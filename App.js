@@ -1,27 +1,97 @@
-import React, { Component } from 'react';
-import { AppRegistry, Text, Image, View, Button } from 'react-native';
-import {StackNavigator} from 'react-navigation'
-import HomeScreen from './HomeScreen';
 
-const DetailsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Details Screen</Text>
-  </View>
-);
+import React from 'react';
+import {
+  AppRegistry,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {
+  NavigationProvider,
+  StackNavigation,
+} from '@expo/ex-navigation';
+import {
+  Ionicons,
+  FontAwesome
+} from '@expo/vector-icons';
 
-const RootNavigator = StackNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      headerTitle: 'Home',
-    },
+import { AppLoading, Asset, Font } from 'expo';
+
+import Router from './navigation/Router';
+import cacheAssetsAsync from './utilities/cacheAssetsAsync';
+
+export default class AppContainer extends React.Component {
+  state = {
+    appIsReady: false,
+  }
+
+  componentWillMount() {
+    this._loadAssetsAsync();
+  }
+
+  async _loadAssetsAsync() {
+    try {
+      await cacheAssetsAsync({
+        images: [
+          require('./screens/img/bob.png'),
+          require('./screens/img/cookiemonster.jpeg'),
+          require('./screens/img/elmo.jpg'),
+          require('./screens/img/me.png'),
+          require('./screens/img/1.jpg'),
+          require('./screens/img/2.jpg'),
+          require('./screens/img/3.jpg'),
+          require('./screens/img/4.jpg'),
+          require('./screens/img/5.jpg'),
+        ],
+        fonts: [
+            Ionicons.font,
+        ]
+      });
+    } catch(e) {
+      console.warn(
+        'There was an error caching assets (see: main.js), perhaps due to a ' +
+        'network timeout, so we skipped caching. Reload the app to try again.'
+      );
+      console.log(e.message);
+    } finally {
+      this.setState({appIsReady: true});
+    }
+  }
+
+  render() {
+    if (this.state.appIsReady) {
+        return (
+            <View style={styles.container}>
+              <NavigationProvider router={Router}>
+                <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
+              </NavigationProvider>
+
+                {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
+                {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+            </View>
+        );
+    } else {
+      return (
+        <AppLoading
+          startAsync={this._loadAssetsAsync}
+          onFinish={() => this.setState({ isReady: true })}
+          onError={console.warn}
+        />
+      );
+    }
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  Details: {
-    screen: DetailsScreen,
-    navigationOptions: {
-      headerTitle: 'Details',
-    },
+  statusBarUnderlay: {
+    height: 24,
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });
 
-export default RootNavigator;
+// Exponent.registerRootComponent(AppContainer);
