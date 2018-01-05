@@ -17,8 +17,7 @@ export default class ButtonBar extends Component {
         super();
         this.state = {
             height: new Animated.Value(36),
-            buttons: ['Live', 'Photo', 'Check In'],
-            icons: ['ios-videocam', 'ios-camera', 'ios-pin']
+            buttons: ['Task', 'Post', 'Survey']
         };
     }
 
@@ -64,7 +63,6 @@ export default class ButtonBar extends Component {
         return buttons.map((button, i) => {
             return (
                 <View key={i} style={styles.buttonItem}>
-                    <Ionicons name={icons[i]} size={16} color={Colors.black}/>
                     <Text style={styles.text}>{button}</Text>
                 </View>
             )
@@ -97,9 +95,13 @@ export default class ButtonBar extends Component {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        height: 36,
-        backgroundColor: Colors.lightGray,
-        borderBottomWidth: StyleSheet.hairlineWidth
+        height: 40,
+        backgroundColor: Colors.white,
+        borderTopWidth: 2,
+        borderColor: "#f4f4f4",
+        borderBottomLeftRadius: 14,
+        borderBottomRightRadius: 14,
+        marginBottom: 10,
     },
 
     buttonItem: {
@@ -108,15 +110,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderLeftWidth: StyleSheet.hairlineWidth,
-        borderColor: '#ddd'
+        borderLeftWidth: 0
     },
 
     text: {
         fontSize: 14,
         backgroundColor: 'transparent',
-        fontWeight: '700',
+        fontWeight: '300',
         marginLeft: 8,
-        color: Colors.black
+        color: Colors.main
     }
 });

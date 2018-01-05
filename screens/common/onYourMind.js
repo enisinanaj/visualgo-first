@@ -29,18 +29,20 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: 'white',
         marginTop: 10,
-        marginBottom: 10,
+        borderTopLeftRadius: 14,
+        borderTopRightRadius: 14
     },
 
     input: {
         flex: 1,
         fontSize: 14,
-        marginLeft: 10
+        marginLeft: 10,
     },
 
     profile: {
         backgroundColor: 'black',
         height: 40,
         width: 40,
+        borderRadius: 20
     }
 })

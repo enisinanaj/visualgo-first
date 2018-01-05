@@ -67,15 +67,15 @@ export default class AppContainer extends React.Component {
                 <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
               </NavigationProvider>
 
-                {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-                {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+              {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor="blue"/>}
+              {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
             </View>
         );
     } else {
       return (
         <AppLoading
           startAsync={this._loadAssetsAsync}
-          onFinish={() => this.setState({ isReady: true })}
+          onFinish={() => this.setState({ appIsReady: true })}
           onError={console.warn}
         />
       );

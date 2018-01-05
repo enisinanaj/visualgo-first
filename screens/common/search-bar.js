@@ -13,7 +13,7 @@ import {
 
 import Colors from '../../constants/Colors';
 
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 
 export default class SearchBar extends Component {
     constructor() {
@@ -68,21 +68,23 @@ export default class SearchBar extends Component {
         return (
             <View ref='container'>
                 <Animated.View style={[styles.container, {height}]}>
-                    <TouchableOpacity style={styles.icon}>
-                        <Ionicons name='ios-chatbubbles' size={24} color='white'/>
-                    </TouchableOpacity>
+                    <View style={styles.searchBarOuterContainer}>
+                        <TouchableOpacity style={styles.icon}>
+                            <Ionicons name='ios-menu-outline' size={24} color='#3B5998'/>
+                        </TouchableOpacity>
 
-                    <View style={styles.searchBarContainer}>
-                        <View style={styles.searchIcon}>
-                            <Ionicons name='ios-search' color='#7585AE' size={18} />
+                        <View style={styles.searchBarContainer}>
+                            <View style={styles.searchIcon}>
+                                <Ionicons name='ios-search' color='#7585AE' size={18} />
+                            </View>
+
+                            <TextInput placeholderTextColor={'#7585AE'} placeholder={'Search'} style={styles.searchBar}/>
                         </View>
 
-                        <TextInput placeholderTextColor={'#7585AE'} placeholder={'Search'} style={styles.searchBar}/>
+                        <TouchableOpacity style={styles.icon} onPress={this.props.openChat}>
+                            <Ionicons name='ios-camera-outline' size={32} color='#3B5998'/>
+                        </TouchableOpacity>
                     </View>
-
-                    <TouchableOpacity style={styles.icon} onPress={this.props.openChat}>
-                        <Ionicons name='ios-people' size={32} color='white'/>
-                    </TouchableOpacity>
                 </Animated.View>
 
             </View>
@@ -97,10 +99,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: 60,
-        padding: 16,
-        paddingTop: 24,
-        paddingBottom: 10,
         backgroundColor: Colors.main,
+        paddingTop: 24,
+        borderBottomColor: Colors.gray,
+        borderBottomWidth: 1,
+    },
+
+    searchBarOuterContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        padding: 16,
+        paddingBottom: 10,
+        backgroundColor: Colors.white
     },
 
     icon: {
@@ -113,9 +123,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: 28,
-        backgroundColor: Colors.searchBar,
+        backgroundColor: Colors.lightGray,
+        borderColor: Colors.main,
         borderRadius: 5,
         padding: 8,
+        marginTop: 3,
         marginLeft: 8,
         marginRight: 8,
     },
@@ -127,7 +139,7 @@ const styles = StyleSheet.create({
 
     searchBar: {
         flex: 1,
-        color: 'white',
+        color: Colors.grayText,
         fontSize: 14,
         marginLeft: 8
     }

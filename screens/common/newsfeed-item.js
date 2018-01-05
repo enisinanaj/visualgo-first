@@ -88,7 +88,7 @@ export default class NewsFeedItem extends Component {
         const {data} = this.props;
         if(data.type == 'image') {
             return (
-                <ImagePost imageCount={data.images.length} images={data.images}/>
+                <ImagePost imageCount={data.images.length} images={data.images} style={styles.imageStyle}/>
             )
         }
 
@@ -106,10 +106,9 @@ export default class NewsFeedItem extends Component {
                     {this.renderAvatar()}
                     {this.renderContent()}
                     {this.renderLikesAndComments()}
-                    <View style={styles.line} />
-                </View>
-                <View style={styles.buttonContainer}>
-                    {this.renderLikeBar()}
+                    <View style={styles.buttonContainer}>
+                        {this.renderLikeBar()}
+                    </View>
                 </View>
             </View>
         )
@@ -121,6 +120,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         marginBottom: 10,
+        borderRadius: 15
     },
 
     content: {
@@ -132,8 +132,7 @@ const styles = StyleSheet.create({
     line: {
         margin: 16,
         marginBottom: 0,
-        borderColor: '#ddd',
-        borderBottomWidth: StyleSheet.hairlineWidth
+        borderColor: '#ddd'
     },
 
     avatarContainer: {
@@ -163,13 +162,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         height: 40,
         width: 40,
+        borderRadius: 20
     },
 
     buttonContainer: {
         flexDirection: 'row',
-
-        height: 36,
-        borderBottomWidth: StyleSheet.hairlineWidth
+        borderColor: "#f4f4f4",
+        height: 45,
+        marginTop: 5,
+        borderTopWidth: 2
     },
 
 
@@ -197,5 +198,10 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+
+    imageStyle: {
+        borderBottomLeftRadius: 14,
+        borderBottomRightRadius: 14
     }
 })

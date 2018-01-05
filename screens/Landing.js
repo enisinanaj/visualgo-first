@@ -84,7 +84,12 @@ export default class Landing extends Component {
     _renderRow(data) {
 
         if (data == '0') {
-            return <OnYourMind onFocus={() => this.setState({modal: true})}/>
+            return (
+                <View>
+                    <OnYourMind onFocus={() => this.setState({modal: true})}/>
+                    <ButtonBar ref='buttonBar'/>
+                </View>
+            )
         }
 
         return <NewsFeedItem data={data}/>
@@ -121,9 +126,6 @@ export default class Landing extends Component {
 
         if(offset > this.offsetY) {
             console.log('scrolling down');
-            if(!(offset < 32)) {
-                this.refs.buttonBar.hide();
-            }
 
             if(!(offset < 56)) {
                 this.refs.searchBar.hide();
@@ -132,8 +134,6 @@ export default class Landing extends Component {
             //if
         } else {
             console.log('scrolling up');
-
-            this.refs.buttonBar.show();
             setTimeout(() => {this.refs.searchBar.show();}, 150);
 
         }
@@ -199,7 +199,6 @@ export default class Landing extends Component {
 
                     <View ref='view' style={styles.container}>
                         <SearchBar ref='searchBar' openChat={this.openChat.bind(this)}/>
-                        <ButtonBar ref='buttonBar'/>
                         <ListView
                             refreshControl={
                                 <RefreshControl
@@ -207,7 +206,7 @@ export default class Landing extends Component {
                                     onRefresh={this._onRefresh.bind(this)}
                                 />
                             }
-
+                            style={styles.listView}
                             onScroll={this._onScroll}
                             dataSource={this.state.dataSource}
                             renderRow={(data) => this._renderRow(data)}
@@ -226,7 +225,7 @@ const styles= StyleSheet.create({
         flex: 1,
         width,
         height,
-        backgroundColor: Colors.gray
+        backgroundColor: "#f4f4f4"
     },
     fade: {
         height,
@@ -242,5 +241,10 @@ const styles= StyleSheet.create({
         backgroundColor: Colors.chat_bg,
         right: 0
 
+    },
+
+    listView: {
+        paddingLeft: (width - (width * 4.9/5)) / 2,
+        width: width * 4.9/5
     }
 })

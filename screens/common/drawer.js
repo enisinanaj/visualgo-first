@@ -56,6 +56,5 @@ const styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor: Colors.chat_bg,
         right: 0
-
     }
 });
