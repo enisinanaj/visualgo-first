@@ -6,25 +6,31 @@ import {
     View,
     Text,
     Image,
-    StyleSheet
+    StyleSheet,
+    Dimensions,
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
 import {randomProfile} from '../helpers';
 import moment from 'moment';
+import locale from 'moment/locale/it'
 import ImagePost from './image-post';
 
 import Button from './button';
+
+const {width, height} = Dimensions.get('window');
 
 export default class NewsFeedItem extends Component {
     constructor() {
         super();
         this.state = {
             profile: randomProfile(),
-            time: moment().format('hh:mm A MMM Do'),
-            buttons: ['Like', 'Comment', 'Share'],
-            icons: ['md-thumbs-up', 'md-chatbubbles', 'ios-share-alt'],
+            time: moment().locale("it").format("D MMMM [alle ore] hh:mm"),
+            buttons: ['Comment', 'Stats'],
+            icons: ['comment', 'ios-podium-outline'],
+            iconTypes: ["evilicon"],
+            iconColors: [Colors.main, Colors.yellow],
             likes: 0,
             comments: 0
         };
@@ -54,7 +60,7 @@ export default class NewsFeedItem extends Component {
                 <Image style={styles.profile} source={profile.source}/>
                 <View style={styles.nameContainer}>
                     <Text style={styles.name}>{profile.name}</Text>
-                    <Text style={styles.time}>{time} <Ionicons name='md-globe'/></Text>
+                    <Text style={styles.time}>{time}</Text>
                 </View>
             </View>
         )
@@ -76,10 +82,11 @@ export default class NewsFeedItem extends Component {
     }
 
     renderLikeBar() {
-        const {buttons, icons} = this.state;
+        const {buttons, icons, iconTypes, iconColors} = this.state;
         return buttons.map((button, i) => {
             return (
-                <Button key={i} name={button} onPress={this.buttonOnPress.bind(this)} icon={icons[i]} />
+                <Button key={i} name={button} onPress={this.buttonOnPress.bind(this)} icon={icons[i]} 
+                    iconType={iconTypes[i]} iconColor={iconColors[i]} />
             )
         })
     }
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         marginBottom: 10,
-        borderRadius: 15
+        borderRadius: 20
     },
 
     content: {
@@ -166,11 +173,16 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer: {
+        flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-between',
         borderColor: "#f4f4f4",
         height: 45,
+        paddingTop: 10,
         marginTop: 5,
-        borderTopWidth: 2
+        borderTopWidth: 2,
+        marginLeft: 15,
+        width: width * 4.43/5
     },
 
 

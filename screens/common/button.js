@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, EvilIcons} from '@expo/vector-icons';
 
 export default class Button extends Component {
     constructor(props) {
@@ -18,7 +18,9 @@ export default class Button extends Component {
         this.state = {
             pressed: false,
             name: props.name,
-            icon: props.icon
+            icon: props.icon,
+            iconType: props.iconType,
+            iconColor: props.iconColor
         }
     }
 
@@ -30,24 +32,25 @@ export default class Button extends Component {
             } else {
                 this.props.onPress('Dislike');
             }
-
-
         }
+    }
 
-
-
-
-
-
+    renderIcon(icon, iconType, pressed, iconColor) {
+        if (iconType == undefined || iconType == "ionicon") {
+            return (<Ionicons name={icon} size={22} color={pressed ? Colors.liked : iconColor}/>);
+        } else if (iconType == "evilicon") {
+            return (<EvilIcons name={icon} size={22} color={pressed ? Colors.liked : iconColor} style={styles.evilIcon}/>)
+        }
     }
 
     render() {
-        const {pressed, name, icon} = this.state;
+        const {pressed, name, icon, iconType, iconColor} = this.state;
+
+        //<Text style={[styles.text, {color: pressed ? Colors.liked : Colors.like}]}>{name}</Text>
 
         return (
             <TouchableOpacity onPress={() => this.pressed(name)} style={styles.buttonItem}>
-                    <Ionicons name={icon} size={16} color={pressed ? Colors.liked : Colors.like}/>
-                    <Text style={[styles.text, {color: pressed ? Colors.liked : Colors.like}]}>{name}</Text>
+                {this.renderIcon(icon, iconType, pressed, iconColor)}
             </TouchableOpacity>
         )
     }
@@ -62,11 +65,7 @@ const styles = StyleSheet.create({
 
 
     buttonItem: {
-        flex: 1,
-        backgroundColor: 'transparent',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+            
     },
 
     text: {
@@ -74,5 +73,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '700',
         marginLeft: 8,
+    },
+
+    evilIcon: {
+        color: Colors.main,
+        fontWeight: 800
     }
 })

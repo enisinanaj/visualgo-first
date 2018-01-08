@@ -23,4 +23,5 @@ export default {
     noticeBackground: tintColor,
     noticeText: '#fff',
     white: '#fff',
+    yellow: '#f9ce3a'
 };

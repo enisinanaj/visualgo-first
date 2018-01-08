@@ -22,25 +22,32 @@ export default class RootNavigation extends React.Component {
         tabBarHeight={40}
         initialTab="landing">
         <TabNavigationItem
-          id="landing"
-          renderIcon={isSelected => this._renderIcon('ios-paper', isSelected)}>
-          <StackNavigation initialRoute="landing" />
-        </TabNavigationItem>
-
-        <TabNavigationItem
           id="links"
-          renderIcon={isSelected => this._renderIcon('ios-basket', isSelected)}>
+          renderIcon={isSelected => this._renderIcon('ios-bowtie-outline', isSelected)}>
           <StackNavigation initialRoute="links" />
         </TabNavigationItem>
 
         <TabNavigationItem
+          id="landing"
+          renderIcon={isSelected => this._renderIcon('ios-card-outline', isSelected)}>
+          <StackNavigation initialRoute="landing" />
+        </TabNavigationItem>
+
+        <TabNavigationItem
           id="settings"
-          renderIcon={isSelected => this._renderIcon('md-globe', isSelected)}>
+          renderIcon={isSelected => this._renderIcon('ios-calendar-outline', isSelected)}>
           <StackNavigation initialRoute="settings" />
         </TabNavigationItem>
+
         <TabNavigationItem
             id="settings"
-            renderIcon={isSelected => this._renderIcon('ios-menu', isSelected)}>
+            renderIcon={isSelected => this._renderIcon('ios-chatbubbles-outline', isSelected)}>
+          <StackNavigation initialRoute="settings" />
+        </TabNavigationItem>
+        
+        <TabNavigationItem
+            id="settings"
+            renderIcon={isSelected => this._renderIcon('ios-checkmark-circle-outline', isSelected)}>
           <StackNavigation initialRoute="settings" />
         </TabNavigationItem>
       </TabNavigation>

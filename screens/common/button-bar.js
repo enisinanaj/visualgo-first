@@ -33,7 +33,6 @@ export default class ButtonBar extends Component {
     }
 
     hide() {
-
         if(this.state.animating) {
             return;
         }

@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     searchIcon: {
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 15
     },
 
     searchBar: {
