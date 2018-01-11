@@ -18,6 +18,7 @@ import locale from 'moment/locale/it'
 import ImagePost from './image-post';
 
 import Button from './button';
+import CardView from 'react-native-cardview';
 
 const {width, height} = Dimensions.get('window');
 
@@ -109,14 +110,19 @@ export default class NewsFeedItem extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View>
-                    {this.renderAvatar()}
-                    {this.renderContent()}
-                    {this.renderLikesAndComments()}
-                    <View style={styles.buttonContainer}>
-                        {this.renderLikeBar()}
-                    </View>
-                </View>
+                <CardView
+                        cardElevation={4}
+                        cardMaxElevation={4}
+                        cornerRadius={5}>
+                        <View>
+                            {this.renderAvatar()}
+                            {this.renderContent()}
+                            {this.renderLikesAndComments()}
+                            <View style={styles.buttonContainer}>
+                                {this.renderLikeBar()}
+                            </View>
+                        </View>
+                </CardView>
             </View>
         )
     }
@@ -127,7 +133,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         marginBottom: 10,
-        borderRadius: 20
+        borderRadius: 20,
+        marginRight: 5
     },
 
     content: {

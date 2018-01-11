@@ -24,6 +24,7 @@ import ButtonBar from './common/button-bar';
 import OnYourMind from './common/onYourMind';
 import NewsFeedItem from './common/newsfeed-item';
 import CreatePost from './common/create-post';
+import CardView from 'react-native-cardview'
 
 import {EvilIcons} from '@expo/vector-icons';
 
@@ -98,29 +99,46 @@ export default class Landing extends Component {
             )
         } else if (data == '1') {
             return (
-                <View>
-                    <OnYourMind onFocus={() => this.setState({modal: true})}/>
-                    <ButtonBar ref='buttonBar'/>
-                </View>
+                <CardView 
+                    cardElevation={3}
+                    cardMaxElevation={3}
+                    cornerRadius={12} style={styles.onYourMind}>
+                    <View>
+                        <OnYourMind onFocus={() => this.setState({modal: true})}/>
+                        <ButtonBar ref='buttonBar'/>
+                    </View>
+                </CardView>
             )
         }
 
-        return <NewsFeedItem data={data}/>
+        return (<View style={styles.newsFeedArea}>
+                <NewsFeedItem data={data}/>
+            </View>);
     }
 
     renderFilterBar(data) {
         if (data == 0) {
             return (
-                <TouchableOpacity style={styles.filterButtonItem}>
-                    <EvilIcons name={"search"} size={22} color={Colors.main}/>
-                </TouchableOpacity>
+                <CardView 
+                    cardElevation={3}
+                    cardMaxElevation={3}
+                    cornerRadius={22} style={styles.filterButtonItem}>
+                    <TouchableOpacity>
+                        <EvilIcons name={"search"} size={22} color={Colors.main}/>
+                    </TouchableOpacity>
+                </CardView>
             )
         }
 
         return (
-            <View style={styles.filterButtons}>
-                <Button title={data} style={styles.filterButton}/>
-            </View>
+            <CardView 
+                    cardElevation={3}
+                    cardMaxElevation={3}
+                    cornerRadius={22} style={styles.filterButtons}>
+                <View>
+                    <Button title={data} style={styles.filterButton}/>
+                </View>
+            </CardView>
         )
     }
 
@@ -261,22 +279,22 @@ const styles= StyleSheet.create({
     },
     drawer: {
         height,
-        padding: 8,
+        padding: 15,
         paddingTop: 20,
-        width: width * 4/5,
+        width: width,
         position: 'absolute',
         backgroundColor: Colors.chat_bg,
         right: 0
     },
     filtersListView: {
         flex: 1,
-        height: 55,
+        height: 65,
         paddingTop: 10,
         width: width * 4.9/5
     },
     listView: {
         paddingLeft: (width - (width * 4.9/5)) / 2,
-        width: width * 4.9/5
+        width: width
     },
     filterButtonItem: {
         flex: 1,
@@ -286,7 +304,8 @@ const styles= StyleSheet.create({
         paddingTop: 15,
         height: 44,
         color: Colors.main,
-        marginLeft: (width - (width * 4.9/5)) / 2
+        marginLeft: (width - (width * 4.9/5)) / 2,
+        marginRight: 4
     },
     filterButtons: {
         flex: 1,
@@ -296,11 +315,22 @@ const styles= StyleSheet.create({
         paddingTop: 5,
         height: 44,
         color: Colors.main,
+        marginRight: 4,
         marginLeft: (width - (width * 4.9/5)) / 2
     }, 
     filterButton: {
         padding: 0,
         margin: 0,
         color: Colors.main
+    },
+
+    newsFeedArea: {
+        marginTop: 15
+    },
+
+    onYourMind: {
+        backgroundColor: Colors.white,
+        height: 110,
+        marginRight: 5
     }
 })
