@@ -27,6 +27,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 64,
         padding: 16,
+        backgroundColor: 'white',
+        marginTop: 10,
+        borderTopLeftRadius: 14,
+        borderTopRightRadius: 14
     },
 
     input: {
