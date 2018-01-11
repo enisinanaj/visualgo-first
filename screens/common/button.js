@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     },
 
     evilIcon: {
-        color: Colors.main,
-        fontWeight: 800
+        color: Colors.main
     }
 })
