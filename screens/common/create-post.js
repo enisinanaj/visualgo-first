@@ -78,14 +78,14 @@ export default class CreatePost extends Component{
         return (
             <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
-                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                 <View>
-                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16}}>
+                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
                         Commenti <Switch color={Colors.main} style={{height: 24, marginLeft: 5, marginBottom: 5}}/>
                     </Text>
                 </View>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16, marginRight: 5}}>
-                    Tutti <Octicons name={"globe"} size={20} color={Colors.main} style={{paddingTop: 10}} />
+                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
+                    Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
                 </Text>
             </View>
         )
@@ -95,14 +95,14 @@ export default class CreatePost extends Component{
         return (
             <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
-                justifyContent: 'flex-start', alignItems: 'center', padding: 16}}>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16, marginRight: 30, height: 20, marginLeft: 5}}>
+                justifyContent: 'flex-start', alignItems: 'center', padding: 13}}>
+                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
                     Task
                 </Text>
-                <Text style={{color: Colors.black, fontWeight: '800', fontSize: 16, marginRight: 30, height: 20}}>
+                <Text style={{color: Colors.black, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18}}>
                     Post
                 </Text>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16, height: 20}}>
+                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, height: 18}}>
                     Survey
                 </Text>
             </View>
@@ -137,7 +137,7 @@ export default class CreatePost extends Component{
     renderText() {
         return (
             <View style={{flex: 1, padding: 16}}>
-                <TextInput autoFocus={true} style={{height: 60, fontSize: 32, textAlign: 'center', textAlignVertical: 'center', 
+                <TextInput autoFocus={true} style={{height: 50, fontSize: 22, textAlign: 'center', textAlignVertical: 'center', 
                     fontWeight: '300'}} 
                     placeholderTextColor={Colors.grayText} 
                     placeholder={"What's on your mind?"}/>
@@ -153,7 +153,7 @@ export default class CreatePost extends Component{
 
     renderBackgroundColors() {
         return (
-            <View style={{height: 50}}>
+            <View style={{height: 40}}>
                 <ListView
                     horizontal={true}
                     style={styles.backgroundColors}
@@ -165,19 +165,13 @@ export default class CreatePost extends Component{
 
     renderMenu() {
         const {k_visible} = this.state;
-        if(k_visible) {
+        if(false) {
             return (
                 <TouchableOpacity
                     onPress={() => {Keyboard.dismiss()}}
-                    style={{height: 56, borderTopWidth: StyleSheet.hairlineWidth, borderColor: Colors.chat_line,
+                    style={{height: 56, borderTopWidth: StyleSheet.hairlineWidth, borderColor: Colors.gray,
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 16}}>
                     <Text style={{color: Colors.black, fontSize: 16, fontWeight: '500'}}>Add to your post</Text>
-                    <View style={{flexDirection: 'row', paddingRight: 16}}>
-                        <Ionicons style={styles.icon} name='md-camera' color='#93B75F' size={24} />
-                        <Ionicons style={styles.icon} name='md-videocam' color='#E7404E' size={24} />
-                        <Ionicons style={styles.icon} name='md-pin' color='#D8396F' size={24} />
-                        <Ionicons style={styles.icon} name='ios-happy' color='#EDC370' size={24} />
-                    </View>
                 </TouchableOpacity>
             )
         }
@@ -191,37 +185,17 @@ export default class CreatePost extends Component{
         const objs =
             [
                 {
-                    icon: 'md-camera',
-                    color: '#93B75F',
-                    name: 'Photo/Video'
+                    name: 'Tagga Cluster, Negozi, Utenti'
                 },
                 {
-                    icon: 'md-videocam',
-                    color: '#E7404E',
-                    name: 'Live Video'
-                },
-                {
-                    icon: 'md-pin',
-                    color: '#D8396F',
-                    name: 'Check In'
-                },
-                {
-                    icon: 'ios-happy',
-                    color: '#EDC370',
-                    name: 'Feeling/Activity'
-                },
-                {
-                    icon: 'ios-person-add',
-                    color: '#628FF6',
-                    name: 'Tag Friends'
+                    name: 'Foto/Video'
                 }
             ];
 
         return objs.map((o, i) => {
             return (
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.chat_line, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <Ionicons name={o.icon} color={o.color} size={24}/>
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16}}>{o.name}</Text>
                 </View>
             )
