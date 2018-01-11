@@ -95,9 +95,12 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         height: 40,
+        backgroundColor: Colors.white,
         borderTopWidth: 2,
         borderColor: "#f4f4f4",
-        paddingTop: 10
+        borderBottomLeftRadius: 14,
+        borderBottomRightRadius: 14,
+        marginBottom: 10,
     },
 
     buttonItem: {
