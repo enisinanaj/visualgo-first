@@ -11,15 +11,19 @@ import {
     TextInput,
     TouchableOpacity,
     StatusBar,
-    StyleSheet
+    StyleSheet,
+    Switch,
+    ListView
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
-
-
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const backgroundColorsArray = ['0', '1', '2', '3', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14', '15'];
 
 import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
+import EvilIcons from '@expo/vector-icons/EvilIcons';
+import Octicons from '@expo/vector-icons/Octicons';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -27,6 +31,7 @@ export default class CreatePost extends Component{
         this.state = {
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
+            backgroundColors: ds.cloneWithRows(backgroundColorsArray),
         }
     }
 
@@ -55,14 +60,51 @@ export default class CreatePost extends Component{
 
     renderHeader() {
         return (
-            <View style={{backgroundColor: '#F6F7F9', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
+            <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
-                    <Text style={{color: '#4080FF'}}>Cancel</Text>
+                    <Text>
+                        <EvilIcons name={"close"} size={22} color={Colors.main}/>
+                    </Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Update Status</Text>
-                <Text style={{color: '#4080FF', fontWeight: '700'}}>Post</Text>
+                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Nuovo Post</Text>
+                <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Post</Text>
+            </View>
+        )
+    }
+
+    renderCommentSwitchRow() {
+        return (
+            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
+                borderBottomColor: Colors.gray, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                <View>
+                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16}}>
+                        Commenti <Switch color={Colors.main} style={{height: 24, marginLeft: 5, marginBottom: 5}}/>
+                    </Text>
+                </View>
+                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16, marginRight: 5}}>
+                    Tutti <Octicons name={"globe"} size={20} color={Colors.main} style={{paddingTop: 10}} />
+                </Text>
+            </View>
+        )
+    }
+
+    renderPostType() {
+        return (
+            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
+                borderBottomColor: Colors.gray, flexDirection: 'row',
+                justifyContent: 'flex-start', alignItems: 'center', padding: 16}}>
+                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16, marginRight: 30, height: 20, marginLeft: 5}}>
+                    Task
+                </Text>
+                <Text style={{color: Colors.black, fontWeight: '800', fontSize: 16, marginRight: 30, height: 20}}>
+                    Post
+                </Text>
+                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 16, height: 20}}>
+                    Survey
+                </Text>
             </View>
         )
     }
@@ -94,8 +136,29 @@ export default class CreatePost extends Component{
 
     renderText() {
         return (
-            <View style={{flex: 1, padding: 16, paddingTop: 0}}>
-                <TextInput autoFocus={true} style={{height: 20, fontSize: 16}} placeholderTextColor={'gray'} placeholder={"What's on your mind?"}/>
+            <View style={{flex: 1, padding: 16}}>
+                <TextInput autoFocus={true} style={{height: 60, fontSize: 32, textAlign: 'center', textAlignVertical: 'center', 
+                    fontWeight: '300'}} 
+                    placeholderTextColor={Colors.grayText} 
+                    placeholder={"What's on your mind?"}/>
+            </View>
+        )
+    }
+
+    renderColorBox() {
+        return (
+            <TouchableOpacity style={styles.backgroundColorsItem} />
+        );
+    }
+
+    renderBackgroundColors() {
+        return (
+            <View style={{height: 50}}>
+                <ListView
+                    horizontal={true}
+                    style={styles.backgroundColors}
+                    dataSource={this.state.backgroundColors}
+                    renderRow={(data) => this.renderColorBox(data)}/>
             </View>
         )
     }
@@ -114,7 +177,6 @@ export default class CreatePost extends Component{
                         <Ionicons style={styles.icon} name='md-videocam' color='#E7404E' size={24} />
                         <Ionicons style={styles.icon} name='md-pin' color='#D8396F' size={24} />
                         <Ionicons style={styles.icon} name='ios-happy' color='#EDC370' size={24} />
-
                     </View>
                 </TouchableOpacity>
             )
@@ -171,8 +233,10 @@ export default class CreatePost extends Component{
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'default'} animated={true}/>
                 {this.renderHeader()}
-                {this.renderAvatar()}
+                {this.renderCommentSwitchRow()}
+                {this.renderPostType()}
                 {this.renderText()}
+                {this.renderBackgroundColors()}
                 {this.renderMenu()}
             </View>
         )
@@ -183,6 +247,26 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+
+    backgroundColorsItem: {
+        height: 20,
+        width: 20,
+        backgroundColor: Colors.tintColor,
+        margin: 4,
+        borderRadius: 4
+    },
+
+    backgroundColors: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        paddingLeft: 10,
+        paddingTop: 5,
+        paddingRight: 10,
+        backgroundColor: Colors.white,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderColor: Colors.gray,
+    }, 
 
     img: {
         width: 40,
