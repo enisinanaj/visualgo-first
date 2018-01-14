@@ -26,6 +26,7 @@ import {Ionicons} from '@expo/vector-icons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import TagList from './tag-list';
+import PostPrivacy from './privacy';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -34,7 +35,8 @@ export default class CreatePost extends Component{
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
-            tagModal: false
+            tagModal: false,
+            privacyModal: false
         }
     }
 
@@ -76,6 +78,18 @@ export default class CreatePost extends Component{
         )
     }
 
+    renderPrivacyModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.privacyModal}
+                onRequestClose={() => this.setState({privacyModal: false})}>
+                <PostPrivacy closeModal={() => this.setState({privacyModal: false})} />
+            </Modal>
+        );
+    }
+
     renderCommentSwitchRow() {
         return (
             <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
@@ -86,9 +100,11 @@ export default class CreatePost extends Component{
                         Commenti <Switch color={Colors.main} style={{height: 24, marginLeft: 5, marginBottom: 5}}/>
                     </Text>
                 </View>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
-                    Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
-                </Text>
+                <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
+                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
+                        Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
+                    </Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -232,6 +248,7 @@ export default class CreatePost extends Component{
                 {this.renderBackgroundColors()}
                 {this.renderMenu()}
                 {this.renderTaggingModal()}
+                {this.renderPrivacyModal()}
             </View>
         )
     }
