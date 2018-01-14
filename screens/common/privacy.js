@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   rowSubTitle: {
-    fointWeight: '100',
     color: Colors.grayText,
     fontSize: 14
   },

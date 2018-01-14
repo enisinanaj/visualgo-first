@@ -172,12 +172,6 @@ export default class TagList extends Component {
         {this.renderHeader()}
         <DefaultRow renderChildren={() => this.renderFilters()} arguments={{}} />
         <ListView
-          refreshControl={
-              <RefreshControl
-                  refreshing={this.state.refreshing}
-                  onRefresh={this._onRefresh.bind(this)}
-              />
-          }
           style={styles.listView}
           onScroll={this._onScroll}
           dataSource={this.state.tagSource}
@@ -218,7 +212,6 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   rowSubTitle: {
-    fointWeight: '100',
     color: Colors.grayText,
     fontSize: 14
   },

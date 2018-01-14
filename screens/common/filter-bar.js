@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
         padding: 17,
         paddingTop: 15,
         height: 44,
-        color: Colors.main,
         marginLeft: (width - (width * 4.9/5)) / 2,
     },
     filterButtons: {
@@ -90,7 +89,6 @@ const styles = StyleSheet.create({
         padding: 17,
         paddingTop: 5,
         height: 44,
-        color: Colors.main,
         marginLeft: (width - (width * 4.9/5)) / 2,
     }, 
     filterButton: {
@@ -106,7 +104,6 @@ const styles = StyleSheet.create({
         padding: 17,
         paddingTop: 5,
         height: 44,
-        color: Colors.white,
         marginLeft: (width - (width * 4.9/5)) / 2,
     }, 
     filterButtonSelected: {

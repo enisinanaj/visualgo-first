@@ -174,7 +174,7 @@ export default class CreatePost extends Component{
             <View style={{height: 40}}>
                 <ListView
                     horizontal={true}
-                    style={styles.backgroundColors}
+                    contentContainerStyle={styles.backgroundColors}
                     dataSource={this.state.backgroundColors}
                     renderRow={(data) => this.renderColorBox(data)}/>
             </View>
@@ -221,7 +221,7 @@ export default class CreatePost extends Component{
                 },
                 {
                     name: 'Foto/Video',
-                    onPress: ''
+                    onPress: () => {}
                 }
             ];
 
