@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         borderColor: "#f4f4f4",
         borderBottomLeftRadius: 14,
         borderBottomRightRadius: 14,
-        marginBottom: 10,
+        //marginBottom: 10,
     },
 
     buttonItem: {

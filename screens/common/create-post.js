@@ -13,7 +13,8 @@ import {
     StatusBar,
     StyleSheet,
     Switch,
-    ListView
+    ListView,
+    Modal
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -24,6 +25,7 @@ import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
+import TagList from './tag-list';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -32,6 +34,7 @@ export default class CreatePost extends Component{
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
+            tagModal: false
         }
     }
 
@@ -56,7 +59,6 @@ export default class CreatePost extends Component{
         }
 
     }
-
 
     renderHeader() {
         return (
@@ -181,14 +183,29 @@ export default class CreatePost extends Component{
         )
     }
 
+    renderTaggingModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.tagModal}
+                onRequestClose={() => this.setState({tagModal: false})}>
+                
+                <TagList closeModal={() => this.setState({tagModal: false})} />
+            </Modal>
+        );
+    }
+
     renderList() {
         const objs =
             [
                 {
-                    name: 'Tagga Cluster, Negozi, Utenti'
+                    name: 'Tagga Cluster, Negozi, Utenti',
+                    onPress: () => this.setState({tagModal: true})
                 },
                 {
-                    name: 'Foto/Video'
+                    name: 'Foto/Video',
+                    onPress: ''
                 }
             ];
 
@@ -196,7 +213,9 @@ export default class CreatePost extends Component{
             return (
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16}}>{o.name}</Text>
+                    <TouchableOpacity onPress={o.onPress}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16}}>{o.name}</Text>
+                    </TouchableOpacity>
                 </View>
             )
         })
@@ -212,6 +231,7 @@ export default class CreatePost extends Component{
                 {this.renderText()}
                 {this.renderBackgroundColors()}
                 {this.renderMenu()}
+                {this.renderTaggingModal()}
             </View>
         )
     }

@@ -24,11 +24,11 @@ import ButtonBar from './common/button-bar';
 import OnYourMind from './common/onYourMind';
 import NewsFeedItem from './common/newsfeed-item';
 import CreatePost from './common/create-post';
-
-import {EvilIcons} from '@expo/vector-icons';
+import FilterBar from './common/filter-bar'
 
 import Drawer from './common/drawer';
 import _ from 'lodash';
+import Shadow from '../constants/Shadow';
 
 //1 is regular post, 2 is image
 const data = ['0', '1',
@@ -57,8 +57,7 @@ export default class Landing extends Component {
             opacity: new Animated.Value(1),
             header_height: new Animated.Value(96),
 
-            dataSource: ds.cloneWithRows(data),
-            filtersSource: ds.cloneWithRows(filters)
+            dataSource: ds.cloneWithRows(data)
         };
 
         this.offsetY = 0;
@@ -89,16 +88,10 @@ export default class Landing extends Component {
     _renderRow(data) {
 
         if (data == '0') {
-            return (
-                <ListView
-                    horizontal={true}
-                    style={styles.filtersListView}
-                    dataSource={this.state.filtersSource}
-                    renderRow={(data) => this.renderFilterBar(data)}/>
-            )
+            return <FilterBar data={filters} />;
         } else if (data == '1') {
             return (
-                <View>
+                <View style={[styles.onYourMindContainer, Shadow]}>
                     <OnYourMind onFocus={() => this.setState({modal: true})}/>
                     <ButtonBar ref='buttonBar'/>
                 </View>
@@ -106,22 +99,6 @@ export default class Landing extends Component {
         }
 
         return <NewsFeedItem data={data}/>
-    }
-
-    renderFilterBar(data) {
-        if (data == 0) {
-            return (
-                <TouchableOpacity style={styles.filterButtonItem}>
-                    <EvilIcons name={"search"} size={22} color={Colors.main}/>
-                </TouchableOpacity>
-            )
-        }
-
-        return (
-            <View style={styles.filterButtons}>
-                <Button title={data} style={styles.filterButton}/>
-            </View>
-        )
     }
 
     renderModal() {
@@ -140,7 +117,7 @@ export default class Landing extends Component {
     loadMore() {
         console.log('should load more');
         this.setState({loading: true});
-        //add two more child views
+
         data.push('1');
         data.push('1');
         this.setState({dataSource: ds.cloneWithRows(data)});
@@ -158,8 +135,6 @@ export default class Landing extends Component {
             if(!(offset < 56)) {
                 this.refs.searchBar.hide();
             }
-
-            //if
         } else {
             console.log('scrolling up');
             setTimeout(() => {this.refs.searchBar.show();}, 150);
@@ -173,8 +148,6 @@ export default class Landing extends Component {
             console.log('end');
             this.loadMore();
         }
-
-        // console.log(e);
     }
 
     getStyle() {
@@ -268,39 +241,14 @@ const styles= StyleSheet.create({
         backgroundColor: Colors.chat_bg,
         right: 0
     },
-    filtersListView: {
-        flex: 1,
-        height: 55,
-        paddingTop: 10,
-        width: width * 4.9/5
-    },
     listView: {
-        paddingLeft: (width - (width * 4.9/5)) / 2,
-        width: width * 4.9/5
+        paddingLeft: (width - (width * 4.9/5)) / 2
     },
-    filterButtonItem: {
-        flex: 1,
-        backgroundColor: Colors.white,
-        borderRadius: 30,
-        padding: 17,
-        paddingTop: 15,
-        height: 44,
-        color: Colors.main,
-        marginLeft: (width - (width * 4.9/5)) / 2
-    },
-    filterButtons: {
-        flex: 1,
-        backgroundColor: Colors.white,
-        borderRadius: 20,
-        padding: 17,
-        paddingTop: 5,
-        height: 44,
-        color: Colors.main,
-        marginLeft: (width - (width * 4.9/5)) / 2
-    }, 
-    filterButton: {
+    onYourMindContainer: {
+        width: width * 4.9/5,
+        marginTop: 5,
+        marginBottom: 12,
         padding: 0,
-        margin: 0,
-        color: Colors.main
+        borderRadius: 14,
     }
 })

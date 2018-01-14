@@ -18,6 +18,7 @@ import locale from 'moment/locale/it'
 import ImagePost from './image-post';
 
 import Button from './button';
+import Shadow from '../../constants/Shadow';
 
 const {width, height} = Dimensions.get('window');
 
@@ -108,7 +109,7 @@ export default class NewsFeedItem extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, Shadow]}>
                 <View>
                     {this.renderAvatar()}
                     {this.renderContent()}
@@ -127,7 +128,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         marginBottom: 10,
-        borderRadius: 20
+        borderRadius: 20,
+        width: width * 4.9/5
     },
 
     content: {
@@ -184,7 +186,6 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         width: width * 4.43/5
     },
-
 
     buttonItem: {
         flex: 1,
