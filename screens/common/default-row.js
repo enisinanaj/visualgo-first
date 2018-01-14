@@ -7,6 +7,7 @@ import {EvilIcons} from '@expo/vector-icons';
 export default class DefaultRow extends Component {
 
     render() {
+        console.log("defaultRow + " + this.props.arguments);
         return (
             <View style={styles.defaultRow}>
                 {this.props.renderChildren(this.props.arguments)}

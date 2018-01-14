@@ -26,7 +26,6 @@ export default class FitlerBar extends Component {
     }
 
     drawElements(data) {
-        console.log("drawElements");
         if (data == 0) {
             return (
                 <TouchableOpacity style={[styles.filterButtonItem, Shadow]}>
@@ -36,14 +35,29 @@ export default class FitlerBar extends Component {
         }
 
         return (
-            <TouchableOpacity style={[styles.filterButtons, Shadow]}>
-                <Text style={styles.filterButton}>{data}</Text>
+            <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, Shadow]}
+                onPress={() => this.setSelected(data)}>
+                <Text style={data.selected ? styles.filterButtonSelected : styles.filterButton}>{data.title}</Text>
             </TouchableOpacity>
         )
     }
 
+    setSelected(b) {
+        var buttons = this.props.data;
+
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].selected = false;
+
+            if (buttons[i].title === b.title) {
+                buttons[i].selected = true;
+            }
+        }
+
+        b.onSelected();
+        this.setState({filtersSource: ds.cloneWithRows(buttons)});
+    }
+
     render() {
-        console.log("drawElements");
         return <ListView
             horizontal={true}
             style={styles.filtersListView}
@@ -84,5 +98,21 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         margin: 0,
         color: Colors.main
+    },
+    filterButtonsSelected: {
+        flex: 1,
+        backgroundColor: Colors.main,
+        borderRadius: 20,
+        padding: 17,
+        paddingTop: 5,
+        height: 44,
+        color: Colors.white,
+        marginLeft: (width - (width * 4.9/5)) / 2,
+    }, 
+    filterButtonSelected: {
+        padding: 0,
+        paddingTop: 10,
+        margin: 0,
+        color: Colors.white
     }
 });

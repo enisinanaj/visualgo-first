@@ -43,7 +43,7 @@ const data = ['0', '1',
     {type: 'post'}
     ];
 
-const filters = ['0', 'Survey', 'Post', 'Task'];
+const filters = ['0', {title: 'Survey'}, {title: 'Post'}, {title: 'Task'}];
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
@@ -93,7 +93,10 @@ export default class Landing extends Component {
             return (
                 <View style={[styles.onYourMindContainer, Shadow]}>
                     <OnYourMind onFocus={() => this.setState({modal: true})}/>
-                    <ButtonBar ref='buttonBar'/>
+                    <ButtonBar ref='buttonBar' buttons={[
+                        {title: 'Task'}, 
+                        {title: 'Post', onPress: () => this.setState({modal: true})},
+                        {title: 'Survey'}]}/>
                 </View>
             )
         }
@@ -118,8 +121,8 @@ export default class Landing extends Component {
         console.log('should load more');
         this.setState({loading: true});
 
-        data.push('1');
-        data.push('1');
+        data.push('3');
+        data.push('6');
         this.setState({dataSource: ds.cloneWithRows(data)});
 
     }

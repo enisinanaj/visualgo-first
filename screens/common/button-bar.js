@@ -6,18 +6,19 @@ import {
     Animated,
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 
 import {Ionicons} from '@expo/vector-icons'
 import Colors from '../../constants/Colors';
 
 export default class ButtonBar extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             height: new Animated.Value(36),
-            buttons: ['Task', 'Post', 'Survey']
+            buttons: props.buttons
         };
     }
 
@@ -62,7 +63,9 @@ export default class ButtonBar extends Component {
         return buttons.map((button, i) => {
             return (
                 <View key={i} style={styles.buttonItem}>
-                    <Text style={styles.text}>{button}</Text>
+                    <TouchableOpacity onPress={button.onPress}>
+                        <Text style={styles.text}>{button.title}</Text>
+                    </TouchableOpacity>
                 </View>
             )
         })
