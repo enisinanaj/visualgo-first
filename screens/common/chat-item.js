@@ -6,7 +6,8 @@ import {
     View,
     Image,
     Text,
-    StyleSheet
+    StyleSheet,
+    Button
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
@@ -17,24 +18,34 @@ export default () => {
 
     const avatar = randomProfile();
 
-    return (
-        <View style={styles.container}>
-            <View>
-                <Image style={styles.img} source={avatar.source}/>
-            </View>
-            <View style={styles.desc}>
-                <Text style={styles.text}>{avatar.name}</Text>
-                {avatar.online ?
-                    <View style={styles.phone}><Text style={{color: '#42B72A', fontSize: 64, backgroundColor: 'transparent'}}>·</Text></View>
-                    :
-                    <View style={styles.phone}>
-                        <Text style={styles.descText}>30m</Text>
-                        <Ionicons name='md-phone-portrait' size={16} color={Colors.chat_line}/>
-                    </View>
-                }
 
+    return (
+
+            <View style={styles.container}>
+                <View>
+                    <Image style={styles.img} source={avatar.source}/>
+                </View>
+
+                <View style={styles.desc}>
+                    <Text style={styles.textName}>Bob</Text>
+                </View>
+
+                
+
+                <View style={styles.desc}>
+                    <Text style={styles.text}>{avatar.name}</Text>
+                    {avatar.online ?
+                        <View style={styles.phone}><Text style={{color: '#42B72A', fontSize: 64, backgroundColor: 'transparent'}}>·</Text></View>
+                        :
+                        <View style={styles.phone}>
+                            <Text style={styles.descText}>30m</Text>
+                            <Ionicons name='md-phone-portrait' size={16} color={Colors.chat_line}/>
+                        </View>
+                    }
+
+                </View>
             </View>
-        </View>
+
     )
 }
 
@@ -69,6 +80,20 @@ const styles = StyleSheet.create({
     },
 
     text: {
+        color: 'white',
+        paddingLeft: 10,
+        fontSize: 14,
+        fontWeight: '500'
+    },
+
+    textName: {
+        color: '#00000080',
+        paddingLeft: 10,
+        fontSize: 14,
+        fontWeight: '500'
+    },
+
+    textLasatMessage: {
         color: 'white',
         paddingLeft: 10,
         fontSize: 14,
