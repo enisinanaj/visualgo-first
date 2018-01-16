@@ -43,7 +43,7 @@ const data = ['0', '1',
     {type: 'post'}
     ];
 
-const filters = ['0', {title: 'Survey'}, {title: 'Post'}, {title: 'Task'}];
+const filters = ['0', {title: 'All', selected: true}, {title: 'Post'}, {title: 'Task'}, {title: 'Survey'}];
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
@@ -88,10 +88,12 @@ export default class Landing extends Component {
     _renderRow(data) {
 
         if (data == '0') {
-            return <FilterBar data={filters} />;
+            return <View style={styles.filterBarContainer}>
+                    <FilterBar data={filters} />
+                </View>;
         } else if (data == '1') {
             return (
-                <View style={[styles.onYourMindContainer, Shadow]}>
+                <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
                     <OnYourMind onFocus={() => this.setState({modal: true})}/>
                     <ButtonBar ref='buttonBar' buttons={[
                         {title: 'Task'}, 
@@ -118,7 +120,6 @@ export default class Landing extends Component {
     }
 
     loadMore() {
-        console.log('should load more');
         this.setState({loading: true});
 
         data.push('3');
@@ -228,7 +229,7 @@ const styles= StyleSheet.create({
         flex: 1,
         width,
         height,
-        backgroundColor: "#f4f4f4"
+        backgroundColor: "#f7f7f7",
     },
     fade: {
         height,
@@ -245,13 +246,18 @@ const styles= StyleSheet.create({
         right: 0
     },
     listView: {
-        paddingLeft: (width - (width * 4.9/5)) / 2
+        //paddingLeft: (width - (width * 4.9/5)) / 2
     },
     onYourMindContainer: {
-        width: width * 4.9/5,
-        marginTop: 5,
-        marginBottom: 12,
+        heihgt: 110,
+        marginTop: 6,
+        marginBottom: 6,
+        marginRight: 5,
+        marginLeft: 5,
         padding: 0,
         borderRadius: 14,
+    },
+    filterBarContainer: {
+        backgroundColor: Colors.white,
     }
 })

@@ -109,7 +109,7 @@ export default class NewsFeedItem extends Component {
 
     render() {
         return (
-            <View style={[styles.container, Shadow]}>
+            <View style={[styles.container, Shadow.cardShadow]}>
                 <View>
                     {this.renderAvatar()}
                     {this.renderContent()}
@@ -127,15 +127,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        marginBottom: 10,
+        marginBottom: 6,
         borderRadius: 20,
-        width: width * 4.9/5
+        marginLeft: 5,
+        marginRight: 5,
     },
 
     content: {
-        padding: 16,
+        padding: 15,
         paddingTop: 0,
-        paddingBottom: 0
+        paddingBottom: 15
     },
 
     line: {
@@ -145,25 +146,27 @@ const styles = StyleSheet.create({
     },
 
     avatarContainer: {
-        padding: 16,
         paddingBottom: 0,
         flexDirection: 'row',
         marginBottom: 10,
+        marginRight: 15,
+        marginLeft: 15,
+        marginTop: 15
     },
 
     nameContainer: {
-        marginLeft: 10,
+        marginLeft: 8,
         justifyContent: 'space-around'
     },
 
     name: {
-        fontSize: 14,
+        fontSize: 16,
         color: 'black',
-        fontWeight: '600'
+        fontWeight: '400'
     },
 
     time: {
-        color: 'gray',
+        color: '#999999',
         fontSize: 12,
     },
 
@@ -178,13 +181,13 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderColor: "#f4f4f4",
-        height: 45,
-        paddingTop: 10,
-        marginTop: 5,
-        borderTopWidth: 2,
-        marginLeft: 15,
-        width: width * 4.43/5
+        borderColor: Colors.borderGray,
+        height: 44,
+        paddingTop: 14,
+        paddingBottom: 14,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderTopWidth: 1,
     },
 
     buttonItem: {
@@ -198,7 +201,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '700',
         marginLeft: 8,
-        color: Colors.like
+        color: Colors.main
     },
 
     likeText: {

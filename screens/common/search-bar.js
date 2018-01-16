@@ -8,12 +8,14 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    Dimensions
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
-
 import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
+
+const {width, height} = Dimensions.get('window');
 
 export default class SearchBar extends Component {
     constructor() {
@@ -31,7 +33,7 @@ export default class SearchBar extends Component {
     }
 
     measureView() {
-        console.log('measuring view');
+
         this.refs.container.measure((a, b, w, h, x, y) => {
            this.setState({height: new Animated.Value(h), original: h});
         });
@@ -42,7 +44,6 @@ export default class SearchBar extends Component {
         if(this.state.animating) {
             return;
         }
-        console.log('animating');
 
         this.setState({animating: true});
         Animated.timing(
@@ -55,7 +56,7 @@ export default class SearchBar extends Component {
         if(!this.state.animating) {
             return;
         }
-        console.log('animating');
+
         this.setState({animating: false});
         Animated.timing(
             this.state.height,
@@ -68,21 +69,21 @@ export default class SearchBar extends Component {
         return (
             <View ref='container'>
                 <Animated.View style={[styles.container, {height}]}>
-                    <View style={styles.searchBarOuterContainer}>
+                    <View style={[styles.searchBarOuterContainer, {height: this.state.height-12}]}>
                         <TouchableOpacity style={styles.icon}>
-                            <Ionicons name='ios-menu-outline' size={24} color='#3B5998'/>
+                            <Ionicons name='ios-menu-outline' size={24} color={Colors.main}/>
                         </TouchableOpacity>
 
                         <View style={styles.searchBarContainer}>
                             <View style={styles.searchIcon}>
-                                <Ionicons name='ios-search' color='#7585AE' size={18} />
+                                <Ionicons name='ios-search' color='#b2B2B2' size={18} />
                             </View>
 
-                            <TextInput placeholderTextColor={'#7585AE'} placeholder={'Search'} style={styles.searchBar}/>
+                            <TextInput placeholderTextColor={'#B2B2B2'} placeholder={'Search'} style={styles.searchBar}/>
                         </View>
 
                         <TouchableOpacity style={styles.icon} onPress={this.props.openChat}>
-                            <Ionicons name='ios-camera-outline' size={32} color='#3B5998'/>
+                            <Ionicons name='ios-camera-outline' size={32} color={Colors.main}/>
                         </TouchableOpacity>
                     </View>
                 </Animated.View>
@@ -100,48 +101,52 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 60,
         backgroundColor: Colors.main,
-        paddingTop: 24,
-        borderBottomColor: Colors.gray,
+        paddingTop: 20,
+        borderBottomColor: Colors.borderGray,
         borderBottomWidth: 1,
     },
 
     searchBarOuterContainer: {
         flex: 1,
         flexDirection: 'row',
-        padding: 16,
-        paddingBottom: 10,
-        backgroundColor: Colors.white
+        paddingBottom: 9,
+        paddingTop: 9,
+        backgroundColor: Colors.white,
+        height: 48
     },
 
     icon: {
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 26,
+        marginTop: 3
     },
 
     searchBarContainer: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        height: 28,
+        height: 30,
+        width: 239,
         backgroundColor: Colors.lightGray,
         borderColor: Colors.main,
-        borderRadius: 5,
+        borderRadius: 15,
         padding: 8,
-        marginTop: 3,
-        marginLeft: 8,
-        marginRight: 8,
     },
 
     searchIcon: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 15
+        marginTop: 12,
+        marginLeft: 2
     },
 
     searchBar: {
         flex: 1,
-        color: Colors.grayText,
-        fontSize: 14,
+        color: "#B2B2B2",
+        fontSize: 12,
         marginLeft: 8
     }
 })

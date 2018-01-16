@@ -17,45 +17,8 @@ export default class ButtonBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            height: new Animated.Value(36),
             buttons: props.buttons
         };
-    }
-
-    componentDidMount() {
-        setTimeout(() => {this.measureView()}, 0)
-    }
-
-    measureView() {
-        console.log('measuring view');
-        this.refs.container.measure((a, b, w, h, x, y) => {
-            this.setState({height: new Animated.Value(h), original: h});
-        });
-    }
-
-    hide() {
-        if(this.state.animating) {
-            return;
-        }
-        console.log('animating');
-
-        this.setState({animating: true});
-        Animated.timing(
-            this.state.height,
-            {toValue: 0}
-        ).start();
-    }
-
-    show() {
-        if(!this.state.animating) {
-            return;
-        }
-        console.log('animating');
-        this.setState({animating: false});
-        Animated.timing(
-            this.state.height,
-            {toValue: this.state.original}
-        ).start();
     }
 
     renderButtons() {
@@ -72,21 +35,11 @@ export default class ButtonBar extends Component {
 
     }
 
-    getStyle() {
-        const {height} = this.state;
-
-
-        return {height, opacity: height.interpolate({
-            inputRange: [0, 36],
-            outputRange: [0, 1],
-        })}
-    }
-
     render() {
 
         return (
             <View ref='container'>
-                <Animated.View style={[styles.container, this.getStyle()]}>
+                <Animated.View style={[styles.container]}>
                     {this.renderButtons()}
                 </Animated.View>
             </View>
@@ -99,11 +52,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 40,
         backgroundColor: Colors.white,
-        borderTopWidth: 2,
-        borderColor: "#f4f4f4",
-        borderBottomLeftRadius: 14,
-        borderBottomRightRadius: 14,
-        //marginBottom: 10,
+        borderTopWidth: 1,
+        borderColor: Colors.borderGray,
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15,
     },
 
     buttonItem: {
@@ -118,8 +70,9 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         backgroundColor: 'transparent',
-        fontWeight: '300',
+        fontWeight: '200',
         marginLeft: 8,
-        color: Colors.main
+        color: Colors.main,
+        fontFamily: 'Roboto-Light'
     }
 });

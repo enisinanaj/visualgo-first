@@ -28,16 +28,16 @@ export default class FitlerBar extends Component {
     drawElements(data) {
         if (data == 0) {
             return (
-                <TouchableOpacity style={[styles.filterButtonItem, Shadow]}>
+                <TouchableOpacity style={[styles.searchButtonContainer, Shadow.filterShadow]}>
                     <EvilIcons name={'search'} size={22} color={Colors.main}/>
                 </TouchableOpacity>
             )
         }
 
         return (
-            <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, Shadow]}
+            <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, styles.buttonStyle, Shadow.filterShadow]}
                 onPress={() => this.setSelected(data)}>
-                <Text style={data.selected ? styles.filterButtonSelected : styles.filterButton}>{data.title}</Text>
+                <Text style={[data.selected ? styles.filterButtonSelected : styles.filterButton, styles.buttonContentStyle]}>{data.title}</Text>
             </TouchableOpacity>
         )
     }
@@ -53,63 +53,83 @@ export default class FitlerBar extends Component {
             }
         }
 
-        b.onSelected();
+        if (b.onSelected != undefined) {
+            b.onSelected();
+        }
+
         this.setState({filtersSource: ds.cloneWithRows(buttons)});
     }
 
     render() {
-        return <ListView
-            horizontal={true}
-            style={styles.filtersListView}
-            dataSource={this.state.filtersSource}
-            renderRow={(data) => this.drawElements(data)}/>;
+        return <View style={styles.filterBarContainer}>
+                <Text style={styles.filterBarHeader}>Search e filtri contestuali</Text>
+                <ListView
+                    horizontal={true}
+                    style={styles.filtersListView}
+                    dataSource={this.state.filtersSource}
+                    renderRow={(data) => this.drawElements(data)}/>
+            </View>;
     }
 };
 
 const styles = StyleSheet.create({
+    filterBarContainer: {
+        paddingTop: 14,
+        paddingLeft: 0,
+    },
+    filterBarHeader: {
+        fontSize: 14,
+        fontWeight: '800',
+        paddingLeft: 20,
+        fontFamily: 'Roboto-Bold'
+    },
     filtersListView: {
         flex: 1,
-        height: 60,
+        height: 68,
+        paddingBottom: 14,
         paddingTop: 10,
-        width: width * 4.9/5
+        paddingLeft: 20,
+        paddingBottom: 14
     },
-    filterButtonItem: {
+    searchButtonContainer: {
         flex: 1,
         backgroundColor: Colors.white,
-        borderRadius: 30,
-        padding: 17,
-        paddingTop: 15,
+        borderRadius: 22,
+        padding: 10,
+        paddingTop: 14,
         height: 44,
-        marginLeft: (width - (width * 4.9/5)) / 2,
+        width: 44,
+        marginRight: 8,
+        marginBottom: 14,
     },
+
     filterButtons: {
-        flex: 1,
         backgroundColor: Colors.white,
-        borderRadius: 20,
-        padding: 17,
-        paddingTop: 5,
-        height: 44,
-        marginLeft: (width - (width * 4.9/5)) / 2,
-    }, 
-    filterButton: {
-        padding: 0,
-        paddingTop: 10,
-        margin: 0,
-        color: Colors.main
     },
     filterButtonsSelected: {
-        flex: 1,
-        backgroundColor: Colors.main,
-        borderRadius: 20,
-        padding: 17,
-        paddingTop: 5,
-        height: 44,
-        marginLeft: (width - (width * 4.9/5)) / 2,
-    }, 
+        backgroundColor: Colors.main
+    },  
+    filterButton: {
+        color: Colors.main,
+    },
     filterButtonSelected: {
+        color: Colors.white,
+    },
+
+    buttonContentStyle: {
         padding: 0,
         paddingTop: 10,
         margin: 0,
-        color: Colors.white
+        textAlign: 'center',
+    },
+    buttonStyle: {
+        flex: 1,
+        borderRadius: 22,
+        padding: 17,
+        paddingTop: 5,
+        height: 44,
+        marginRight: 8,
+        minWidth: 75,
+        fontFamily: 'Roboto-Light'
     }
 });
