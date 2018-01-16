@@ -43,7 +43,7 @@ const data = ['0', '1',
     {type: 'post'}
     ];
 
-const filters = ['0', 'Survey', 'Post', 'Task'];
+const filters = ['0', {title: 'All', selected: true}, {title: 'Post'}, {title: 'Task'}, {title: 'Survey'}];
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
@@ -89,16 +89,12 @@ export default class Landing extends Component {
     _renderRow(data) {
 
         if (data == '0') {
-            return (
-                <ListView
-                    horizontal={true}
-                    style={styles.filtersListView}
-                    dataSource={this.state.filtersSource}
-                    renderRow={(data) => this.renderFilterBar(data)}/>
-            )
+            return <View style={styles.filterBarContainer}>
+                    <FilterBar data={filters} />
+                </View>;
         } else if (data == '1') {
             return (
-                <View>
+                <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
                     <OnYourMind onFocus={() => this.setState({modal: true})}/>
                     <ButtonBar ref='buttonBar'/>
                 </View>
@@ -138,7 +134,6 @@ export default class Landing extends Component {
     }
 
     loadMore() {
-        console.log('should load more');
         this.setState({loading: true});
         //add two more child views
         data.push('1');
@@ -252,7 +247,7 @@ const styles= StyleSheet.create({
         flex: 1,
         width,
         height,
-        backgroundColor: "#f4f4f4"
+        backgroundColor: "#f7f7f7",
     },
     fade: {
         height,
@@ -268,39 +263,19 @@ const styles= StyleSheet.create({
         backgroundColor: Colors.chat_bg,
         right: 0
     },
-    filtersListView: {
-        flex: 1,
-        height: 55,
-        paddingTop: 10,
-        width: width * 4.9/5
-    },
     listView: {
-        paddingLeft: (width - (width * 4.9/5)) / 2,
-        width: width * 4.9/5
+        //paddingLeft: (width - (width * 4.9/5)) / 2
     },
-    filterButtonItem: {
-        flex: 1,
-        backgroundColor: Colors.white,
-        borderRadius: 30,
-        padding: 17,
-        paddingTop: 15,
-        height: 44,
-        color: Colors.main,
-        marginLeft: (width - (width * 4.9/5)) / 2
-    },
-    filterButtons: {
-        flex: 1,
-        backgroundColor: Colors.white,
-        borderRadius: 20,
-        padding: 17,
-        paddingTop: 5,
-        height: 44,
-        color: Colors.main,
-        marginLeft: (width - (width * 4.9/5)) / 2
-    }, 
-    filterButton: {
+    onYourMindContainer: {
+        heihgt: 110,
+        marginTop: 6,
+        marginBottom: 6,
+        marginRight: 5,
+        marginLeft: 5,
         padding: 0,
-        margin: 0,
-        color: Colors.main
+        borderRadius: 14,
+    },
+    filterBarContainer: {
+        backgroundColor: Colors.white,
     }
 })

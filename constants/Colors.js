@@ -3,9 +3,9 @@ const tintColor = '#4F8AFF';
 export default {
     tintColor,
     tabIconDefault: '#888',
-    main: "#1326f3",
+    main: "#002BFF",
     oldMain: "#3B5998",
-    searchBar: '#384778',
+    searchBar: '#efefef',
     black: '#212121',
     grayText: '#898F9C',
     gray: '#D3D6DB',
@@ -23,5 +23,6 @@ export default {
     noticeBackground: tintColor,
     noticeText: '#fff',
     white: '#fff',
-    yellow: '#f9ce3a'
+    yellow: '#FFD500',
+    borderGray: '#f2f2f2'
 };
