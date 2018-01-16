@@ -17,15 +17,17 @@ export default () => {
         <View style={styles.container}>
             <View style={styles.searchContainer}>
                 <View style={styles.searchBarContainer}>
+
+                    <View style={styles.menuIcon}>
+                        <Ionicons name='ios-search' color='#61636B' size={24} />
+                    </View>
                     <View style={styles.searchIcon}>
-                        <Ionicons name='ios-search' color='#61636B' size={18} />
+                        <Ionicons name='ios-search' color='#61636B' size={24} />
                     </View>
                     <TextInput style={styles.search} placeholderTextColor={'#61636B'} placeholder={"Search"}/>
                 </View>
 
-                <View style={styles.icon}>
-                    <Ionicons name='ios-settings' color={'#72757A'} size={24} />
-                </View>
+
             </View>
         </View>
     )
@@ -52,12 +54,12 @@ const styles = StyleSheet.create({
 
     search: {
         flex: 1,
-        backgroundColor: '#292C34',
+        backgroundColor: '#00000020',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 4,
-        fontSize: 12,
-        color: 'white',
+        fontSize: 16,
+        color: 'black',
         borderRadius: 5,
     },
 
@@ -65,15 +67,20 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        height: 28,
-        backgroundColor: '#292C34',
+        height: 48,
+        backgroundColor: '#00000000',
         borderRadius: 5,
         padding: 8,
+    },
+
+    menuIcon:{
+
     },
 
     searchIcon: {
         justifyContent: 'center',
         alignItems: 'center',
+        paddingRight: 10,
     },
 
 })
