@@ -24,6 +24,9 @@ import ButtonBar from './common/button-bar';
 import OnYourMind from './common/onYourMind';
 import NewsFeedItem from './common/newsfeed-item';
 import CreatePost from './common/create-post';
+import FilterBar from './common/filter-bar';
+
+import Shadow from '../constants/Shadow';
 
 import {EvilIcons} from '@expo/vector-icons';
 

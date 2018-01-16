@@ -64,7 +64,7 @@ export default class AppContainer extends React.Component {
         return (
             <View style={styles.container}>
               <NavigationProvider router={Router}>
-                <StackNavigation id="root" initialRoute={Router.getRoute('chat')} />
+                <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
               </NavigationProvider>
 
               {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor="blue"/>}

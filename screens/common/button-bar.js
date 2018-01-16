@@ -13,8 +13,8 @@ import {Ionicons} from '@expo/vector-icons'
 import Colors from '../../constants/Colors';
 
 export default class ButtonBar extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             buttons: props.buttons
         };
