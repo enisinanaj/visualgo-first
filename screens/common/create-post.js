@@ -13,7 +13,8 @@ import {
     StatusBar,
     StyleSheet,
     Switch,
-    ListView
+    ListView,
+    Modal
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -24,6 +25,8 @@ import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
+import TagList from './tag-list';
+import PostPrivacy from './privacy';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -32,6 +35,8 @@ export default class CreatePost extends Component{
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
+            tagModal: false,
+            privacyModal: false
         }
     }
 
@@ -57,7 +62,6 @@ export default class CreatePost extends Component{
 
     }
 
-
     renderHeader() {
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
@@ -74,6 +78,18 @@ export default class CreatePost extends Component{
         )
     }
 
+    renderPrivacyModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.privacyModal}
+                onRequestClose={() => this.setState({privacyModal: false})}>
+                <PostPrivacy closeModal={() => this.setState({privacyModal: false})} />
+            </Modal>
+        );
+    }
+
     renderCommentSwitchRow() {
         return (
             <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
@@ -84,9 +100,11 @@ export default class CreatePost extends Component{
                         Commenti <Switch color={Colors.main} style={{height: 24, marginLeft: 5, marginBottom: 5}}/>
                     </Text>
                 </View>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
-                    Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
-                </Text>
+                <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
+                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
+                        Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
+                    </Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -156,7 +174,7 @@ export default class CreatePost extends Component{
             <View style={{height: 40}}>
                 <ListView
                     horizontal={true}
-                    style={styles.backgroundColors}
+                    contentContainerStyle={styles.backgroundColors}
                     dataSource={this.state.backgroundColors}
                     renderRow={(data) => this.renderColorBox(data)}/>
             </View>
@@ -181,14 +199,29 @@ export default class CreatePost extends Component{
         )
     }
 
+    renderTaggingModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.tagModal}
+                onRequestClose={() => this.setState({tagModal: false})}>
+                
+                <TagList closeModal={() => this.setState({tagModal: false})} />
+            </Modal>
+        );
+    }
+
     renderList() {
         const objs =
             [
                 {
-                    name: 'Tagga Cluster, Negozi, Utenti'
+                    name: 'Tagga Cluster, Negozi, Utenti',
+                    onPress: () => this.setState({tagModal: true})
                 },
                 {
-                    name: 'Foto/Video'
+                    name: 'Foto/Video',
+                    onPress: () => {}
                 }
             ];
 
@@ -196,7 +229,9 @@ export default class CreatePost extends Component{
             return (
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16}}>{o.name}</Text>
+                    <TouchableOpacity onPress={o.onPress}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16}}>{o.name}</Text>
+                    </TouchableOpacity>
                 </View>
             )
         })
@@ -212,6 +247,8 @@ export default class CreatePost extends Component{
                 {this.renderText()}
                 {this.renderBackgroundColors()}
                 {this.renderMenu()}
+                {this.renderTaggingModal()}
+                {this.renderPrivacyModal()}
             </View>
         )
     }

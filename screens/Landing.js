@@ -26,12 +26,9 @@ import NewsFeedItem from './common/newsfeed-item';
 import CreatePost from './common/create-post';
 import FilterBar from './common/filter-bar';
 
-import Shadow from '../constants/Shadow';
-
-import {EvilIcons} from '@expo/vector-icons';
-
 import Drawer from './common/drawer';
 import _ from 'lodash';
+import Shadow from '../constants/Shadow';
 
 //1 is regular post, 2 is image
 const data = ['0', '1',
@@ -60,8 +57,7 @@ export default class Landing extends Component {
             opacity: new Animated.Value(1),
             header_height: new Animated.Value(96),
 
-            dataSource: ds.cloneWithRows(data),
-            filtersSource: ds.cloneWithRows(filters)
+            dataSource: ds.cloneWithRows(data)
         };
 
         this.offsetY = 0;
@@ -99,28 +95,15 @@ export default class Landing extends Component {
             return (
                 <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
                     <OnYourMind onFocus={() => this.setState({modal: true})}/>
-                    <ButtonBar ref='buttonBar'/>
+                    <ButtonBar ref='buttonBar' buttons={[
+                        {title: 'Task'}, 
+                        {title: 'Post', onPress: () => this.setState({modal: true})},
+                        {title: 'Survey'}]}/>
                 </View>
             )
         }
 
         return <NewsFeedItem data={data}/>
-    }
-
-    renderFilterBar(data) {
-        if (data == 0) {
-            return (
-                <TouchableOpacity style={styles.filterButtonItem}>
-                    <EvilIcons name={"search"} size={22} color={Colors.main}/>
-                </TouchableOpacity>
-            )
-        }
-
-        return (
-            <View style={styles.filterButtons}>
-                <Button title={data} style={styles.filterButton}/>
-            </View>
-        )
     }
 
     renderModal() {
@@ -138,9 +121,9 @@ export default class Landing extends Component {
 
     loadMore() {
         this.setState({loading: true});
-        //add two more child views
-        data.push('1');
-        data.push('1');
+
+        data.push('3');
+        data.push('6');
         this.setState({dataSource: ds.cloneWithRows(data)});
 
     }
@@ -156,8 +139,6 @@ export default class Landing extends Component {
             if(!(offset < 56)) {
                 this.refs.searchBar.hide();
             }
-
-            //if
         } else {
             console.log('scrolling up');
             setTimeout(() => {this.refs.searchBar.show();}, 150);
@@ -171,8 +152,6 @@ export default class Landing extends Component {
             console.log('end');
             this.loadMore();
         }
-
-        // console.log(e);
     }
 
     getStyle() {

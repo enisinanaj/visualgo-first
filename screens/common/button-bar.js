@@ -6,7 +6,8 @@ import {
     Animated,
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 
 import {Ionicons} from '@expo/vector-icons'
@@ -25,7 +26,9 @@ export default class ButtonBar extends Component {
         return buttons.map((button, i) => {
             return (
                 <View key={i} style={styles.buttonItem}>
-                    <Text style={styles.text}>{button}</Text>
+                    <TouchableOpacity onPress={button.onPress}>
+                        <Text style={styles.text}>{button.title}</Text>
+                    </TouchableOpacity>
                 </View>
             )
         })

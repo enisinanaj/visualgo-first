@@ -18,7 +18,8 @@ import Colors from '../../constants/Colors';
 import ChatItem from './chat-item';
 import ChatSearchBar from './chat-search-bar';
 import SearchBar from './search-bar';
-import ButtonBar from './button-bar-chat';
+import DefaultRow from './default-row';
+import FilterBar from './filter-bar';
 
 const data = ['1', '1', '1', '1', '1', '1', '1', '1', '1','1', '1', '1','1', '1', '1'];
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -36,12 +37,17 @@ export default class MessagesList extends Component {
         console.log("click");
     }
 
+    renderFilters() {
+        filters = [
+          {title: 'All', selected: false},
+          {title: 'Group', selected: false},
+          {title: 'Active', selected: false}];
+        return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} /></View>
+      }
+
     _renderRow(data) {
         return (
-
-                <ChatItem />
-
-
+            <ChatItem />
         )
     }
 
@@ -51,7 +57,7 @@ export default class MessagesList extends Component {
             
             <View style={styles.drawer}>
                 <SearchBar ref='searchBar' style={styles.searchBar}/>
-                <ButtonBar/>
+                <DefaultRow renderChildren={() => this.renderFilters()} />
 
                 <ScrollView
                     ref='scrollview'

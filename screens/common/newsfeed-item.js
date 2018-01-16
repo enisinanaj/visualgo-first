@@ -18,6 +18,7 @@ import locale from 'moment/locale/it'
 import ImagePost from './image-post';
 
 import Button from './button';
+import Shadow from '../../constants/Shadow';
 
 const {width, height} = Dimensions.get('window');
 
@@ -188,7 +189,6 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         borderTopWidth: 1,
     },
-
 
     buttonItem: {
         flex: 1,

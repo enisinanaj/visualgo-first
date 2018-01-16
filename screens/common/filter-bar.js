@@ -61,7 +61,9 @@ export default class FitlerBar extends Component {
     }
 
     render() {
-        return <View style={styles.filterBarContainer}>
+        var {customStyle} = this.props || {};
+
+        return <View style={[styles.filterBarContainer, customStyle]}>
                 <Text style={styles.filterBarHeader}>Search e filtri contestuali</Text>
                 <ListView
                     horizontal={true}

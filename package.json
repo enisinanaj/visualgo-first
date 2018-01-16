@@ -1,8 +1,8 @@
 {
-  "name": "react-native-facebook-ui",
+  "name": "VisualGo",
   "version": "0.0.0",
-  "description": "Hello Exponent!",
-  "author": null,
+  "description": "VisualGo",
+  "author": "AreaKappa for Warda",
   "scripts": {
     "test": "jest",
     "start": "react-native-scripts start"
