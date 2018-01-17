@@ -73,6 +73,6 @@ const styles = StyleSheet.create({
         fontWeight: '200',
         marginLeft: 8,
         color: Colors.main,
-        fontFamily: 'Roboto-Light'
+        //fontFamily: 'Roboto-Light'
     }
 });

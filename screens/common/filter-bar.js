@@ -14,8 +14,16 @@ const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 import Colors from '../../constants/Colors';
 import {EvilIcons} from '@expo/vector-icons';
 import Shadow from '../../constants/Shadow';
+import { Font } from 'expo';
 
 export default class FitlerBar extends Component {
+
+    /*componentDidMount() {
+        Font.loadAsync({
+          'Roboto-Bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+          'Roboto-Light': require('../../assets/fonts/Roboto-Light.ttf'),
+        });
+      }*/
 
     constructor(props) {
         super(props);
@@ -83,7 +91,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '800',
         paddingLeft: 20,
-        fontFamily: 'Roboto-Bold'
+        //fontFamily: 'Roboto-Bold'
     },
     filtersListView: {
         flex: 1,
@@ -132,6 +140,6 @@ const styles = StyleSheet.create({
         height: 44,
         marginRight: 8,
         minWidth: 75,
-        fontFamily: 'Roboto-Light'
+        //fontFamily: 'Roboto-Light'
     }
 });

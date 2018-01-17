@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         marginRight: 15,
         color: '#000000',
-        fontFamily: 'Roboto-Light'
+        //fontFamily: 'Roboto-Light'
     },
 
     profile: {

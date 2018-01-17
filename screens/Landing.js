@@ -249,7 +249,7 @@ const styles= StyleSheet.create({
         //paddingLeft: (width - (width * 4.9/5)) / 2
     },
     onYourMindContainer: {
-        heihgt: 110,
+        //height: 110,
         marginTop: 6,
         marginBottom: 6,
         marginRight: 5,
