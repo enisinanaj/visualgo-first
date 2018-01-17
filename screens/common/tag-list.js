@@ -49,7 +49,8 @@ export default class TagList extends Component {
     super(props);
 
     this.state = {
-      tagSource: ds.cloneWithRows(tagsToShow)
+      tagSource: ds.cloneWithRows(tagsToShow),
+      selectedTags: []
     };
 
     this._onScroll = this._onScroll.bind(this);
@@ -68,23 +69,14 @@ export default class TagList extends Component {
     const l_height = e.contentSize.height;
     const offset = e.contentOffset.y;
 
-    if(offset > this.offsetY) {
-        console.log('scrolling down');
-    } else {
-        console.log('scrolling up');
-    }
-
     this.offsetY = offset;
 
     if(offset + this.content_height >= l_height) {
-        console.log('end');
-        console.log('moar!!!.....');
         this.loadMore();
     }
   }
 
   loadMore() {
-    console.log('should load more');
     this.setState({loading: true});
     this.setState({tagSource: ds.cloneWithRows(tagsToShow)});
   }
@@ -130,6 +122,13 @@ export default class TagList extends Component {
 
   toggleRow(rowData) {
     rowData.selected = !rowData.selected;
+
+    if(rowData.selected) {
+      this.state.selectedTags.push(rowData);
+    } else {
+      this.setState({selectedTags: this.state.selectedTags.filter(value => value != rowData)});
+    }
+
     this.setState({tagSource: ds.cloneWithRows(tagsToShow)});
   }
 
@@ -148,7 +147,6 @@ export default class TagList extends Component {
   }
 
   renderTagRow(data) {
-    console.log("renderTagRow" + data);
     return (
       <View style={styles.rowContainer}>
         <TouchableOpacity onPress={() => this.toggleRow(data)} style={styles.rowContainer}>
