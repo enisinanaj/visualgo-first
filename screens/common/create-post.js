@@ -18,6 +18,7 @@ import {
     Modal
 } from 'react-native';
 
+
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const backgroundColorsArray = ['0', '1', '2', '3', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14', '15'];
@@ -111,7 +112,23 @@ export default class CreatePost extends Component{
                 </View>
             )
         }else{
-            return;
+            return (
+                <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
+                    borderBottomColor: Colors.gray, flexDirection: 'row',
+                    justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
+                    <View style={styles.viewAndroid}>
+                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
+                        Commenti 
+                        </Text>
+                        <Switch color={Colors.main} style={styles.switchAndroid}/>
+                    </View>
+                    <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
+                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
+                            Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )
         }
 
 
@@ -294,5 +311,15 @@ const styles = StyleSheet.create({
 
     icon: {
         marginLeft: 10
+    },
+
+    switchAndroid:{
+        height: 24, 
+        marginLeft: 5, 
+        marginBottom: 5
+    },
+
+    viewAndroid:{
+        flexDirection: 'row'
     }
 });
