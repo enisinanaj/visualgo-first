@@ -12,7 +12,6 @@ import {
 
 const {width, height} = Dimensions.get('window');
 import Colors from '../../constants/Colors';
-import ChatItem from './chat-item';
 import ChatSearchBar from './chat-search-bar';
 
 const data = ['1', '1', '1', '1', '1', '1', '1', '1', '1'];
@@ -28,7 +27,7 @@ export default class Drawer extends Component {
 
     _renderRow(data) {
         return (
-            <ChatItem />
+            <View></View>
         )
     }
 

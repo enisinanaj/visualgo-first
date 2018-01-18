@@ -17,18 +17,11 @@ import Shadow from '../../constants/Shadow';
 import { Font } from 'expo';
 
 export default class FitlerBar extends Component {
-
-    /*componentDidMount() {
-        Font.loadAsync({
-          'Roboto-Bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-          'Roboto-Light': require('../../assets/fonts/Roboto-Light.ttf'),
-        });
-      }*/
-
     constructor(props) {
         super(props);
 
         this.state = {
+            headTitle: this.props.headTitle,
             filtersSource: ds.cloneWithRows(this.props.data)
         }
     }
@@ -65,6 +58,9 @@ export default class FitlerBar extends Component {
             b.onSelected();
         }
 
+        if (b.headTitle) {
+            this.setState({headTitle: b.headTitle})
+        }
         this.setState({filtersSource: ds.cloneWithRows(buttons)});
     }
 
@@ -72,7 +68,7 @@ export default class FitlerBar extends Component {
         var {customStyle} = this.props || {};
 
         return <View style={[styles.filterBarContainer, customStyle]}>
-                <Text style={styles.filterBarHeader}>Search e filtri contestuali</Text>
+                <Text style={styles.filterBarHeader}>{this.state.headTitle}</Text>
                 <ListView
                     horizontal={true}
                     style={styles.filtersListView}

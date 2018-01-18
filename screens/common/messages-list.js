@@ -15,8 +15,6 @@ import {
 
 const {width, height} = Dimensions.get('window');
 import Colors from '../../constants/Colors';
-import ChatItem from './chat-item';
-import ChatSearchBar from './chat-search-bar';
 import SearchBar from './search-bar';
 import DefaultRow from './default-row';
 import FilterBar from './filter-bar';
@@ -38,23 +36,21 @@ export default class MessagesList extends Component {
     }
 
     renderFilters() {
-        filters = [
+        filters = ['0',
           {title: 'All', selected: false},
           {title: 'Group', selected: false},
           {title: 'Active', selected: false}];
-        return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} /></View>
+        return <View style={styles.filterBarContainer}><FilterBar headTitle={"Messages"} data={filters} customStyle={{height: 100}} /></View>
       }
 
     _renderRow(data) {
         return (
-            <ChatItem />
-        )
+            <View></View>
+        );
     }
-
 
     render() {
         return (
-            
             <View style={styles.drawer}>
                 <SearchBar ref='searchBar' style={styles.searchBar}/>
                 <DefaultRow renderChildren={() => this.renderFilters()} />
@@ -63,17 +59,12 @@ export default class MessagesList extends Component {
                     ref='scrollview'
                     bounces={false}
                     scrollEventThrottle={100}
-                    showsHorizontalScrollIndicator={false}
-                >
+                    showsHorizontalScrollIndicator={false}>
 
                     <ListView style={styles.chatBar}
-
                         dataSource={this.state.dataSource}
-                        renderRow={(data) => this._renderRow(data)}
-                    />
-
+                        renderRow={(data) => this._renderRow(data)}/>
                 </ScrollView>
-
             </View>
         )
     }

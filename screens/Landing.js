@@ -89,7 +89,7 @@ export default class Landing extends Component {
 
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
-                    <FilterBar data={filters} />
+                    <FilterBar data={filters} headTitle={"My Wall"} />
                 </View>;
         } else if (data == '1') {
             return (

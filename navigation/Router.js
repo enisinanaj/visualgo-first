@@ -8,6 +8,7 @@ import ImageScreen from '../screens/imageScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import Chat from '../screens/Chat';
 import RootNavigation from './RootNavigation';
+import ConversationView from '../screens/Conversation';
 
 
 export default createRouter(() => ({
@@ -17,4 +18,5 @@ export default createRouter(() => ({
     settings: () => SettingsScreen,
     chat: () => Chat,
     rootNavigation: () => RootNavigation,
+    conversation: () => ConversationView,
 }));

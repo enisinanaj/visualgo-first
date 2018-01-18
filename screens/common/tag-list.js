@@ -41,6 +41,7 @@ const managers = [
   {title: 'Moriah Fewell', subtitle: 'Shanghai Store', img: require('../img/me.png'), selected: false }];
 
 var tagsToShow = clusters;
+var currentCategory = "clusters";
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -99,24 +100,27 @@ export default class TagList extends Component {
 
   renderFilters() {
     filters = ['0', 
-      {title: 'Clusters', selected: true, onSelected: () => this.filterForClusters()},
-      {title: 'Store', selected: false, onSelected: () => this.filterForStores()},
-      {title: 'Manager', selected: false, onSelected: () => this.filterForManagers()}];
-    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} /></View>
+      {title: 'Clusters', selected: true, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
+      {title: 'Store', selected: false, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
+      {title: 'Manager', selected: false, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
+    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Clusters"}/></View>
   }
 
   filterForClusters() {
     this.setState({tagSource: ds.cloneWithRows(clusters)});
+    currentCategory = 'clusters';
     tagsToShow = clusters;
   }
 
   filterForManagers() {
     this.setState({tagSource: ds.cloneWithRows(managers)});
+    currentCategory = 'managers';
     tagsToShow = managers;
   }
 
   filterForStores() {
     this.setState({tagSource: ds.cloneWithRows(stores)});
+    currentCategory = 'stores';
     tagsToShow = stores;
   }
 
@@ -124,6 +128,7 @@ export default class TagList extends Component {
     rowData.selected = !rowData.selected;
 
     if(rowData.selected) {
+      rowData.category = currentCategory;
       this.state.selectedTags.push(rowData);
     } else {
       this.setState({selectedTags: this.state.selectedTags.filter(value => value != rowData)});
@@ -163,9 +168,28 @@ export default class TagList extends Component {
     return <DefaultRow arguments={data} renderChildren={() => this.renderTagRow(data)} />
   }
 
+  _renderSelectedTagElement(data) {
+    if (data.category != 'managers') {
+      return <Text style={{color: Colors.white, marginRight: 13, marginTop: 10}}>{data.title}</Text>;
+    } else {
+      return <Image source={data.img} style={styles.selectedDisplayPictureInFooter} />;
+    }
+  }
+
+  _renderSelectedTags() {
+    var dataSource = ds.cloneWithRows(this.state.selectedTags);
+    var result = <ListView
+        dataSource={dataSource}
+        horizontal={true}
+        renderRow={(data) => this._renderSelectedTagElement(data)}
+      />;
+
+    return result;
+  }
+
   render() {
     return (
-      <View style={{height: this.state.visibleHeight}}>
+      <View style={{height: this.state.visibleHeight, flex: 1, justifyContent: 'column'}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
         <DefaultRow renderChildren={() => this.renderFilters()} />
@@ -175,7 +199,9 @@ export default class TagList extends Component {
           dataSource={this.state.tagSource}
           renderRow={(data) => this._renderRow(data)}
         />
-        <View style={styles.selectedTags}></View>
+        <View style={[styles.selectedTags, this.state.selectedTags.length > 0 ? {height: 60, padding: 10} : {}]}>
+          {this._renderSelectedTags()}
+        </View>
       </View>
     );
   }
@@ -217,12 +243,20 @@ const styles = StyleSheet.create({
     color: Colors.main
   },
   selectedTags: {
-    height: 0
+    backgroundColor: Colors.main,
+    padding: 0,
+    margin: 0,
   },
   selectableDisplayPicture: {
     width: 50,
     height: 50,
     borderRadius: 25
+  },
+  selectedDisplayPictureInFooter: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 13
   },
   selectedDisplayPicture: {
     borderWidth: 3,
