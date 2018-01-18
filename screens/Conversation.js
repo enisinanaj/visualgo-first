@@ -1,3 +1,4 @@
+import {EvilIcons} from '@expo/vector-icons';
 import React, {Component} from 'react';
 import {
     Animated,
@@ -21,7 +22,7 @@ import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
 
-import {EvilIcons} from '@expo/vector-icons';
+import {EvilIcons, SimpleLineIcons, MaterialIcons} from '@expo/vector-icons';
 import _ from 'lodash';
 
 import moment from 'moment';
@@ -89,11 +90,53 @@ export default class Conversation extends Component {
                     onScroll={this._onScroll}
                     dataSource={this.state.convoMessages}
                     renderRow={(data) => this._renderRow(data)}/>
+                <View style={mesageBoxStyle.newMessageAreaContainer}>
+                    <TouchableOpacity style={mesageBoxStyle.attachmentBackground}>
+                        <EvilIcons name={"chevron-right"} size={30} color={Colors.white} />
+                    </TouchableOpacity>
+                    <View style={mesageBoxStyle.textBoxContainer}>
+                        <TextInput style={mesageBoxStyle.textArea}></TextInput>
+                        <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.yellow} />
+                    </View>
+                    <TouchableOpacity>
+                        <MaterialIcons name={"send"} size={30} color={Colors.main} />
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
 }
 
+
+const mesageBoxStyle = StyleSheet.create({
+    newMessageAreaContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 60
+    },
+    attachmentBackground: {
+        height: 44,
+        width: 44,
+        borderRadius: 22,
+        backgroundColor: Colors.main,
+        marginLeft: 10,
+        marginRight: 10
+    },
+    textBoxContainer: {
+        width: width - 108,
+        borderRadius: 22,
+        backgroundColor: Colors.lightGray,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+    },
+    textArea: {
+        backgroundColor: 'transparent',
+        color: Colors.black,
+        width: width - 108 - 30
+    },
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -107,7 +150,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'strech',
+        alignItems: 'stretch',
         paddingTop: 5,
         paddingBottom: 5,
         height: 25,
