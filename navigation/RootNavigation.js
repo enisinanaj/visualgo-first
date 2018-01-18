@@ -26,7 +26,7 @@ export default class RootNavigation extends React.Component {
         <TabNavigationItem
           id="links" style={styles.tabNavigationItem}
           renderIcon={isSelected => this._renderIcon('ios-bowtie-outline', isSelected)}>
-          <StackNavigation initialRoute="links" />
+          <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
 
         <TabNavigationItem
@@ -36,9 +36,9 @@ export default class RootNavigation extends React.Component {
         </TabNavigationItem>
 
         <TabNavigationItem
-          id="settings" style={styles.tabNavigationItem}
+          id="tasks" style={styles.tabNavigationItem}
           renderIcon={isSelected => this._renderIcon('ios-calendar-outline', isSelected)}>
-          <StackNavigation initialRoute="settings" />
+          <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
 
         <TabNavigationItem
@@ -50,7 +50,7 @@ export default class RootNavigation extends React.Component {
         <TabNavigationItem
             id="settings" style={styles.tabNavigationItem}
             renderIcon={isSelected => this._renderIcon('ios-checkmark-circle-outline', isSelected)}>
-          <StackNavigation initialRoute="settings" />
+          <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
       </TabNavigation>
     );

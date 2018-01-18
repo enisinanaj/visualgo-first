@@ -177,9 +177,9 @@ export default class Landing extends Component {
     }
 
     _onDrawerOpen(event) {
-        const e = event.nativeEvent;
-        const offset = e.contentOffset.x;
-        this.offsetX.setValue(offset);
+        //const e = event.nativeEvent;
+        //const offset = e.contentOffset.x;
+        //this.offsetX.setValue(offset);
     }
 
     openChat() {
@@ -189,7 +189,7 @@ export default class Landing extends Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                {this.renderDrawer()}
+                {/*this.renderDrawer()*/}
                 <ScrollView
                     ref='scrollview'
                     horizontal={true}
@@ -216,7 +216,7 @@ export default class Landing extends Component {
                             renderRow={(data) => this._renderRow(data)}
                         />
                     </View>
-                    {this.renderFade()}
+                    {/*this.renderFade()*/}
                 </ScrollView>
                 {this.renderModal()}
             </View>
