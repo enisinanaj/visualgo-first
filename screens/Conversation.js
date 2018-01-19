@@ -1,4 +1,3 @@
-import {EvilIcons} from '@expo/vector-icons';
 import React, {Component} from 'react';
 import {
     Animated,
@@ -53,10 +52,10 @@ export default class Conversation extends Component {
     _renderHeader() {
         return (
             <View style={styles.headerView}>
-                <EvilIcons name={"chevron-left"} size={22} onPress={() => this._goBack()} style={{width: 22}}/>
+                <EvilIcons name={"chevron-left"} size={30} onPress={() => this._goBack()} style={{width: 22}}/>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', width: width - 22}}>
                     <Text style={styles.viewTitle}>{this.props.route.params.convTitle}</Text>
-                    <EvilIcons name={"chevron-right"} size={22} style={{width: 22}}/>
+                    <EvilIcons name={"chevron-right"} size={22} style={{width: 22, marginTop: 3}}/>
                 </View>
             </View>);
     }
@@ -81,26 +80,30 @@ export default class Conversation extends Component {
 
     render() {
         return (
-            <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
+            <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
                 <View style={styles.statusBlackBackground}/>
                 <DefaultRow renderChildren={() => this._renderHeader()} />
-                <ListView
-                    style={styles.listView}
-                    onScroll={this._onScroll}
-                    dataSource={this.state.convoMessages}
-                    renderRow={(data) => this._renderRow(data)}/>
-                <View style={mesageBoxStyle.newMessageAreaContainer}>
-                    <TouchableOpacity style={mesageBoxStyle.attachmentBackground}>
-                        <EvilIcons name={"chevron-right"} size={30} color={Colors.white} />
-                    </TouchableOpacity>
-                    <View style={mesageBoxStyle.textBoxContainer}>
-                        <TextInput style={mesageBoxStyle.textArea}></TextInput>
-                        <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.yellow} />
+                <ScrollView>
+                    <ListView
+                        style={styles.listView}
+                        onScroll={this._onScroll}
+                        dataSource={this.state.convoMessages}
+                        renderRow={(data) => this._renderRow(data)}/>
+                </ScrollView>
+                <View>
+                    <View style={messageBoxStyle.newMessageAreaContainer}>
+                        <View style={messageBoxStyle.attachmentBackground}>
+                            <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
+                        </View>
+                        <View style={messageBoxStyle.textBoxContainer}>
+                            <TextInput style={messageBoxStyle.textArea}></TextInput>
+                            <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.yellow} style={messageBoxStyle.openEmoticons} />
+                        </View>
+                        <TouchableOpacity style={messageBoxStyle.sendButton}>
+                            <MaterialIcons name={"send"} size={30} color={Colors.main} />
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
-                        <MaterialIcons name={"send"} size={30} color={Colors.main} />
-                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -108,43 +111,65 @@ export default class Conversation extends Component {
 }
 
 
-const mesageBoxStyle = StyleSheet.create({
+const messageBoxStyle = StyleSheet.create({
     newMessageAreaContainer: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        height: 60
+        heihgt: 60,
+        paddingBottom: 10
     },
     attachmentBackground: {
-        height: 44,
-        width: 44,
-        borderRadius: 22,
+        height: 40,
+        width: 40,
+        borderRadius: 20,
         backgroundColor: Colors.main,
         marginLeft: 10,
         marginRight: 10
     },
+    attachmentButton: {
+        padding: 0,
+        marginTop: 8,
+        marginLeft: 5,
+        backgroundColor: 'transparent'
+    },
     textBoxContainer: {
-        width: width - 108,
+        width: width - 115,
         borderRadius: 22,
         backgroundColor: Colors.lightGray,
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        height: 40,
+        marginRight: 10
     },
     textArea: {
         backgroundColor: 'transparent',
         color: Colors.black,
-        width: width - 108 - 30
+        width: width - 120 - 22,
+        height: 40,
+        paddingLeft: 15,
+        paddingRight: 15
     },
+    openEmoticons: {
+        marginTop: 9,
+        marginRight: 10,
+        backgroundColor: 'transparent'
+    },
+    sendButton: {
+        marginTop: 7,
+        marginRight: 10
+    }
 });
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        justifyContent: 'space-between'
     },
     listView: {
-        paddingTop: 10
+        paddingTop: 10,
+        flex: 1
     },
     headerView: {
         flex: 1,
@@ -153,7 +178,7 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         paddingTop: 5,
         paddingBottom: 5,
-        height: 25,
+        height: 30,
     },
     statusBlackBackground: {
         backgroundColor: Colors.black,
@@ -163,6 +188,7 @@ const styles = StyleSheet.create({
     viewTitle: {
         fontSize: 16,
         fontWeight: '800',
+        marginTop: 2
     },
     displayPicture: {
         marginLeft: 10,
@@ -170,6 +196,11 @@ const styles = StyleSheet.create({
         height: 44,
         width: 44,
         borderRadius: 22
+    },
+    convoContainer: {
+        flex: 1, 
+        justifyContent: 'space-between', 
+        height: height
     },
     messageBubble: {
         backgroundColor: Colors.borderGray,
