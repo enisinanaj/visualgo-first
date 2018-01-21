@@ -193,7 +193,7 @@ export default class TagList extends Component {
       <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
-        <DefaultRow renderChildren={() => this.renderFilters()} />
+        <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
         <ListView
           style={styles.listView}
           onScroll={this._onScroll}
