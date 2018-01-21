@@ -77,14 +77,14 @@ export default class FitlerBar extends Component {
     render() {
         var {customStyle} = this.props || {};
 
-        return <View style={[styles.filterBarContainer, customStyle]}>
+        return <View style={styles.filterBarContainer}>
                 <Text style={styles.filterBarHeader}>{this.state.headTitle}</Text>
 
                 <ListView
                     horizontal={true}
                     style={styles.filtersListView}
                     dataSource={this.state.filtersSource}
-                    
+                      
                     renderRow={(data) => this.drawElements(data)}/>
                 
             </View>;
@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     filterBarContainer: {
         paddingTop: 14,
         paddingLeft: 0,
-        width: width
+        paddingBottom:0,
+        height:110
     },
     filterBarHeader: {
         fontSize: 14,
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         paddingBottom: 14,
         paddingTop: 10,
         paddingLeft: 20,
-        paddingBottom: 14,
+        paddingBottom: 0,
         right: 0
     },
     searchButtonContainer: {
