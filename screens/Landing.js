@@ -190,15 +190,7 @@ export default class Landing extends Component {
         return (
             <View style={{flex: 1}}>
                 {/*this.renderDrawer()*/}
-                <ScrollView
-                    ref='scrollview'
-                    horizontal={true}
-                    pagingEnabled={true}
-                    bounces={false}
-                    onScroll={this._onDrawerOpen}
-                    scrollEventThrottle={100}
-                    showsHorizontalScrollIndicator={false}
-                >
+
 
                     <View ref='view' style={styles.container}>
                         <SearchBar ref='searchBar' openChat={this.openChat.bind(this)}/>
@@ -217,7 +209,7 @@ export default class Landing extends Component {
                         />
                     </View>
                     {/*this.renderFade()*/}
-                </ScrollView>
+                            
                 {this.renderModal()}
             </View>
         )

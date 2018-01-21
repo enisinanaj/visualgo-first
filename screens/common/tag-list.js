@@ -182,6 +182,7 @@ export default class TagList extends Component {
         dataSource={dataSource}
         horizontal={true}
         renderRow={(data) => this._renderSelectedTagElement(data)}
+        
       />;
 
     return result;
@@ -189,7 +190,7 @@ export default class TagList extends Component {
 
   render() {
     return (
-      <View style={{height: this.state.visibleHeight, flex: 1, justifyContent: 'column'}}>
+      <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
         <DefaultRow renderChildren={() => this.renderFilters()} />
@@ -198,6 +199,7 @@ export default class TagList extends Component {
           onScroll={this._onScroll}
           dataSource={this.state.tagSource}
           renderRow={(data) => this._renderRow(data)}
+         
         />
         <View style={[styles.selectedTags, this.state.selectedTags.length > 0 ? {height: 60, padding: 10} : {}]}>
           {this._renderSelectedTags()}

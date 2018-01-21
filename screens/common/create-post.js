@@ -181,7 +181,8 @@ export default class CreatePost extends Component{
         return (
             <View style={{flex: 1, padding: 16}}>
                 <TextInput autoFocus={true} style={{height: 50, fontSize: 22, textAlign: 'center', textAlignVertical: 'center', 
-                    fontWeight: '300'}} 
+                    fontWeight: '300'}}
+                    underlineColorAndroid={'rgba(0,0,0,0)'} 
                     placeholderTextColor={Colors.grayText} 
                     placeholder={"What's on your mind?"}/>
             </View>

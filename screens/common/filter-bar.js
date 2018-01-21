@@ -6,7 +6,8 @@ import { Text,
     StyleSheet, 
     Dimensions, 
     ListView, 
-    TouchableOpacity} from 'react-native';
+    TouchableOpacity,
+    ScrollView} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -69,11 +70,14 @@ export default class FitlerBar extends Component {
 
         return <View style={[styles.filterBarContainer, customStyle]}>
                 <Text style={styles.filterBarHeader}>{this.state.headTitle}</Text>
+
                 <ListView
                     horizontal={true}
                     style={styles.filtersListView}
                     dataSource={this.state.filtersSource}
+                    
                     renderRow={(data) => this.drawElements(data)}/>
+                
             </View>;
     }
 };
@@ -82,6 +86,7 @@ const styles = StyleSheet.create({
     filterBarContainer: {
         paddingTop: 14,
         paddingLeft: 0,
+        width: width
     },
     filterBarHeader: {
         fontSize: 14,
@@ -91,11 +96,13 @@ const styles = StyleSheet.create({
     },
     filtersListView: {
         flex: 1,
-        height: 68,
+        height: 72,
         paddingBottom: 14,
         paddingTop: 10,
         paddingLeft: 20,
-        paddingBottom: 14
+        paddingBottom: 14,
+        paddingRight: 20,
+        right: 0
     },
     searchButtonContainer: {
         flex: 1,
@@ -105,8 +112,9 @@ const styles = StyleSheet.create({
         paddingTop: 14,
         height: 44,
         width: 44,
-        marginRight: 8,
+        margin: 8,
         marginBottom: 14,
+        marginTop: 2
     },
 
     filterButtons: {
@@ -136,6 +144,7 @@ const styles = StyleSheet.create({
         height: 44,
         marginRight: 8,
         minWidth: 75,
+        marginTop: 2
         //fontFamily: 'Roboto-Light'
     }
 });

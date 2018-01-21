@@ -6,7 +6,8 @@ export default {
         shadowOffset: {
             height: 2,
             width: 0
-        }
+        },
+        elevation: 2
     },
     cardShadow: {
         shadowColor: "#000000",
@@ -15,6 +16,7 @@ export default {
         shadowOffset: {
             height: 2,
             width: 0
-        }
+        },
+        elevation: 2
     }
 }

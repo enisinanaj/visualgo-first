@@ -141,7 +141,9 @@ export default class Conversation extends Component {
                         <View style={messageBoxStyle.textBoxContainer}>
                             <TextInput style={messageBoxStyle.textArea} ref='newMessageTextInput'
                                 onChangeText={(arg) => this.setState({newMessage: arg})}
-                                valiue={this.state.newMessage}/>
+                                valiue={this.state.newMessage}
+                                underlineColorAndroid={'rgba(0,0,0,0)'} 
+                                />
                             <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.yellow} style={messageBoxStyle.openEmoticons} />
                         </View>
                         <TouchableOpacity style={messageBoxStyle.sendButton} onPress={() => this._addMessage()}>
