@@ -78,7 +78,7 @@ export default class Chat extends Component {
             <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
                 <SearchBar ref='searchBar'/>
-                <DefaultRow renderChildren={() => this.renderFilters()} />
+                <DefaultRow renderChildren={() => this.renderFilters()} usePadding={true} />
                 <ListView
                     style={styles.listView}
                     onScroll={this._onScroll}

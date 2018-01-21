@@ -21,9 +21,12 @@ export default class FitlerBar extends Component {
     constructor(props) {
         super(props);
 
+        var filters = this.props.data;
+        filters.push('last-padding');
+
         this.state = {
             headTitle: this.props.headTitle,
-            filtersSource: ds.cloneWithRows(this.props.data)
+            filtersSource: ds.cloneWithRows(filters)
         }
     }
 
@@ -34,6 +37,12 @@ export default class FitlerBar extends Component {
                     <EvilIcons name={'search'} size={22} color={Colors.main}/>
                 </TouchableOpacity>
             )
+        }
+
+        if (data == 'last-padding') {
+            return (
+                <View style={{width: 30, backgroundColor: 'transparent'}}></View>
+            );
         }
 
         return (
@@ -101,7 +110,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingLeft: 20,
         paddingBottom: 14,
-        paddingRight: 20,
         right: 0
     },
     searchButtonContainer: {

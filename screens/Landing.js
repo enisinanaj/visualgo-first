@@ -251,5 +251,6 @@ const styles= StyleSheet.create({
     },
     filterBarContainer: {
         backgroundColor: Colors.white,
+        width: width
     }
 })

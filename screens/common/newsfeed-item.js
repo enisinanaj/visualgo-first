@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     },
 
     profile: {
-        backgroundColor: 'black',
+        backgroundColor: 'transparent',
         height: 40,
         width: 40,
         borderRadius: 20

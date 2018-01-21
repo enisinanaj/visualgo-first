@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
 
     profile: {
-        backgroundColor: 'black',
+        backgroundColor: 'transparent',
         marginLeft: 15,
         height: 40,
         width: 40,
