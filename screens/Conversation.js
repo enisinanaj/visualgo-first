@@ -12,8 +12,10 @@ import {
     StatusBar,
     Image,
     TouchableOpacity,
+    Keyboard,
     Button,
-    TextInput
+    TextInput,
+    KeyboardAvoidingView
 } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -28,7 +30,7 @@ import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
 
-const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
+var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
                   {from: {name: 'me', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo', read: true, date: new Date()},
                   {from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
 
@@ -41,12 +43,37 @@ export default class Conversation extends Component {
         super(props);
 
         this.state = {
-            convoMessages: ds.cloneWithRows(messages)
+            convoMessages: ds.cloneWithRows(messages),
+            visibleHeight: height,
+            newMessage: '',
+            contentLayout: {}
         }
     }
 
     _goBack() {
         this.props.navigator.pop();
+    }
+
+    componentDidMount () {
+        Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+        Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+    }
+
+    componentWillUnmount() {
+        Keyboard.removeListener('keyboardWillShow');
+        Keyboard.removeListener('keyboardWillHide');
+    }
+
+    keyboardWillShow (e) {
+        let newSize = Dimensions.get('window').height - e.endCoordinates.height
+            this.setState({visibleHeight: newSize, k_visible: true})
+    }
+
+    keyboardWillHide (e) {
+        if(this.componentDidMount) {
+            this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+        }
+
     }
 
     _renderHeader() {
@@ -77,35 +104,52 @@ export default class Conversation extends Component {
             </View>);
     }
 
+    _addMessage() {
+        var {newMessage} = this.state;
+        messages.push(
+            {from: {name: 'me', image: require('./img/elmo.jpg')}, message: newMessage, read: false, date: new Date()}
+        );
+
+        this.setState({convoMessages: ds.cloneWithRows(messages)});
+        this.refs['newMessageTextInput'].clear();
+        this.refs['conversationCollection'].scrollToEnd();
+    }
 
     render() {
+        var {height, visibleHeight} = this.state;
         return (
-            <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
-                <StatusBar barStyle={'light-content'} animated={true}/>
-                <View style={styles.statusBlackBackground}/>
-                <DefaultRow renderChildren={() => this._renderHeader()} />
-                <ScrollView>
-                    <ListView
-                        style={styles.listView}
-                        onScroll={this._onScroll}
-                        dataSource={this.state.convoMessages}
-                        renderRow={(data) => this._renderRow(data)}/>
-                </ScrollView>
+            <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
+                <View
+                    style={{flex: 1}}
+                    resetScrollToCoords={{x: 0, y: 0}}>
+                    <StatusBar barStyle={'light-content'} animated={true}/>
+                    <View style={styles.statusBlackBackground}/>
+                    <DefaultRow renderChildren={() => this._renderHeader()} />
+                    <ScrollView ref="conversationCollection" contentContainerStyle={{flexGrow: 1}} onLayout={(event) => {this.setState({contentLayout: event.nativeEvent.layout});}}>
+                        <ListView
+                            style={[styles.listView]}
+                            onScroll={this._onScroll}
+                            dataSource={this.state.convoMessages}
+                            renderRow={(data) => this._renderRow(data)}/>
+                    </ScrollView>
+                </View>
                 <View>
                     <View style={messageBoxStyle.newMessageAreaContainer}>
                         <View style={messageBoxStyle.attachmentBackground}>
                             <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
                         </View>
                         <View style={messageBoxStyle.textBoxContainer}>
-                            <TextInput style={messageBoxStyle.textArea}></TextInput>
+                            <TextInput style={messageBoxStyle.textArea} ref='newMessageTextInput'
+                                onChangeText={(arg) => this.setState({newMessage: arg})}
+                                valiue={this.state.newMessage}/>
                             <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.yellow} style={messageBoxStyle.openEmoticons} />
                         </View>
-                        <TouchableOpacity style={messageBoxStyle.sendButton}>
+                        <TouchableOpacity style={messageBoxStyle.sendButton} onPress={() => this._addMessage()}>
                             <MaterialIcons name={"send"} size={30} color={Colors.main} />
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -115,7 +159,7 @@ const messageBoxStyle = StyleSheet.create({
     newMessageAreaContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        heihgt: 60,
+        height: 60,
         paddingBottom: 10
     },
     attachmentBackground: {
@@ -200,7 +244,6 @@ const styles = StyleSheet.create({
     convoContainer: {
         flex: 1, 
         justifyContent: 'space-between', 
-        height: height
     },
     messageBubble: {
         backgroundColor: Colors.borderGray,

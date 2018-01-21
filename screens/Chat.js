@@ -75,7 +75,7 @@ export default class Chat extends Component {
 
   render() {
         return (
-            <View style={{height: this.state.visibleHeight, flex: 1, justifyContent: 'column'}}>
+            <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
                 <SearchBar ref='searchBar'/>
                 <DefaultRow renderChildren={() => this.renderFilters()} />
