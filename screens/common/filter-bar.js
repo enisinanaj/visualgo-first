@@ -7,7 +7,8 @@ import { Text,
     Dimensions, 
     ListView, 
     TouchableOpacity,
-    ScrollView} from 'react-native';
+    ScrollView,
+    TextInput} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -41,13 +42,25 @@ export default class FitlerBar extends Component {
         var filters = this.props.data;
         filters.push('last-padding');
         this.setState({filtersSource: ds.cloneWithRows(filters)});
+
+        $this = this;
+
+        setTimeout(function() {
+            if ($this.refs['searchTextBox'] != undefined) {
+                $this.refs['searchTextBox'].focus();
+            }
+        }, 100);
     }
 
     drawElements(data) {
         if (data == 0) {
             return (
                 <TouchableOpacity style={[styles.searchButtonContainer, Shadow.filterShadow, {width: this.state.searchWidth}]} onPress={() => this._toggleSearch()}>
-                    <EvilIcons name={'search'} size={22} color={Colors.main}/>
+                    <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
+                    {this.state.searchWidth > 44 
+                        ? 
+                        <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} style={{backgroundColor: 'transparent', width: 200}} ref="searchTextBox"/> 
+                        : null}
                 </TouchableOpacity>
             )
         }
@@ -109,7 +122,8 @@ const styles = StyleSheet.create({
         paddingTop: 14,
         paddingLeft: 0,
         paddingBottom:0,
-        height:110
+        height:110,
+        width: width
     },
     filterBarHeader: {
         fontSize: 14,
@@ -128,6 +142,7 @@ const styles = StyleSheet.create({
     },
     searchButtonContainer: {
         flex: 1,
+        flexDirection: 'row',
         backgroundColor: Colors.white,
         borderRadius: 22,
         padding: 10,
