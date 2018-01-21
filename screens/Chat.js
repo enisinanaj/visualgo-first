@@ -78,7 +78,7 @@ export default class Chat extends Component {
             <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
                 <SearchBar ref='searchBar'/>
-                <DefaultRow renderChildren={() => this.renderFilters()} usePadding={true} />
+                <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
                 <ListView
                     style={styles.listView}
                     onScroll={this._onScroll}
@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
       fontSize: 14
     },
     filterBarContainer: {
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
+        
     },
     messageDate: {
         paddingTop: 17
