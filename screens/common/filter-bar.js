@@ -26,14 +26,27 @@ export default class FitlerBar extends Component {
 
         this.state = {
             headTitle: this.props.headTitle,
-            filtersSource: ds.cloneWithRows(filters)
+            filtersSource: ds.cloneWithRows(filters),
+            searchWidth: 44
         }
+    }
+
+    _toggleSearch() {
+        if (this.state.searchWidth == 44) {
+            this.setState({searchWidth: 250});
+        } else {
+            this.setState({searchWidth: 44});
+        }
+
+        var filters = this.props.data;
+        filters.push('last-padding');
+        this.setState({filtersSource: ds.cloneWithRows(filters)});
     }
 
     drawElements(data) {
         if (data == 0) {
             return (
-                <TouchableOpacity style={[styles.searchButtonContainer, Shadow.filterShadow]}>
+                <TouchableOpacity style={[styles.searchButtonContainer, Shadow.filterShadow, {width: this.state.searchWidth}]} onPress={() => this._toggleSearch()}>
                     <EvilIcons name={'search'} size={22} color={Colors.main}/>
                 </TouchableOpacity>
             )
@@ -120,7 +133,7 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingTop: 14,
         height: 44,
-        width: 44,
+        //width: 44,
         margin: 8,
         marginBottom: 14,
         marginTop: 2
