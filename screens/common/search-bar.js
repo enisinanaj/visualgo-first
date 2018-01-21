@@ -9,7 +9,8 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    Dimensions
+    Dimensions,
+    Platform
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
@@ -68,7 +69,7 @@ export default class SearchBar extends Component {
         const {height} = this.state;
         return (
             <View ref='container'>
-                <Animated.View style={[styles.container, {height}]}>
+                <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}>
                     <View style={[styles.searchBarOuterContainer, {height: this.state.height-12}]}>
                         <TouchableOpacity style={styles.icon}>
                             <Ionicons name='ios-menu-outline' size={24} color={Colors.main}/>
@@ -95,7 +96,7 @@ export default class SearchBar extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    containerIOS: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -105,6 +106,18 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.borderGray,
         borderBottomWidth: 1,
     },
+
+    containerAndroid:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 64,
+        backgroundColor: Colors.main,
+        paddingTop: 24,
+        borderBottomColor: Colors.borderGray,
+        borderBottomWidth: 1,
+    },
+
 
     searchBarOuterContainer: {
         flex: 1,
