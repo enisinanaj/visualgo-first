@@ -66,7 +66,7 @@ export default class CreatePost extends Component{
 
     renderHeader() {
         return (
-            <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
+            <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
@@ -180,7 +180,7 @@ export default class CreatePost extends Component{
     renderText() {
         return (
             <View style={{flex: 1, padding: 16}}>
-                <TextInput autoFocus={true} style={{height: 50, fontSize: 22, textAlign: 'center', textAlignVertical: 'center', 
+                <TextInput autoFocus={true} style={{height: Platform.OS === 'ios' ? 50 : 30, fontSize: 22, textAlign: 'center', textAlignVertical: 'center', 
                     fontWeight: '300'}}
                     underlineColorAndroid={'rgba(0,0,0,0)'} 
                     placeholderTextColor={Colors.grayText} 
@@ -271,8 +271,10 @@ export default class CreatePost extends Component{
                 {this.renderCommentSwitchRow()}
                 {this.renderPostType()}
                 {this.renderText()}
-                {this.renderBackgroundColors()}
-                {this.renderMenu()}
+                <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
+                    {this.renderBackgroundColors()}
+                    {this.renderMenu()}
+                </View>
                 {this.renderTaggingModal()}
                 {this.renderPrivacyModal()}
             </View>
