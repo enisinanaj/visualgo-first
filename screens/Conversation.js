@@ -105,6 +105,10 @@ export default class Conversation extends Component {
     }
 
     _addMessage() {
+        if (this.state.newMessage == "") {
+            return;
+        }
+        
         var {newMessage} = this.state;
         messages.push(
             {from: {name: 'me', image: require('./img/elmo.jpg')}, message: newMessage, read: false, date: new Date()}
@@ -112,6 +116,7 @@ export default class Conversation extends Component {
 
         this.setState({convoMessages: ds.cloneWithRows(messages)});
         this.refs['newMessageTextInput'].clear();
+        this.setState({newMessage: ""}); 
         this.refs['conversationCollection'].scrollToEnd();
     }
 
@@ -141,7 +146,7 @@ export default class Conversation extends Component {
                         <View style={messageBoxStyle.textBoxContainer}>
                             <TextInput style={messageBoxStyle.textArea} ref='newMessageTextInput'
                                 onChangeText={(arg) => this.setState({newMessage: arg})}
-                                valiue={this.state.newMessage}
+                                value={this.state.newMessage}
                                 underlineColorAndroid={'rgba(0,0,0,0)'} 
                                 />
                             <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.yellow} style={messageBoxStyle.openEmoticons} />
