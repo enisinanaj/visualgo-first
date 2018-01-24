@@ -170,9 +170,17 @@ export default class TagList extends Component {
 
   _renderSelectedTagElement(data) {
     if (data.category != 'managers') {
-      return <Text style={{color: Colors.white, marginRight: 13, marginTop: 10}}>{data.title}</Text>;
+      return (
+      <TouchableOpacity onPress={() => this.toggleRow(data)}>
+        <Text style={{color: Colors.white, marginRight: 13, marginTop: 10}}>{data.title}</Text>
+      </TouchableOpacity>
+      )
     } else {
-      return <Image source={data.img} style={styles.selectedDisplayPictureInFooter} />;
+      return (
+        <TouchableOpacity onPress={() => this.toggleRow(data)}>
+          <Image source={data.img} style={styles.selectedDisplayPictureInFooter} />
+        </TouchableOpacity>
+      ) 
     }
   }
 
