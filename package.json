@@ -5,7 +5,8 @@
   "author": "AreaKappa for Warda",
   "scripts": {
     "test": "jest",
-    "start": "react-native-scripts start"
+    "start": "react-native-scripts start",
+    "eject": "react-scripts eject"
   },
   "jest": {
     "preset": "jest-exponent"
