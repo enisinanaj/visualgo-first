@@ -27,6 +27,10 @@ const images = {
     '5': require('../img/5.jpg')
 };
 
+export default settings = {
+    baseApi: 'http://crpbddyxugpgmqhgx-mock.stoplight-proxy.io/v1'
+}
+
 export function randomProfile() {
     var random = Math.floor((Math.random() * profile.length));
 

@@ -32,7 +32,7 @@ import Shadow from '../constants/Shadow';
 
 //1 is regular post, 2 is image
 const data = ['0', '1',
-    {type: 'image', images: ['1']},
+    /*{type: 'image', images: ['1']},
     {type: 'image', images: ['1', '2']},
     {type: 'image', images: ['1', '2', '3']},
     {type: 'image', images: ['1', '2', '3', '4']},
@@ -40,7 +40,7 @@ const data = ['0', '1',
     {type: 'image', images: ['1', '2', '3', '4', '5', '6']},
     {type: 'post'},
     {type: 'post'},
-    {type: 'post'}
+    {type: 'post'}*/
     ];
 
 const filters = ['0', {title: 'All', selected: true}, {title: 'Post'}, {title: 'Task'}, {title: 'Survey'}];
@@ -56,9 +56,12 @@ export default class Landing extends Component {
             loading: false,
             opacity: new Animated.Value(1),
             header_height: new Animated.Value(96),
-
-            dataSource: ds.cloneWithRows(data)
+            dataSource: ds.cloneWithRows(data),
+            take: 20,
+            skip: 0
         };
+
+        this._loadPosts();
 
         this.offsetY = 0;
         this.offsetX = new Animated.Value(0);
@@ -66,6 +69,25 @@ export default class Landing extends Component {
         this._onScroll = this._onScroll.bind(this);
         this.loadMore = _.debounce(this.loadMore, 300);
         this._onDrawerOpen = this._onDrawerOpen.bind(this);
+    }
+
+    _loadPosts() {
+
+        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log("landing data: " + JSON.stringify(responseJson));
+
+                responseJson.forEach(element => {
+                    data.push(element);
+                });
+
+                console.log("landing data: " + JSON.stringify(data));
+                this.setState({dataSource: ds.cloneWithRows(data)});
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     componentDidMount() {
@@ -122,10 +144,11 @@ export default class Landing extends Component {
     loadMore() {
         this.setState({loading: true});
 
-        data.push('3');
-        data.push('6');
-        this.setState({dataSource: ds.cloneWithRows(data)});
-
+        this.setState({
+            skip: this.state.skip + this.state.keep
+        });
+        
+        this._loadPosts();
     }
 
     _onScroll(event) {
