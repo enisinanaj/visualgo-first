@@ -76,13 +76,10 @@ export default class Landing extends Component {
         return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("landing data: " + JSON.stringify(responseJson));
-
                 responseJson.forEach(element => {
                     data.push(element);
                 });
 
-                console.log("landing data: " + JSON.stringify(data));
                 this.setState({dataSource: ds.cloneWithRows(data)});
             })
             .catch((error) => {
