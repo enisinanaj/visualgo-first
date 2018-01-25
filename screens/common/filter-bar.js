@@ -18,6 +18,7 @@ import {EvilIcons} from '@expo/vector-icons';
 import Shadow from '../../constants/Shadow';
 import { Font } from 'expo';
 import Router from '../../navigation/Router';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default class FitlerBar extends Component {
     constructor(props) {
@@ -79,6 +80,7 @@ export default class FitlerBar extends Component {
                     <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle, Shadow.filterShadow]}
                         onPress={data.onPress}>
                         <Text style={[styles.filterButton, styles.buttonNewGroupContentStyle]}>{data.title}</Text>
+                        <MaterialCommunityIcons style={styles.plusIcon} name={"plus-circle"} size={22} color={Colors.main} />
                     </TouchableOpacity>
                 )
             }else{
@@ -165,6 +167,12 @@ const styles = StyleSheet.create({
         paddingBottom:0,
         height:110,
         width: width
+    },
+    plusIcon: {
+        marginLeft: 15,
+        width: 22,
+        borderRadius: 11,
+        backgroundColor: 'transparent'
     },
     filterBarHeader: {
         fontSize: 14,
