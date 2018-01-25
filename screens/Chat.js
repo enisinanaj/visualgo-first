@@ -67,12 +67,16 @@ export default class Chat extends Component {
     return <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMessageRow(data)} />
   }
 
+  _goToNewGoup() {
+    this.props.navigator.push('newGroup');
+  }
+
   renderFilters() {
     filters = ['0',
           {title: 'All', selected: true, active: true},
           {title: 'Group', selected: false, active: true},
           {title: 'Active', selected: false, active: true},
-          {title: 'New', active: false}];
+          {title: 'New', active: false, onPress: () => this._goToNewGoup()}];
     return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Messages"} /></View>
   }
 

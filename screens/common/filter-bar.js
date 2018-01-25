@@ -53,16 +53,6 @@ export default class FitlerBar extends Component {
         }, 100);
     }
 
-    _goToNewGroup = () => {
-
-        
-        console.log("TODO: Open group creation view..")
-
-        this.props.navigator.push(Router.getRoute('newGroup'));
-
-
-    }
-
     drawElements(data) {
         if (data == 0) {
             return (
@@ -87,7 +77,7 @@ export default class FitlerBar extends Component {
             if(data.title ===  'New'){
                 return (
                     <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle, Shadow.filterShadow]}
-                        onPress={() => this._goToNewGroup()}>
+                        onPress={data.onPress}>
                         <Text style={[styles.filterButton, styles.buttonNewGroupContentStyle]}>{data.title}</Text>
                     </TouchableOpacity>
                 )

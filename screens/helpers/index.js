@@ -33,7 +33,7 @@ export default settings = {
 
 export function getProfile(profileId) {
     var result = "";
-    return fetch(settings.baseApi + '/users?userId=' + profileId)
+    return fetch(settings.baseApi + '/users?userId=null') // + profileId)
         .then((response) => response.json())
         .then((responseJson) => {
             retusul = responseJson;

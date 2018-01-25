@@ -20,5 +20,5 @@ export default createRouter(() => ({
     chat: () => Chat,
     rootNavigation: () => RootNavigation,
     conversation: () => ConversationView,
-    newGroup:() => NewGroup,
+    newGroup: () => NewGroup,
 }));
