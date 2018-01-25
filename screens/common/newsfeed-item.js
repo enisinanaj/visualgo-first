@@ -12,7 +12,7 @@ import {
 
 import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
-import {randomProfile} from '../helpers';
+import {getProfile} from '../helpers';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import ImagePost from './image-post';
@@ -23,17 +23,19 @@ import Shadow from '../../constants/Shadow';
 const {width, height} = Dimensions.get('window');
 
 export default class NewsFeedItem extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+
         this.state = {
-            profile: randomProfile(),
-            time: moment().locale("it").format("D MMMM [alle ore] hh:mm"),
+            profile: getProfile(this.props.data.creator),
+            time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: ['Comment', 'Stats'],
             icons: ['comment', 'ios-podium-outline'],
             iconTypes: ["evilicon"],
             iconColors: [Colors.main, Colors.yellow],
             likes: 0,
-            comments: 0
+            comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length
         };
     }
 
@@ -96,13 +98,13 @@ export default class NewsFeedItem extends Component {
         const {data} = this.props;
         if(data.type == 'image') {
             return (
-                <ImagePost imageCount={data.images.length} images={data.images} style={styles.imageStyle}/>
+                <ImagePost imageCount={data.media.length} images={data.media} style={styles.imageStyle}/>
             )
         }
 
         return (
             <View style={styles.content}>
-                <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dapibus tincidunt massa, sit amet volutpat nisi imperdiet at. Morbi maximus, neque vitae posuere molestie, enim est posuere eros, at rutrum sem felis id nisl. Ut nec mi augue. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec tempor lectus facilisis, rutrum metus sed, volutpat felis. Fusce vitae dictum sapien, non facilisis nisl. Aenean elementum ante sed lectus sodales consequat in a mauris. Duis fermentum condimentum elit, vel suscipit purus lobortis in. Maecenas lorem quam, gravida in hendrerit pharetra, malesuada in elit.</Text>
+                <Text>{this.props.data.content}</Text>
             </View>
         )
     }
