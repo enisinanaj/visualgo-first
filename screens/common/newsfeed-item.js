@@ -12,7 +12,7 @@ import {
 
 import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
-import {randomProfile} from '../helpers';
+import {getProfile} from '../helpers';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import ImagePost from './image-post';
@@ -26,9 +26,10 @@ export default class NewsFeedItem extends Component {
     constructor(props) {
         super(props);
 
+
         this.state = {
-            profile: randomProfile(),
-            time: moment().locale("it").format("D MMMM [alle ore] hh:mm"),
+            profile: getProfile(this.props.data.creator),
+            time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: ['Comment', 'Stats'],
             icons: ['comment', 'ios-podium-outline'],
             iconTypes: ["evilicon"],
