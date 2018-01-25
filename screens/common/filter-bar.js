@@ -61,7 +61,7 @@ export default class FitlerBar extends Component {
                     <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
                     {this.state.searchWidth > 44 
                         ? 
-                        <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} style={{backgroundColor: 'transparent', width: 200}} ref="searchTextBox"/> 
+                        <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} placeholder='Search...' style={{backgroundColor: 'transparent', width: 200}} ref="searchTextBox"/> 
                         : null}
                 </TouchableOpacity>
             )

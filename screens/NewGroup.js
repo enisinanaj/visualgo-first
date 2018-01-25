@@ -1,27 +1,22 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-    Animated,
-    View,
-    Text,
-    Dimensions,
-    RefreshControl,
-    Modal,
-    ScrollView,
-    ListView,
-    StyleSheet,
-    StatusBar,
-    Image,
-    TouchableOpacity,
-    Keyboard,
-    Button,
-    TextInput,
-    KeyboardAvoidingView
-} from 'react-native';
+  Text,
+  View,
+  Button,
+  Modal,
+  StyleSheet,
+  RefreshControl,
+  StatusBar,
+  Image,
+  TouchableOpacity,
+  ListView,
+  Dimensions,
+    Platform } from 'react-native';
 
-import Colors from '../constants/Colors';
-import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
+import Colors from '../constants/Colors';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import {EvilIcons, SimpleLineIcons, MaterialIcons} from '@expo/vector-icons';
 import _ from 'lodash';
@@ -36,6 +31,13 @@ var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const {width, height} = Dimensions.get('window');
+
+const people = [
+    {title: 'Roseanne Font', subtitle: 'Milan Store', img: require('./img/elmo.jpg'), selected: false }, 
+    {title: 'Denis Mcgraw', subtitle: 'Rome Store', img: require('./img/bob.png'), selected: false },
+    {title: 'Love Guerette', subtitle: 'Paris Store', img: require('./img/cookiemonster.jpeg'), selected: false },
+    {title: 'Marget Divers', subtitle: 'London Store', img: require('./img/elmo.jpg'), selected: false },
+    {title: 'Moriah Fewell', subtitle: 'Shanghai Store', img: require('./img/me.png'), selected: false }];
 
 export default class NewGroup extends Component {
 
@@ -54,55 +56,65 @@ export default class NewGroup extends Component {
         this.props.navigator.pop();
     }
 
-    componentDidMount () {
-        Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
-        Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
-    }
-
-    componentWillUnmount() {
-        Keyboard.removeListener('keyboardWillShow');
-        Keyboard.removeListener('keyboardWillHide');
-    }
-
-    keyboardWillShow (e) {
-        let newSize = Dimensions.get('window').height - e.endCoordinates.height
-            this.setState({visibleHeight: newSize, k_visible: true})
-    }
-
-    keyboardWillHide (e) {
-        if(this.componentDidMount) {
-            this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
-        }
-
-    }
-
-    _renderHeader() {
+    renderHeader() {
         return (
-            <View style={styles.headerView}>
-                <EvilIcons name={"chevron-left"} size={30} onPress={() => this._goBack()} style={{width: 22}}/>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', width: width - 22}}>
-                    <Text style={styles.viewTitle}>{this.props.route.params.convTitle}</Text>
-                    <EvilIcons name={"chevron-right"} size={22} style={{width: 22, marginTop: 3}}/>
-                </View>
-            </View>);
+            <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
+                borderBottomColor: Colors.gray, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                <TouchableOpacity onPress={this.props.closeModal}>
+                    <Text>
+                        <EvilIcons name={"close"} size={22} color={Colors.main}/>
+                    </Text>
+                </TouchableOpacity>
+                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Select People</Text>
+                <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Create</Text>
+            </View>
+        )
     }
+
+    toggleRow(rowData) {
+        rowData.selected = !rowData.selected;
+    
+        if(rowData.selected) {
+          rowData.category = currentCategory;
+          this.state.selectedTags.push(rowData);
+        } else {
+          this.setState({selectedTags: this.state.selectedTags.filter(value => value != rowData)});
+        }
+    
+        this.setState({tagSource: ds.cloneWithRows(tagsToShow)});
+      }
+    
+  renderTagRow(data) {
+    return (
+      <View style={styles.rowContainer}>
+        <TouchableOpacity onPress={() => this.toggleRow(data)} style={styles.rowContainer}>
+          {this.renderSelectableComponent(data)}
+          <View style={styles.textInRow}>
+            <Text style={[styles.rowTitle, data.selected ? styles.rowSelected : {}]}>{data.title}</Text>
+            <Text style={styles.rowSubTitle}>{data.subtitle}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>);
+  }
+
+  renderSelectableComponent(data) {
+    if (data.img == undefined) {
+      return (
+        <Ionicons name={data.selected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} 
+              size={30} color={data.selected ? Colors.main : Colors.gray} />
+      );
+    }
+    
+    return (
+      <Image source={data.img} style={[styles.selectableDisplayPicture,
+        data.selected ? styles.selectedDisplayPicture : {}]} />
+    );
+  }
 
     _renderRow(data) {
-        if (data.from.name != 'me') {
-            return (
-                <View style={styles.fromBubble}>
-                    <Image source={data.from.image} style={styles.displayPicture} />
-                    <View style={styles.messageBubble}>
-                        <Text>{data.message}</Text>
-                    </View>
-                </View>);
-        }
-
-        return (
-            <View style={styles.messageBubble}>
-                <Text>{data.message}</Text>
-            </View>);
-    }
+        return <DefaultRow arguments={data} renderChildren={() => this.renderTagRow(data)} />
+      }
 
     _addMessage() {
         if (this.state.newMessage == "") {
@@ -120,43 +132,28 @@ export default class NewGroup extends Component {
         this.refs['conversationCollection'].scrollToEnd();
     }
 
+    renderFilters() {
+        filters = ['0'];
+        return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"People"} /></View>
+      }
+
     render() {
         var {height, visibleHeight} = this.state;
         return (
-            <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
-                <View
-                    style={{flex: 1}}
-                    resetScrollToCoords={{x: 0, y: 0}}>
-                    <StatusBar barStyle={'light-content'} animated={true}/>
-                    <View style={styles.statusBlackBackground}/>
-                    <DefaultRow renderChildren={() => this._renderHeader()} />
-                    <ScrollView ref="conversationCollection" contentContainerStyle={{flexGrow: 1}} onLayout={(event) => {this.setState({contentLayout: event.nativeEvent.layout});}}>
-                        <ListView
-                            style={[styles.listView]}
-                            onScroll={this._onScroll}
-                            dataSource={this.state.convoMessages}
-                            renderRow={(data) => this._renderRow(data)}/>
-                    </ScrollView>
-                </View>
-                <View>
-                    <View style={messageBoxStyle.newMessageAreaContainer}>
-                        <View style={messageBoxStyle.attachmentBackground}>
-                            <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
-                        </View>
-                        <View style={messageBoxStyle.textBoxContainer}>
-                            <TextInput style={messageBoxStyle.textArea} ref='newMessageTextInput'
-                                onChangeText={(arg) => this.setState({newMessage: arg})}
-                                value={this.state.newMessage}
-                                underlineColorAndroid={'rgba(0,0,0,0)'} 
-                                />
-                            <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.yellow} style={messageBoxStyle.openEmoticons} />
-                        </View>
-                        <TouchableOpacity style={messageBoxStyle.sendButton} onPress={() => this._addMessage()}>
-                            <MaterialIcons name={"send"} size={30} color={Colors.main} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </KeyboardAvoidingView>
+            <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
+                <View style={[Platform.OS === 'ios' ? styles.statusIOSBackground : styles.statusAndroidBackground]}/>
+                <StatusBar barStyle={'light-content'} animated={true}/>
+
+                    
+
+
+                        {this.renderHeader()}
+
+                        
+                        <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
+
+                    
+            </View>
         );
     }
 }
@@ -231,10 +228,19 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         height: 30,
     },
-    statusBlackBackground: {
-        backgroundColor: Colors.black,
+    statusIOSBackground: {
+        backgroundColor: Colors.main,
         height: 20,
         width: width
+    },
+    statusAndroidBackground: {
+        backgroundColor: Colors.main,
+        height: 24,
+        width: width
+    },
+
+    statusBlackBackground: {
+
     },
     viewTitle: {
         fontSize: 16,
