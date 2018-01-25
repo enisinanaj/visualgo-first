@@ -100,9 +100,9 @@ export default class TagList extends Component {
 
   renderFilters() {
     filters = ['0', 
-      {title: 'Clusters', selected: true, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
-      {title: 'Store', selected: false, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
-      {title: 'Manager', selected: false, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
+      {title: 'Clusters', selected: true, active: true, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
+      {title: 'Store', selected: false, active: true, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
+      {title: 'Manager', selected: false, active: true, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
     return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Clusters"}/></View>
   }
 

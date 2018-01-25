@@ -58,7 +58,7 @@ export default class FitlerBar extends Component {
         
         console.log("TODO: Open group creation view..")
 
-        Router.getRoute('newGroup');
+        this.props.navigator.push(Router.getRoute('newGroup'));
 
 
     }
@@ -120,15 +120,20 @@ export default class FitlerBar extends Component {
                 buttons[i].selected = true;
             }
 
+            
             if (b.title === 'Group'){
-                if(buttons[4].title === 'New'){
-                    buttons[4].active = true;
+                if(buttons.length > 3){
+
+                    if(buttons[4].title === 'New'){
+                        buttons[4].active = true;
+                    }
+                    
+                }else{
+                    if(buttons[4].title === 'New'){
+                        buttons[4].active = false;
+                    }
                 }
-                
-            }else{
-                if(buttons[4].title === 'New'){
-                    buttons[4].active = false;
-                }
+
             }
         }
 
