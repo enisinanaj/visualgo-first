@@ -112,18 +112,22 @@ export default class FitlerBar extends Component {
 
             
             if (b.title === 'Group'){
-                if(buttons.length > 3){
+                if(buttons.length > 4){
 
                     if(buttons[4].title === 'New'){
                         buttons[4].active = true;
                     }
                     
-                }else{
+                }
+
+            }else{
+                if(buttons.length > 4){
+
                     if(buttons[4].title === 'New'){
                         buttons[4].active = false;
                     }
+                    
                 }
-
             }
         }
 
