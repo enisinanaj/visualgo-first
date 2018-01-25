@@ -17,6 +17,7 @@ import Colors from '../../constants/Colors';
 import {EvilIcons} from '@expo/vector-icons';
 import Shadow from '../../constants/Shadow';
 import { Font } from 'expo';
+import Router from '../../navigation/Router';
 
 export default class FitlerBar extends Component {
     constructor(props) {
@@ -52,6 +53,16 @@ export default class FitlerBar extends Component {
         }, 100);
     }
 
+    _goToNewGroup = () => {
+
+        
+        console.log("TODO: Open group creation view..")
+
+        Router.getRoute('newGroup');
+
+
+    }
+
     drawElements(data) {
         if (data == 0) {
             return (
@@ -71,12 +82,32 @@ export default class FitlerBar extends Component {
             );
         }
 
-        return (
-            <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, styles.buttonStyle, Shadow.filterShadow]}
-                onPress={() => this.setSelected(data)}>
-                <Text style={[data.selected ? styles.filterButtonSelected : styles.filterButton, styles.buttonContentStyle]}>{data.title}</Text>
-            </TouchableOpacity>
-        )
+        if(data.active){
+
+            if(data.title ===  'New'){
+                return (
+                    <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle, Shadow.filterShadow]}
+                        onPress={() => this._goToNewGroup()}>
+                        <Text style={[styles.filterButton, styles.buttonNewGroupContentStyle]}>{data.title}</Text>
+                    </TouchableOpacity>
+                )
+            }else{
+
+                return (
+                    <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, styles.buttonStyle, Shadow.filterShadow]}
+                        onPress={() => this.setSelected(data)}>
+                        <Text style={[data.selected ? styles.filterButtonSelected : styles.filterButton, styles.buttonContentStyle]}>{data.title}</Text>
+                    </TouchableOpacity>
+                )
+
+            }
+
+
+        }
+
+        return null;
+
+
     }
 
     setSelected(b) {
@@ -87,6 +118,17 @@ export default class FitlerBar extends Component {
 
             if (buttons[i].title === b.title) {
                 buttons[i].selected = true;
+            }
+
+            if (b.title === 'Group'){
+                if(buttons[4].title === 'New'){
+                    buttons[4].active = true;
+                }
+                
+            }else{
+                if(buttons[4].title === 'New'){
+                    buttons[4].active = false;
+                }
             }
         }
 
@@ -173,6 +215,14 @@ const styles = StyleSheet.create({
         margin: 0,
         textAlign: 'center',
     },
+    buttonNewGroupContentStyle: {
+        padding: 0,
+        paddingTop: 10,
+        margin: 0,
+        textAlign: 'center',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
     buttonStyle: {
         flex: 1,
         borderRadius: 22,
@@ -182,6 +232,18 @@ const styles = StyleSheet.create({
         marginRight: 8,
         minWidth: 75,
         marginTop: 2
+        //fontFamily: 'Roboto-Light'
+    },
+    buttonNewGroupStyle: {
+        flex: 1,
+        borderRadius: 22,
+        padding: 8,
+        paddingTop: 5,
+        height: 44,
+        marginRight: 8,
+        width: 44,
+        marginTop: 2
+        
         //fontFamily: 'Roboto-Light'
     }
 });

@@ -61,15 +61,18 @@ export default class Chat extends Component {
     this.props.navigator.push(Router.getRoute('conversation', {convTitle: 'Andy'}));
   }
 
+
+
   _renderRow(data) {
     return <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMessageRow(data)} />
   }
 
   renderFilters() {
     filters = ['0',
-          {title: 'All', selected: true},
-          {title: 'Group', selected: false},
-          {title: 'Active', selected: false}];
+          {title: 'All', selected: true, active: true},
+          {title: 'Group', selected: false, active: true},
+          {title: 'Active', selected: false, active: true},
+          {title: 'New', active: false}];
     return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Messages"} /></View>
   }
 

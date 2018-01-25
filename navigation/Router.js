@@ -9,6 +9,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import Chat from '../screens/Chat';
 import RootNavigation from './RootNavigation';
 import ConversationView from '../screens/Conversation';
+import NewGroup from '../screens/NewGroup'
 
 
 export default createRouter(() => ({
@@ -19,4 +20,5 @@ export default createRouter(() => ({
     chat: () => Chat,
     rootNavigation: () => RootNavigation,
     conversation: () => ConversationView,
+    newGroup:() => NewGroup,
 }));
