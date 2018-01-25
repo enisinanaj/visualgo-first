@@ -43,7 +43,7 @@ const data = ['0', '1',
     {type: 'post'}*/
     ];
 
-const filters = ['0', {title: 'All', selected: true}, {title: 'Post'}, {title: 'Task'}, {title: 'Survey'}];
+const filters = ['0', {title: 'All', selected: true, active: true}, {title: 'Post', active: true}, {title: 'Task', active: true}, {title: 'Survey', active: true}];
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
