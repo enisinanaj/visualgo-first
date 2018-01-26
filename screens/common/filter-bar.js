@@ -69,7 +69,7 @@ export default class FitlerBar extends Component {
                             <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} placeholder={data.searchPlaceHolder} style={{backgroundColor: 'transparent', width: 200}} ref="searchTextBox"/> 
                             {!data.fixedOpen ?
                                 <TouchableOpacity onPress={() => this._toggleSearch()}>
-                                    <EvilIcons name={"close"} size={20} />
+                                    <EvilIcons name={"close"} size={20} color={Colors.main} />
                                 </TouchableOpacity>
                             : null}
                         </View>
