@@ -19,6 +19,7 @@ import Colors from '../constants/Colors';
 import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
+import NewGroup from './NewGroup';
 
 import {EvilIcons} from '@expo/vector-icons';
 import _ from 'lodash';
@@ -40,6 +41,7 @@ export default class Chat extends Component {
 
     this.state = {
         messages: ds.cloneWithRows(messages),
+        createNewGroup: false,
     };
   }
 
@@ -60,19 +62,29 @@ export default class Chat extends Component {
   _goToConvo = (messageId) => {
     this.props.navigator.push(Router.getRoute('conversation', {convTitle: 'Andy'}));
   }
-
-
-
+  
   _renderRow(data) {
     return <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMessageRow(data)} />
   }
 
   _goToNewGoup() {
-    this.props.navigator.push('newGroup');
+    this.setState({createNewGroup: true});
+  }
+
+  renderNewGroupModal() {
+    return (
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={this.state.createNewGroup}
+        onRequestClose={() => this.setState({createNewGroup: false})}>
+        <NewGroup closeModal={() => this.setState({createNewGroup: false})}/>
+      </Modal>
+    );
   }
 
   renderFilters() {
-    filters = ['0',
+    filters = [{type: 'search', searchPlaceHolder: 'Search'},
           {title: 'All', selected: true, active: true},
           {title: 'Group', selected: false, active: true},
           {title: 'Active', selected: false, active: true},
@@ -91,6 +103,7 @@ export default class Chat extends Component {
                     onScroll={this._onScroll}
                     dataSource={this.state.messages}
                     renderRow={(data) => this._renderRow(data)}/>
+                {this.renderNewGroupModal()}
             </View>
         )
     }

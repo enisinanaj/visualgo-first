@@ -47,8 +47,8 @@ export default class NewGroup extends Component {
         this.state = {
             convoMessages: ds.cloneWithRows(messages),
             visibleHeight: height,
-            newMessage: '',
-            contentLayout: {}
+            contentLayout: {},
+            managers: ds.cloneWithRows(people)
         }
     }
 
@@ -74,15 +74,7 @@ export default class NewGroup extends Component {
 
     toggleRow(rowData) {
         rowData.selected = !rowData.selected;
-    
-        if(rowData.selected) {
-          rowData.category = currentCategory;
-          this.state.selectedTags.push(rowData);
-        } else {
-          this.setState({selectedTags: this.state.selectedTags.filter(value => value != rowData)});
-        }
-    
-        this.setState({tagSource: ds.cloneWithRows(tagsToShow)});
+        this.setState({managers: ds.cloneWithRows(people)});
       }
     
   renderTagRow(data) {
@@ -114,7 +106,7 @@ export default class NewGroup extends Component {
 
     _renderRow(data) {
         return <DefaultRow arguments={data} renderChildren={() => this.renderTagRow(data)} />
-      }
+    }
 
     _addMessage() {
         if (this.state.newMessage == "") {
@@ -133,7 +125,7 @@ export default class NewGroup extends Component {
     }
 
     renderFilters() {
-        filters = ['0'];
+        filters = [{type: 'search', searchPlaceHolder: 'Search', fixedOpen: true}];
         return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"People"} /></View>
       }
 
@@ -143,71 +135,18 @@ export default class NewGroup extends Component {
             <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
                 <View style={[Platform.OS === 'ios' ? styles.statusIOSBackground : styles.statusAndroidBackground]}/>
                 <StatusBar barStyle={'light-content'} animated={true}/>
-
-                    
-
-
-                        {this.renderHeader()}
-
-                        
-                        <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
-
-                    
+                {this.renderHeader()}
+                <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
+                <ListView
+                    style={styles.listView}
+                    onScroll={this._onScroll}
+                    dataSource={this.state.managers}
+                    renderRow={(data) => this._renderRow(data)}
+                />
             </View>
         );
     }
 }
-
-
-const messageBoxStyle = StyleSheet.create({
-    newMessageAreaContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        height: 60,
-        paddingBottom: 10
-    },
-    attachmentBackground: {
-        height: 40,
-        width: 40,
-        borderRadius: 20,
-        backgroundColor: Colors.main,
-        marginLeft: 10,
-        marginRight: 10
-    },
-    attachmentButton: {
-        padding: 0,
-        marginTop: 8,
-        marginLeft: 5,
-        backgroundColor: 'transparent'
-    },
-    textBoxContainer: {
-        width: width - 115,
-        borderRadius: 22,
-        backgroundColor: Colors.lightGray,
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        height: 40,
-        marginRight: 10
-    },
-    textArea: {
-        backgroundColor: 'transparent',
-        color: Colors.black,
-        width: width - 120 - 22,
-        height: 40,
-        paddingLeft: 15,
-        paddingRight: 15
-    },
-    openEmoticons: {
-        marginTop: 9,
-        marginRight: 10,
-        backgroundColor: 'transparent'
-    },
-    sendButton: {
-        marginTop: 7,
-        marginRight: 10
-    }
-});
 
 const styles = StyleSheet.create({
     container: {
@@ -287,5 +226,62 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.lightGray,
         borderWidth: 2,
         borderColor: Colors.borderGray,
-    }
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+      },
+      modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'grey',
+      },
+      innerContainer: {
+        alignItems: 'center',
+      },
+      rowContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+      },
+      textInRow: {
+        marginLeft: 10,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center'
+      },
+      rowTitle: {
+        fontWeight: '400',
+        fontSize: 18
+      },
+      rowSubTitle: {
+        color: Colors.grayText,
+        fontSize: 14
+      },
+      rowSelected: {
+        color: Colors.main
+      },
+      selectedTags: {
+        backgroundColor: Colors.main,
+        padding: 0,
+        margin: 0,
+      },
+      selectableDisplayPicture: {
+        width: 50,
+        height: 50,
+        borderRadius: 25
+      },
+      selectedDisplayPictureInFooter: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 13
+      },
+      selectedDisplayPicture: {
+        borderWidth: 3,
+        borderColor: Colors.main
+      },
+      filterBarContainer: {
+          backgroundColor: Colors.white
+      }
 });

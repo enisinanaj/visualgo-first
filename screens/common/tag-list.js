@@ -99,7 +99,7 @@ export default class TagList extends Component {
   }
 
   renderFilters() {
-    filters = ['0', 
+    filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Manager'}, 
       {title: 'Clusters', selected: true, active: true, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
       {title: 'Store', selected: false, active: true, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
       {title: 'Manager', selected: false, active: true, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];

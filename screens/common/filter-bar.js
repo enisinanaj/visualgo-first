@@ -36,7 +36,7 @@ export default class FitlerBar extends Component {
 
     _toggleSearch() {
         if (this.state.searchWidth == 44) {
-            this.setState({searchWidth: 250});
+            this.setState({searchWidth: width - 50});
         } else {
             this.setState({searchWidth: 44});
         }
@@ -55,13 +55,24 @@ export default class FitlerBar extends Component {
     }
 
     drawElements(data) {
-        if (data == 0) {
+        if (data.type === 'search' ) {
             return (
-                <TouchableOpacity style={[styles.searchButtonContainer, Shadow.filterShadow, {width: this.state.searchWidth}]} onPress={() => this._toggleSearch()}>
+                <TouchableOpacity style={[
+                        styles.searchButtonContainer, 
+                        Shadow.filterShadow, 
+                        {width: data.fixedOpen ? width - 50 : this.state.searchWidth}
+                    ]} onPress={() => this._toggleSearch()}>
                     <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
-                    {this.state.searchWidth > 44 
+                    {this.state.searchWidth > 44 || data.fixedOpen
                         ? 
-                        <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} placeholder='Search...' style={{backgroundColor: 'transparent', width: 200}} ref="searchTextBox"/> 
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} placeholder={data.searchPlaceHolder} style={{backgroundColor: 'transparent', width: 200}} ref="searchTextBox"/> 
+                            {!data.fixedOpen ?
+                                <TouchableOpacity onPress={() => this._toggleSearch()}>
+                                    <EvilIcons name={"close"} size={20} />
+                                </TouchableOpacity>
+                            : null}
+                        </View>
                         : null}
                 </TouchableOpacity>
             )
