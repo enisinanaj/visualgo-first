@@ -133,7 +133,7 @@ export default class NewGroup extends Component {
         var {height, visibleHeight} = this.state;
         return (
             <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
-                <View style={[Platform.OS === 'ios' ? styles.statusIOSBackground : styles.statusAndroidBackground]}/>
+                
                 <StatusBar barStyle={'light-content'} animated={true}/>
                 {this.renderHeader()}
                 <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
