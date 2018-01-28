@@ -30,6 +30,8 @@ import Octicons from '@expo/vector-icons/Octicons';
 import TagList from './tag-list';
 import PostPrivacy from './privacy';
 
+import {Camera, Permissions} from 'expo';
+
 export default class CreatePost extends Component{
     constructor() {
         super();
@@ -39,13 +41,21 @@ export default class CreatePost extends Component{
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
             tagModal: false,
             privacyModal: false,
-            allTags: []
+            cameraModal: false,
+            allTags: [],
+            hasCameraPermission: null,
+            type: Camera.Constants.Type.back,
         }
     }
 
     componentDidMount () {
         Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+    }
+
+    async componentWillMount() {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        this.setState({ hasCameraPermission: status === 'granted' });
     }
 
     componentWillUnmount() {
@@ -232,6 +242,62 @@ export default class CreatePost extends Component{
         );
     }
 
+    renderCameraModal() {
+        const { hasCameraPermission } = this.state;
+        if (hasCameraPermission === null) {
+          return <Modal animationType={"slide"}
+                transparent={false}
+                visible={this.state.cameraModal}
+                onRequestClose={() => this.setState({cameraModal: false})}>
+                <View />
+           </Modal>;
+        } else if (hasCameraPermission === false) {
+            return <Modal animationType={"slide"}
+                transparent={false}
+                visible={this.state.cameraModal}
+                onRequestClose={() => this.setState({cameraModal: false})}>
+                <Text>No access to camera</Text>
+           </Modal>;
+        } else {
+          return (
+            <Modal animationType={"slide"}
+                transparent={false}
+                visible={this.state.cameraModal}
+                onRequestClose={() => this.setState({cameraModal: false})}>
+                <View style={{ flex: 1 }}>
+                    <Camera style={{ flex: 1 }} type={this.state.type}>
+                        <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: 'transparent',
+                            flexDirection: 'row',
+                        }}>
+                        <TouchableOpacity
+                            style={{
+                            flex: 0.1,
+                            alignSelf: 'flex-end',
+                            alignItems: 'center',
+                            }}
+                            onPress={() => {
+                            this.setState({
+                                type: this.state.type === Camera.Constants.Type.back
+                                ? Camera.Constants.Type.front
+                                : Camera.Constants.Type.back,
+                            });
+                            }}>
+                            <Text
+                            style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+                            {' '}Flip{' '}
+                            </Text>
+                        </TouchableOpacity>
+                        </View>
+                    </Camera>
+                </View>
+            </Modal>
+          );
+        }
+    }
+
     renderMenu() {
         const objs =
             [
@@ -241,7 +307,7 @@ export default class CreatePost extends Component{
                 },
                 {
                     name: 'Foto/Video',
-                    onPress: () => {}
+                    onPress: () => this.setState({cameraModal: true})
                 }
             ];
 
@@ -309,6 +375,7 @@ export default class CreatePost extends Component{
                 </View>
                 {this.renderTaggingModal()}
                 {this.renderPrivacyModal()}
+                {this.renderCameraModal()}
             </View>
         )
     }
