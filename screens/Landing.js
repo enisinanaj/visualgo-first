@@ -128,6 +128,15 @@ export default class Landing extends Component {
         return <NewsFeedItem data={data}/>
     }
 
+    newPostHandler(obj) {
+        if (obj != undefined && obj.reload) {
+            this._clearPosts();
+            this._loadPosts();
+        }
+
+        this.setState({modal: false});
+    }
+
     renderModal() {
         return (
             <Modal
@@ -136,7 +145,7 @@ export default class Landing extends Component {
                 visible={this.state.modal}
                 onRequestClose={() => this.setState({modal: false})}
             >
-                <CreatePost closeModal={() => this.setState({modal: false})} />
+                <CreatePost closeModal={(obj) => this.newPostHandler(obj)} />
             </Modal>
         )
     }

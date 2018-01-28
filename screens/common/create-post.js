@@ -38,7 +38,8 @@ export default class CreatePost extends Component{
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
             tagModal: false,
-            privacyModal: false
+            privacyModal: false,
+            allTags: []
         }
     }
 
@@ -64,6 +65,10 @@ export default class CreatePost extends Component{
 
     }
 
+    post() {
+        this.props.closeModal({reload: true})
+    }
+
     renderHeader() {
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
@@ -75,7 +80,9 @@ export default class CreatePost extends Component{
                     </Text>
                 </TouchableOpacity>
                 <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Nuovo Post</Text>
-                <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Post</Text>
+                <TouchableOpacity onPress={() => this.post()}>
+                    <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Post</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -207,22 +214,9 @@ export default class CreatePost extends Component{
         )
     }
 
-    renderMenu() {
-        const {k_visible} = this.state;
-        if(false) {
-            return (
-                <TouchableOpacity
-                    onPress={() => {Keyboard.dismiss()}}
-                    style={{height: 56, borderTopWidth: StyleSheet.hairlineWidth, borderColor: Colors.gray,
-                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 16}}>
-                    <Text style={{color: Colors.black, fontSize: 16, fontWeight: '500'}}>Add to your post</Text>
-                </TouchableOpacity>
-            )
-        }
-
-        return (
-            this.renderList()
-        )
+    finishTags(tags) {
+        console.log("received tags: " + tags.length);
+        this.setState({allTags: tags, tagModal: false});
     }
 
     renderTaggingModal() {
@@ -233,12 +227,12 @@ export default class CreatePost extends Component{
                 visible={this.state.tagModal}
                 onRequestClose={() => this.setState({tagModal: false})}>
                 
-                <TagList closeModal={() => this.setState({tagModal: false})} />
+                <TagList closeModal={(tags) => this.finishTags(tags)} />
             </Modal>
         );
     }
 
-    renderList() {
+    renderMenu() {
         const objs =
             [
                 {
@@ -251,12 +245,50 @@ export default class CreatePost extends Component{
                 }
             ];
 
+        var {allTags} = this.state;
+        if (allTags.length > 0) {
+            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+            var managersLength = allTags.filter((row) => row.category == 'managers').length;
+            var storesLength = allTags.filter((row) => row.category == 'stores').length;
+
+            var clustersLabel = '', managersLabel = '', storesLabel = '';
+
+            if (clustersLength > 1) {
+                clustersLabel = clustersLength + " Clusters";
+            } else if (clustersLength == 1) {
+                clustersLabel = allTags.filter((row) => row.category == 'clusters')[0].title;
+            }
+
+            if (managersLength > 1) {
+                managersLabel = clustersLength > 0 ? ', ' : '';
+                managersLabel += managersLength + " Managers";
+            } else if (managersLength == 1) {
+                managersLabel = clustersLength > 0 ? ', ' : '';
+                managersLabel += allTags.filter((row) => row.category == 'managers')[0].title;
+            }
+
+            if (storesLength > 1) {
+                storesLabel = managersLength > 0 || clustersLength > 0 ? ', ' : '';
+                storesLabel += storesLength + " Stores";
+            } else if (storesLength == 1) {
+                storesLabel = managersLength > 0 || clustersLength > 0 ? ', ' : '';
+                storesLabel += allTags.filter((row) => row.category == 'stores')[0].title;
+            }
+
+            objs[0].name = "Tag";
+            objs[0].innerName = clustersLabel + managersLabel + storesLabel;
+        }
+
         return objs.map((o, i) => {
             return (
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16}}>{o.name}</Text>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        {o.innerName != undefined && o.innerName != '' ? 
+                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                        : null}
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                     </TouchableOpacity>
                 </View>
             )
