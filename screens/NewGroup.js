@@ -75,7 +75,7 @@ export default class NewGroup extends Component {
     toggleRow(rowData) {
         rowData.selected = !rowData.selected;
         this.setState({managers: ds.cloneWithRows(people)});
-      }
+    }
     
   renderTagRow(data) {
     return (
@@ -129,6 +129,31 @@ export default class NewGroup extends Component {
         return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"People"} /></View>
       }
 
+
+      _renderSelectedTagElement(data) {
+          return (
+            <TouchableOpacity onPress={() => this.toggleRow(data)}>
+              <Image source={data.img} style={styles.selectedDisplayPictureInFooter} />
+            </TouchableOpacity>
+          )
+      }
+    
+      _renderSelectedTags() {
+        var selectedManagers = people.filter((el) => el.selected);
+        var dataSource = ds.cloneWithRows(selectedManagers);
+        var result = <ListView
+            dataSource={dataSource}
+            horizontal={true}
+            renderRow={(data) => this._renderSelectedTagElement(data)}
+        />;
+    
+        return result;
+      }
+
+    _selectedManagerNotEmpty() {
+        return people.filter((el) => el.selected).length > 0;
+    }
+
     render() {
         var {height, visibleHeight} = this.state;
         return (
@@ -143,6 +168,9 @@ export default class NewGroup extends Component {
                     dataSource={this.state.managers}
                     renderRow={(data) => this._renderRow(data)}
                 />
+                <View style={[styles.selectedTags, this._selectedManagerNotEmpty() ? {height: 60, padding: 10} : {}]}>
+                    {this._renderSelectedTags()}
+                </View>
             </View>
         );
     }
