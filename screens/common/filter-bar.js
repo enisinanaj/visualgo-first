@@ -30,7 +30,8 @@ export default class FitlerBar extends Component {
         this.state = {
             headTitle: this.props.headTitle,
             filtersSource: ds.cloneWithRows(filters),
-            searchWidth: 44
+            searchWidth: 44,
+            searchQuery: ''
         }
     }
 
@@ -46,12 +47,10 @@ export default class FitlerBar extends Component {
         this.setState({filtersSource: ds.cloneWithRows(filters)});
 
         $this = this;
+    }
 
-        setTimeout(function() {
-            if ($this.refs['searchTextBox'] != undefined) {
-                $this.refs['searchTextBox'].focus();
-            }
-        }, 100);
+    _setQuery(q) {
+        this.setState({searchQuery: q});
     }
 
     drawElements(data) {
@@ -66,7 +65,12 @@ export default class FitlerBar extends Component {
                     {this.state.searchWidth > 44 || data.fixedOpen
                         ? 
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} placeholder={data.searchPlaceHolder} style={{backgroundColor: 'transparent', width: 200}} ref="searchTextBox"/> 
+                            <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
+                                placeholder={data.searchPlaceHolder}
+                                autoFocus={true}
+                                style={{backgroundColor: 'transparent', width: 200}}
+                                onChangeText={(arg) => {this._setQuery(arg); data.onType(arg)} }
+                                ref="searchTextBox" value={this.state.searchQuery}/> 
                             {!data.fixedOpen ?
                                 <TouchableOpacity onPress={() => this._toggleSearch()}>
                                     <EvilIcons name={"close"} size={20} color={Colors.main} />

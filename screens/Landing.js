@@ -31,25 +31,15 @@ import _ from 'lodash';
 import Shadow from '../constants/Shadow';
 
 //1 is regular post, 2 is image
-const data = ['0', '1',
-    /*{type: 'image', images: ['1']},
-    {type: 'image', images: ['1', '2']},
-    {type: 'image', images: ['1', '2', '3']},
-    {type: 'image', images: ['1', '2', '3', '4']},
-    {type: 'image', images: ['1', '2', '3', '4', '5']},
-    {type: 'image', images: ['1', '2', '3', '4', '5', '6']},
-    {type: 'post'},
-    {type: 'post'},
-    {type: 'post'}*/
-    ];
+const data = ['0', '1'];
 
-    const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
-        {title: 'All', selected: true, active: true}, 
-        {title: 'Post', active: true}, 
-        {title: 'Task', active: true},
-        {title: 'Survey', active: true}];
+const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
+    {title: 'All', selected: true, active: true}, 
+    {title: 'Post', active: true}, 
+    {title: 'Task', active: true},
+    {title: 'Survey', active: true}];
 
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
     constructor(props) {
@@ -66,6 +56,8 @@ export default class Landing extends Component {
             skip: 0
         };
 
+        filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
+
         this._loadPosts();
 
         this.offsetY = 0;
@@ -76,9 +68,15 @@ export default class Landing extends Component {
         this._onDrawerOpen = this._onDrawerOpen.bind(this);
     }
 
-    _loadPosts() {
+    _clearPosts() {
+        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
+    }
 
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take)
+    _loadPosts(query) {
+
+        var addQuery = query != undefined ? '&q=' + query : '';
+
+        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
             .then((response) => response.json())
             .then((responseJson) => {
                 responseJson.forEach(element => {
