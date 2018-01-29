@@ -24,6 +24,7 @@ export default class SearchBar extends Component {
         this.state = {
             height: null,
             animating: false,
+            open: false,
         };
 
         this.measureView = this.measureView.bind(this);
@@ -71,7 +72,7 @@ export default class SearchBar extends Component {
             <View ref='container'>
                 <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}>
                     <View style={[styles.searchBarOuterContainer, {height: this.state.height-12}]}>
-                        <TouchableOpacity style={styles.icon}>
+                        <TouchableOpacity style={styles.icon} onPress={this.props.openMenu}>
                             <Ionicons name='ios-menu-outline' size={24} color={Colors.main}/>
                         </TouchableOpacity>
 

@@ -35,7 +35,7 @@ export default class Drawer extends Component {
     render() {
         return (
             <View style={styles.drawer}>
-                <ChatSearchBar/>
+                
                 <ListView
 
                     dataSource={this.state.dataSource}
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         width: width * 4/5,
         position: 'absolute',
-        backgroundColor: Colors.chat_bg,
+        backgroundColor: Colors.main,
         right: 0
     }
 });

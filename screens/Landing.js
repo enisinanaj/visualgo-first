@@ -16,6 +16,8 @@ import {
     Button
 } from 'react-native';
 
+import Drawer from 'react-native-drawer'
+
 const {width, height} = Dimensions.get('window');
 
 import Colors from '../constants/Colors';
@@ -25,8 +27,9 @@ import OnYourMind from './common/onYourMind';
 import NewsFeedItem from './common/newsfeed-item';
 import CreatePost from './common/create-post';
 import FilterBar from './common/filter-bar';
+import DrawerOld from './common/drawer';
 
-import Drawer from './common/drawer';
+
 import _ from 'lodash';
 import Shadow from '../constants/Shadow';
 
@@ -67,6 +70,23 @@ export default class Landing extends Component {
         this.loadMore = _.debounce(this.loadMore, 300);
         this._onDrawerOpen = this._onDrawerOpen.bind(this);
     }
+
+    closeControlPanel = () => {
+        this._drawer.close()
+    };
+      openControlPanel = () => {
+        this._drawer.open()
+    };
+
+    toggleMenu = () => {
+        if(this._drawer.props.open){
+            this._drawer.close()
+        }else{
+            this._drawer.open()
+        }
+
+
+    };
 
     _clearPosts() {
         this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
@@ -209,23 +229,39 @@ export default class Landing extends Component {
     }
 
     _onDrawerOpen(event) {
-        //const e = event.nativeEvent;
-        //const offset = e.contentOffset.x;
-        //this.offsetX.setValue(offset);
+        const e = event.nativeEvent;
+        const offset = e.contentOffset.x;
+        this.offsetX.setValue(offset);
     }
 
     openChat() {
-        this.refs.scrollview.scrollTo({x: width * 4/5, y: 0, animated: true});
+        //this.refs.scrollview.scrollTo({x: width * 4/5, y: 0, animated: true});
+    }
+
+    openMenu() {
+        this.offsetX.setValue(offset);
     }
 
     render() {
         return (
+
+            
+            
             <View style={{flex: 1}}>
-                {/*this.renderDrawer()*/}
+                    
+                <Drawer
+                type="static"
+                ref={(ref) => this._drawer = ref}
+                content={<DrawerOld/>}
+                openDrawerOffset={100}
+                styles={drawerStyles}
+                tweenHandler={Drawer.tweenPresets.parallax}
+                side="right"
+                >
 
 
                     <View ref='view' style={styles.container}>
-                        <SearchBar ref='searchBar' openChat={this.openChat.bind(this)}/>
+                        <SearchBar ref='searchBar' openChat={this.openChat.bind(this)} openMenu={this.toggleMenu.bind(this)}/>
                         
                         <ListView
                             refreshControl={
@@ -243,13 +279,25 @@ export default class Landing extends Component {
                     {/*this.renderFade()*/}
                             
                 {this.renderModal()}
+                </Drawer>
+
+
             </View>
+
+            
+
         )
     }
 }
 
+const drawerStyles = {
+    drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
+    main: {paddingLeft: 0},
+  }
+
 const styles= StyleSheet.create({
     container: {
+        
         flex: 1,
         width,
         height,
@@ -270,7 +318,7 @@ const styles= StyleSheet.create({
         right: 0
     },
     listView: {
-        //paddingLeft: (width - (width * 4.9/5)) / 2
+        //paddingLeft: (width - (width * 4/5)) / 2
     },
     onYourMindContainer: {
         //height: 110,
