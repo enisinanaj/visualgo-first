@@ -8,7 +8,8 @@ import {
     ListView,
     Text,
     StyleSheet,
-    Image
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -39,12 +40,56 @@ export default class Drawer extends Component {
     }
 
     _renderRow(data) {
-        return <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMenuItem(data)}/>
+        return (
+        
+            <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMenuItem(data)}/>
+
+        )
     }
+
+    goToReport = () => {
+        console.log("Report");
+    }
+
+    goToGuidelines = () => {
+        console.log("Guidelines");
+    }
+
+    goToWall = () => {
+        console.log("Wall");
+    }
+
+    goToCalendar = () => {
+        console.log("Calendar");
+    }
+
+    goToMessages = () => {
+        console.log("Messages");
+    }
+
+    goToDoList = () => {
+        console.log("ToDoList");
+    }
+
+    goToAnagrafiche = () => {
+        console.log("Anagrafiche");
+    }
+
+    goToLogout = () => {
+        console.log("Logout");
+    }
+
+    
+
 
     renderMenuItem(data){
 
-            return (<Text style={styles.menuItem}>{data}</Text>)
+        return (
+            <TouchableOpacity onPress={data == 'Report' ? this.goToReport.bind(this) : data == 'Visual Guideline' ? this.goToGuidelines.bind(this) : data == 'Wall' ? this.goToWall.bind(this) : data == 'Calendar' ? this.goToCalendar.bind(this) : data == 'Messages' ? this.goToMessages.bind(this) : data == 'To Do List' ? this.goToDoList.bind(this) : data == 'Anagrafiche' ? this.goToAnagrafiche.bind(this) : data == 'Logout' ? this.goToLogout.bind(this) : null}>
+                <Text style={styles.menuItem}>{data}</Text>
+            </TouchableOpacity>
+        
+        )
         
     }
 
