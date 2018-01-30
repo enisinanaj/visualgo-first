@@ -3,19 +3,21 @@
   "version": "1.2.1",
   "description": "VisualGo",
   "author": "AreaKappa for Warda",
+  "private": true,
+  "devDependencies": {
+    "jest-expo": "25.0.0",
+    "react-test-renderer": "16.2.0"
+  },
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "jest",
-    "start": "react-native-scripts start",
-    "eject": "react-scripts eject"
+    "test": "node node_modules/jest/bin/jest.js"
   },
   "jest": {
-    "preset": "jest-exponent"
+    "preset": "jest-expo"
   },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "dependencies": {
     "@expo/ex-navigation": "4.2.0",
     "@expo/samples": "^2.1.1",
-    "@expo/vector-icons": "6.2.2",
     "chat-engine-gravatar": "0.0.8",
     "chat-engine-react-native": "0.0.9",
     "chat-engine-typing-indicator": "0.0.9",
@@ -26,15 +28,5 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-svg": "^6.0.1-rc.1",
     "react-navigation": "^1.0.0-beta.27"
-  },
-  "devDependencies": {
-    "jest-exponent": "~0.1.3",
-    "react-native-scripts": "1.8.1",
-    "react-test-renderer": "16.0.0"
-  },
-  "rnpm": {
-    "assets": [
-      "./fonts"
-    ]
   }
 }

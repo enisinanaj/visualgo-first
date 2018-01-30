@@ -5,25 +5,25 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>VisualGo</string>
+	<string>visualgo</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.areak.VisualGo</string>
+	<string>com.areak.visualgo</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>VisualGo</string>
+	<string>visualgo</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.0.0</string>
+	<string>0.1.0</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>expcba038b96d224562a1708fe6a4bf5cef</string>
+				<string>expb551c855f4c546f9bac72844b05d1263</string>
 			</array>
 		</dict>
 		<dict>
@@ -31,7 +31,7 @@
 			<string>OAuthRedirect</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.areak.VisualGo</string>
+				<string>com.areak.visualgo</string>
 			</array>
 		</dict>
 	</array>
@@ -58,20 +58,24 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Allow visualgo to access your calendar</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow VisualGo to use your camera</string>
+	<string>Allow visualgo to use your camera</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Allow VisualGo to access your contacts</string>
+	<string>Allow visualgo to access your contacts</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow VisualGo to use your location</string>
+	<string>Allow visualgo to use your location</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow VisualGo to access your microphone</string>
+	<string>Allow visualgo to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Allow VisualGo to access your device's accelerometer</string>
+	<string>Allow visualgo to access your device's accelerometer</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give VisualGo permission to save photos</string>
+	<string>Give visualgo permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give VisualGo permission to access your photos</string>
+	<string>Give visualgo permission to access your photos</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Allow visualgo to access your reminders</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
