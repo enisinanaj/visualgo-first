@@ -26,6 +26,7 @@ import ButtonBar from './common/button-bar';
 import OnYourMind from './common/onYourMind';
 import NewsFeedItem from './common/newsfeed-item';
 import CreatePost from './common/create-post';
+import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
 import DrawerOld from './common/drawer';
 
@@ -49,7 +50,8 @@ export default class Landing extends Component {
         super(props);
 
         this.state = {
-            modal: false,
+            modalPost: false,
+            modalTask: false,
             refreshing: false,
             loading: false,
             opacity: new Animated.Value(1),
@@ -110,6 +112,28 @@ export default class Landing extends Component {
             });
     }
 
+    _clearTasks() {
+        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
+    }
+
+    _loadTasks(query) {
+
+        var addQuery = query != undefined ? '&q=' + query : '';
+
+        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                responseJson.forEach(element => {
+                    data.push(element);
+                });
+
+                this.setState({dataSource: ds.cloneWithRows(data)});
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     componentDidMount() {
         setTimeout(() => {this.measureView()}, 0);
     }
@@ -136,10 +160,10 @@ export default class Landing extends Component {
         } else if (data == '1') {
             return (
                 <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
-                    <OnYourMind onFocus={() => this.setState({modal: true})}/>
+                    <OnYourMind onFocus={() => this.setState({modalPost: true})}/>
                     <ButtonBar ref='buttonBar' buttons={[
-                        {title: 'Task'}, 
-                        {title: 'Post', onPress: () => this.setState({modal: true})},
+                        {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
+                        {title: 'Post', onPress: () => this.setState({modalPost: true})},
                         {title: 'Survey'}]}/>
                 </View>
             )
@@ -154,19 +178,36 @@ export default class Landing extends Component {
             this._loadPosts();
         }
 
-        this.setState({modal: false});
+        this.setState({modalPost: false});
+    }
+
+    newTaskHandler(obj) {
+        if (obj != undefined && obj.reload) {
+            this._clearTasks();
+            this._loadTasks();
+        }
+
+        this.setState({modalTask: false});
     }
 
     renderModal() {
         return (
-            <Modal
-                animationType={"slide"}
-                transparent={false}
-                visible={this.state.modal}
-                onRequestClose={() => this.setState({modal: false})}
-            >
-                <CreatePost closeModal={(obj) => this.newPostHandler(obj)} />
-            </Modal>
+            <View>
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.modalPost}
+                    onRequestClose={() => this.setState({modalPost: false})}>
+                    <CreatePost closeModal={(obj) => this.newPostHandler(obj)} />
+                </Modal>
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.modalTask}
+                    onRequestClose={() => this.setState({modalTask: false})}>
+                    <CreateTask closeModal={(obj) => this.newTaskHandler(obj)} />
+                </Modal>
+            </View>
         )
     }
 

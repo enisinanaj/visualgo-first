@@ -67,7 +67,7 @@ export default class FitlerBar extends Component {
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
                                 placeholder={data.searchPlaceHolder}
-                                autoFocus={true}
+                                autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
                                 style={{backgroundColor: 'transparent', width: 200}}
                                 onChangeText={(arg) => {this._setQuery(arg); data.onType(arg)} }
                                 ref="searchTextBox" value={this.state.searchQuery}/> 
