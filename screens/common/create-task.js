@@ -28,6 +28,7 @@ import {Ionicons} from '@expo/vector-icons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import ThemesList from './themes-list';
+import EnvironmentsList from './environments-list';
 import PostPrivacy from './privacy';
 
 export default class CreateTask extends Component{
@@ -38,8 +39,10 @@ export default class CreateTask extends Component{
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
             themeModal: false,
+            environmentModal: false,
             privacyModal: false,
-            allThemes: []
+            allThemes: [],
+            allEnvironments: []
         }
     }
 
@@ -290,25 +293,244 @@ export default class CreateTask extends Component{
             [
                 {
                     name: 'Ambiente',
-                    onPress: () => this.setState({themeModal: true})
+                    onPress: () => this.setState({environmentModal: true})
                 }
             ];
 
-        var {allThemes} = this.state;
-        if (allThemes.length > 0) {
-            var themesLength = allThemes.filter((row) => row.category == 'themes').length;
+        var {allEnvironments} = this.state;
+        if (allEnvironments.length > 0) {
+            var environmentsLength = allEnvironments.filter((row) => row.category == 'environment').length;
 
-            var themesLabel = '';
+            var environmentLabel = '';
 
-            if (themesLength > 1) {
-                themesLabel = themesLength + " Themes";
-            } else if (themesLength == 1) {
-                themesLabel = allThemes.filter((row) => row.category == 'themes')[0].title;
+            if (environmentsLength > 1) {
+                environmentLabel = environmentsLength + " Environments";
+            } else if (environmentsLength == 1) {
+                environmentLabel = allEnvironments.filter((row) => row.category == 'environment')[0].title;
             }
 
-            objs[0].name = "Themes";
-            objs[0].innerName = themesLabel;
+            objs[0].name = "Environments";
+            objs[0].innerName = environmentsLabel;
         }
+
+        return objs.map((o, i) => {
+            return (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        {o.innerName != undefined && o.innerName != '' ? 
+                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                        : null}
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    finishEnvironments(environments) {
+        console.log("received environments: " + environments.length);
+        this.setState({allEnvironments: environments, environmentModal: false});
+    }
+
+    renderEnvironmentsModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.environmentModal}
+                onRequestClose={() => this.setState({environmentModal: false})}>
+                
+                <EnvironmentsList closeModal={(environments) => this.finishEnvironments(environments)} />
+            </Modal>
+        );
+    }
+
+    renderVisualGuideline() {
+        const objs =
+            [
+                {
+                    name: 'Visual Guideline'
+                }
+            ];
+
+        return objs.map((o, i) => {
+            return (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        {o.innerName != undefined && o.innerName != '' ? 
+                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                        : null}
+                        <EvilIcons name={"paperclip"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    renderStartDueDate() {
+        const objs =
+            [
+                {
+                    name: 'Start/Due Date'
+                }
+            ];
+
+        return objs.map((o, i) => {
+            return (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        {o.innerName != undefined && o.innerName != '' ? 
+                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                        : null}
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    renderPhoto() {
+        const objs =
+            [
+                {
+                    name: 'Foto'
+                }
+            ];
+
+            return objs.map((o, i) => {
+                return (
+                    <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                        borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <EvilIcons name={"check-square"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
+                                    <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                                </TouchableOpacity>
+                                <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.black}}>1</Text>
+                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
+                                    <EvilIcons name={"plus"} color={Colors.main} size={32} style={{marginRight: 5}} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )
+            })
+    }
+
+    renderVideo() {
+        const objs =
+            [
+                {
+                    name: 'Video'
+                }
+            ];
+
+            return objs.map((o, i) => {
+                return (
+                    <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                        borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <EvilIcons name={"square"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
+                                    <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                                </TouchableOpacity>
+                                <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>0</Text>
+                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
+                                    <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )
+            })
+    }
+
+    render360() {
+        const objs =
+            [
+                {
+                    name: '360'
+                }
+            ];
+
+            return objs.map((o, i) => {
+                return (
+                    <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                        borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <EvilIcons name={"square"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
+                                    <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                                </TouchableOpacity>
+                                <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>0</Text>
+                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
+                                    <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )
+            })
+    }
+
+    renderAssignTo() {
+        const objs =
+            [
+                {
+                    name: 'Assegna a...'
+                }
+            ];
+
+        return objs.map((o, i) => {
+            return (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        {o.innerName != undefined && o.innerName != '' ? 
+                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                        : null}
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    renderTaskAdmins() {
+        const objs =
+            [
+                {
+                    name: 'Amministratori del Task'
+                }
+            ];
 
         return objs.map((o, i) => {
             return (
@@ -339,7 +561,15 @@ export default class CreateTask extends Component{
                 </View>
                 {this.renderTaskDescription()}
                 {this.renderEnvironment()}
+                {this.renderVisualGuideline()}
+                {this.renderStartDueDate()}
+                {this.renderPhoto()}
+                {this.renderVideo()}
+                {this.render360()}
+                {this.renderAssignTo()}
+                {this.renderTaskAdmins()}
                 {this.renderThemesModal()}
+                {this.renderEnvironmentsModal()}
                 {this.renderPrivacyModal()}
             </View>
         )
