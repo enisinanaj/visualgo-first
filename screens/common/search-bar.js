@@ -65,6 +65,10 @@ export default class SearchBar extends Component {
         ).start();
     }
 
+    openCamera() {
+        this.props.navigator.push(Router.getRoute('openCamera'));
+    }
+
     render() {
         const {height} = this.state;
         return (
@@ -83,7 +87,7 @@ export default class SearchBar extends Component {
                             <TextInput placeholderTextColor={'#B2B2B2'} placeholder={'Search'} style={styles.searchBar}/>
                         </View>
 
-                        <TouchableOpacity style={styles.icon} onPress={this.props.openChat}>
+                        <TouchableOpacity style={styles.icon} onPress={this.openCamera()}>
                             <Ionicons name='ios-camera-outline' size={32} color={Colors.main}/>
                         </TouchableOpacity>
                     </View>

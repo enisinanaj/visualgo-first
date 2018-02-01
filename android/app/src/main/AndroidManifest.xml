@@ -18,6 +18,7 @@
 
   <!-- ADD PERMISSIONS HERE -->
   <!-- BEGIN OPTIONAL PERMISSIONS -->
+  <uses-permission android:name=”android.permission.CAMERA” />
   <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
   <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />

@@ -9,7 +9,9 @@ import SettingsScreen from '../screens/SettingsScreen';
 import Chat from '../screens/Chat';
 import RootNavigation from './RootNavigation';
 import ConversationView from '../screens/Conversation';
+import ReactPubNub from '../screens/PubNubChat';
 import NewGroup from '../screens/NewGroup'
+import Camera from '../screens/Camera'
 
 
 export default createRouter(() => ({
@@ -20,5 +22,6 @@ export default createRouter(() => ({
     chat: () => Chat,
     rootNavigation: () => RootNavigation,
     conversation: () => ConversationView,
+    openCamera: () => Camera,
     newGroup: () => NewGroup,
 }));

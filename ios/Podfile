@@ -39,6 +39,7 @@ target 'visualgo' do
     :podspec => "../node_modules/react-native/third-party-podspecs/GLog.podspec",
     :inhibit_warnings => true
 
+  pod 'react-native-camera', path: '../node_modules/react-native-camera'
 
   post_install do |installer|
     installer.pods_project.main_group.tab_width = '2';
