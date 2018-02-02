@@ -30,7 +30,7 @@ export default class ImagePost extends Component {
             case 1:
                 return (
                     <View style={styles.imageContainer}>
-                        <SingleImage image={images[0]}/>
+                        <SingleImage image={{uri: images[0].url}}/>
                     </View>
                 );
                 break;
@@ -39,8 +39,8 @@ export default class ImagePost extends Component {
                 return(
                     <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
                         <View style={styles.imageContainer}>
-                            <Image style={[styles.img, {marginBottom: 4}]} source={getImage(images[0])}/>
-                            <Image style={styles.img} source={getImage(images[1])}/>
+                            <Image style={[styles.img, {marginBottom: 4}]} source={{uri: images[0].url}}/>
+                            <Image style={styles.img} source={{uri: images[1].url}}/>
                         </View>
                     </TouchableWithoutFeedback>
                 );
@@ -49,10 +49,10 @@ export default class ImagePost extends Component {
                 return(
                     <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
                         <View style={styles.imageContainer}>
-                            <Image style={[styles.img, {marginBottom: 4}]} source={getImage(images[0])}/>
+                            <Image style={[styles.img, {marginBottom: 4}]} source={{uri: images[0].url}}/>
                             <View style={{flexDirection: 'row', flex: 1}}>
-                                <Image style={[styles.img, {marginRight: 2}]} source={getImage(images[1])}/>
-                                <Image style={[styles.img, {marginLeft: 2}]} source={getImage(images[2])}/>
+                                <Image style={[styles.img, {marginRight: 2}]} source={{uri: images[1].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[2].url}}/>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
@@ -63,12 +63,12 @@ export default class ImagePost extends Component {
                     <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
                         <View style={styles.imageContainer}>
                             <View style={{flexDirection: 'row', flex: 1, marginBottom: 4}}>
-                                <Image style={[styles.img, {marginRight: 2}]} source={getImage(images[0])}/>
-                                <Image style={[styles.img, {marginLeft: 2}]} source={getImage(images[1])}/>
+                                <Image style={[styles.img, {marginRight: 2}]} source={{uri: images[0].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[1].url}}/>
                             </View>
                             <View style={{flexDirection: 'row', flex: 1}}>
-                                <Image style={[styles.img, {marginRight: 2}]} source={getImage(images[2])}/>
-                                <Image style={[styles.img, {marginLeft: 2}]} source={getImage(images[3])}/>
+                                <Image style={[styles.img, {marginRight: 2}]} source={{uri: images[2].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[3].url}}/>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
@@ -79,13 +79,13 @@ export default class ImagePost extends Component {
                     <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
                         <View style={styles.imageContainer}>
                             <View style={{flexDirection: 'row', flex: 1, marginBottom: 4}}>
-                                <Image style={[styles.img, {marginRight: 2}]} source={getImage(images[0])}/>
-                                <Image style={[styles.img, {marginLeft: 2}]} source={getImage(images[1])}/>
+                                <Image style={[styles.img, {marginRight: 2}]} source={{uri: images[0].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[1].url}}/>
                             </View>
                             <View style={{flexDirection: 'row', flex: 1}}>
-                                <Image style={[styles.img, {marginRight: 2}]} source={getImage(images[2])}/>
-                                <Image style={[styles.img, {marginLeft: 2, marginRight: 2}]} source={getImage(images[3])}/>
-                                <Image style={[styles.img, {marginLeft: 2}]} source={getImage(images[4])}/>
+                                <Image style={[styles.img, {marginRight: 2}]} source={{uri: images[2].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2, marginRight: 2}]} source={{uri: images[3].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[4].url}}/>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
@@ -98,13 +98,13 @@ export default class ImagePost extends Component {
                     <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
                         <View style={styles.imageContainer}>
                             <View style={{flexDirection: 'row', flex: 1, marginBottom: 4}}>
-                                <Image style={[styles.img, {marginRight: 2}]} source={getImage(images[0])}/>
-                                <Image style={[styles.img, {marginLeft: 2}]} source={getImage(images[1])}/>
+                                <Image style={[styles.img, {marginRight: 2}]} source={{uri: images[0].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[1].url}}/>
                             </View>
                             <View style={{flexDirection: 'row', flex: 1}}>
-                                <Image style={[styles.img, {marginRight: 2}]} source={getImage(images[2])}/>
-                                <Image style={[styles.img, {marginLeft: 2, marginRight: 2}]} source={getImage(images[3])}/>
-                                <Image style={[styles.img, {marginLeft: 2}]} source={getImage(images[4])} />
+                                <Image style={[styles.img, {marginRight: 2}]} source={{uri: images[2].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2, marginRight: 2}]} source={{uri: images[3].url}}/>
+                                <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[4].url}} />
                                 <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,.7)', justifyContent: 'center', alignItems: 'center'}}>
                                     <Text style={{fontSize: 18, color: 'white', fontWeight: '700'}}>
                                         + {imageCount - 5}
@@ -130,7 +130,7 @@ export default class ImagePost extends Component {
         return (
             <View>
                 <View style={styles.textContainer}>
-                    <Text>This is an image post with {imageCount} image(s).</Text>
+                    <Text>{this.props.textContent}</Text>
                 </View>
                 {this.renderImages()}
             </View>

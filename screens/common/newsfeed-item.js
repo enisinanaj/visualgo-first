@@ -28,7 +28,7 @@ export default class NewsFeedItem extends Component {
 
 
         this.state = {
-            profile: getProfile(this.props.data.creator),
+            //profile: getProfile(this.props.data.creator),
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: ['Comment', 'Stats'],
             icons: ['comment', 'ios-podium-outline'],
@@ -57,10 +57,11 @@ export default class NewsFeedItem extends Component {
     }
 
     renderAvatar() {
-        const {profile, time} = this.state;
+        const {time} = this.state;
+        const profile = this.props.data.profile[0];
         return (
             <View style={styles.avatarContainer}>
-                <Image style={styles.profile} source={profile.source}/>
+                <Image style={styles.profile} source={{uri: profile.media.url}}/>
                 <View style={styles.nameContainer}>
                     <Text style={styles.name}>{profile.name}</Text>
                     <Text style={styles.time}>{time}</Text>
@@ -76,12 +77,12 @@ export default class NewsFeedItem extends Component {
             return
         }
 
-        return (
+        return null /*(
             <View style={styles.likesComments}>
                 <Text style={styles.likeText}>{likes > 0 ? <Ionicons name='md-thumbs-up' color={Colors.main}/> : ''}{likes == 0 ? '' : ' ' + likes}</Text>
                 <Text style={styles.likeText}>{comments == 0 ? '' : comments + ' Comments'}</Text>
             </View>
-        )
+        )*/
     }
 
     renderLikeBar() {
@@ -96,9 +97,9 @@ export default class NewsFeedItem extends Component {
 
     renderContent() {
         const {data} = this.props;
-        if(data.type == 'image') {
+        if(data.media != undefined && data.media.length > 0) {
             return (
-                <ImagePost imageCount={data.media.length} images={data.media} style={styles.imageStyle}/>
+                <ImagePost imageCount={data.media.length} images={data.media} style={styles.imageStyle} textContent={this.props.data.content}/>
             )
         }
 

@@ -33,6 +33,7 @@ import DrawerOld from './common/drawer';
 
 import _ from 'lodash';
 import Shadow from '../constants/Shadow';
+import { getProfile } from './helpers/index';
 
 //1 is regular post, 2 is image
 const data = ['0', '1'];
@@ -102,10 +103,12 @@ export default class Landing extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 responseJson.forEach(element => {
-                    data.push(element);
+                    getProfile(element.creator, (responseJson) => {
+                        element.profile = responseJson;
+                        data.push(element);
+                        this.setState({dataSource: ds.cloneWithRows(data)});
+                    });
                 });
-
-                this.setState({dataSource: ds.cloneWithRows(data)});
             })
             .catch((error) => {
                 console.error(error);
@@ -227,22 +230,19 @@ export default class Landing extends Component {
         const offset = e.contentOffset.y;
 
         if(offset > this.offsetY) {
-            console.log('scrolling down');
-
-            if(!(offset < 56)) {
-                this.refs.searchBar.hide();
+            if(!(offset < 100)) {
+                this.refs.searchBar.hide()
             }
         } else {
-            console.log('scrolling up');
-            setTimeout(() => {this.refs.searchBar.show();}, 150);
+            this.refs.searchBar.show()
+            //setTimeout(() => {this.refs.searchBar.show();}, 150);
 
         }
 
         this.offsetY = offset;
 
 
-        if(offset + this.content_height >= l_height) {
-            console.log('end');
+        if(offset + this.content_height + 60 >= l_height) {
             this.loadMore();
         }
     }
@@ -299,8 +299,6 @@ export default class Landing extends Component {
                 tweenHandler={Drawer.tweenPresets.parallax}
                 side="right"
                 >
-
-
                     <View ref='view' style={styles.container}>
                         <SearchBar ref='searchBar' openChat={this.openChat.bind(this)} openMenu={this.toggleMenu.bind(this)}/>
                         

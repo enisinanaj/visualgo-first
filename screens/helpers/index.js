@@ -34,6 +34,7 @@ export default settings = {
 export function getProfile(profileId, getData) {
     return fetch(settings.baseApi + '/users?userId=' + profileId)
     .then((response) => response.json())
+    .then((responseJson) => getData(responseJson))
     .catch((error) => {
         console.error(error);
     });

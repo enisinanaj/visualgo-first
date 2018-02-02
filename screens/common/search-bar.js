@@ -25,6 +25,7 @@ export default class SearchBar extends Component {
             height: null,
             animating: false,
             open: false,
+            hiddenBar: false
         };
 
         this.measureView = this.measureView.bind(this);
@@ -50,8 +51,10 @@ export default class SearchBar extends Component {
         this.setState({animating: true});
         Animated.timing(
             this.state.height,
-            {toValue: 0}
+            {toValue: 0, duration: 500}
         ).start();
+
+        this.setState({hiddenBar: true});
     }
 
     show() {
@@ -62,8 +65,10 @@ export default class SearchBar extends Component {
         this.setState({animating: false});
         Animated.timing(
             this.state.height,
-            {toValue: this.state.original}
+            {toValue: this.state.original, duration: 500}
         ).start();
+
+        setTimeout(() => this.setState({hiddenBar: false}), 350);
     }
 
     render() {
@@ -71,7 +76,8 @@ export default class SearchBar extends Component {
         return (
             <View ref='container'>
                 <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}>
-                    <View style={[styles.searchBarOuterContainer, {height: this.state.height-12}]}>
+                    { this.state.hiddenBar ? null :
+                    <View style={[styles.searchBarOuterContainer, {height: height - 18}]} ref='realSearchBar'>
                         <TouchableOpacity style={styles.icon} onPress={this.props.openMenu}>
                             <Ionicons name='ios-menu-outline' size={24} color={Colors.main}/>
                         </TouchableOpacity>
@@ -87,9 +93,8 @@ export default class SearchBar extends Component {
                         <TouchableOpacity style={styles.icon} onPress={this.props.openChat}>
                             <Ionicons name='ios-camera-outline' size={32} color={Colors.main}/>
                         </TouchableOpacity>
-                    </View>
+                    </View>}
                 </Animated.View>
-
             </View>
         )
 
@@ -119,14 +124,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
 
-
     searchBarOuterContainer: {
         flex: 1,
         flexDirection: 'row',
         paddingBottom: 9,
         paddingTop: 9,
-        backgroundColor: Colors.white,
-        height: 48
+        backgroundColor: Colors.white
     },
 
     icon: {

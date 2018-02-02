@@ -29,7 +29,7 @@ export default class SingleImage extends Component {
         const {image} = this.props;
         return (
             <View ref="view" style={{flex: 1}}>
-                <Image style={{flex: 1, height: null, width}} source={getImage(image)} />
+                <Image style={{flex: 1, height: null, width: null}} source={image} />
             </View>
         )
     }
