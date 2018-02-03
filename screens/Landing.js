@@ -28,7 +28,7 @@ import NewsFeedItem from './common/newsfeed-item';
 import CreatePost from './common/create-post';
 import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
-import DrawerOld from './common/drawer';
+import BlueMenu from './common/blue-menu';
 
 
 import _ from 'lodash';
@@ -293,7 +293,7 @@ export default class Landing extends Component {
                 <Drawer
                 type="static"
                 ref={(ref) => this._drawer = ref}
-                content={<DrawerOld/>}
+                content={<BlueMenu/>}
                 openDrawerOffset={100}
                 styles={drawerStyles}
                 tweenHandler={Drawer.tweenPresets.parallax}

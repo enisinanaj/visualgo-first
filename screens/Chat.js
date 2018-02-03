@@ -15,11 +15,14 @@ import {
     Button
 } from 'react-native';
 
+import Drawer from 'react-native-drawer'
+
 import Colors from '../constants/Colors';
 import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
 import NewGroup from './NewGroup';
+import BlueMenu from './common/blue-menu';
 
 import {EvilIcons} from '@expo/vector-icons';
 import _ from 'lodash';
@@ -43,6 +46,38 @@ export default class Chat extends Component {
         messages: ds.cloneWithRows(messages),
         createNewGroup: false,
     };
+
+    this._onDrawerOpen = this._onDrawerOpen.bind(this);
+  }
+
+  closeControlPanel = () => {
+    this._drawer.close()
+  };
+  openControlPanel = () => {
+    this._drawer.open()
+  };
+
+  toggleMenu = () => {
+      if(this._drawer.props.open){
+          this._drawer.close()
+      }else{
+          this._drawer.open()
+      }
+
+
+  };
+
+  
+  renderDrawer() {
+    return (
+        <Drawer/>
+    )
+  }
+
+  _onDrawerOpen(event) {
+      const e = event.nativeEvent;
+      const offset = e.contentOffset.x;
+      this.offsetX.setValue(offset);
   }
 
   renderMessageRow(data) {
@@ -94,19 +129,43 @@ export default class Chat extends Component {
 
   render() {
         return (
-            <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
-                <StatusBar barStyle={'light-content'} animated={true}/>
-                <SearchBar ref='searchBar'/>
-                <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
-                <ListView
-                    style={styles.listView}
-                    onScroll={this._onScroll}
-                    dataSource={this.state.messages}
-                    renderRow={(data) => this._renderRow(data)}/>
-                {this.renderNewGroupModal()}
-            </View>
+
+          <View style={{flex: 1}}>
+
+                <Drawer
+                type="static"
+                ref={(ref) => this._drawer = ref}
+                content={<BlueMenu/>}
+                openDrawerOffset={100}
+                styles={drawerStyles}
+                tweenHandler={Drawer.tweenPresets.parallax}
+                side="right"
+                >
+                    <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
+                        <StatusBar barStyle={'light-content'} animated={true}/>
+                        <SearchBar ref='searchBar' openMenu={this.toggleMenu.bind(this)}/>
+                        <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
+                        <ListView
+                            style={styles.listView}
+                            onScroll={this._onScroll}
+                            dataSource={this.state.messages}
+                            renderRow={(data) => this._renderRow(data)}
+                            enableEmptySections={true}/>
+                        {this.renderNewGroupModal()}
+                    </View>
+                </Drawer>
+          
+          
+          </View>
+
+
         )
     }
+}
+
+const drawerStyles = {
+  drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
+  main: {paddingLeft: 0},
 }
 
 const styles = StyleSheet.create({
@@ -155,5 +214,10 @@ const styles = StyleSheet.create({
     },
     messageDate: {
         paddingTop: 17
+    },
+    listView: {
+      backgroundColor: Colors.white,
+      flexDirection: 'column'
+      
     }
   });

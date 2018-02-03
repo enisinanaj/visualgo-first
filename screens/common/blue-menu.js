@@ -31,7 +31,7 @@ const menus = [ {name: 'Report', image: require('../img/elmo.jpg')},
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-export default class Drawer extends Component {
+export default class BlueMenu extends Component {
     constructor() {
         super();
         this.state = {
