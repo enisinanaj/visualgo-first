@@ -24,7 +24,7 @@ const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const backgroundColorsArray = ['0', '1', '2', '3', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14', '15'];
 
 import Colors from '../../constants/Colors';
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import ThemesList from './themes-list';
@@ -261,11 +261,17 @@ export default class CreateTask extends Component{
     renderBackgroundColors() {
         return (
             <View style={{height: 40}}>
-                <ListView
-                    horizontal={true}
-                    contentContainerStyle={styles.backgroundColors}
-                    dataSource={this.state.backgroundColors}
-                    renderRow={(data) => this.renderColorBox(data)}/>
+                <View style={{flexDirection: 'row', alignContent: 'flex-end', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
+                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray}}>
+                        <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
+                        <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
+                    </View>
+                    <ListView style={{flexGrow: 8}}
+                        horizontal={true}
+                        contentContainerStyle={styles.backgroundColors}
+                        dataSource={this.state.backgroundColors}
+                        renderRow={(data) => this.renderColorBox(data)}/>
+                </View>
             </View>
         )
     }
@@ -364,7 +370,7 @@ export default class CreateTask extends Component{
                         {o.innerName != undefined && o.innerName != '' ? 
                             <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                         : null}
-                        <EvilIcons name={"paperclip"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                        <Ionicons name={"ios-attach"} color={Colors.main} size={32} style={{marginRight: 10}} />
                     </TouchableOpacity>
                 </View>
             )
@@ -409,7 +415,7 @@ export default class CreateTask extends Component{
                         borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <EvilIcons name={"check-square"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                                <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
                                 <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
@@ -444,7 +450,7 @@ export default class CreateTask extends Component{
                         borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <EvilIcons name={"square"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                                <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
                                 <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
@@ -479,7 +485,7 @@ export default class CreateTask extends Component{
                         borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <EvilIcons name={"square"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                                <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
                                 <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
