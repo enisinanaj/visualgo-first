@@ -10,6 +10,7 @@ import Chat from '../screens/Chat';
 import RootNavigation from './RootNavigation';
 import ConversationView from '../screens/Conversation';
 import NewGroup from '../screens/NewGroup'
+import Login from '../screens/Login'
 
 
 export default createRouter(() => ({
@@ -21,4 +22,5 @@ export default createRouter(() => ({
     rootNavigation: () => RootNavigation,
     conversation: () => ConversationView,
     newGroup: () => NewGroup,
+    login: () => Login,
 }));

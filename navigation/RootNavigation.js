@@ -50,7 +50,7 @@ export default class RootNavigation extends React.Component {
         <TabNavigationItem
             id="settings" style={styles.tabNavigationItem}
             renderIcon={isSelected => this._renderIcon('ios-checkmark-circle-outline', isSelected)}>
-          <StackNavigation initialRoute="landing" />
+          <StackNavigation initialRoute="login" />
         </TabNavigationItem>
       </TabNavigation>
     );
