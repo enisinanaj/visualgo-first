@@ -11,6 +11,7 @@ import {
     ListView,
     StyleSheet,
     StatusBar,
+    TextInput,
     Image,
     TouchableOpacity,
     Button,
@@ -48,40 +49,14 @@ export default class Chat extends Component {
         messages: ds.cloneWithRows(messages),
         createNewGroup: false,
         visibleHeight: height,
+        canLogin: false,
+        passTyped: false,
+        emailTyped: false
     };
 
-    this._onDrawerOpen = this._onDrawerOpen.bind(this);
+
   }
 
-  closeControlPanel = () => {
-    this._drawer.close()
-  };
-  openControlPanel = () => {
-    this._drawer.open()
-  };
-
-  toggleMenu = () => {
-      if(this._drawer.props.open){
-          this._drawer.close()
-      }else{
-          this._drawer.open()
-      }
-
-
-  };
-
-  
-  renderDrawer() {
-    return (
-        <Drawer/>
-    )
-  }
-
-  _onDrawerOpen(event) {
-      const e = event.nativeEvent;
-      const offset = e.contentOffset.x;
-      this.offsetX.setValue(offset);
-  }
 
   renderMessageRow(data) {
     return (
@@ -97,37 +72,12 @@ export default class Chat extends Component {
         </View>);
   }
 
-  _goToConvo = (messageId) => {
-    this.props.navigator.push(Router.getRoute('conversation', {convTitle: 'Andy'}));
+  _goToLanding = (messageId) => {
+    this.props.navigator.push(Router.getRoute('landing'));
   }
   
   _renderRow(data) {
     return <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMessageRow(data)} />
-  }
-
-  _goToNewGoup() {
-    this.setState({createNewGroup: true});
-  }
-
-  renderNewGroupModal() {
-    return (
-      <Modal
-        animationType={"slide"}
-        transparent={false}
-        visible={this.state.createNewGroup}
-        onRequestClose={() => this.setState({createNewGroup: false})}>
-        <NewGroup closeModal={() => this.setState({createNewGroup: false})}/>
-      </Modal>
-    );
-  }
-
-  renderFilters() {
-    filters = [{type: 'search', searchPlaceHolder: 'Search'},
-          {title: 'All', selected: true, active: true},
-          {title: 'Group', selected: false, active: true},
-          {title: 'Active', selected: false, active: true},
-          {title: 'New', active: false, onPress: () => this._goToNewGoup()}];
-    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Messages"} /></View>
   }
 
   _renderHeader() {
@@ -141,32 +91,91 @@ export default class Chat extends Component {
         </View>);
   }
 
+  emailChanged() {
+    this.state.emailTyped = true;
+
+    if(this.state.passTyped == true){
+      this.state.canLogin = true;
+      this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
+      this._buttonLogin.setNativeProps({disabled: false});
+      console.log("enabling login");
+    }
+
+    console.log("emailTyped");
+
+  }
+
+  passwordChanged() {
+    this.state.passTyped = true;
+
+    if(this.state.emailTyped == true){
+      this.state.canLogin = true;
+      this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
+      this._buttonLogin.setNativeProps({disabled: false});
+      console.log("enabling login");
+    }
+
+    console.log("passTyped");
+
+  }
+
+  showPassword(){
+    this._passInput.setNativeProps({secureTextEntry: false});
+  }
+
   render() {
     var {height, visibleHeight} = this.state;
         return (
-          <View style={{flex: 1}}>
+          <KeyboardAvoidingView style={{height: visibleHeight}} behavior={"padding"}>
+
+            <View style={{flex: 1}}>
 
 
-                    <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
-                        <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}/>
-                        <DefaultRow renderChildren={() => this._renderHeader()} />
+                      <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
+                          <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}/>
+                          <DefaultRow renderChildren={() => this._renderHeader()} />
 
-                        <TouchableOpacity style={styles.buttonStyleLinkedin}>
-                          <Text style={styles.buttonContentStyleLinkedin}>LOGIN WITH LINKEDIN</Text>
-                        </TouchableOpacity>
+                          <TouchableOpacity style={styles.buttonStyleLinkedin}>
+                            <Text style={styles.buttonContentStyleLinkedin}>LOGIN WITH LINKEDIN</Text>
+                          </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.buttonStyleGoogle}>
-                          <Text style={styles.buttonContentStyleGoogle}>LOGIN WITH FACEBOOK</Text>
-                        </TouchableOpacity>
+                          <TouchableOpacity style={styles.buttonStyleGoogle}>
+                            <Text style={styles.buttonContentStyleGoogle}>LOGIN WITH FACEBOOK</Text>
+                          </TouchableOpacity>
 
-                        <Text style={styles.OrText}>Or... </Text>
+                          <Text style={styles.OrText}>Or... </Text>
 
-                    </View>
+                          <Text style={styles.grayText}>Enter your e-mail address </Text>
 
-                
-          
-          
-          </View>
+                          <View style={styles.searchBarContainer}>
+                            <TextInput placeholderTextColor={Colors.main} placeholder={'Email'} style={styles.searchBar} onChangeText={() => this.emailChanged()}/>
+                          </View>
+
+                          <Text style={styles.grayText}>Enter your password </Text>
+
+                          <View style={styles.searchBarContainer}>
+                            <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} style={styles.searchBar} onChangeText={() => this.passwordChanged()}/>
+                          </View>
+
+                          <TouchableOpacity onPress={() => this.showPassword()}>
+                            <Text style={styles.ShowPasswordText}>Show Password</Text>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity ref={component => this._buttonLogin = component} style={styles.buttonLoginDisabled} disabled={true} onPress={() => console.log("Logging in..")}>
+                            <Text style={styles.buttonContentStyleGoogle}>LOGIN</Text>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity>
+                            <Text style={styles.ForgottenText}>Forgotten your password?</Text>
+                          </TouchableOpacity>
+
+                      </View>
+
+                  
+            
+            
+            </View>
+          </KeyboardAvoidingView>
 
         )
     }
@@ -220,7 +229,7 @@ buttonContentStyleGoogle: {
     marginLeft: 40, 
     minWidth: 75,
     marginTop: 20,
-    
+  
     backgroundColor: '#2F77B0',
     alignItems: 'center'
     //fontFamily: 'Roboto-Light'
@@ -237,6 +246,36 @@ buttonStyleGoogle: {
   marginTop: 20,
   
   backgroundColor: '#4F86EC',
+  alignItems: 'center'
+  //fontFamily: 'Roboto-Light'
+},
+
+buttonLoginEnabled: {
+  flexDirection: 'column',
+  borderRadius: 25,
+  padding: 10,
+  height: 50,
+  marginRight: 40,
+  marginLeft: 40,
+  minWidth: 75,
+  marginTop: 20,
+  
+  backgroundColor: '#4F86EC',
+  alignItems: 'center'
+  //fontFamily: 'Roboto-Light'
+},
+
+buttonLoginDisabled: {
+  flexDirection: 'column',
+  borderRadius: 25,
+  padding: 10,
+  height: 50,
+  marginRight: 40,
+  marginLeft: 40,
+  minWidth: 75,
+  marginTop: 20,
+  
+  backgroundColor: Colors.gray,
   alignItems: 'center'
   //fontFamily: 'Roboto-Light'
 },
@@ -262,7 +301,34 @@ buttonStyleGoogle: {
       fontSize: 16,
       fontWeight: '800',
       color: Colors.main,
-      marginLeft: 20,
+      marginLeft: 40,
+      marginTop: 30,
+
+    },
+
+    ShowPasswordText:{
+      fontSize: 16,
+      fontWeight: '800',
+      color: Colors.main,
+      marginLeft: 40,
+      marginTop: 0,
+
+    },
+
+    ForgottenText:{
+      fontSize: 16,
+      fontWeight: '800',
+      color: '#FBD54A',
+      marginLeft: 40,
+      marginTop: 20,
+
+    },
+
+    grayText:{
+      fontSize: 14,
+      fontWeight: '100',
+      color: Colors.gray,
+      marginLeft: 40,
       marginTop: 30,
 
     },
@@ -322,5 +388,22 @@ buttonStyleGoogle: {
       backgroundColor: Colors.white,
       flexDirection: 'column'
       
+    },
+    searchBarContainer: {
+      alignItems: 'center',
+      height: 60,
+      marginLeft: 40,
+      flexDirection: 'column',
+      marginRight: 40,
+      marginLeft: 40, 
+      minWidth: 75,
+    },
+    searchBar: {
+      flex: 1,
+      color: Colors.main,
+      fontSize: 28,
+      marginLeft: 0,
+      paddingBottom: 8,
+      width: 314,
     }
   });
