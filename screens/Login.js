@@ -35,19 +35,13 @@ import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
 
 const {width, height} = Dimensions.get('window');
-const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
-                  {from: {name: 'Andy', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo', read: true, date: new Date()},
-                  {from: {name: 'Ivan', image: require('./img/cookiemonster.jpeg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
 
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Chat extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-        messages: ds.cloneWithRows(messages),
-        createNewGroup: false,
         visibleHeight: height,
         canLogin: false,
         passTyped: false,
@@ -57,27 +51,8 @@ export default class Chat extends Component {
 
   }
 
-
-  renderMessageRow(data) {
-    return (
-        <View style={styles.rowContainer}>
-            <TouchableOpacity  onPress={() => this._goToConvo(1)} style={styles.rowContainer}>
-                <Image source={data.from.image} style={styles.selectableDisplayPicture} />
-                <View style={styles.textInRow}>
-                    <Text style={[styles.rowTitle, !data.read ? styles.unreadMessage : {}]}>{data.from.name}</Text>
-                    <Text style={styles.rowSubTitle}>{data.message}</Text>
-                </View>
-                <Text style={styles.messageDate}>{moment(data.date).locale("it").format("LT")}</Text>
-            </TouchableOpacity>
-        </View>);
-  }
-
   _goToLanding = (messageId) => {
     this.props.navigator.push(Router.getRoute('landing'));
-  }
-  
-  _renderRow(data) {
-    return <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMessageRow(data)} />
   }
 
   _renderHeader() {
@@ -98,10 +73,9 @@ export default class Chat extends Component {
       this.state.canLogin = true;
       this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
       this._buttonLogin.setNativeProps({disabled: false});
-      console.log("enabling login");
+
     }
 
-    console.log("emailTyped");
 
   }
 
@@ -112,10 +86,10 @@ export default class Chat extends Component {
       this.state.canLogin = true;
       this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
       this._buttonLogin.setNativeProps({disabled: false});
-      console.log("enabling login");
+
     }
 
-    console.log("passTyped");
+    
 
   }
 
@@ -126,13 +100,14 @@ export default class Chat extends Component {
   render() {
     var {height, visibleHeight} = this.state;
         return (
-          <KeyboardAvoidingView style={{height: visibleHeight}} behavior={"padding"}>
+          <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
+            <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}/>
+            <ScrollView>
+            <View style={{flexDirection: 'column', backgroundColor: Colors.white}} resetScrollToCoords={{x: 0, y: 0}}>
 
-            <View style={{flex: 1}}>
 
 
-                      <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
-                          <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}/>
+                          
                           <DefaultRow renderChildren={() => this._renderHeader()} />
 
                           <TouchableOpacity style={styles.buttonStyleLinkedin}>
@@ -161,7 +136,7 @@ export default class Chat extends Component {
                             <Text style={styles.ShowPasswordText}>Show Password</Text>
                           </TouchableOpacity>
 
-                          <TouchableOpacity ref={component => this._buttonLogin = component} style={styles.buttonLoginDisabled} disabled={true} onPress={() => console.log("Logging in..")}>
+                          <TouchableOpacity ref={component => this._buttonLogin = component} disabled={true} style={styles.buttonLoginDisabled} onPress={() => console.log("Logging in..")}>
                             <Text style={styles.buttonContentStyleGoogle}>LOGIN</Text>
                           </TouchableOpacity>
 
@@ -169,12 +144,14 @@ export default class Chat extends Component {
                             <Text style={styles.ForgottenText}>Forgotten your password?</Text>
                           </TouchableOpacity>
 
-                      </View>
+                 
 
                   
             
             
             </View>
+            </ScrollView>
+            
           </KeyboardAvoidingView>
 
         )
