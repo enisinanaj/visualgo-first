@@ -63,11 +63,8 @@ export default class Chat extends Component {
       }else{
           this._drawer.open()
       }
-
-
   };
 
-  
   renderDrawer() {
     return (
         <Drawer/>
@@ -129,9 +126,7 @@ export default class Chat extends Component {
 
   render() {
         return (
-
           <View style={{flex: 1}}>
-
                 <Drawer
                 type="static"
                 ref={(ref) => this._drawer = ref}
@@ -139,8 +134,7 @@ export default class Chat extends Component {
                 openDrawerOffset={100}
                 styles={drawerStyles}
                 tweenHandler={Drawer.tweenPresets.parallax}
-                side="right"
-                >
+                side="right">
                     <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
                         <StatusBar barStyle={'light-content'} animated={true}/>
                         <SearchBar ref='searchBar' openMenu={this.toggleMenu.bind(this)}/>
@@ -154,8 +148,6 @@ export default class Chat extends Component {
                         {this.renderNewGroupModal()}
                     </View>
                 </Drawer>
-          
-          
           </View>
 
 

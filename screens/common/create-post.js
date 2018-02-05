@@ -15,7 +15,8 @@ import {
     Switch,
     ListView,
     Platform,
-    Modal
+    Modal,
+    ScrollView
 } from 'react-native';
 
 
@@ -29,6 +30,8 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import TagList from './tag-list';
 import PostPrivacy from './privacy';
+import ImageBrowser from '../ImageBrowser';
+import ImagePost from './image-post';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -39,7 +42,9 @@ export default class CreatePost extends Component{
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
             tagModal: false,
             privacyModal: false,
-            allTags: []
+            allTags: [],
+            imageBrowserOpen: false,
+            photos: []
         }
     }
 
@@ -55,7 +60,7 @@ export default class CreatePost extends Component{
 
     keyboardWillShow (e) {
         let newSize = Dimensions.get('window').height - e.endCoordinates.height
-            this.setState({visibleHeight: newSize, k_visible: true})
+        this.setState({visibleHeight: newSize, k_visible: true})
     }
 
     keyboardWillHide (e) {
@@ -118,7 +123,7 @@ export default class CreatePost extends Component{
                     </TouchableOpacity>
                 </View>
             )
-        }else{
+        } else {
             return (
                 <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
                     borderBottomColor: Colors.gray, flexDirection: 'row',
@@ -232,6 +237,34 @@ export default class CreatePost extends Component{
         );
     }
 
+    imageBrowserCallback = (callback) => {
+        callback.then((photos) => {
+
+          let newPhotos = [];
+          photos.forEach(element => {
+              newPhotos.push({url: element.uri != null ? element.uri : element.file});
+          });
+
+          this.setState({
+            imageBrowserOpen: false,
+            photos: newPhotos
+          })
+        }).catch((e) => console.log(e))
+    }
+
+    _renderImagePickerModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.imageBrowserOpen}
+                onRequestClose={() => this.setState({imageBrowserOpen: false})}>
+                
+                <ImageBrowser max={6} callback={this.imageBrowserCallback}/>
+            </Modal>
+        );
+    }
+
     renderMenu() {
         const objs =
             [
@@ -241,7 +274,7 @@ export default class CreatePost extends Component{
                 },
                 {
                     name: 'Foto/Video',
-                    onPress: () => {}
+                    onPress: () => {this.setState({imageBrowserOpen: true})}
                 }
             ];
 
@@ -280,7 +313,7 @@ export default class CreatePost extends Component{
         }
 
         return objs.map((o, i) => {
-            return (
+            return (o.visible == undefined || o.visible) && (
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -295,20 +328,28 @@ export default class CreatePost extends Component{
         })
     }
 
+    renderSelectedImages() {
+        return this.state.photos.length > 0 && <ImagePost imageCount={this.state.photos.length} images={this.state.photos} style={{}}/>;
+    }
+
     render() {
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'default'} animated={true}/>
                 {this.renderHeader()}
-                {this.renderCommentSwitchRow()}
-                {this.renderPostType()}
-                {this.renderText()}
-                <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
-                    {this.renderBackgroundColors()}
-                    {this.renderMenu()}
-                </View>
+                <ScrollView>
+                    {this.renderCommentSwitchRow()}
+                    {this.renderPostType()}
+                    {this.renderText()}
+                    {this.renderSelectedImages()}
+                    <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
+                        {this.renderBackgroundColors()}
+                        {this.renderMenu()}
+                    </View>
+                </ScrollView>
                 {this.renderTaggingModal()}
                 {this.renderPrivacyModal()}
+                {this._renderImagePickerModal()}
             </View>
         )
     }

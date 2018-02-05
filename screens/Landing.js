@@ -201,7 +201,7 @@ export default class Landing extends Component {
                     transparent={false}
                     visible={this.state.modalPost}
                     onRequestClose={() => this.setState({modalPost: false})}>
-                    <CreatePost closeModal={(obj) => this.newPostHandler(obj)} />
+                    <CreatePost closeModal={(obj) => this.newPostHandler(obj)} navigator={this.props.navigator}/>
                 </Modal>
                 <Modal
                     animationType={"slide"}
@@ -275,21 +275,13 @@ export default class Landing extends Component {
         this.offsetX.setValue(offset);
     }
 
-    openChat() {
-        //this.refs.scrollview.scrollTo({x: width * 4/5, y: 0, animated: true});
-    }
-
     openMenu() {
         this.offsetX.setValue(offset);
     }
 
     render() {
         return (
-
-            
-            
             <View style={{flex: 1}}>
-                    
                 <Drawer
                 type="static"
                 ref={(ref) => this._drawer = ref}
@@ -300,7 +292,7 @@ export default class Landing extends Component {
                 side="right"
                 >
                     <View ref='view' style={styles.container}>
-                        <SearchBar ref='searchBar' openChat={this.openChat.bind(this)} openMenu={this.toggleMenu.bind(this)}/>
+                        <SearchBar ref='searchBar' openMenu={this.toggleMenu.bind(this)}/>
                         
                         <ListView
                             refreshControl={

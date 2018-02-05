@@ -9,18 +9,25 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     Image,
+    Modal
 } from 'react-native';
 
 import {getImage} from '../helpers';
 const {width, height} = Dimensions.get('window');
-import { withNavigation } from '@expo/ex-navigation';
 
+import _ from 'lodash';
 import SingleImage from './single-image';
+import ImageScreen from '../imageScreen';
+import Router from '../../navigation/Router';
 
-
-@withNavigation
 export default class ImagePost extends Component {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            imagesScreen: false
+        }
+    }
 
     renderImages() {
         const {imageCount, images} = this.props;
@@ -114,15 +121,22 @@ export default class ImagePost extends Component {
                         </View>
                     </TouchableWithoutFeedback>
                 );
-
-
         }
     }
 
-    openImages() {
-        const {images} = this.props;
+    renderAllImagesModal() {
+        return
+        <Modal
+            animationType={"slide"}
+            transparent={false}
+            visible={this.state.imagesScreen}
+            onRequestClose={() => this.setState({imagesScreen: false})}>
+            <ImageScreen images={this.props.images} closeModal={() => this.setState({imagesScreen: false})}></ImageScreen>
+        </Modal>;
+    }
 
-        this.props.navigator.push('images', {images});
+    openImages() {
+        //TODO 
     }
 
     render() {
@@ -133,6 +147,7 @@ export default class ImagePost extends Component {
                     <Text>{this.props.textContent}</Text>
                 </View>
                 {this.renderImages()}
+                {this.renderAllImagesModal()}
             </View>
         )
     }

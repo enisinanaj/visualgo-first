@@ -15,7 +15,8 @@ import {
     Switch,
     ListView,
     Platform,
-    Modal
+    Modal,
+    ScrollView
 } from 'react-native';
 
 
@@ -357,7 +358,8 @@ export default class CreateTask extends Component{
         const objs =
             [
                 {
-                    name: 'Visual Guideline'
+                    name: 'Visual Guideline',
+                    onPress: () => {Expo.DocumentPicker.getDocumentAsync({})}
                 }
             ];
 
@@ -559,21 +561,23 @@ export default class CreateTask extends Component{
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'default'} animated={true}/>
                 {this.renderHeader()}
-                {this.renderCommentSwitchRow()}
-                {this.renderPostType()}
-                {this.renderTheme()}
-                <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
-                    {this.renderBackgroundColors()}
-                </View>
-                {this.renderTaskDescription()}
-                {this.renderEnvironment()}
-                {this.renderVisualGuideline()}
-                {this.renderStartDueDate()}
-                {this.renderPhoto()}
-                {this.renderVideo()}
-                {this.render360()}
-                {this.renderAssignTo()}
-                {this.renderTaskAdmins()}
+                <ScrollView>
+                    {this.renderCommentSwitchRow()}
+                    {this.renderPostType()}
+                    {this.renderTheme()}
+                    <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
+                        {this.renderBackgroundColors()}
+                    </View>
+                    {this.renderTaskDescription()}
+                    {this.renderEnvironment()}
+                    {this.renderVisualGuideline()}
+                    {this.renderStartDueDate()}
+                    {this.renderPhoto()}
+                    {this.renderVideo()}
+                    {this.render360()}
+                    {this.renderAssignTo()}
+                    {this.renderTaskAdmins()}
+                </ScrollView>
                 {this.renderThemesModal()}
                 {this.renderEnvironmentsModal()}
                 {this.renderPrivacyModal()}

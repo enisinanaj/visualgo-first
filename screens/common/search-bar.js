@@ -10,8 +10,12 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-    Platform
+    Platform,
+    Modal
 } from 'react-native';
+
+import { ImagePicker } from 'expo';
+import ImageBrowser from '../ImageBrowser';
 
 import Colors from '../../constants/Colors';
 import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
@@ -25,7 +29,8 @@ export default class SearchBar extends Component {
             height: null,
             animating: false,
             open: false,
-            hiddenBar: false
+            hiddenBar: false,
+            imageBrowserOpen: false
         };
 
         this.measureView = this.measureView.bind(this);
@@ -71,6 +76,29 @@ export default class SearchBar extends Component {
         setTimeout(() => this.setState({hiddenBar: false}), 350);
     }
 
+    imageBrowserCallback = (callback) => {
+        callback.then((photos) => {
+          console.log(photos)
+          this.setState({
+            imageBrowserOpen: false,
+            photos
+          })
+        }).catch((e) => console.log(e))
+    }
+
+    _renderImagePickerModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.imageBrowserOpen}
+                onRequestClose={() => this.setState({imageBrowserOpen: false})}>
+                
+                <ImageBrowser max={4} callback={this.imageBrowserCallback}/>
+            </Modal>
+        );
+    }
+
     render() {
         const {height} = this.state;
         return (
@@ -90,11 +118,12 @@ export default class SearchBar extends Component {
                             <TextInput placeholderTextColor={'#B2B2B2'} placeholder={'Search'} style={styles.searchBar}/>
                         </View>
 
-                        <TouchableOpacity style={styles.icon} onPress={this.props.openChat}>
+                        <TouchableOpacity style={styles.icon} onPress={() => {this.setState({imageBrowserOpen: true})}}>
                             <Ionicons name='ios-camera-outline' size={32} color={Colors.main}/>
                         </TouchableOpacity>
                     </View>}
                 </Animated.View>
+                {this._renderImagePickerModal()}
             </View>
         )
 
