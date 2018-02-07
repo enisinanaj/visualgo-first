@@ -33,11 +33,12 @@ import _ from 'lodash';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
+import { withNavigation } from '@expo/ex-navigation';
 
 const {width, height} = Dimensions.get('window');
 
-
-export default class Chat extends Component {
+@withNavigation
+export default class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -45,7 +46,9 @@ export default class Chat extends Component {
         visibleHeight: height,
         canLogin: false,
         passTyped: false,
-        emailTyped: false
+        emailTyped: false,
+        email: '',
+        pass: '',
     };
 
 
@@ -66,31 +69,57 @@ export default class Chat extends Component {
         </View>);
   }
 
-  emailChanged() {
-    this.state.emailTyped = true;
+  emailChanged(email) {
 
-    if(this.state.passTyped == true){
+    if(email != ''){
+      this.state.emailTyped = true;
+    }else{
+      this.state.emailTyped = false;
+    }
+
+
+    if(this.state.passTyped && this.state.emailTyped){
       this.state.canLogin = true;
       this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
-      this._buttonLogin.setNativeProps({disabled: false});
 
+      this.setState({canLogin: true});
+      //this._buttonLogin.setNativeProps({disabled: false});
+
+    }else{
+      this._buttonLogin.setNativeProps({style: styles.buttonLoginDisabled});
+
+      this.setState({canLogin: false});
     }
 
 
   }
 
-  passwordChanged() {
-    this.state.passTyped = true;
+  passwordChanged(pass) {
+    
 
-    if(this.state.emailTyped == true){
+    if(pass != ''){
+      this.state.passTyped = true;
+    }else{
+      this.state.passTyped = false;
+    }
+
+    if(this.state.emailTyped && this.state.passTyped){
       this.state.canLogin = true;
       this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
-      this._buttonLogin.setNativeProps({disabled: false});
+      this.setState({canLogin: true});
+      //this._buttonLogin.setNativeProps({disabled: false});
 
+    }else{
+      this._buttonLogin.setNativeProps({style: styles.buttonLoginDisabled});
+      this.setState({canLogin: true});
     }
 
     
 
+  }
+
+  LogIn(){
+    this.props.navigator.push('landing');
   }
 
   showPassword(){
@@ -123,20 +152,20 @@ export default class Chat extends Component {
                           <Text style={styles.grayText}>Enter your e-mail address </Text>
 
                           <View style={styles.searchBarContainer}>
-                            <TextInput placeholderTextColor={Colors.main} placeholder={'Email'} style={styles.searchBar} onChangeText={() => this.emailChanged()}/>
+                            <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} style={styles.searchBar} onChangeText={(email) => this.emailChanged(email)}/>
                           </View>
 
                           <Text style={styles.grayText}>Enter your password </Text>
 
                           <View style={styles.searchBarContainer}>
-                            <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} style={styles.searchBar} onChangeText={() => this.passwordChanged()}/>
+                            <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} style={styles.searchBar} onChangeText={(pass) => this.passwordChanged(pass)}/>
                           </View>
 
                           <TouchableOpacity onPress={() => this.showPassword()}>
                             <Text style={styles.ShowPasswordText}>Show Password</Text>
                           </TouchableOpacity>
 
-                          <TouchableOpacity ref={component => this._buttonLogin = component} disabled={true} style={styles.buttonLoginDisabled} onPress={() => console.log("Logging in..")}>
+                          <TouchableOpacity ref={component => this._buttonLogin = component} disabled={!this.state.canLogin} style={styles.buttonLoginDisabled} onPress={() => this.LogIn()}>
                             <Text style={styles.buttonContentStyleGoogle}>LOGIN</Text>
                           </TouchableOpacity>
 
