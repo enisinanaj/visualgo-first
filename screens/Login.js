@@ -33,10 +33,11 @@ import _ from 'lodash';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
+import { withNavigation } from '@expo/ex-navigation';
 
 const {width, height} = Dimensions.get('window');
 
-
+@withNavigation
 export default class Chat extends Component {
   constructor(props) {
     super(props);
@@ -72,7 +73,8 @@ export default class Chat extends Component {
     if(this.state.passTyped == true){
       this.state.canLogin = true;
       this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
-      this._buttonLogin.setNativeProps({disabled: false});
+      this.setState({canLogin: true});
+      //this._buttonLogin.setNativeProps({disabled: false});
 
     }
 
@@ -85,12 +87,17 @@ export default class Chat extends Component {
     if(this.state.emailTyped == true){
       this.state.canLogin = true;
       this._buttonLogin.setNativeProps({style: styles.buttonLoginEnabled});
-      this._buttonLogin.setNativeProps({disabled: false});
+      this.setState({canLogin: true});
+      //this._buttonLogin.setNativeProps({disabled: false});
 
     }
 
     
 
+  }
+
+  LogIn(){
+    this.props.navigator.push('landing');
   }
 
   showPassword(){
@@ -136,7 +143,7 @@ export default class Chat extends Component {
                             <Text style={styles.ShowPasswordText}>Show Password</Text>
                           </TouchableOpacity>
 
-                          <TouchableOpacity ref={component => this._buttonLogin = component} disabled={true} style={styles.buttonLoginDisabled} onPress={() => console.log("Logging in..")}>
+                          <TouchableOpacity ref={component => this._buttonLogin = component} disabled={!this.state.canLogin} style={styles.buttonLoginDisabled} onPress={() => this.LogIn()}>
                             <Text style={styles.buttonContentStyleGoogle}>LOGIN</Text>
                           </TouchableOpacity>
 
