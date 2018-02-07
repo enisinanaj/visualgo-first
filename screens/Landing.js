@@ -281,8 +281,7 @@ export default class Landing extends Component {
 
     render() {
         return (
-            <View style={{flex: 1}}>
-                <Drawer
+            <Drawer
                 type="static"
                 ref={(ref) => this._drawer = ref}
                 content={<BlueMenu/>}
@@ -291,30 +290,27 @@ export default class Landing extends Component {
                 tweenHandler={Drawer.tweenPresets.parallax}
                 side="right"
                 >
-                    <View ref='view' style={styles.container}>
-                        <SearchBar ref='searchBar' openMenu={this.toggleMenu.bind(this)}/>
-                        
-                        <ListView
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={this.state.refreshing}
-                                    onRefresh={this._onRefresh.bind(this)}
-                                />
-                            }
-                            style={styles.listView}
-                            onScroll={this._onScroll}
-                            dataSource={this.state.dataSource}
-                            renderRow={(data) => this._renderRow(data)}
-                        />
-                    </View>
-                    {/*this.renderFade()*/}
+                    <View style={{flex: 1}}>
+                        <View ref='view' style={styles.container}>
+                            <SearchBar ref='searchBar' openMenu={this.toggleMenu.bind(this)}/>
                             
-                {this.renderModal()}
-                </Drawer>
+                            <ListView
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={this.state.refreshing}
+                                        onRefresh={this._onRefresh.bind(this)}
+                                    />
+                                }
+                                style={styles.listView}
+                                onScroll={this._onScroll}
+                                dataSource={this.state.dataSource}
+                                renderRow={(data) => this._renderRow(data)}
+                            />
+                        </View>
+                        {this.renderModal()}
 
-
-            </View>
-
+                    </View>
+            </Drawer>
             
 
         )

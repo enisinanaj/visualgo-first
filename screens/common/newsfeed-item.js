@@ -66,6 +66,7 @@ export default class NewsFeedItem extends Component {
                     <Text style={styles.name}>{profile.name}</Text>
                     <Text style={styles.time}>{time}</Text>
                 </View>
+                <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
             </View>
         )
     }

@@ -19,6 +19,7 @@ import ImageBrowser from '../ImageBrowser';
 
 import Colors from '../../constants/Colors';
 import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
 
 const {width, height} = Dimensions.get('window');
 
@@ -119,7 +120,7 @@ export default class SearchBar extends Component {
                         </View>
 
                         <TouchableOpacity style={styles.icon} onPress={() => {this.setState({imageBrowserOpen: true})}}>
-                            <Ionicons name='ios-camera-outline' size={32} color={Colors.main}/>
+                            <Feather name="camera" size={20} color={Colors.main}/>
                         </TouchableOpacity>
                     </View>}
                 </Animated.View>

@@ -6,6 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   View,
+  Dimensions
 } from 'react-native';
 import {
   NavigationProvider,
@@ -20,6 +21,12 @@ import { AppLoading, Asset, Font } from 'expo';
 
 import Router from './navigation/Router';
 import cacheAssetsAsync from './utilities/cacheAssetsAsync';
+import Drawer from 'react-native-drawer'
+
+import BlueMenu from './screens/common/blue-menu';
+import Colors from './constants/Colors';
+
+const {width, height} = Dimensions.get('window');
 
 export default class AppContainer extends React.Component {
   state = {
@@ -83,6 +90,12 @@ export default class AppContainer extends React.Component {
   }
 }
 
+const drawerStyles = {
+  drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
+  main: {paddingLeft: 0},
+}
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -92,6 +105,15 @@ const styles = StyleSheet.create({
     height: 24,
     backgroundColor: 'rgba(0,0,0,0.2)',
   },
+  drawer: {
+    height,
+    padding: 8,
+    paddingTop: 20,
+    width: width * 4/5,
+    position: 'absolute',
+    backgroundColor: Colors.chat_bg,
+    right: 0
+}
 });
 
 // Exponent.registerRootComponent(AppContainer);

@@ -17,15 +17,20 @@ import {EvilIcons} from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import ChatSearchBar from './chat-search-bar';
 import DefaultRow from '../common/default-row';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
 
 const data = ['Report', 'Visual Guideline', 'Wall', 'Calendar', 'Messages', 'To Do List', ' ', 'Anagrafiche', 'Logout'];
 
-const menus = [ {name: 'Report', image: require('../img/elmo.jpg')},
-                {name: 'Visual Guideline', image: require('../img/elmo.jpg')},
-                {name: 'Wall', image: require('../img/elmo.jpg')},
-                {name: 'Calendar', image: require('../img/elmo.jpg')},
-                {name: 'Messages', image: require('../img/elmo.jpg')},
-                {name: 'To Do List', image: require('../img/elmo.jpg')} ];
+const menus = [ {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
+                {name: 'Visual Guideline', icon: 'ios-bowtie-outline', onPress: () => {}},
+                {name: 'Wall', icon: 'ios-card-outline', onPress: () => {}},
+                {name: 'Calendar', icon: 'ios-calendar-outline', onPress: () => {}},
+                {name: 'Messages', icon: 'ios-chatbubbles-outline', onPress: () => {}},
+                {name: 'To Do List', icon: 'ios-checkmark-circle-outline', onPress: () => {}},
+                {name: ''},
+                {name: 'Anagrafiche', onPress: () => {}, subtitle: 'Gestisci negozi, Cluster e contatti'},
+                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {}}];
 
 
 
@@ -35,62 +40,49 @@ export default class BlueMenu extends Component {
     constructor() {
         super();
         this.state = {
-            dataSource: ds.cloneWithRows(data)
+            dataSource: ds.cloneWithRows(menus)
         }
     }
 
     _renderRow(data) {
         return (
-        
             <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMenuItem(data)}/>
-
         )
     }
 
-    goToReport = () => {
-        console.log("Report");
+    _renderIcon(data) {
+        if (data.iconType != undefined && data.iconType == 'Feather') {
+            return <Feather name={data.icon} 
+            size={20}
+            style={{marginTop: 7, marginLeft: 10}}
+            color={Colors.white}/>
+        }
+
+        return <Ionicons
+            name={data.icon}
+            size={26}
+            style={{marginTop: 3, marginLeft: 10}}
+            color={Colors.white}
+        />;
     }
-
-    goToGuidelines = () => {
-        console.log("Guidelines");
-    }
-
-    goToWall = () => {
-        console.log("Wall");
-    }
-
-    goToCalendar = () => {
-        console.log("Calendar");
-    }
-
-    goToMessages = () => {
-        console.log("Messages");
-    }
-
-    goToDoList = () => {
-        console.log("ToDoList");
-    }
-
-    goToAnagrafiche = () => {
-        console.log("Anagrafiche");
-    }
-
-    goToLogout = () => {
-        console.log("Logout");
-    }
-
-    
-
 
     renderMenuItem(data){
-
         return (
-            <TouchableOpacity onPress={data == 'Report' ? this.goToReport.bind(this) : data == 'Visual Guideline' ? this.goToGuidelines.bind(this) : data == 'Wall' ? this.goToWall.bind(this) : data == 'Calendar' ? this.goToCalendar.bind(this) : data == 'Messages' ? this.goToMessages.bind(this) : data == 'To Do List' ? this.goToDoList.bind(this) : data == 'Anagrafiche' ? this.goToAnagrafiche.bind(this) : data == 'Logout' ? this.goToLogout.bind(this) : null}>
-                <Text style={styles.menuItem}>{data}</Text>
+            <TouchableOpacity>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}} >
+                    {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
+                    <Text 
+                        style={[styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
+                            ? {marginLeft: 10} : {},
+                            data.iconPosition == 'right' ? {marginLeft: 10} : {}]}>
+                            {data.name}
+                    </Text>
+                    {data.iconPosition == "right" ? this._renderIcon(data) : null}
+                </View>
+                {data.subtitle != undefined ?
+                <Text style={{color: Colors.white, size: 20, fontWeight: '100', marginLeft: 10}}>{data.subtitle}</Text> : null}
             </TouchableOpacity>
-        
         )
-        
     }
 
 
@@ -101,13 +93,11 @@ export default class BlueMenu extends Component {
                 <Text style={styles.accountName}>Giannino De Gianni</Text>
                 <Text style={styles.accountEmail}>giannino@warda.it</Text>
 
-
                 <ListView
-
                     dataSource={this.state.dataSource}
+                    style={{marginBottom: 50}}
                     renderRow={(data) => this._renderRow(data)}
                 />
-
             </View>
         )
     }
@@ -129,26 +119,29 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         marginTop: 20,
+        marginLeft: 15,
         marginBottom: 10,
     },
 
     menuItem: {
         color: Colors.white,
-        fontSize: 22,
-        paddingLeft: 40,
-        
+        fontSize: 26,
+        fontWeight: '100',
+        paddingTop: 0,
+        paddingBottom: 0
     },
-
     accountName: {
         color: Colors.white,
-        
-        fontSize: 22
+        fontSize: 28,
+        fontWeight: '100',
+        marginLeft: 15
     },
 
     accountEmail: {
         color: Colors.white,
-        fontSize: 18,
-        marginBottom: 30
-
+        fontSize: 20,
+        marginBottom: 30,
+        fontWeight: '200',
+        marginLeft: 15
     }
 });

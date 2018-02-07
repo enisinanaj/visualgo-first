@@ -43,7 +43,10 @@ export default class CreateTask extends Component{
             environmentModal: false,
             privacyModal: false,
             allThemes: [],
-            allEnvironments: []
+            allEnvironments: [],
+            photosCount: 0,
+            videosCount: 0,
+            count360: 0
         }
     }
 
@@ -296,44 +299,15 @@ export default class CreateTask extends Component{
     }
 
     renderEnvironment() {
-        const objs =
-            [
-                {
-                    name: 'Ambiente',
-                    onPress: () => this.setState({environmentModal: true})
-                }
-            ];
-
-        var {allEnvironments} = this.state;
-        if (allEnvironments.length > 0) {
-            var environmentsLength = allEnvironments.filter((row) => row.category == 'environment').length;
-
-            var environmentLabel = '';
-
-            if (environmentsLength > 1) {
-                environmentLabel = environmentsLength + " Environments";
-            } else if (environmentsLength == 1) {
-                environmentLabel = allEnvironments.filter((row) => row.category == 'environment')[0].title;
-            }
-
-            objs[0].name = "Environments";
-            objs[0].innerName = environmentsLabel;
-        }
-
-        return objs.map((o, i) => {
-            return (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity onPress={() => this.setState({environmentModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Ambiente</Text>
+                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     finishEnvironments(environments) {
@@ -355,205 +329,126 @@ export default class CreateTask extends Component{
     }
 
     renderVisualGuideline() {
-        const objs =
-            [
-                {
-                    name: 'Visual Guideline',
-                    onPress: () => {Expo.DocumentPicker.getDocumentAsync({})}
-                }
-            ];
-
-        return objs.map((o, i) => {
-            return (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
-                        <Ionicons name={"ios-attach"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity onPress={() => {Expo.DocumentPicker.getDocumentAsync({})}} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Visual Guideline</Text>
+                    <Ionicons name={"ios-attach"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     renderStartDueDate() {
-        const objs =
-            [
-                {
-                    name: 'Start/Due Date'
-                }
-            ];
-
-        return objs.map((o, i) => {
-            return (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Start/Due Date</Text>
+                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     renderPhoto() {
-        const objs =
-            [
-                {
-                    name: 'Foto'
-                }
-            ];
-
-            return objs.map((o, i) => {
-                return (
-                    <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                        borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
-                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
-                                {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
-                                : null}
-                            </View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
-                                    <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
-                                </TouchableOpacity>
-                                <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.black}}>1</Text>
-                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
-                                    <EvilIcons name={"plus"} color={Colors.main} size={32} style={{marginRight: 5}} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        {this.state.photosCount > 0 ?
+                        <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                        : <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} /> }
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Foto</Text>
                     </View>
-                )
-            })
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <TouchableOpacity onPress={() => {this.setState({photosCount: --this.state.photosCount})}} style={{alignSelf: 'center'}}>
+                            <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.black}}>{this.state.photosCount}</Text>
+                        <TouchableOpacity onPress={() => {this.setState({photosCount: ++this.state.photosCount})}} style={{alignSelf: 'center'}}>
+                            <EvilIcons name={"plus"} color={Colors.main} size={32} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
     }
 
     renderVideo() {
-        const objs =
-            [
-                {
-                    name: 'Video'
-                }
-            ];
-
-            return objs.map((o, i) => {
-                return (
-                    <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                        borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
-                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
-                                {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
-                                : null}
-                            </View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
-                                    <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
-                                </TouchableOpacity>
-                                <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>0</Text>
-                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
-                                    <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        {this.state.videosCount > 0 ?
+                        <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                        : <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} /> }
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Video</Text>
                     </View>
-                )
-            })
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <TouchableOpacity onPress={() => {this.setState({videosCount: --this.state.videosCount})}} style={{alignSelf: 'center'}}>
+                            <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>{this.state.videosCount}</Text>
+                        <TouchableOpacity onPress={() => {this.setState({videosCount: ++this.state.videosCount})}} style={{alignSelf: 'center'}}>
+                            <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
     }
 
     render360() {
-        const objs =
-            [
-                {
-                    name: '360'
-                }
-            ];
-
-            return objs.map((o, i) => {
-                return (
-                    <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                        borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
-                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>{o.name}</Text>
-                                {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5, alignSelf: 'center'}}>{o.innerName}</Text>
-                                : null}
-                            </View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
-                                    <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
-                                </TouchableOpacity>
-                                <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>0</Text>
-                                <TouchableOpacity onPress={o.onPress} style={{alignSelf: 'center'}}>
-                                    <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        {this.state.count360 > 0 ?
+                        <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
+                        : <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} /> }
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>360°</Text>
                     </View>
-                )
-            })
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}}>
+                            <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>{this.state.count360}</Text>
+                        <TouchableOpacity onPress={() => {this.setState({count360: ++this.state.count360})}} style={{alignSelf: 'center'}}>
+                            <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
     }
 
     renderAssignTo() {
-        const objs =
-            [
-                {
-                    name: 'Assegna a...'
-                }
-            ];
-
-        return objs.map((o, i) => {
-            return (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Assegna a...</Text>
+                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     renderTaskAdmins() {
-        const objs =
-            [
-                {
-                    name: 'Amministratori del Task'
-                }
-            ];
-
-        return objs.map((o, i) => {
-            return (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
+        return (
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Amministratori del Task</Text>
+                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     render() {

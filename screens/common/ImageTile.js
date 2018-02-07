@@ -13,6 +13,8 @@ import Colors from '../../constants/Colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ImagePicker } from 'expo';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const { width } = Dimensions.get('window')
 
@@ -38,7 +40,7 @@ export default class ImageTile extends React.PureComponent {
       return (
         <TouchableOpacity onPress={() => this.openCamera(selectImage)}>
           <View style={styles.cameraSelection}>
-            <Ionicons name='ios-camera-outline' size={50} color={"#AAAAAA"}/>
+            <FontAwesome name="camera" size={50} color={"#AAAAAA"} />
           </View>
         </TouchableOpacity>
       );
