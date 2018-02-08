@@ -90,8 +90,7 @@ export default class ThemeList extends Component {
   }
 
   renderFilters() {
-    filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Manager', fixedOpen: true, autoFocus: false}, 
-      {title: 'Themes', selected: true, active: true, onPress: () => this.filterForThemes(), headTitle: 'Themes'}];
+    filters = [{type: 'search', searchPlaceHolder: 'Search Themes', fixedOpen: true, autoFocus: false}];
     return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"}/></View>
   }
 
@@ -130,6 +129,8 @@ export default class ThemeList extends Component {
   }
 
   renderSelectableComponent(data) {
+    data.selected = false;
+
     if (data.img == undefined) {
       return (
         <Ionicons name='ios-checkmark-circle-outline' 
@@ -148,7 +149,7 @@ export default class ThemeList extends Component {
         <TouchableOpacity onPress={() => this.toggleRow(data)} style={styles.rowContainer}>
           {this.renderSelectableComponent(data)}
           <View style={styles.textInRow}>
-            <Text style={[styles.rowTitle, data.selected ? styles.rowSelected : {}]}>{data.title}</Text>
+            <Text style={styles.rowTitle}>{data.title}</Text>
           </View>
         </TouchableOpacity>
       </View>);
@@ -233,11 +234,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 18
   },
-  rowSelected: {
-    color: Colors.main
-  },
   selectedThemes: {
-    backgroundColor: Colors.main,
     padding: 0,
     margin: 0,
   },
@@ -245,17 +242,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginLeft: 10
-  },
-  selectedDisplayPictureInFooter: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 13
-  },
-  selectedDisplayPicture: {
-    borderWidth: 3,
-    borderColor: Colors.main,
     marginLeft: 10
   },
   filterBarContainer: {

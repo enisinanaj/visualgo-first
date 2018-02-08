@@ -16,7 +16,8 @@ import {
     ListView,
     Platform,
     Modal,
-    ScrollView
+    ScrollView,
+    DefaultRow
 } from 'react-native';
 
 
@@ -31,6 +32,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import PostPrivacy from './privacy';
+import TagListTask from './tag-list-task';
 
 export default class CreateTask extends Component{
     constructor() {
@@ -39,7 +41,9 @@ export default class CreateTask extends Component{
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
+            //tagList: ds.cloneWithRows(allTags),
             themeModal: false,
+            tagListTastModal: false,
             environmentModal: false,
             privacyModal: false,
             addPhotoSelected: false,
@@ -47,6 +51,7 @@ export default class CreateTask extends Component{
             add360Selected: false,
             allThemes: [],
             allEnvironments: [],
+            allTags: [],
             countPhoto: 0,
             countVideo: 0,
             count360: 0
@@ -231,6 +236,19 @@ export default class CreateTask extends Component{
         );
     }
 
+    renderTagListTaskModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.tagListTastModal}
+                onRequestClose={() => this.setState({tagListTastModal: false})}>
+                
+                <TagListTask closeModal={(tags) => this.finishTagListTask(tags)} />
+            </Modal>
+        );
+    }
+
     renderTheme() {
         const objs =
             [
@@ -258,15 +276,20 @@ export default class CreateTask extends Component{
 
         return objs.map((o, i) => {
             return (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                <View key={i} style={{flexDirection: 'row', height: o.innerName != undefined && o.innerName != '' ? 112 : 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                            <Text style={{color:'red'}}>*</Text>
+                        <View style={{flex:1}}>
                             {o.innerName != undefined && o.innerName != '' ? 
-                                <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                            : null}
+                                <View style={{alignItems: 'center'}}>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                </View>
+                            : 
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                                <Text style={{color:'red', marginLeft: 5}}>*</Text>
+                            </View>
+                            }
                         </View>
                         <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                     </TouchableOpacity>
@@ -278,6 +301,12 @@ export default class CreateTask extends Component{
     renderColorBox() {
         return (
             <TouchableOpacity style={styles.backgroundColorsItem} />
+        );
+    }
+
+    renderSelectedTag(data){
+        return (
+            <Text>{data.title} </Text>
         );
     }
 
@@ -302,6 +331,11 @@ export default class CreateTask extends Component{
     finishThemes(themes) {
         console.log("received themes: " + themes.length);
         this.setState({allThemes: themes, themeModal: false});
+    }
+
+    finishTagListTask(tags) {
+
+        this.setState({allTags: tags, tagListTastModal: false});
     }
 
     renderThemesModal() {
@@ -366,7 +400,7 @@ export default class CreateTask extends Component{
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Start/Due Date</Text>
-                        <Text style={{color: 'red'}}>*</Text>
+                        <Text style={{color: 'red', marginLeft: 5}}>*</Text>
                     </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
@@ -444,13 +478,23 @@ export default class CreateTask extends Component{
     }
 
     renderAssignTo() {
+
+        var {allTags} = this.state;
+
+
+
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({tagListTastModal: true})}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Assegna a...</Text>
                         <Text style={{color: 'red'}}>*</Text>
+                        <ListView style={{flexGrow: 8}}
+                            horizontal={true}
+                            contentContainerStyle={styles.backgroundColors}
+                            dataSource={ds.cloneWithRows(allTags)}
+                            renderRow={(data) => this.renderSelectedTag(data)}/>
                     </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
@@ -465,7 +509,7 @@ export default class CreateTask extends Component{
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Amministratori del Task</Text>
-                        <Text style={{color: 'red'}}>*</Text>
+                        <Text style={{color: 'red', marginLeft: 5}}>*</Text>
                     </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
@@ -498,6 +542,7 @@ export default class CreateTask extends Component{
                 {this.renderThemeModal()}
                 {this.renderEnvironmentsModal()}
                 {this.renderPrivacyModal()}
+                {this.renderTagListTaskModal()}
             </View>
         )
     }
