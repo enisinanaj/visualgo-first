@@ -32,6 +32,7 @@ import TagList from './tag-list';
 import PostPrivacy from './privacy';
 import ImageBrowser from '../ImageBrowser';
 import ImagePost from './image-post';
+import ImageScreen from '../imageScreen';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -44,7 +45,8 @@ export default class CreatePost extends Component{
             privacyModal: false,
             allTags: [],
             imageBrowserOpen: false,
-            photos: []
+            photos: [],
+            imagesListModal: false
         }
     }
 
@@ -328,8 +330,28 @@ export default class CreatePost extends Component{
         })
     }
 
+    renderImagesListModal() {
+        return (
+            <Modal 
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.imagesListModal}
+                onRequestClose={(images) => this.resetImages(images)}>
+                <ImageScreen images={this.state.photos} onClose={(images) => this.resetImages(images)} />
+            </Modal>
+        );
+    }
+
+    resetImages(images) {
+        this.setState({photos: images});
+        this.setState({imagesListModal: false});
+    }
+
     renderSelectedImages() {
-        return this.state.photos.length > 0 && <ImagePost imageCount={this.state.photos.length} images={this.state.photos} style={{}}/>;
+        return this.state.photos.length > 0 && 
+            <View style={{marginTop: - 20, backgroundColor: 'transparent'}}>
+                <ImagePost imageCount={this.state.photos.length} images={this.state.photos} style={{}} onPress={() => {this.setState({imagesListModal: true})}}/>
+            </View>
     }
 
     render() {
@@ -350,6 +372,7 @@ export default class CreatePost extends Component{
                 {this.renderTaggingModal()}
                 {this.renderPrivacyModal()}
                 {this._renderImagePickerModal()}
+                {this.renderImagesListModal()}
             </View>
         )
     }
