@@ -90,7 +90,7 @@ export default class BlueMenu extends Component {
                         style={[styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
                             ? {marginLeft: 10, padding: 0} : {},
                             data.iconPosition == 'right' ? {marginLeft: 10, padding: 0} : {},
-                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : styles.menuItemLarge]}>
+                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : Platform.OS == 'ios' ? styles.menuItemLarge : styles.menuItemAndroid]}>
                             {data.name}
                     </Text>
                     {data.iconPosition == "right" ? this._renderIcon(data) : null}
@@ -109,7 +109,7 @@ export default class BlueMenu extends Component {
 
                 <ListView
                     dataSource={this.state.dataSource}
-                    style={{marginBottom: 50}}
+                    style={{marginBottom: 50, paddingBottom: 25}}
                     renderRow={(data) => this._renderRow(data)}
                 />
             </View>
@@ -147,6 +147,11 @@ const styles = StyleSheet.create({
 
     menuItemLarge: {
         fontSize: 28,
+        height: 30
+    },
+
+    menuItemAndroid: {
+        fontSize: 24,
         height: 30
     },
 
