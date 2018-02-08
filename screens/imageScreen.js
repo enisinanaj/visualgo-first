@@ -8,11 +8,16 @@ import {
     StyleSheet,
     ScrollView,
     ImageView,
-    Dimensions
+    Image,
+    Dimensions,
+    StatusBar,
+    TouchableOpacity
 } from 'react-native';
 
 import Colors from '../constants/Colors';
 import Router from '../navigation/Router';
+import {EvilIcons} from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,23 +27,65 @@ export default class ImageScreen extends Component {
         super(props);
 
         this.state = {
-
+            images: this.props.images
         };
     }
 
+    _removeImage(img) {
+        let images = [];
+
+        for (k in this.state.images) {
+            if (this.state.images[k].url != img.url) {
+                images.push(this.state.images[k]);
+            }
+        }
+
+        if (images.length == 0) {
+            this.props.onClose([]);
+        }
+
+        this.setState({images: images});
+    }
+
     _renderImages() {
-        let objs = this.props.images;
+        let objs = this.state.images;
 
         return objs.map((o, i) => {
             return (
-                <ImageView key={i} style={styles.image} source={{uri: o.url}}/>
+                <View>
+                    <Image
+                        style={styles.imageStyle}
+                        source={{uri: o.url}}
+                    />
+                    <View style={{position: 'absolute', top: 25, right: 10}}>
+                        <TouchableOpacity onPress={() => this._removeImage(o) }>
+                            <EvilIcons name={"close"} size={26} color={Colors.main} style={{backgroundColor: 'transparent'}} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             )
         })
     }
 
+    renderHeader() {
+        return (
+          <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
+              borderBottomColor: Colors.gray, flexDirection: 'row',
+              justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+              <View style={{width: 30}}></View>
+              <Text style={{fontSize: 16, color: 'black', fontWeight: '600', alignContent: 'center', alignSelf: 'center'}}>Edit</Text>
+              <TouchableOpacity onPress={() => this.props.onClose(this.state.images)}>
+                <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Done</Text>
+              </TouchableOpacity>
+          </View>
+        );
+      }
+
     render() {
         return (
-            <View style={{backgroundColor: 'rgba(0,0,0,.5)'}}>
+            <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
+                <StatusBar barStyle={'default'} animated={true}/>
+                {this.renderHeader()}
                 <ScrollView>
                     {this._renderImages()}
                 </ScrollView>
