@@ -40,7 +40,7 @@ var currentCategory = "themes";
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-export default class ThemesList extends Component {
+export default class ThemeList extends Component {
   constructor(props) {
     super(props);
 
@@ -90,7 +90,8 @@ export default class ThemesList extends Component {
   }
 
   renderFilters() {
-    filters = [{type: 'search', searchPlaceHolder: 'Search Themes', fixedOpen: true, autoFocus: false}];
+    filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Manager', fixedOpen: true, autoFocus: false}, 
+      {title: 'Themes', selected: true, active: true, onPress: () => this.filterForThemes(), headTitle: 'Themes'}];
     return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"}/></View>
   }
 
@@ -125,30 +126,29 @@ export default class ThemesList extends Component {
     }
 
     this.setState({themeSource: ds.cloneWithRows(themesToShow)});
+    this.props.closeModal(this.state.selectedThemes);
   }
 
   renderSelectableComponent(data) {
     if (data.img == undefined) {
       return (
-        <Ionicons name={data.selected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} 
-              size={30} color={data.selected ? Colors.main : Colors.gray} />
+        <Ionicons name='ios-checkmark-circle-outline' 
+              size={30} color={Colors.gray} />
       );
     }
     
     return (
-      <Image source={data.img} style={[styles.selectableDisplayPicture,
-        data.selected ? styles.selectedDisplayPicture : {}]} />
+      <Image source={data.img} style={styles.selectableDisplayPicture} />
     );
   }
 
   renderThemeRow(data) {
     return (
       <View style={styles.rowContainer}>
-        <TouchableOpacity onPress={() => this.props.closeModal(this.state.selectedThemes)} style={styles.rowContainer}>
+        <TouchableOpacity onPress={() => this.toggleRow(data)} style={styles.rowContainer}>
           {this.renderSelectableComponent(data)}
           <View style={styles.textInRow}>
             <Text style={[styles.rowTitle, data.selected ? styles.rowSelected : {}]}>{data.title}</Text>
-            <Text style={styles.rowSubTitle}>{data.subtitle}</Text>
           </View>
         </TouchableOpacity>
       </View>);
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   textInRow: {
-    marginLeft: 10,
+    marginLeft: 20,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'
@@ -232,10 +232,6 @@ const styles = StyleSheet.create({
   rowTitle: {
     fontWeight: '400',
     fontSize: 18
-  },
-  rowSubTitle: {
-    color: Colors.grayText,
-    fontSize: 14
   },
   rowSelected: {
     color: Colors.main
@@ -248,7 +244,8 @@ const styles = StyleSheet.create({
   selectableDisplayPicture: {
     width: 50,
     height: 50,
-    borderRadius: 25
+    borderRadius: 25,
+    marginLeft: 10
   },
   selectedDisplayPictureInFooter: {
     width: 40,
@@ -258,7 +255,8 @@ const styles = StyleSheet.create({
   },
   selectedDisplayPicture: {
     borderWidth: 3,
-    borderColor: Colors.main
+    borderColor: Colors.main,
+    marginLeft: 10
   },
   filterBarContainer: {
       backgroundColor: Colors.white

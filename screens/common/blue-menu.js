@@ -12,6 +12,12 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+import {
+    StackNavigator,
+  } from 'react-navigation';
+
+import Router from '../../navigation/Router';
+
 const {width, height} = Dimensions.get('window');
 import {EvilIcons} from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
@@ -19,10 +25,20 @@ import ChatSearchBar from './chat-search-bar';
 import DefaultRow from '../common/default-row';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
+import { withNavigation } from '@expo/ex-navigation';
 
 const data = ['Report', 'Visual Guideline', 'Wall', 'Calendar', 'Messages', 'To Do List', ' ', 'Anagrafiche', 'Logout'];
 
-const menus = [ {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+@withNavigation
+export default class BlueMenu extends Component {
+    constructor() {
+        super();
+
+        
+
+        const menus = [ {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
                 {name: 'Visual Guideline', icon: 'ios-bowtie-outline', onPress: () => {}},
                 {name: 'Wall', icon: 'ios-card-outline', onPress: () => {}},
                 {name: 'Calendar', icon: 'ios-calendar-outline', onPress: () => {}},
@@ -30,18 +46,26 @@ const menus = [ {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
                 {name: 'To Do List', icon: 'ios-checkmark-circle-outline', onPress: () => {}},
                 {name: ''},
                 {name: 'Anagrafiche', onPress: () => {}, subtitle: 'Gestisci negozi, Cluster e contatti'},
-                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {}}];
+                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.LogOut()}}];
 
-
-
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-export default class BlueMenu extends Component {
-    constructor() {
-        super();
         this.state = {
             dataSource: ds.cloneWithRows(menus)
         }
+
+
+    }
+
+    
+
+    
+
+    LogOut(){
+
+        
+        this.props.navigator.push('login');
+        
+
+        
     }
 
     _renderRow(data) {
@@ -68,7 +92,7 @@ export default class BlueMenu extends Component {
 
     renderMenuItem(data){
         return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => data.onPress()}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}} >
                     {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
                     <Text 
@@ -80,7 +104,7 @@ export default class BlueMenu extends Component {
                     {data.iconPosition == "right" ? this._renderIcon(data) : null}
                 </View>
                 {data.subtitle != undefined ?
-                <Text style={{color: Colors.white, size: 20, fontWeight: '100', marginLeft: 10}}>{data.subtitle}</Text> : null}
+                <Text style={{color: Colors.white, fontSize: 20, fontWeight: '100', marginLeft: 10}}>{data.subtitle}</Text> : null}
             </TouchableOpacity>
         )
     }

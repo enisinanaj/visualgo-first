@@ -28,7 +28,7 @@ import Colors from '../../constants/Colors';
 import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
-import ThemesList from './themes-list';
+import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import PostPrivacy from './privacy';
 
@@ -42,10 +42,13 @@ export default class CreateTask extends Component{
             themeModal: false,
             environmentModal: false,
             privacyModal: false,
+            addPhotoSelected: false,
+            addVideoSelected: false,
+            add360Selected: false,
             allThemes: [],
             allEnvironments: [],
-            photosCount: 0,
-            videosCount: 0,
+            countPhoto: 0,
+            countVideo: 0,
             count360: 0
         }
     }
@@ -215,6 +218,19 @@ export default class CreateTask extends Component{
         )
     }
 
+    renderThemeModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.themeModal}
+                onRequestClose={() => this.setState({themeModal: false})}>
+                
+                <ThemeList closeModal={(theme) => this.finishThemes(theme)} />
+            </Modal>
+        );
+    }
+
     renderTheme() {
         const objs =
             [
@@ -245,10 +261,13 @@ export default class CreateTask extends Component{
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                            <Text style={{color:'red'}}>*</Text>
+                            {o.innerName != undefined && o.innerName != '' ? 
+                                <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                            : null}
+                        </View>
                         <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                     </TouchableOpacity>
                 </View>
@@ -293,7 +312,7 @@ export default class CreateTask extends Component{
                 visible={this.state.themeModal}
                 onRequestClose={() => this.setState({themeModal: false})}>
                 
-                <ThemesList closeModal={(themes) => this.finishThemes(themes)} />
+                <ThemeList closeModal={(themes) => this.finishThemes(themes)} />
             </Modal>
         );
     }
@@ -345,7 +364,10 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Start/Due Date</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Start/Due Date</Text>
+                        <Text style={{color: 'red'}}>*</Text>
+                    </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -357,19 +379,17 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        {this.state.photosCount > 0 ?
-                        <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
-                        : <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} /> }
+                    <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <Ionicons name={this.state.addPhotoSelected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} size={30} color={Colors.main} />
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Foto</Text>
-                    </View>
+                    </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <TouchableOpacity onPress={() => {this.setState({photosCount: --this.state.photosCount})}} style={{alignSelf: 'center'}}>
-                            <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        <TouchableOpacity onPress={() => {this.setState({countPhoto: --this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={this.state.countPhoto > 0 ? false : true}>
+                            <EvilIcons name={"minus"} color={((this.state.addPhotoSelected) && (this.state.countPhoto > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.black}}>{this.state.photosCount}</Text>
-                        <TouchableOpacity onPress={() => {this.setState({photosCount: ++this.state.photosCount})}} style={{alignSelf: 'center'}}>
-                            <EvilIcons name={"plus"} color={Colors.main} size={32} style={{marginRight: 5}} />
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countPhoto > 0 ? Colors.black : Colors.gray}}>{this.state.countPhoto}</Text>
+                        <TouchableOpacity onPress={() => {this.setState({countPhoto: ++this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={!this.state.addPhotoSelected}>
+                            <EvilIcons name={"plus"} color={(this.state.addPhotoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -382,19 +402,17 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        {this.state.videosCount > 0 ?
-                        <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
-                        : <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} /> }
+                    <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <Ionicons name={this.state.addVideoSelected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} size={30} color={Colors.main} />
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Video</Text>
-                    </View>
+                    </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <TouchableOpacity onPress={() => {this.setState({videosCount: --this.state.videosCount})}} style={{alignSelf: 'center'}}>
-                            <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        <TouchableOpacity onPress={() => {this.setState({countVideo: --this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={this.state.countVideo > 0 ? false : true}>
+                            <EvilIcons name={"minus"} color={((this.state.addVideoSelected) && (this.state.countVideo > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>{this.state.videosCount}</Text>
-                        <TouchableOpacity onPress={() => {this.setState({videosCount: ++this.state.videosCount})}} style={{alignSelf: 'center'}}>
-                            <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countVideo > 0 ? Colors.black : Colors.gray}}>{this.state.countVideo}</Text>
+                        <TouchableOpacity onPress={() => {this.setState({countVideo: ++this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={!this.state.addVideoSelected}>
+                            <EvilIcons name={"plus"} color={(this.state.addVideoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -407,19 +425,17 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        {this.state.count360 > 0 ?
-                        <Ionicons name={"ios-checkmark-circle"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} />
-                        : <Ionicons name={"ios-checkmark-circle-outline"} color={Colors.main} size={32} style={{marginRight: 0, alignSelf: 'center'}} /> }
+                    <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <Ionicons name={this.state.add360Selected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} size={30} color={Colors.main} />
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>360°</Text>
-                    </View>
+                    </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}}>
-                            <EvilIcons name={"minus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}} disabled={this.state.count360 > 0 ? false : true}>
+                            <EvilIcons name={"minus"} color={((this.state.add360Selected) && (this.state.count360 > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: Colors.gray}}>{this.state.count360}</Text>
-                        <TouchableOpacity onPress={() => {this.setState({count360: ++this.state.count360})}} style={{alignSelf: 'center'}}>
-                            <EvilIcons name={"plus"} color={Colors.gray} size={32} style={{marginRight: 5}} />
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.count360 > 0 ? Colors.black : Colors.gray}}>{this.state.count360}</Text>
+                        <TouchableOpacity onPress={() => {this.setState({count360: ++this.state.count360})}} style={{alignSelf: 'center'}} disabled={!this.state.add360Selected}>
+                            <EvilIcons name={"plus"} color={(this.state.add360Selected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -432,7 +448,10 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Assegna a...</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Assegna a...</Text>
+                        <Text style={{color: 'red'}}>*</Text>
+                    </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -444,7 +463,10 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Amministratori del Task</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Amministratori del Task</Text>
+                        <Text style={{color: 'red'}}>*</Text>
+                    </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -459,8 +481,8 @@ export default class CreateTask extends Component{
                 <ScrollView>
                     {this.renderCommentSwitchRow()}
                     {this.renderPostType()}
-                    {this.renderTheme()}
                     <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
+                        {this.renderTheme()}
                         {this.renderBackgroundColors()}
                     </View>
                     {this.renderTaskDescription()}
@@ -473,7 +495,7 @@ export default class CreateTask extends Component{
                     {this.renderAssignTo()}
                     {this.renderTaskAdmins()}
                 </ScrollView>
-                {this.renderThemesModal()}
+                {this.renderThemeModal()}
                 {this.renderEnvironmentsModal()}
                 {this.renderPrivacyModal()}
             </View>

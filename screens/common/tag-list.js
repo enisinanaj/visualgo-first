@@ -209,7 +209,6 @@ export default class TagList extends Component {
           onScroll={this._onScroll}
           dataSource={this.state.tagSource}
           renderRow={(data) => this._renderRow(data)}
-         
         />
         <View style={[styles.selectedTags, this.state.selectedTags.length > 0 ? {height: 60, padding: 10} : {}]}>
           {this._renderSelectedTags()}
