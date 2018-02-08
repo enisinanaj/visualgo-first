@@ -9,7 +9,8 @@ import {
     Text,
     StyleSheet,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Platform
 } from 'react-native';
 
 import {
@@ -83,7 +84,7 @@ export default class BlueMenu extends Component {
     renderMenuItem(data){
         return (
             <TouchableOpacity onPress={() => data.onPress()}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: 10}} >
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: Platform.OS == 'ios' ? 10 : 30}} >
                     {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
                     <Text
                         style={[styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
