@@ -99,8 +99,6 @@ export default class ImagePost extends Component {
                 );
                 break;
             default:
-                //for cases with 5+ pictures
-                //@TODO render images with more than 6
                 return(
                     <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
                         <View style={styles.imageContainer}>
@@ -124,19 +122,8 @@ export default class ImagePost extends Component {
         }
     }
 
-    renderAllImagesModal() {
-        return
-        <Modal
-            animationType={"slide"}
-            transparent={false}
-            visible={this.state.imagesScreen}
-            onRequestClose={() => this.setState({imagesScreen: false})}>
-            <ImageScreen images={this.props.images} closeModal={() => this.setState({imagesScreen: false})}></ImageScreen>
-        </Modal>;
-    }
-
     openImages() {
-        //TODO 
+        this.props.onPress()
     }
 
     render() {
@@ -147,7 +134,6 @@ export default class ImagePost extends Component {
                     <Text>{this.props.textContent}</Text>
                 </View>
                 {this.renderImages()}
-                {this.renderAllImagesModal()}
             </View>
         )
     }
@@ -157,7 +143,6 @@ const styles = StyleSheet.create({
     imageContainer: {
         height: height/2.5,
     },
-
     img: {
         flex: 1,
         width: null,
