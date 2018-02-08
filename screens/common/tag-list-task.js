@@ -84,15 +84,15 @@ export default class TagListTask extends Component {
 
   renderHeader() {
     return (
-      <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
+      <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
           borderBottomColor: Colors.gray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
             <Text>
-              <EvilIcons name={"close"} size={22} color={Colors.main}/>
+            <Text style={{fontSize: 16, color: 'black', fontWeight: '600', color: Colors.main}}>Cancel</Text>
             </Text>
           </TouchableOpacity>
-          <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Tags</Text>
+          
 
       </View>
     );
@@ -211,8 +211,8 @@ export default class TagListTask extends Component {
         />
         <View style={[styles.selectedTags, this.state.selectedTags.length > 0 ? {height: 60, padding: 10} : {}]}>
           {this._renderSelectedTags()}
-          <TouchableOpacity onPress={() => this.props.closeModal(this.state.selectedTags)}>
-            {this.state.selectedTags.length > 0 ? <Text style={{color: Colors.white, fontWeight: '700', fontSize: 18, paddingRight: 10}}>Done</Text> : null }
+          <TouchableOpacity  onPress={() => this.props.closeModal(this.state.selectedTags)}>
+            {this.state.selectedTags.length > 0 ? <Text style={{color: Colors.white, fontWeight: '700', fontSize: 18, paddingRight: 10, marginTop: 8}}>Done</Text> : null }
           </TouchableOpacity>
         </View>
       </View>
