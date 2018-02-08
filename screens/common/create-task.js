@@ -306,7 +306,7 @@ export default class CreateTask extends Component{
 
     renderSelectedTag(data){
         return (
-            <Text>{data.title} </Text>
+            <Text>{data.title}</Text>
         );
     }
 
@@ -478,10 +478,7 @@ export default class CreateTask extends Component{
     }
 
     renderAssignTo() {
-
         var {allTags} = this.state;
-
-
 
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
@@ -492,11 +489,11 @@ export default class CreateTask extends Component{
                         <Text style={{color: 'red'}}>*</Text>
                         <ListView style={{flexGrow: 8}}
                             horizontal={true}
-                            contentContainerStyle={styles.backgroundColors}
+                            contentContainerStyle={styles.backgroundColorsAssignTo}
                             dataSource={ds.cloneWithRows(allTags)}
                             renderRow={(data) => this.renderSelectedTag(data)}/>
-                    </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </View>                    
                 </TouchableOpacity>
             </View>
         )
@@ -570,7 +567,17 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         backgroundColor: Colors.white,
         borderTopWidth: StyleSheet.hairlineWidth,
-        borderColor: Colors.gray,
+        borderColor: Colors.gray
+    }, 
+
+    backgroundColorsAssignTo: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        paddingLeft: 10,
+        paddingTop: 5,
+        paddingRight: 10,
+        backgroundColor: Colors.white
     }, 
 
     img: {

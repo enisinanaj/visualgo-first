@@ -212,7 +212,7 @@ export default class TagListTask extends Component {
         <View style={[styles.selectedTags, this.state.selectedTags.length > 0 ? {height: 60, padding: 10} : {}]}>
           {this._renderSelectedTags()}
           <TouchableOpacity onPress={() => this.props.closeModal(this.state.selectedTags)}>
-            <Text style={{color: Colors.white, fontWeight: '700', fontSize: 18, paddingRight: 10}}>Done</Text>
+            {this.state.selectedTags.length > 0 ? <Text style={{color: Colors.white, fontWeight: '700', fontSize: 18, paddingRight: 10}}>Done</Text> : null }
           </TouchableOpacity>
         </View>
       </View>
