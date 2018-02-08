@@ -45,27 +45,17 @@ export default class BlueMenu extends Component {
                 {name: 'Messages', icon: 'ios-chatbubbles-outline', onPress: () => {}},
                 {name: 'To Do List', icon: 'ios-checkmark-circle-outline', onPress: () => {}},
                 {name: ''},
-                {name: 'Anagrafiche', onPress: () => {}, subtitle: 'Gestisci negozi, Cluster e contatti'},
-                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.LogOut()}}];
+                {name: 'Anagrafiche', onPress: () => {}},
+                {name: 'Gestisci negozi, Cluster e contatti', isSubtitle: true},
+                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}}];
 
         this.state = {
             dataSource: ds.cloneWithRows(menus)
         }
-
-
     }
 
-    
-
-    
-
-    LogOut(){
-
-        
+    logOut() {   
         this.props.navigator.push('login');
-        
-
-        
     }
 
     _renderRow(data) {
@@ -78,14 +68,14 @@ export default class BlueMenu extends Component {
         if (data.iconType != undefined && data.iconType == 'Feather') {
             return <Feather name={data.icon} 
             size={20}
-            style={{marginTop: 7, marginLeft: 10}}
+            style={{marginTop: 7, marginLeft: 10, height: 30}}
             color={Colors.white}/>
         }
 
         return <Ionicons
             name={data.icon}
             size={26}
-            style={{marginTop: 3, marginLeft: 10}}
+            style={{marginTop: 3, marginLeft: 10, height: 30}}
             color={Colors.white}
         />;
     }
@@ -93,18 +83,17 @@ export default class BlueMenu extends Component {
     renderMenuItem(data){
         return (
             <TouchableOpacity onPress={() => data.onPress()}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}} >
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: 10}} >
                     {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
-                    <Text 
+                    <Text
                         style={[styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
-                            ? {marginLeft: 10} : {},
-                            data.iconPosition == 'right' ? {marginLeft: 10} : {}]}>
+                            ? {marginLeft: 10, padding: 0} : {},
+                            data.iconPosition == 'right' ? {marginLeft: 10, padding: 0} : {},
+                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : styles.menuItemLarge]}>
                             {data.name}
                     </Text>
                     {data.iconPosition == "right" ? this._renderIcon(data) : null}
                 </View>
-                {data.subtitle != undefined ?
-                <Text style={{color: Colors.white, fontSize: 20, fontWeight: '100', marginLeft: 10}}>{data.subtitle}</Text> : null}
             </TouchableOpacity>
         )
     }
@@ -149,15 +138,28 @@ const styles = StyleSheet.create({
 
     menuItem: {
         color: Colors.white,
-        fontSize: 26,
-        fontWeight: '100',
-        paddingTop: 0,
-        paddingBottom: 0
-    },
-    accountName: {
-        color: Colors.white,
         fontSize: 28,
         fontWeight: '100',
+        padding: 0,
+        margin: 0
+    },
+
+    menuItemLarge: {
+        fontSize: 28,
+        height: 30
+    },
+
+    subtitle: {
+        fontSize: 16,
+        height: 30
+    },
+
+    accountName: {
+        color: Colors.white,
+        fontSize: 30,
+        fontWeight: '100',
+        margin: 0,
+        padding: 0,
         marginLeft: 15
     },
 
