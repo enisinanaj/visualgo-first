@@ -306,7 +306,8 @@ export default class CreateTask extends Component{
 
     renderSelectedTag(data){
         return (
-            <Text>{data.title}</Text>
+            <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
+            
         );
     }
 
@@ -318,11 +319,11 @@ export default class CreateTask extends Component{
                         <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
                         <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
                     </View>
-                    <ListView style={{flexGrow: 8}}
-                        horizontal={true}
-                        contentContainerStyle={styles.backgroundColors}
-                        dataSource={this.state.backgroundColors}
-                        renderRow={(data) => this.renderColorBox(data)}/>
+                        <ListView style={{flexGrow: 8}}
+                            horizontal={true}
+                            contentContainerStyle={styles.backgroundColors}
+                            dataSource={this.state.backgroundColors}
+                            renderRow={(data) => this.renderColorBox(data)}/>
                 </View>
             </View>
         )
@@ -486,7 +487,7 @@ export default class CreateTask extends Component{
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({tagListTastModal: true})}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Assegna a...</Text>
-                        <Text style={{color: 'red'}}>*</Text>
+                        {this.state.allTags.length == 0 ? <Text style={{color: 'red'}}>*</Text> : null }
                         <ListView style={{flexGrow: 8}}
                             horizontal={true}
                             contentContainerStyle={styles.backgroundColorsAssignTo}
