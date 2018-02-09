@@ -25,15 +25,15 @@ import _ from 'lodash';
 const {width, height} = Dimensions.get('window');
 
 const themes = [
-  {title: '#SanValentino', img: require('../img/elmo.jpg'), id: 1},
-  {title: '#SaldiFebbraio', img: require('../img/bob.png'), id: 2},
-  {title: '#Sale', img: require('../img/cookiemonster.jpeg'), id: 3},
-  {title: '#NewCollection', img: require('../img/elmo.jpg'), id: 4},
-  {title: '#FlowersTheme', img: require('../img/elmo.jpg'), id: 5},
-  {title: '#SanValentino', img: require('../img/elmo.jpg'), id: 6},
-  {title: '#SaldiFebbraio', img: require('../img/bob.png'), id: 7},
-  {title: '#Sale', img: require('../img/elmo.jpg'), id: 8},
-  {title: '#NewCollection', img: require('../img/elmo.jpg'), id: 9}];
+  {title: '# SanValentino', img: require('../img/elmo.jpg'), id: 1},
+  {title: '# SaldiFebbraio', img: require('../img/bob.png'), id: 2},
+  {title: '# Sale', img: require('../img/cookiemonster.jpeg'), id: 3},
+  {title: '# NewCollection', img: require('../img/elmo.jpg'), id: 4},
+  {title: '# FlowersTheme', img: require('../img/elmo.jpg'), id: 5},
+  {title: '# SanValentino', img: require('../img/elmo.jpg'), id: 6},
+  {title: '# SaldiFebbraio', img: require('../img/bob.png'), id: 7},
+  {title: '# Sale', img: require('../img/elmo.jpg'), id: 8},
+  {title: '# NewCollection', img: require('../img/elmo.jpg'), id: 9}];
 
 var themesToShow = themes;
 var currentCategory = "themes";
@@ -231,8 +231,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   rowTitle: {
-    fontWeight: '400',
-    fontSize: 18
+    fontWeight: '200',
+    fontSize: 24,
+    color: Colors.grayText
   },
   selectedThemes: {
     padding: 0,

@@ -33,6 +33,7 @@ import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
+import Feather from '@expo/vector-icons/Feather';
 
 export default class CreateTask extends Component{
     constructor() {
@@ -282,10 +283,10 @@ export default class CreateTask extends Component{
                         <View style={{flex:1}}>
                             {o.innerName != undefined && o.innerName != '' ? 
                                 <View style={{alignItems: 'center'}}>
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 26, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                                 </View>
                             : 
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
                                 <Text style={{color:'red', marginLeft: 5}}>*</Text>
                             </View>
@@ -382,13 +383,21 @@ export default class CreateTask extends Component{
         );
     }
 
+    _getDocuments() {
+        try {
+            //Expo.DocumentPicker.getDocumentAsync({});
+        } catch (e) {
+            
+        }
+    }
+
     renderVisualGuideline() {
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => {Expo.DocumentPicker.getDocumentAsync({})}} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity onPress={this._getDocuments()} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Visual Guideline</Text>
-                    <Ionicons name={"ios-attach"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    <Ionicons name={"ios-attach"} color={Colors.main} size={32} style={{marginRight: 20}} />
                 </TouchableOpacity>
             </View>
         )
@@ -415,7 +424,7 @@ export default class CreateTask extends Component{
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Ionicons name={this.state.addPhotoSelected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} size={30} color={Colors.main} />
+                        <Feather name={this.state.addPhotoSelected ? "check-square" : "square"} size={27} color={Colors.main} />
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Foto</Text>
                     </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
@@ -438,7 +447,7 @@ export default class CreateTask extends Component{
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Ionicons name={this.state.addVideoSelected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} size={30} color={Colors.main} />
+                        <Feather name={!this.state.addVideoSelected ? "square" : "check-square"} size={27} color={Colors.main} />
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Video</Text>
                     </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
@@ -461,7 +470,7 @@ export default class CreateTask extends Component{
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Ionicons name={this.state.add360Selected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} size={30} color={Colors.main} />
+                        <Feather name={this.state.add360Selected ? "check-square" : "square"} size={27} color={Colors.main} />
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>360°</Text>
                     </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>

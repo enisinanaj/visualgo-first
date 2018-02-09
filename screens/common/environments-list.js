@@ -21,6 +21,7 @@ import {EvilIcons} from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import _ from 'lodash';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const {width, height} = Dimensions.get('window');
 
@@ -130,7 +131,7 @@ export default class EnvironmentList extends Component {
   renderSelectableComponent(data) {
     if (data.color != undefined) {
       return (
-        <Ionicons name={"ios-checkmark-circle"} 
+        <FontAwesome name={"circle"} 
               size={30} color={data.color} />
       );
     }
@@ -148,7 +149,6 @@ export default class EnvironmentList extends Component {
           {this.renderSelectableComponent(data)}
           <View style={styles.textInRow}>
             <Text style={[styles.rowTitle, data.selected ? styles.rowSelected : {}]}>{data.title}</Text>
-            <Text style={styles.rowSubTitle}>{data.subtitle}</Text>
           </View>
         </TouchableOpacity>
       </View>);
@@ -230,8 +230,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   rowTitle: {
-    fontWeight: '400',
-    fontSize: 18
+    fontWeight: '200',
+    fontSize: 24,
+    color: Colors.grayText
   },
   rowSubTitle: {
     color: Colors.grayText,
