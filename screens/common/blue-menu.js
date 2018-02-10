@@ -39,7 +39,8 @@ export default class BlueMenu extends Component {
 
         
 
-        const menus = [ {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
+        const menus = [ 
+                {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
                 {name: 'Visual Guideline', icon: 'ios-bowtie-outline', onPress: () => {}},
                 {name: 'Wall', icon: 'ios-card-outline', onPress: () => {}},
                 {name: 'Calendar', icon: 'ios-calendar-outline', onPress: () => {}},
@@ -48,7 +49,8 @@ export default class BlueMenu extends Component {
                 {name: ''},
                 {name: 'Anagrafiche', onPress: () => {}},
                 {name: 'Gestisci negozi, Cluster e contatti', isSubtitle: true},
-                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}}];
+                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}},
+                {name: ''}];
 
         this.state = {
             dataSource: ds.cloneWithRows(menus)
@@ -84,7 +86,7 @@ export default class BlueMenu extends Component {
     renderMenuItem(data){
         return (
             <TouchableOpacity onPress={() => data.onPress()}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: Platform.OS == 'ios' ? 10 : 30}} >
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: Platform.OS == 'ios' ? 10 : 36}} >
                     {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
                     <Text
                         style={[styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
@@ -109,8 +111,8 @@ export default class BlueMenu extends Component {
 
                 <ListView
                     dataSource={this.state.dataSource}
-                    style={{marginBottom: 50, paddingBottom: 25}}
-                    renderRow={(data) => this._renderRow(data)}
+                    
+                    renderRow={Platform.OS == 'ios' ? (data) => this._renderRow(data) : (data) => this.renderMenuItem(data)}
                 />
             </View>
         )
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         marginTop: 20,
-        marginLeft: 15,
+        marginLeft: 10,
         marginBottom: 10,
     },
 
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
         fontWeight: '100',
         margin: 0,
         padding: 0,
-        marginLeft: 15
+        marginLeft: 10
     },
 
     accountEmail: {
@@ -174,6 +176,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 30,
         fontWeight: '200',
-        marginLeft: 15
+        marginLeft: 10
     }
 });
