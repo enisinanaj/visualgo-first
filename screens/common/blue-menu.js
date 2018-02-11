@@ -12,11 +12,6 @@ import {
     TouchableOpacity,
     Platform
 } from 'react-native';
-
-import {
-    StackNavigator,
-  } from 'react-navigation';
-
 import Router from '../../navigation/Router';
 
 const {width, height} = Dimensions.get('window');
@@ -26,18 +21,16 @@ import ChatSearchBar from './chat-search-bar';
 import DefaultRow from '../common/default-row';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
-import { withNavigation } from '@expo/ex-navigation';
+import Login from '../Login';
+import {NavigationActions} from 'react-navigation';
 
 const data = ['Report', 'Visual Guideline', 'Wall', 'Calendar', 'Messages', 'To Do List', ' ', 'Anagrafiche', 'Logout'];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-@withNavigation
 export default class BlueMenu extends Component {
-    constructor() {
-        super();
-
-        
+    constructor(props) {
+        super(props);
 
         const menus = [ 
                 {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
@@ -57,8 +50,14 @@ export default class BlueMenu extends Component {
         }
     }
 
-    logOut() {   
-        this.props.navigator.push('login');
+    logOut() {
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'Login' })
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
     }
 
     _renderRow(data) {

@@ -102,8 +102,9 @@ export default class SearchBar extends Component {
 
     render() {
         const {height} = this.state;
+        let styleProps = this.props.style != undefined ? this.props.style : {};
         return (
-            <View ref='container'>
+            <View ref='container' style={styleProps}>
                 <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}>
                     { this.state.hiddenBar ? null :
                     <View style={[styles.searchBarOuterContainer, {height: height - 18}]} ref='realSearchBar'>

@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 6,
     paddingLeft: 20,
-    paddingRight: 20
+    paddingRight: 20,
   }
 });

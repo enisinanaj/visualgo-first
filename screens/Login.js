@@ -15,6 +15,7 @@ import {
     Image,
     TouchableOpacity,
     Button,
+    Keyboard,
     KeyboardAvoidingView
 } from 'react-native';
 
@@ -30,15 +31,13 @@ import BlueMenu from './common/blue-menu';
 
 import {EvilIcons} from '@expo/vector-icons';
 import _ from 'lodash';
+import {NavigationActions} from 'react-navigation';
 
 import moment from 'moment';
 import locale from 'moment/locale/it'
-import Router from '../navigation/Router';
-import { withNavigation } from '@expo/ex-navigation';
 
 const {width, height} = Dimensions.get('window');
 
-@withNavigation
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -55,8 +54,25 @@ export default class Login extends Component {
     };
   }
 
-  _goToLanding = (messageId) => {
-    this.props.navigator.push(Router.getRoute('landing'));
+  componentDidMount () {
+    Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+    Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+  }
+
+  componentWillUnmount() {
+      Keyboard.removeListener('keyboardWillShow');
+      Keyboard.removeListener('keyboardWillHide');
+  }
+
+  keyboardWillShow (e) {
+      let newSize = Dimensions.get('window').height - e.endCoordinates.height
+          this.setState({visibleHeight: newSize, k_visible: true})
+  }
+
+  keyboardWillHide (e) {
+      if(this.componentDidMount) {
+          this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+      }
   }
 
   _renderHeader() {
@@ -99,7 +115,13 @@ export default class Login extends Component {
   }
 
   LogIn(){
-    this.props.navigator.push('landing');
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+          NavigationActions.navigate({ routeName: 'Index' })
+      ]
+    });
+    this.props.navigation.dispatch(resetAction);
   }
 
   showPassword(){
@@ -113,14 +135,13 @@ export default class Login extends Component {
   }
 
   render() {
-    var {height, visibleHeight} = this.state;
+    var {visibleHeight} = this.state;
         return (
           <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
-            <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}/>
+            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
+            <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height: 0}]}/>
 
-            <View style={{flexDirection: 'column', backgroundColor: Colors.white}} resetScrollToCoords={{x: 0, y: 0}}>
-              <ScrollView>
-                          
+            <View style={{flexDirection: 'column', backgroundColor: Colors.white, height: height - 20}} resetScrollToCoords={{x: 0, y: 0}}>
                 <DefaultRow renderChildren={() => this._renderHeader()} />
 
                 <TouchableOpacity>
@@ -164,9 +185,6 @@ export default class Login extends Component {
                 <TouchableOpacity>
                   <Text style={styles.ForgottenText}>Forgotten your password?</Text>
                 </TouchableOpacity>
-
-              </ScrollView>
-            
             </View>
             
           </KeyboardAvoidingView>

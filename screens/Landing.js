@@ -71,25 +71,7 @@ export default class Landing extends Component {
         this.content_height = 0;
         this._onScroll = this._onScroll.bind(this);
         this.loadMore = _.debounce(this.loadMore, 300);
-        this._onDrawerOpen = this._onDrawerOpen.bind(this);
     }
-
-    closeControlPanel = () => {
-        this._drawer.close()
-    };
-      openControlPanel = () => {
-        this._drawer.open()
-    };
-
-    toggleMenu = () => {
-        if(this._drawer.props.open){
-            this._drawer.close()
-        }else{
-            this._drawer.open()
-        }
-
-
-    };
 
     _clearPosts() {
         this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
@@ -120,7 +102,6 @@ export default class Landing extends Component {
     }
 
     _loadTasks(query) {
-
         var addQuery = query != undefined ? '&q=' + query : '';
 
         return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
@@ -137,16 +118,6 @@ export default class Landing extends Component {
             });
     }
 
-    componentDidMount() {
-        setTimeout(() => {this.measureView()}, 0);
-    }
-
-    measureView() {
-        this.refs.view.measure((a, b, w, h, px, py) => {
-            this.content_height = h;
-        });
-    }
-
     _onRefresh() {
         this.setState({refreshing: true});
         setTimeout(() => {
@@ -155,7 +126,6 @@ export default class Landing extends Component {
     }
 
     _renderRow(data) {
-
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
                     <FilterBar data={filters} headTitle={"My Wall"} />
@@ -215,10 +185,9 @@ export default class Landing extends Component {
     }
 
     loadMore() {
-        this.setState({loading: true});
-
         this.setState({
-            skip: this.state.skip + this.state.keep
+            skip: this.state.skip + this.state.keep,
+            loading: true
         });
         
         this._loadPosts();
@@ -229,19 +198,7 @@ export default class Landing extends Component {
         const l_height = e.contentSize.height;
         const offset = e.contentOffset.y;
 
-        if(offset > this.offsetY) {
-            if(!(offset < 100)) {
-                this.refs.searchBar.hide()
-            }
-        } else {
-            this.refs.searchBar.show()
-            //setTimeout(() => {this.refs.searchBar.show();}, 150);
-
-        }
-
         this.offsetY = offset;
-
-
         if(offset + this.content_height + 60 >= l_height) {
             this.loadMore();
         }
@@ -263,56 +220,23 @@ export default class Landing extends Component {
         )
     }
 
-    renderDrawer() {
-        return (
-            <Drawer/>
-        )
-    }
-
-    _onDrawerOpen(event) {
-        const e = event.nativeEvent;
-        const offset = e.contentOffset.x;
-        this.offsetX.setValue(offset);
-    }
-
-    openMenu() {
-        this.offsetX.setValue(offset);
-    }
-
     render() {
         return (
-            <Drawer
-                type="static"
-                ref={(ref) => this._drawer = ref}
-                content={<BlueMenu/>}
-                openDrawerOffset={100}
-                styles={drawerStyles}
-                tweenHandler={Drawer.tweenPresets.parallax}
-                side="right"
-                >
-                    <View style={{flex: 1}}>
-                        <View ref='view' style={styles.container}>
-                            <SearchBar ref='searchBar' openMenu={this.toggleMenu.bind(this)}/>
-                            
-                            <ListView
-                                refreshControl={
-                                    <RefreshControl
-                                        refreshing={this.state.refreshing}
-                                        onRefresh={this._onRefresh.bind(this)}
-                                    />
-                                }
-                                style={styles.listView}
-                                onScroll={this._onScroll}
-                                dataSource={this.state.dataSource}
-                                renderRow={(data) => this._renderRow(data)}
-                            />
-                        </View>
-                        {this.renderModal()}
-
-                    </View>
-            </Drawer>
-            
-
+            <View ref='view' style={styles.container}>
+                <ListView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh.bind(this)}
+                        />
+                    }
+                    style={styles.listView}
+                    onScroll={this._onScroll}
+                    dataSource={this.state.dataSource}
+                    renderRow={(data) => this._renderRow(data)}
+                />
+                {this.renderModal()}
+            </View>
         )
     }
 }
@@ -320,35 +244,21 @@ export default class Landing extends Component {
 const drawerStyles = {
     drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 0},
-  }
+}
 
 const styles= StyleSheet.create({
     container: {
-        
         flex: 1,
         width,
         height,
-        backgroundColor: "#f7f7f7",
+        backgroundColor: "#f7f7f7"
     },
     fade: {
         height,
         backgroundColor: 'black',
         width: width * 4/5,
     },
-    drawer: {
-        height,
-        padding: 8,
-        paddingTop: 20,
-        width: width * 4/5,
-        position: 'absolute',
-        backgroundColor: Colors.chat_bg,
-        right: 0
-    },
-    listView: {
-        //paddingLeft: (width - (width * 4/5)) / 2
-    },
     onYourMindContainer: {
-        //height: 110,
         marginTop: 6,
         marginBottom: 6,
         marginRight: 5,

@@ -12,10 +12,8 @@ import {
   NavigationProvider,
   StackNavigation,
 } from '@expo/ex-navigation';
-import {
-  Ionicons,
-  FontAwesome
-} from '@expo/vector-icons';
+import {Ionicons, FontAwesome} from '@expo/vector-icons';
+import {StackNavigator} from 'react-navigation';
 
 import { AppLoading, Asset, Font } from 'expo';
 
@@ -25,10 +23,12 @@ import Drawer from 'react-native-drawer'
 
 import BlueMenu from './screens/common/blue-menu';
 import Colors from './constants/Colors';
+import SearchBar from './screens/common/search-bar';
+import Login from './screens/Login';
 
 const {width, height} = Dimensions.get('window');
 
-export default class AppContainer extends React.Component {
+class AppContainer extends React.Component {
   state = {
     appIsReady: false,
   }
@@ -66,17 +66,39 @@ export default class AppContainer extends React.Component {
     }
   }
 
+  toggleMenu = () => {
+    if(this._drawer.props.open){
+        this._drawer.close()
+    }else{
+        this._drawer.open()
+    }
+  };
+
   render() {
     if (this.state.appIsReady) {
         return (
+          <Drawer
+            type="static"
+            ref={(ref) => this._drawer = ref}
+            content={<BlueMenu navigation={this.props.navigation}/>}
+            openDrawerOffset={100}
+            styles={drawerStyles}
+            tweenHandler={Drawer.tweenPresets.parallax}
+            side="right"
+            >
             <View style={styles.container}>
-              <NavigationProvider router={Router}>
-                <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
-              </NavigationProvider>
+              <SearchBar ref='searchBar' openMenu={() => this.toggleMenu()} style={{zIndex: 999}}/>
 
-              {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor="blue"/>}
+              <View style={{marginTop: 0, bottom: 0, position: 'fixed', height: height - 65}}>
+                <NavigationProvider router={Router}>
+                  <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
+                </NavigationProvider>
+              </View>
+
+              {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
               {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
             </View>
+          </Drawer>
         );
     } else {
       return (
@@ -90,11 +112,21 @@ export default class AppContainer extends React.Component {
   }
 }
 
+const MainAppNavigation = StackNavigator({
+  Login: { screen: Login },
+  Index: { screen: AppContainer}
+},
+{
+  initialRouteName: 'Index',
+  headerMode: 'none'
+});
+
+export default () => <MainAppNavigation />;
+
 const drawerStyles = {
   drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
   main: {paddingLeft: 0},
 }
-
 
 const styles = StyleSheet.create({
   container: {

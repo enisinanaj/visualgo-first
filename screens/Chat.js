@@ -18,7 +18,6 @@ import {
 import Drawer from 'react-native-drawer'
 
 import Colors from '../constants/Colors';
-import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
 import NewGroup from './NewGroup';
@@ -137,7 +136,6 @@ export default class Chat extends Component {
                 side="right">
                     <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
                         <StatusBar barStyle={'light-content'} animated={true}/>
-                        <SearchBar ref='searchBar' openMenu={this.toggleMenu.bind(this)}/>
                         <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
                         <ListView
                             style={styles.listView}
