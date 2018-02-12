@@ -488,40 +488,89 @@ export default class CreateTask extends Component{
     }
 
     renderAssignTo() {
+        const objs =
+            [
+                {
+                    name: 'Assegna a...',
+                    onPress: () => this.setState({tagListTastModal: true})
+                }
+            ];
+
         var {allTags} = this.state;
 
-        return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({tagListTastModal: true})}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Assegna a...</Text>
-                        {this.state.allTags.length == 0 ? <Text style={{color: 'red'}}>*</Text> : null }
-                        <ListView style={{flexGrow: 8}}
-                            horizontal={true}
-                            contentContainerStyle={styles.backgroundColorsAssignTo}
-                            dataSource={ds.cloneWithRows(allTags)}
-                            renderRow={(data) => this.renderSelectedTag(data)}/>
-                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </View>                    
-                </TouchableOpacity>
-            </View>
-        )
+        if (allTags.length > 0) {
+            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+            console.log(clustersLength);
+            var clustersLabel = '';
+
+            if (clustersLength > 1) {
+                clustersLabel += clustersLength + " Clusters";
+            } else if (clustersLength == 1) {
+                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
+            }
+
+            objs[0].name = "Tag";
+            objs[0].innerName = clustersLabel;
+        }
+
+        return objs.map((o, i) => {
+            return (o.visible == undefined || o.visible) && (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        {clustersLength == 0 ? <Text style={{color: 'red'}}>*</Text> : null }
+                        {o.innerName != undefined && o.innerName != '' ? 
+                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                        : null}
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
     }
 
     renderTaskAdmins() {
-        return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Amministratori del Task</Text>
-                        <Text style={{color: 'red', marginLeft: 5}}>*</Text>
-                    </View>
-                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                </TouchableOpacity>
-            </View>
-        )
+        const objs =
+            [
+                {
+                    name: 'Amministratori del Task',
+                    onPress: () => this.setState({tagListTastModal: true})
+                }
+            ];
+
+        var {allTags} = this.state;
+
+        if (allTags.length > 0) {
+            var managersLength = allTags.filter((row) => row.category == 'managers').length;
+            console.log(managersLength);
+            var managersLabel = '';
+
+            if (managersLength > 1) {
+                managersLabel += managersLength + " Managers";
+            } else if (managersLength == 1) {
+                managersLabel += allTags.filter((row) => row.category == 'managers')[0].title;
+            }
+
+            objs[0].name = "Tag";
+            objs[0].innerName = managersLabel;
+        }
+
+        return objs.map((o, i) => {
+            return (o.visible == undefined || o.visible) && (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        {managersLength == 0 ? <Text style={{color: 'red'}}>*</Text> : null }
+                        {o.innerName != undefined && o.innerName != '' ? 
+                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                        : null}
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
     }
 
     render() {
@@ -581,6 +630,16 @@ const styles = StyleSheet.create({
     }, 
 
     backgroundColorsAssignTo: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        paddingLeft: 10,
+        paddingTop: 5,
+        paddingRight: 10,
+        backgroundColor: Colors.white
+    }, 
+
+    backgroundColorsAdmins: {
         flex: 1,
         justifyContent: 'flex-start',
         flexDirection: 'row',
