@@ -58,7 +58,13 @@ export default class NewsFeedItem extends Component {
 
     renderAvatar() {
         const {time} = this.state;
-        const profile = this.props.data.profile[0];
+        let profile = {};
+        try {
+             profile = this.props.data.profile[0];
+        } catch(e) {
+            return null;
+        }
+
         return (
             <View style={styles.avatarContainer}>
                 <Image style={styles.profile} source={{uri: profile.media.url}}/>
@@ -100,7 +106,8 @@ export default class NewsFeedItem extends Component {
         const {data} = this.props;
         if(data.media != undefined && data.media.length > 0) {
             return (
-                <ImagePost imageCount={data.media.length} images={data.media} style={styles.imageStyle} textContent={this.props.data.content}/>
+                <ImagePost imageCount={data.media.length} images={data.media} style={styles.imageStyle} textContent={this.props.data.content}
+                    onPress={() => {}}/>
             )
         }
 

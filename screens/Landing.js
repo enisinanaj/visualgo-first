@@ -73,6 +73,16 @@ export default class Landing extends Component {
         this.loadMore = _.debounce(this.loadMore, 300);
     }
 
+    componentDidMount() { 
+        setTimeout(() => {this.measureView()}, 0); 
+    } 
+ 
+    measureView() { 
+        this.refs.view.measure((a, b, w, h, px, py) => { 
+            this.content_height = h; 
+        }); 
+    } 
+
     _clearPosts() {
         this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
     }
@@ -199,7 +209,7 @@ export default class Landing extends Component {
         const offset = e.contentOffset.y;
 
         this.offsetY = offset;
-        if(offset + this.content_height + 60 >= l_height) {
+        if(offset + this.content_height + 100 >= l_height) {
             this.loadMore();
         }
     }
