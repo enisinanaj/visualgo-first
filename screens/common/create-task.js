@@ -31,9 +31,12 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
+import CalendarView from './calendar';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
 import Feather from '@expo/vector-icons/Feather';
+import moment from 'moment';
+import locale from 'moment/locale/it'
 
 export default class CreateTask extends Component{
     constructor() {
@@ -46,6 +49,7 @@ export default class CreateTask extends Component{
             themeModal: false,
             tagListTastModal: false,
             environmentModal: false,
+            calendarModal: false,
             privacyModal: false,
             addPhotoSelected: false,
             addVideoSelected: false,
@@ -55,7 +59,9 @@ export default class CreateTask extends Component{
             allTags: [],
             countPhoto: 0,
             countVideo: 0,
-            count360: 0
+            count360: 0,
+            start: undefined,
+            due: undefined
         }
     }
 
@@ -101,6 +107,17 @@ export default class CreateTask extends Component{
                 </TouchableOpacity>
             </View>
         )
+    }
+
+    renderCalendarModal() {
+        return <Modal
+            animationType={"slide"}
+            transparent={false}
+            visible={this.state.calendarModal}
+            onRequestClose={() => this.setState({calendarModal: false})}>
+            <CalendarView closeModal={() => this.setState({calendarModal: false})} 
+                onDone={(selected) => {this.setState({...selected, calendarModal: false})}}/>
+        </Modal>;
     }
 
     renderPrivacyModal() {
@@ -348,7 +365,7 @@ export default class CreateTask extends Component{
                 visible={this.state.themeModal}
                 onRequestClose={() => this.setState({themeModal: false})}>
                 
-                <ThemeList closeModal={(themes) => this.finishThemes(themes)} />
+                <ThemeList closeModal={(themes) => this.finishThemes(themes)}/>
             </Modal>
         );
     }
@@ -407,11 +424,16 @@ export default class CreateTask extends Component{
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({calendarModal: true})}>
+                    {this.state.start != undefined && this.state.due != undefined ?
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 16, paddingTop: 5, color: Colors.main}}>
+                            {moment(this.state.start).locale("it").format("D MMM")} / {moment(this.state.due).locale("it").format("D MMM")}
+                        </Text>
+                    :
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Start/Due Date</Text>
                         <Text style={{color: 'red', marginLeft: 5}}>*</Text>
-                    </View>
+                    </View>}
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -548,6 +570,7 @@ export default class CreateTask extends Component{
                 </ScrollView>
                 {this.renderThemeModal()}
                 {this.renderEnvironmentsModal()}
+                {this.renderCalendarModal()}
                 {this.renderPrivacyModal()}
                 {this.renderTagListTaskModal()}
             </View>
