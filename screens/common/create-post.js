@@ -46,7 +46,8 @@ export default class CreatePost extends Component{
             allTags: [],
             imageBrowserOpen: false,
             photos: [],
-            imagesListModal: false
+            imagesListModal: false,
+            text: ''
         }
     }
 
@@ -87,8 +88,8 @@ export default class CreatePost extends Component{
                     </Text>
                 </TouchableOpacity>
                 <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Nuovo Post</Text>
-                <TouchableOpacity onPress={() => this.post()}>
-                    <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Post</Text>
+                <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' ? false : true}>
+                    <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Post</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -198,7 +199,9 @@ export default class CreatePost extends Component{
                     fontWeight: '300'}}
                     underlineColorAndroid={'rgba(0,0,0,0)'} 
                     placeholderTextColor={Colors.grayText} 
-                    placeholder={"What's on your mind?"}/>
+                    placeholder={"What's on your mind?"}
+                    onChangeText={(text) => this.setState({text})}
+                    value={this.state.text}/>
             </View>
         )
     }
