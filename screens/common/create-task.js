@@ -509,7 +509,7 @@ export default class CreateTask extends Component{
                 clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
             }
 
-            objs[0].name = "Tag";
+            objs[0].name = "Assegnato a ";
             objs[0].innerName = clustersLabel;
         }
 
@@ -518,11 +518,15 @@ export default class CreateTask extends Component{
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {clustersLength == 0 ? <Text style={{color: 'red'}}>*</Text> : null }
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
+                        <View style={{flex:1}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                        </View>
                         <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                     </TouchableOpacity>
                 </View>
@@ -552,7 +556,7 @@ export default class CreateTask extends Component{
                 managersLabel += allTags.filter((row) => row.category == 'managers')[0].title;
             }
 
-            objs[0].name = "Tag";
+            objs[0].name = "Task Manager ";
             objs[0].innerName = managersLabel;
         }
 
@@ -561,11 +565,15 @@ export default class CreateTask extends Component{
                 <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
-                        {managersLength == 0 ? <Text style={{color: 'red'}}>*</Text> : null }
-                        {o.innerName != undefined && o.innerName != '' ? 
-                            <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                        : null}
+                        <View style={{flex:1}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                                {allTags.length == 0 || managersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                        </View>
                         <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                     </TouchableOpacity>
                 </View>
