@@ -37,6 +37,18 @@ class AppContainer extends React.Component {
     this._loadAssetsAsync();
   }
 
+  componentDidMount() {
+    Font.loadAsync({
+      'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+      'roboto-black': require('./assets/fonts/Roboto-Black.ttf'),
+      'roboto-black-italic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
+      'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
+      'roboto-bold-condensed': require('./assets/fonts/Roboto-BoldCondensed.ttf'),
+      'roboto-bold-italic': require('./assets/fonts/Roboto-BoldItalic.ttf'),
+      'roboto-bold-italic': require('./assets/fonts/Roboto-BoldItalic.ttf'),
+    });
+  }
+
   async _loadAssetsAsync() {
     try {
       await cacheAssetsAsync({
@@ -72,6 +84,14 @@ class AppContainer extends React.Component {
     }else{
         this._drawer.open()
     }
+
+    /*Animated.timing(                  // Animate over time
+      this.state.fadeAnim,            // The animated value to drive
+      {
+        toValue: 1,                   // Animate to opacity: 1 (opaque)
+        duration: 10000,              // Make it take a while
+      }
+    ).start();*/
   };
 
   render() {
@@ -81,9 +101,28 @@ class AppContainer extends React.Component {
             type="static"
             ref={(ref) => this._drawer = ref}
             content={<BlueMenu navigation={this.props.navigation}/>}
-            openDrawerOffset={100}
+            openDrawerOffset={50}
             styles={drawerStyles}
-            tweenHandler={Drawer.tweenPresets.parallax}
+            //tweenHandler={Drawer.tweenPresets.parallax}
+            //tweenEasing={"easeInOutBounce"}
+            tweenHandler={(ratio) => {
+              var r0 = -ratio/6
+              var r1 = 1-ratio/6
+              var t = [
+                         r1,  r0,  0,  0,
+                         -r0, r1,  0,  0,
+                         0,   0,   1,  0,
+                         0,   0,   0,  1,
+                      ]
+              return {
+                main: {
+                  style: {
+                    transformMatrix: t,
+                    opacity: 1 - ratio/2,
+                  },
+                }
+              }
+            }}
             side="right"
             >
             <View style={styles.container}>
@@ -141,7 +180,7 @@ const styles = StyleSheet.create({
     height,
     padding: 8,
     paddingTop: 20,
-    width: width * 4/5,
+    width: width,
     position: 'absolute',
     backgroundColor: Colors.chat_bg,
     right: 0

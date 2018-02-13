@@ -23,6 +23,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import Login from '../Login';
 import {NavigationActions} from 'react-navigation';
+import {Font, AppLoading} from "expo";
 
 const data = ['Report', 'Visual Guideline', 'Wall', 'Calendar', 'Messages', 'To Do List', ' ', 'Anagrafiche', 'Logout'];
 
@@ -46,8 +47,21 @@ export default class BlueMenu extends Component {
                 {name: ''}];
 
         this.state = {
-            dataSource: ds.cloneWithRows(menus)
+            dataSource: ds.cloneWithRows(menus),
+            isReady: false
         }
+    }
+
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+          'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf')
+        });
+
+        this.setState({ isReady: true });
     }
 
     logOut() {
@@ -102,6 +116,10 @@ export default class BlueMenu extends Component {
 
 
     render() {
+        if (!this.state.isReady) {
+          return <AppLoading />;
+        }
+
         return (
             <View style={styles.drawer}>
                 <Image source={require('../img/elmo.jpg')} style={styles.selectableDisplayPicture} />
@@ -121,9 +139,9 @@ export default class BlueMenu extends Component {
 const styles = StyleSheet.create({
     drawer: {
         height,
-        paddingTop: 20,
-        width: width * 4/5,
-        paddingLeft: 40,
+        paddingTop: 50,
+        paddingLeft: 60, 
+        width: width,
         position: 'absolute',
         backgroundColor: Colors.main,
         right: 0
@@ -140,14 +158,15 @@ const styles = StyleSheet.create({
 
     menuItem: {
         color: Colors.white,
-        fontSize: 28,
+        fontSize: 26,
+        fontFamily: 'roboto-thin',
         fontWeight: '100',
         padding: 0,
         margin: 0
     },
 
     menuItemLarge: {
-        fontSize: 28,
+        fontSize: 26,
         height: 30
     },
 
@@ -163,11 +182,12 @@ const styles = StyleSheet.create({
 
     accountName: {
         color: Colors.white,
-        fontSize: 30,
+        fontSize: 26,
         fontWeight: '100',
         margin: 0,
         padding: 0,
-        marginLeft: 10
+        marginLeft: 10,
+        fontFamily: 'roboto-thin',
     },
 
     accountEmail: {
@@ -175,6 +195,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 30,
         fontWeight: '200',
-        marginLeft: 10
+        marginLeft: 10,
+        fontFamily: 'roboto-thin',
     }
 });
