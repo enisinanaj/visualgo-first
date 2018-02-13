@@ -54,62 +54,64 @@ export default class FitlerBar extends Component {
     }
 
     drawElements(data) {
-        if (data.type === 'search' ) {
-            return (
-                <TouchableOpacity style={[
-                        styles.searchButtonContainer, 
-                        Shadow.filterShadow, 
-                        {width: data.fixedOpen ? width - 50 : this.state.searchWidth}
-                    ]} onPress={() => this._toggleSearch()}>
-                    <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
-                    {this.state.searchWidth > 44 || data.fixedOpen
-                        ? 
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
-                                placeholder={data.searchPlaceHolder}
-                                autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
-                                style={{backgroundColor: 'transparent', width: 200}}
-                                onChangeText={(arg) => {this._setQuery(arg); data.onType(arg)} }
-                                ref="searchTextBox" value={this.state.searchQuery}/> 
-                            {!data.fixedOpen ?
-                                <TouchableOpacity onPress={() => this._toggleSearch()}>
-                                    <EvilIcons name={"close"} size={20} color={Colors.main} />
-                                </TouchableOpacity>
+        if (data.visible === true || data.visible == undefined) {
+            if (data.type === 'search' ) {
+                return (
+                    <TouchableOpacity style={[
+                            styles.searchButtonContainer, 
+                            Shadow.filterShadow, 
+                            {width: data.fixedOpen ? width - 50 : this.state.searchWidth}
+                        ]} onPress={() => this._toggleSearch()}>
+                        <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
+                        {this.state.searchWidth > 44 || data.fixedOpen
+                            ? 
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
+                                    placeholder={data.searchPlaceHolder}
+                                    autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
+                                    style={{backgroundColor: 'transparent', width: 200}}
+                                    onChangeText={(arg) => {this._setQuery(arg); data.onType(arg)} }
+                                    ref="searchTextBox" value={this.state.searchQuery}/> 
+                                {!data.fixedOpen ?
+                                    <TouchableOpacity onPress={() => this._toggleSearch()}>
+                                        <EvilIcons name={"close"} size={20} color={Colors.main} />
+                                    </TouchableOpacity>
+                                : null}
+                            </View>
                             : null}
-                        </View>
-                        : null}
-                </TouchableOpacity>
-            )
-        }
-
-        if (data == 'last-padding') {
-            return (
-                <View style={{width: 30, backgroundColor: 'transparent'}}></View>
-            );
-        }
-
-        if(data.active){
-
-            if(data.title ===  'New'){
-                return (
-                    <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle, Shadow.filterShadow]}
-                        onPress={data.onPress}>
-                        <Text style={[styles.filterButton, styles.buttonNewGroupContentStyle]}>{data.title}</Text>
-                        <MaterialCommunityIcons style={styles.plusIcon} name={"plus-circle"} size={22} color={Colors.main} />
                     </TouchableOpacity>
                 )
-            }else{
-
-                return (
-                    <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, styles.buttonStyle, Shadow.filterShadow]}
-                        onPress={() => this.setSelected(data)}>
-                        <Text style={[data.selected ? styles.filterButtonSelected : styles.filterButton, styles.buttonContentStyle]}>{data.title}</Text>
-                    </TouchableOpacity>
-                )
-
             }
 
+            if (data == 'last-padding') {
+                return (
+                    <View style={{width: 30, backgroundColor: 'transparent'}}></View>
+                );
+            }
 
+            if(data.active){
+
+                if(data.title ===  'New'){
+                    return (
+                        <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle, Shadow.filterShadow]}
+                            onPress={data.onPress}>
+                            <Text style={[styles.filterButton, styles.buttonNewGroupContentStyle]}>{data.title}</Text>
+                            <MaterialCommunityIcons style={styles.plusIcon} name={"plus-circle"} size={22} color={Colors.main} />
+                        </TouchableOpacity>
+                    )
+                }else{
+
+                    return (
+                        <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, styles.buttonStyle, Shadow.filterShadow]}
+                            onPress={() => this.setSelected(data)}>
+                            <Text style={[data.selected ? styles.filterButtonSelected : styles.filterButton, styles.buttonContentStyle]}>{data.title}</Text>
+                        </TouchableOpacity>
+                    )
+
+                }
+
+
+            }
         }
 
         return null;

@@ -61,7 +61,12 @@ export default class CreateTask extends Component{
             countVideo: 0,
             count360: 0,
             start: undefined,
-            due: undefined
+            due: undefined,
+            clustersVisible: false,
+            storeVisible: false,
+            managerVisible: false,
+            assignTo: false,
+            headTitle: 'Clusters'
         }
     }
 
@@ -262,7 +267,8 @@ export default class CreateTask extends Component{
                 visible={this.state.tagListTastModal}
                 onRequestClose={() => this.setState({tagListTastModal: false})}>
                 
-                <TagListTask closeModal={(tags) => this.finishTagListTask(tags)} />
+                <TagListTask clustersVisible={this.state.clustersVisible} storeVisible={this.state.storeVisible} 
+                    managerVisible={this.state.managerVisible} headTitle={this.state.headTitle} closeModal={(tags) => this.finishTagListTask(tags)} />
             </Modal>
         );
     }
@@ -509,12 +515,16 @@ export default class CreateTask extends Component{
         )
     }
 
+    prepareAssignToModal() {
+        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Clusters', tagListTastModal: true});
+    }
+
     renderAssignTo() {
         const objs =
             [
                 {
                     name: 'Assegna a...',
-                    onPress: () => this.setState({tagListTastModal: true})
+                    onPress: () => this.prepareAssignToModal()
                 }
             ];
 
@@ -556,12 +566,16 @@ export default class CreateTask extends Component{
         })
     }
 
+    prepareTaskAdminsModal() {
+        this.setState({clustersVisible: false, storeVisible: false, managerVisible: true, headTitle: 'Managers', tagListTastModal: true});
+    }
+
     renderTaskAdmins() {
         const objs =
             [
                 {
                     name: 'Amministratori del Task',
-                    onPress: () => this.setState({tagListTastModal: true})
+                    onPress: () => this.prepareTaskAdminsModal()
                 }
             ];
 

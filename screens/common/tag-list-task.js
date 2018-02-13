@@ -42,12 +42,19 @@ const managers = [
 
 var tagsToShow = clusters;
 var currentCategory = "clusters";
-
+  
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class TagListTask extends Component {
   constructor(props) {
     super(props);
+
+    const {clustersVisible, storeVisible, managerVisible} = this.props;
+
+    if ((!clustersVisible) && (!storeVisible) && (managerVisible)) {
+      tagsToShow = managers;
+      currentCategory = "managers";
+    }
 
     this.state = {
       tagSource: ds.cloneWithRows(tagsToShow),
@@ -99,11 +106,13 @@ export default class TagListTask extends Component {
   }
 
   renderFilters() {
+    const {clustersVisible, storeVisible, managerVisible} = this.props;
+
     filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Manager'}, 
-      {title: 'Clusters', selected: true, active: true, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
-      {title: 'Store', selected: false, active: true, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
-      {title: 'Manager', selected: false, active: true, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
-    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Clusters"}/></View>
+      {title: 'Clusters', selected: clustersVisible ? true : false, active: true, visible: clustersVisible, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
+      {title: 'Store', selected: false, active: true, visible: storeVisible, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
+      {title: 'Manager', selected: ((!clustersVisible) && (!storeVisible) && (managerVisible)) ? true : false, active: true, visible: managerVisible, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
+    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={this.props.headTitle}/></View>
   }
 
   filterForClusters() {
