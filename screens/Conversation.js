@@ -29,6 +29,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
+import PubNubReact from 'pubnub-react';
 
 var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
                   {from: {name: 'me', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo', read: true, date: new Date()},
@@ -48,10 +49,23 @@ export default class Conversation extends Component {
             newMessage: '',
             contentLayout: {}
         }
+
+        this.pubnub = new PubNubReact({
+            publishKey: 'pub-c-b8fd1056-99b5-4f8b-8986-ce1ab877240b',
+            subscribeKey: 'sub-c-f10175d6-fa3c-11e7-8a22-26ec4b06f838'
+        });
+        this.pubnub.init(this);
     }
 
     _goBack() {
         this.props.navigator.pop();
+    }
+
+    componentWillMount() {
+        this.pubnub.subscribe({
+            channels: ['channel1'],
+            withPresence: true       
+        });
     }
 
     componentDidMount () {
@@ -73,7 +87,6 @@ export default class Conversation extends Component {
         if(this.componentDidMount) {
             this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
         }
-
     }
 
     _renderHeader() {
@@ -114,6 +127,13 @@ export default class Conversation extends Component {
             {from: {name: 'me', image: require('./img/elmo.jpg')}, message: newMessage, read: false, date: new Date()}
         );
 
+        this.pubnub.getStatus((st) => {
+            this.pubnub.publish({
+                message: newMessage,
+                channel: 'channel1'
+            });
+        });
+
         this.setState({convoMessages: ds.cloneWithRows(messages)});
         this.refs['newMessageTextInput'].clear();
         this.setState({newMessage: ""}); 
@@ -122,6 +142,7 @@ export default class Conversation extends Component {
 
     render() {
         var {height, visibleHeight} = this.state;
+        const messages = this.pubnub.getMessage('channel1');
         return (
             <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
                 <View
@@ -131,6 +152,7 @@ export default class Conversation extends Component {
                     <View style={styles.statusBlackBackground}/>
                     <DefaultRow renderChildren={() => this._renderHeader()} />
                     <ScrollView ref="conversationCollection" contentContainerStyle={{flexGrow: 1}} onLayout={(event) => {this.setState({contentLayout: event.nativeEvent.layout});}}>
+                        {messages.map((m, index) => <Text key={'message' + index}>{m.message}</Text>)}
                         <ListView
                             style={[styles.listView]}
                             onScroll={this._onScroll}

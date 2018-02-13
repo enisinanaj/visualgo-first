@@ -22,6 +22,7 @@
     "expo": "^23.0.4",
     "lodash": "^4.17.2",
     "moment": "^2.17.1",
+    "pubnub-react": "^1.2.0",
     "react": "16.0.0",
     "react-native": "0.50.3",
     "react-native-calendars": "^1.17.0",
