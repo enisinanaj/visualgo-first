@@ -44,8 +44,13 @@ class AppContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.loadFontsAsync();
+  }
+
+  async loadFontsAsync() {
     Font.loadAsync({
       'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+      'roboto-thin': require('./assets/fonts/Roboto-Thin.ttf'),
       'roboto-black': require('./assets/fonts/Roboto-Black.ttf'),
       'roboto-black-italic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
       'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
@@ -97,21 +102,21 @@ class AppContainer extends React.Component {
           this.state.mainViewHeight,
           {
             toValue: height - 100,
-            duration: 300,
+            duration: 1000,
           }
         ),
         Animated.timing(
           this.state.marginTop,
           {
             toValue: 50,
-            duration: 300,
+            duration: 1000,
           }
         ),
         Animated.timing(
           this.state.innerViewHeight,
           {
             toValue: height - 160,
-            duration: 300,
+            duration: 1000,
           }
         )
       ]).start();
@@ -125,21 +130,21 @@ class AppContainer extends React.Component {
         this.state.mainViewHeight,
         {
           toValue: height,
-          duration: 300,
+          duration: 1000,
         }
       ),
       Animated.timing(
         this.state.marginTop,
         {
           toValue: 0,
-          duration: 300,
+          duration: 1000,
         }
       ),
       Animated.timing(
         this.state.innerViewHeight,
         {
           toValue: height - 60,
-          duration: 300,
+          duration: 1000,
         }
       )
     ]).start();
@@ -154,8 +159,9 @@ class AppContainer extends React.Component {
             content={<BlueMenu navigation={this.props.navigation}/>}
             openDrawerOffset={50}
             styles={drawerStyles}
-            tweenHandler={Drawer.tweenPresets.parallax}
-            tweenEasing={"linear"}
+            //tweenHandler={Drawer.tweenPresets.parallax}
+            tweenEasing={"easeInOutBack"}
+            tweenDuration={1000}
             acceptTap={true}
             onCloseStart={() => this.closeMenu()}
             captureGestures={false}
