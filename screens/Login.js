@@ -50,7 +50,8 @@ export default class Login extends Component {
         email: '',
         pass: '',
         showPasswordLabel: 'Show password',
-        secureEntryPassword: true
+        secureEntryPassword: true,
+        keyboardIsOpen: false
     };
   }
 
@@ -65,11 +66,13 @@ export default class Login extends Component {
   }
 
   keyboardWillShow (e) {
-      let newSize = Dimensions.get('window').height - e.endCoordinates.height
+      this.setState({keyboardIsOpen: true});
+      let newSize = height - e.endCoordinates.height
           this.setState({visibleHeight: newSize, k_visible: true})
   }
 
   keyboardWillHide (e) {
+    this.setState({keyboardIsOpen: false});
       if(this.componentDidMount) {
           this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
       }
@@ -144,19 +147,23 @@ export default class Login extends Component {
             <View style={{flexDirection: 'column', backgroundColor: Colors.white, height: height - 20}} resetScrollToCoords={{x: 0, y: 0}}>
                 <DefaultRow renderChildren={() => this._renderHeader()} />
 
-                <TouchableOpacity>
-                  <View style={[styles.oAuthButton, styles.buttonStyleLinkedin, Shadow.filterShadow]}>
-                    <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH LINKEDIN</Text>
-                  </View>
-                </TouchableOpacity>
+                {!this.state.keyboardIsOpen? 
+                  <View>
+                    <TouchableOpacity>
+                      <View style={[styles.oAuthButton, styles.buttonStyleLinkedin]}>
+                        <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH LINKEDIN</Text>
+                      </View>
+                    </TouchableOpacity>
 
-                <TouchableOpacity>
-                  <View style={[styles.oAuthButton, styles.buttonStyleGoogle, Shadow.filterShadow]}>
-                    <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH GOOGLE</Text>
-                  </View>
-                </TouchableOpacity>
+                    <TouchableOpacity>
+                      <View style={[styles.oAuthButton, styles.buttonStyleGoogle]}>
+                        <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH GOOGLE</Text>
+                      </View>
+                    </TouchableOpacity>
 
-                <Text style={styles.OrText}>Or... </Text>
+                    <Text style={styles.OrText}>Or... </Text>
+                  </View>
+                : null}
 
                 <Text style={styles.grayText}>Enter your e-mail address </Text>
 
@@ -177,7 +184,7 @@ export default class Login extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity ref={component => this._buttonLogin = component} disabled={!this.state.canLogin} onPress={() => this.LogIn()}>
-                  <View style={[styles.buttonLoginDisabled, styles.oAuthButton, Shadow.filterShadow]}>
+                  <View style={[styles.buttonLoginDisabled, styles.oAuthButton]}>
                     <Text style={[styles.oAuthButtonContent, styles.loginText]}>LOGIN</Text>
                   </View>
                 </TouchableOpacity>
