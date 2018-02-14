@@ -34,6 +34,7 @@ import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
+import TaskDescription from './task-description';
 import Feather from '@expo/vector-icons/Feather';
 import moment from 'moment';
 import locale from 'moment/locale/it'
@@ -51,6 +52,7 @@ export default class CreateTask extends Component{
             environmentModal: false,
             calendarModal: false,
             privacyModal: false,
+            taskDescriptionModal: false,
             addPhotoSelected: true,
             addVideoSelected: false,
             add360Selected: false,
@@ -137,6 +139,18 @@ export default class CreateTask extends Component{
         );
     }
 
+    renderTaskDescriptionModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.taskDescriptionModal}
+                onRequestClose={() => this.setState({taskDescriptionModal: false})}>
+                <TaskDescription closeModal={() => this.setState({taskDescriptionModal: false})} />
+            </Modal>
+        );
+    }
+
     renderCommentSwitchRow() {
 
         if(Platform.OS === 'ios'){
@@ -209,14 +223,12 @@ export default class CreateTask extends Component{
 
     renderTaskDescription() {
         return (
-            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                    borderBottomColor: Colors.gray, flexDirection: 'row', height: 56,
-                    justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
-                <TextInput autoFocus={false} style={{height: 30, fontSize: 18, textAlignVertical: 'center', 
-                    fontWeight: '300', width: width}}
-                    underlineColorAndroid={'rgba(0,0,0,0)'} 
-                    placeholderTextColor={Colors.grayText} 
-                    placeholder={"Descrivi Task"}/>
+            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Describe Task</Text>
+                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                </TouchableOpacity>
             </View>
         )
     }
@@ -616,7 +628,7 @@ export default class CreateTask extends Component{
             )
         })
     }
-
+ 
     render() {
         return (
             <View style={{height: this.state.visibleHeight}}>
@@ -644,6 +656,7 @@ export default class CreateTask extends Component{
                 {this.renderCalendarModal()}
                 {this.renderPrivacyModal()}
                 {this.renderTagListTaskModal()}
+                {this.renderTaskDescriptionModal()}
             </View>
         )
     }
