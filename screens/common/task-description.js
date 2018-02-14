@@ -8,7 +8,8 @@ import {
   TextInput,
   Platform,
   Dimensions,
-  ScrollView } from 'react-native';
+  ScrollView,
+  Keyboard } from 'react-native';
 
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
@@ -27,6 +28,29 @@ export default class TaskDescription extends Component {
     };
   }
 
+  componentDidMount () {
+    Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+    Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+  }
+
+  componentWillUnmount() {
+      Keyboard.removeListener('keyboardWillShow');
+      Keyboard.removeListener('keyboardWillHide');
+  }
+
+  keyboardWillShow (e) {
+      this.setState({keyboardIsOpen: true});
+      let newSize = height - e.endCoordinates.height
+          this.setState({visibleHeight: newSize, k_visible: true})
+  }
+
+  keyboardWillHide (e) {
+    this.setState({keyboardIsOpen: false});
+      if(this.componentDidMount) {
+          this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+      }
+  }
+
   renderHeader() {
     return (
       <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
@@ -35,38 +59,29 @@ export default class TaskDescription extends Component {
           <TouchableOpacity onPress={this.props.closeModal}>
             <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Cancel</Text>
           </TouchableOpacity>
-          <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Done</Text>
+          <Text style={{color: Colors.greyText, fontWeight: '700', fontSize: 18}}>Done</Text>
       </View>
     );
   }
 
-  renderText() {
-    return (
-        <View style={{flex: 1, padding: 16, borderBottomColor: Colors.main, borderBottomWidth: 10}}>
-            <TextInput autoFocus={true} style={{flex: 1, fontSize: 22,
-                fontWeight: '300'}}
-                multiline = {true}
-                numberOfLines = {4}
-                underlineColorAndroid={'rgba(0,0,0,0)'} 
-                placeholderTextColor={Colors.grayText} 
-                placeholder={"What's on your mind?"}
-                onChangeText={(text) => this.setState({text})}
-                value={this.state.text}
-                borderBottomColor={Colors.gray}
-                borderBottomWidth={10}/>
-        </View>
-    )
-}
-
   render() {
     var {visibleHeight} = this.state;
-
+    var textInputHeight = visibleHeight - 80; //80 => renderHeader().height more or less (need to check on Android)
+    
     return (
-      <View style={{height: visibleHeight, borderBottomColor: Colors.gray, borderBottomWidth: 10}}>
+      <View style={{height: visibleHeight}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
         <ScrollView>
-          {this.renderText()}
+          <TextInput autoFocus={true} height={textInputHeight}
+                style={{fontSize: 22,
+                fontWeight: '300'}}
+                multiline = {true}
+                underlineColorAndroid={'rgba(0,0,0,0)'} 
+                placeholderTextColor={Colors.grayText} 
+                placeholder={"Descrivi il Task"}
+                onChangeText={(text) => this.setState({text})}
+                value={this.state.text}/>
           </ScrollView>
       </View>
     );
