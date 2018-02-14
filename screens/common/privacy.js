@@ -18,10 +18,10 @@ import {EvilIcons} from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 var tagsToShow = [
-  {title: 'Public', subtitle: 'All your VisualGo connections', selected: false }, 
-  {title: 'Only Tagged', subtitle: 'Only users tagged in this post', selected: false },
-  {title: 'Public Except...', subtitle: '47 Negozi', selected: false },
-  {title: 'Only me', selected: false }];
+  {title: 'Public', subtitle: 'All your VisualGo connections', selected: false, arrowVisible: false }, 
+  {title: 'Only Tagged', subtitle: 'Only users tagged in this post', selected: false, arrowVisible: false },
+  {title: 'Public Except...', subtitle: 'Don\'t show to some of your VisualGo ...', selected: false, arrowVisible: true },
+  {title: 'Only me', selected: false, arrowVisible: false }];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -76,7 +76,7 @@ export default class PostPrivacy extends Component {
 
   renderTagRow(data) {
     return (
-      <View style={styles.rowContainer}>
+      <View style={[styles.rowContainer, {flexDirection: 'row'}, {justifyContent: 'space-between'}, {alignItems: 'center'}]}>
         <TouchableOpacity onPress={() => this.toggleRow(data)} style={styles.rowContainer}>
           {this.renderSelectableComponent(data)}
           <View style={styles.textInRow}>
@@ -84,6 +84,10 @@ export default class PostPrivacy extends Component {
             <Text style={styles.rowSubTitle}>{data.subtitle}</Text>
           </View>
         </TouchableOpacity>
+        {data.arrowVisible ? 
+          <TouchableOpacity>
+            <EvilIcons name={"arrow-right"} color={Colors.main} size={32} style={{marginRight: 10}} /> 
+          </TouchableOpacity> : null }
       </View>);
   }
 
