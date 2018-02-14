@@ -160,7 +160,6 @@ class AppContainer extends React.Component {
             content={<BlueMenu navigation={this.props.navigation}/>}
             openDrawerOffset={50}
             styles={drawerStyles}
-            //tweenHandler={Drawer.tweenPresets.parallax}
             tweenEasing={"easeInOutBack"}
             tweenDuration={DRAWER_ANIMATION_DURATION}
             acceptTap={true}

@@ -23,7 +23,11 @@ import Drawer from 'react-native-drawer'
 
 import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
+import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
+import FilterBar from './common/filter-bar';
+import NewGroup from './NewGroup';
+import BlueMenu from './common/blue-menu';
 
 import {EvilIcons} from '@expo/vector-icons';
 import _ from 'lodash';
@@ -54,6 +58,9 @@ export default class Login extends Component {
   componentDidMount () {
     Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
     Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
+    const resetAction = NavigationActions.reset();
+    this.props.navigation.dispatch(resetAction);
   }
 
   componentWillUnmount() {
