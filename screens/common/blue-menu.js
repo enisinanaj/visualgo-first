@@ -26,7 +26,6 @@ import {NavigationActions} from 'react-navigation';
 import {Font, AppLoading} from "expo";
 
 const data = ['Report', 'Visual Guideline', 'Wall', 'Calendar', 'Messages', 'To Do List', ' ', 'Anagrafiche', 'Logout'];
-
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class BlueMenu extends Component {

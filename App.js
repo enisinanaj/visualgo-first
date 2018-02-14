@@ -29,13 +29,14 @@ import SearchBar from './screens/common/search-bar';
 import Login from './screens/Login';
 
 const {width, height} = Dimensions.get('window');
+const DRAWER_ANIMATION_DURATION = 750;
 
 class AppContainer extends React.Component {
   state = {
     appIsReady: false,
     menuIsOpen: false,
     mainViewHeight: new Animated.Value(height),
-    innerViewHeight: new Animated.Value(height - 60),
+    innerViewHeight: new Animated.Value(height - 65),
     marginTop: new Animated.Value(0)
   }
 
@@ -102,21 +103,21 @@ class AppContainer extends React.Component {
           this.state.mainViewHeight,
           {
             toValue: height - 100,
-            duration: 1000,
+            duration: DRAWER_ANIMATION_DURATION,
           }
         ),
         Animated.timing(
           this.state.marginTop,
           {
             toValue: 50,
-            duration: 1000,
+            duration: DRAWER_ANIMATION_DURATION,
           }
         ),
         Animated.timing(
           this.state.innerViewHeight,
           {
             toValue: height - 160,
-            duration: 1000,
+            duration: DRAWER_ANIMATION_DURATION,
           }
         )
       ]).start();
@@ -130,21 +131,21 @@ class AppContainer extends React.Component {
         this.state.mainViewHeight,
         {
           toValue: height,
-          duration: 1000,
+          duration: DRAWER_ANIMATION_DURATION,
         }
       ),
       Animated.timing(
         this.state.marginTop,
         {
           toValue: 0,
-          duration: 1000,
+          duration: DRAWER_ANIMATION_DURATION,
         }
       ),
       Animated.timing(
         this.state.innerViewHeight,
         {
-          toValue: height - 60,
-          duration: 1000,
+          toValue: height - 65,
+          duration: DRAWER_ANIMATION_DURATION,
         }
       )
     ]).start();
@@ -161,7 +162,7 @@ class AppContainer extends React.Component {
             styles={drawerStyles}
             //tweenHandler={Drawer.tweenPresets.parallax}
             tweenEasing={"easeInOutBack"}
-            tweenDuration={1000}
+            tweenDuration={DRAWER_ANIMATION_DURATION}
             acceptTap={true}
             onCloseStart={() => this.closeMenu()}
             captureGestures={false}
