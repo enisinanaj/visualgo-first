@@ -3,9 +3,11 @@ import React from 'react';
 import {
   AppRegistry,
   Platform,
+  Animated,
   StatusBar,
   StyleSheet,
   View,
+  TouchableOpacity,
   Dimensions
 } from 'react-native';
 import {
@@ -31,6 +33,10 @@ const {width, height} = Dimensions.get('window');
 class AppContainer extends React.Component {
   state = {
     appIsReady: false,
+    menuIsOpen: false,
+    mainViewHeight: new Animated.Value(height),
+    innerViewHeight: new Animated.Value(height - 60),
+    marginTop: new Animated.Value(0)
   }
 
   componentWillMount() {
@@ -80,19 +86,64 @@ class AppContainer extends React.Component {
 
   toggleMenu = () => {
     if(this._drawer.props.open){
-        this._drawer.close()
+      this._drawer.close()
+      this.setState({menuIsOpen: false});
     }else{
-        this._drawer.open()
-    }
+      this._drawer.open()
+      this.setState({menuIsOpen: true});
 
-    /*Animated.timing(                  // Animate over time
-      this.state.fadeAnim,            // The animated value to drive
-      {
-        toValue: 1,                   // Animate to opacity: 1 (opaque)
-        duration: 10000,              // Make it take a while
-      }
-    ).start();*/
+      Animated.parallel([
+        Animated.timing(
+          this.state.mainViewHeight,
+          {
+            toValue: height - 100,
+            duration: 300,
+          }
+        ),
+        Animated.timing(
+          this.state.marginTop,
+          {
+            toValue: 50,
+            duration: 300,
+          }
+        ),
+        Animated.timing(
+          this.state.innerViewHeight,
+          {
+            toValue: height - 160,
+            duration: 300,
+          }
+        )
+      ]).start();
+    }
   };
+
+  closeMenu() {
+    this.setState({menuIsOpen: false});
+    Animated.parallel([
+      Animated.timing(
+        this.state.mainViewHeight,
+        {
+          toValue: height,
+          duration: 300,
+        }
+      ),
+      Animated.timing(
+        this.state.marginTop,
+        {
+          toValue: 0,
+          duration: 300,
+        }
+      ),
+      Animated.timing(
+        this.state.innerViewHeight,
+        {
+          toValue: height - 60,
+          duration: 300,
+        }
+      )
+    ]).start();
+  }
 
   render() {
     if (this.state.appIsReady) {
@@ -103,39 +154,26 @@ class AppContainer extends React.Component {
             content={<BlueMenu navigation={this.props.navigation}/>}
             openDrawerOffset={50}
             styles={drawerStyles}
-            //tweenHandler={Drawer.tweenPresets.parallax}
-            //tweenEasing={"easeInOutBounce"}
-            tweenHandler={(ratio) => {
-              var r0 = -ratio/6
-              var r1 = 1-ratio/6
-              var t = [
-                         r1,  r0,  0,  0,
-                         -r0, r1,  0,  0,
-                         0,   0,   1,  0,
-                         0,   0,   0,  1,
-                      ]
-              return {
-                main: {
-                  style: {
-                    transformMatrix: t,
-                    opacity: 1 - ratio/2,
-                  },
-                }
-              }
-            }}
-            side="right"
-            >
+            tweenHandler={Drawer.tweenPresets.parallax}
+            tweenEasing={"linear"}
+            acceptTap={true}
+            onCloseStart={() => this.closeMenu()}
+            captureGestures={false}
+            side="right">
             <View style={styles.container}>
-              <SearchBar ref='searchBar' openMenu={() => this.toggleMenu()} style={{zIndex: 999}}/>
-
-              <View style={{marginTop: 0, bottom: 0, position: 'fixed', height: height - 65}}>
-                <NavigationProvider router={Router}>
-                  <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
-                </NavigationProvider>
-              </View>
-
-              {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
-              {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+              <Animated.View style={[{height: this.state.mainViewHeight, marginTop: this.state.marginTop}, {backgroundColor: Colors.white}]}>
+                <SearchBar ref='searchBar' openMenu={() => this.toggleMenu()} style={{zIndex: 999}}/>
+                  <Animated.View style={{marginTop: 0, bottom: 0, position: 'fixed', height: this.state.innerViewHeight}}>
+                    <NavigationProvider router={Router}>
+                      <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
+                    </NavigationProvider>
+                  </Animated.View>
+                {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
+                {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+              </Animated.View>
+              {this.state.menuIsOpen ? 
+                <View style={{position: 'absolute', right: 0, left: 0, bottom: 0, top: 0, backgroundColor: 'transparent'}} /> 
+              : null}
             </View>
           </Drawer>
         );
@@ -170,7 +208,7 @@ const drawerStyles = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.main,
   },
   statusBarUnderlay: {
     height: 24,
