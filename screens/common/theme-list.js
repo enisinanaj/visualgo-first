@@ -12,7 +12,8 @@ import {
   ListView,
   TextInput,
   Platform,
-  Dimensions } from 'react-native';
+  Dimensions,
+  ScrollView } from 'react-native';
 
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
@@ -192,15 +193,17 @@ export default class ThemeList extends Component {
       <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
-        {this.renderCreateTheme()}
-        <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
-        <ListView
-          style={styles.listView}
-          onScroll={this._onScroll}
-          dataSource={this.state.themeSource}
-          renderRow={(data) => this._renderRow(data)}
-         
-        />
+        <ScrollView>
+          {this.renderCreateTheme()}
+          <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
+          <ListView
+            style={styles.listView}
+            onScroll={this._onScroll}
+            dataSource={this.state.themeSource}
+            renderRow={(data) => this._renderRow(data)}
+          
+          />
+        </ScrollView>
       </View>
     );
   }
