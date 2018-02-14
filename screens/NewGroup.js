@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ListView,
   Dimensions,
+  TextInput,
     Platform } from 'react-native';
 
 import DefaultRow from './common/default-row';
@@ -48,7 +49,7 @@ export default class NewGroup extends Component {
             convoMessages: ds.cloneWithRows(messages),
             visibleHeight: height,
             contentLayout: {},
-            managers: ds.cloneWithRows(people)
+            managers: ds.cloneWithRows(people),
         }
     }
 
@@ -60,15 +61,14 @@ export default class NewGroup extends Component {
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
-                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                justifyContent: 'flex-start', alignItems: 'flex-start', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
-                    <Text>
-                        <EvilIcons name={"close"} size={22} color={Colors.main}/>
-                    </Text>
+                    <Text style={{fontSize: 16, color: 'black', fontWeight: '600', color: Colors.main, width: 60}}>Cancel</Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Select People</Text>
-                <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Create</Text>
+                <Text style={{fontSize: 16, color: 'black', fontWeight: '600', marginLeft: 75}}>New Group</Text>
+                
             </View>
+
         )
     }
 
@@ -93,7 +93,7 @@ export default class NewGroup extends Component {
   renderSelectableComponent(data) {
     if (data.img == undefined) {
       return (
-        <Ionicons name={data.selected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} 
+         <Ionicons name={data.selected? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} 
               size={30} color={data.selected ? Colors.main : Colors.gray} />
       );
     }
@@ -125,8 +125,8 @@ export default class NewGroup extends Component {
     }
 
     renderFilters() {
-        filters = [{type: 'search', searchPlaceHolder: 'Search', fixedOpen: true}];
-        return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"People"} /></View>
+        var filters = [{type: 'search', searchPlaceHolder: 'Search', fixedOpen: true}];
+        return <View style={styles.filterBarContainer}><FilterBar noPadding={true} data={filters} customStyle={{padding: 0, margin: 0}} headTitle={""} /></View>
       }
 
 
@@ -141,13 +141,22 @@ export default class NewGroup extends Component {
       _renderSelectedTags() {
         var selectedManagers = people.filter((el) => el.selected);
         var dataSource = ds.cloneWithRows(selectedManagers);
-        var result = <ListView
-            dataSource={dataSource}
-            horizontal={true}
-            renderRow={(data) => this._renderSelectedTagElement(data)}
-        />;
+
     
-        return result;
+        return (
+
+
+
+                <ListView
+                            dataSource={dataSource}
+                            horizontal={true}
+                            renderRow={(data) => this._renderSelectedTagElement(data)}
+                        />
+
+
+
+
+        );
       }
 
     _selectedManagerNotEmpty() {
@@ -156,11 +165,23 @@ export default class NewGroup extends Component {
 
     render() {
         var {height, visibleHeight} = this.state;
+        var filters = [{type: 'search', searchPlaceHolder: 'Search', fixedOpen: true}];
+
         return (
             <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
                 
                 <StatusBar barStyle={'light-content'} animated={true}/>
                 {this.renderHeader()}
+                <View style={{flexDirection: 'row', margin: 10, paddingBottom: -10}}>
+                    <TouchableOpacity>
+                        <Image source={require("../screens/img/slr-camera-128.jpg")} style={[styles.cameraPicture]} />
+                    </TouchableOpacity>
+
+                    <View style={[styles.textField]}>
+                        <TextInput placeholderTextColor={Colors.gray} placeholder={'Name this group chat'} 
+                        style={[styles.textFieldContent]} underlineColorAndroid='rgba(0,0,0,0)'/>
+                    </View>
+                </View>
                 <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
                 <ListView
                     style={styles.listView}
@@ -170,6 +191,9 @@ export default class NewGroup extends Component {
                 />
                 <View style={[styles.selectedTags, this._selectedManagerNotEmpty() ? {height: 60, padding: 10} : {}]}>
                     {this._renderSelectedTags()}
+                    <TouchableOpacity  onPress={() => this.props.closeModal(this.state.selectedTags)}>
+                        {people.filter((el) => el.selected).length > 0 ? <Text style={{color: Colors.white, fontWeight: '700', fontSize: 18, paddingRight: 10, marginTop: 8}}>Create Group</Text> : null }
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -177,6 +201,24 @@ export default class NewGroup extends Component {
 }
 
 const styles = StyleSheet.create({
+    textFieldContent: {
+        flex: 1,
+        width: 260,
+        fontSize: 20,
+        fontWeight: '100'
+        
+      },
+      textField: {
+        marginRight: 40,
+        marginLeft: 20,
+        
+        
+        paddingBottom: 5,
+        paddingTop: 5,
+        height: 55,
+        marginTop: 0,
+        marginBottom: 5
+      },
     container: {
         flex: 1,
         flexDirection: 'column',
@@ -290,6 +332,7 @@ const styles = StyleSheet.create({
         color: Colors.main
       },
       selectedTags: {
+        flexDirection: 'row',
         backgroundColor: Colors.main,
         padding: 0,
         margin: 0,
@@ -298,6 +341,15 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25
+      },
+
+      cameraPicture: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: Colors.gray,
+        padding: 4
       },
       selectedDisplayPictureInFooter: {
         width: 40,

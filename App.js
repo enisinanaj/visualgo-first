@@ -169,7 +169,7 @@ class AppContainer extends React.Component {
             <View style={styles.container}>
               <Animated.View style={[{height: this.state.mainViewHeight, marginTop: this.state.marginTop}, {backgroundColor: Colors.white}]}>
                 <SearchBar ref='searchBar' openMenu={() => this.toggleMenu()} style={{zIndex: 999}}/>
-                  <Animated.View style={{marginTop: 0, bottom: 0, position: 'fixed', height: this.state.innerViewHeight}}>
+                  <Animated.View style={{marginTop: 0, bottom: 0, height: this.state.innerViewHeight}}>
                     <NavigationProvider router={Router}>
                       <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
                     </NavigationProvider>
