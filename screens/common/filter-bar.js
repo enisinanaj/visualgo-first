@@ -164,7 +164,7 @@ export default class FitlerBar extends Component {
         var {customStyle} = this.props || {};
 
         return <View style={styles.filterBarContainer}>
-                <Text style={styles.filterBarHeader}>{this.state.headTitle}</Text>
+                {this.state.headTitle.length > 0 ? <Text style={styles.filterBarHeader}>{this.state.headTitle}</Text> : null}
 
                 <ListView
                     horizontal={true}

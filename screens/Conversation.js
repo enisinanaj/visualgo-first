@@ -34,6 +34,15 @@ var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message
                   {from: {name: 'me', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo', read: true, date: new Date()},
                   {from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
 
+
+var themes = [
+                {name: "San Valentino", image: require('./img/elmo.jpg')},
+                {name: "Saldi Febbraio", image: require('./img/bob.png')},
+                {name: "New Collection", image: require('./img/cookiemonster.jpeg')},
+                {name: "Flowers Theme", image: require('./img/elmo.jpg')}
+    
+             ];
+
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const {width, height} = Dimensions.get('window');
 
@@ -44,14 +53,40 @@ export default class Conversation extends Component {
 
         this.state = {
             convoMessages: ds.cloneWithRows(messages),
+            themesData: ds.cloneWithRows(themes),
             visibleHeight: height,
             newMessage: '',
-            contentLayout: {}
+            contentLayout: {},
+            showThemes: false
         }
     }
 
     _goBack() {
         this.props.navigator.pop();
+    }
+
+    messageTextChanged(text){
+        this.setState({newMessage: text});
+
+        var stringText = text + "";
+
+        if(stringText.length > 0){
+
+            if(stringText[stringText.length-1] == '#'){
+                this.setState({showThemes: true})
+
+            }else{
+                this.setState({showThemes: false})
+
+            }
+        }else{
+            this.setState({showThemes: false})
+        }
+
+        
+
+        
+
     }
 
     componentDidMount () {
@@ -104,6 +139,26 @@ export default class Conversation extends Component {
             </View>);
     }
 
+    themeSelected(name){
+        this.state.newMessage = this.state.newMessage + name;
+        this.setState({showThemes: false});
+    }
+
+    _renderThemesRow(data) {
+
+            return (
+                <TouchableOpacity onPress={() => this.themeSelected(data.name)}>
+                    <View style={styles.themeBubble}>
+                        <Image source={data.image} style={styles.displayThemePicture} />
+                        <View style={styles.themeName}>
+                            <Text style={{fontSize: 24}}># {data.name}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>);
+        
+
+    }
+
     _addMessage() {
         if (this.state.newMessage == "") {
             return;
@@ -138,14 +193,36 @@ export default class Conversation extends Component {
                             renderRow={(data) => this._renderRow(data)}/>
                     </ScrollView>
                 </View>
-                <View>
+                <View style={this.state.showThemes == true ? {flexDirection: 'column'} : {}}>
+
+                    {this.state.showThemes == true ?
+
+
+                    <View style={{height: 160, backgroundColor: Colors.lightGray, marginBottom: 10}}>
+                        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+                            <ListView
+                                style={[styles.listView]}
+                                onScroll={this._onScroll}
+                                dataSource={this.state.themesData}
+                                renderRow={(data) => this._renderThemesRow(data)}/>
+                        </ScrollView>
+                    </View>
+
+                    :
+
+                    null
+                    }
+
                     <View style={messageBoxStyle.newMessageAreaContainer}>
                         <View style={messageBoxStyle.attachmentBackground}>
                             <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
                         </View>
                         <View style={messageBoxStyle.textBoxContainer}>
+
+
+
                             <TextInput style={messageBoxStyle.textArea} ref='newMessageTextInput'
-                                onChangeText={(arg) => this.setState({newMessage: arg})}
+                                onChangeText={(arg) => this.messageTextChanged(arg)}
                                 value={this.state.newMessage}
                                 underlineColorAndroid={'rgba(0,0,0,0)'} 
                                 />
@@ -248,6 +325,13 @@ const styles = StyleSheet.create({
         width: 44,
         borderRadius: 22
     },
+    displayThemePicture: {
+        marginLeft: 10,
+        marginRight: 5,
+        height: 30,
+        width: 30,
+        borderRadius: 15
+    },
     convoContainer: {
         flex: 1, 
         justifyContent: 'space-between', 
@@ -262,8 +346,23 @@ const styles = StyleSheet.create({
         maxWidth: width * 0.7,
         alignSelf: 'flex-end'
     },
+    themeName: {
+        
+        
+        flex: 1,
+        flexDirection: 'row',
+        maxWidth: width * 0.7,
+        alignSelf: 'flex-end'
+    },
     fromBubble: {
         borderRadius: 25,
+        margin: 5,
+        flex: 1,
+        flexDirection: 'row',
+        maxWidth: width * 0.7,
+        alignSelf: 'flex-start'
+    },
+    themeBubble: {
         margin: 5,
         flex: 1,
         flexDirection: 'row',
