@@ -445,7 +445,7 @@ export default class CreateTask extends Component{
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({calendarModal: true})}>
                     {this.state.start != undefined && this.state.due != undefined ?
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 16, paddingTop: 5, color: Colors.main}}>
-                            {moment(this.state.start).locale("it").format("D MMM")} / {moment(this.state.due).locale("it").format("D MMM")}
+                            {moment(this.state.start).locale("it").format("DD/MM/YYYY")} - {moment(this.state.due).locale("it").format("DD/MM/YYYY")}
                         </Text>
                     :
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

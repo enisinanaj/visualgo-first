@@ -5,6 +5,7 @@ import { Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calend
 import DefaultRow from '../common/default-row';
 import Colors from '../../constants/Colors';
 
+import {AppLoading, Font} from 'expo';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 
@@ -27,8 +28,23 @@ export default class CalendarView extends Component {
             startDate: undefined,
             dueDate: undefined,
             period: undefined,
-            doneButtonVisible: false
+            doneButtonVisible: false,
+            isReady: false
         }
+    }
+
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        });
+
+        this.setState({ isReady: true });
     }
 
     renderHeader() {
@@ -39,10 +55,6 @@ export default class CalendarView extends Component {
               <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
                 <Text style={{color: Colors.main, fontWeight: '200', fontSize: 18}}>Cancel</Text>
               </TouchableOpacity>
-              {this.state.doneButtonVisible ? 
-              <TouchableOpacity onPress={() => {this.props.onDone({start: this.state.startDate, due: this.state.dueDate})}}>
-                <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Done</Text>
-              </TouchableOpacity> : null }
           </View>
         );
     }
@@ -71,15 +83,7 @@ export default class CalendarView extends Component {
 
     getStartDate() {
         if (this.state.startDate != undefined) {
-            return moment(this.state.startDate).locale("it").format("D MMMM");
-        } else {
-            return "";
-        }
-    }
-
-    getStartDateDay() {
-        if (this.state.startDate != undefined) {
-            return moment(this.state.startDate).locale("it").format("dddd");
+            return moment(this.state.startDate).locale("it").format("DD/MM/YYYY");
         } else {
             return "";
         }
@@ -87,15 +91,7 @@ export default class CalendarView extends Component {
 
     getDueDate() {
         if (this.state.dueDate != undefined) {
-            return moment(this.state.dueDate).locale("it").format("D MMMM");
-        } else {
-            return "";
-        }
-    }
-
-    getDueDateDay() {
-        if (this.state.dueDate != undefined) {
-            return moment(this.state.dueDate).locale("it").format("dddd");
+            return moment(this.state.dueDate).locale("it").format("DD/MM/YYYY");
         } else {
             return "";
         }
@@ -103,26 +99,36 @@ export default class CalendarView extends Component {
 
     renderSelectedDateRow(base) {
         return (
-            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-            borderBottomColor: Colors.gray, flexDirection: 'row',
-            justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
-                <View style={{flex: 1, flexDirection: 'column', height: 40}}>
-                    <Text style={styles.date}>{this.getStartDateDay()}</Text>
+            <View style={[styles.bottomBar]}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: 40, }}>
                     <Text style={styles.date}>{this.getStartDate()}</Text>
+                    {this.getDueDate() != undefined ?
+                        <Text style={[styles.date]}> - {this.getDueDate()}</Text>
+                    : null }
                 </View>
-                <View style={{flex: 1, flexDirection: 'column', height: 40, right: 10, position: 'absolute'}}>
-                    <Text style={[styles.date, styles.alignRight]}>{this.getDueDateDay()}</Text>
-                    <Text style={[styles.date, styles.alignRight]}>{this.getDueDate()}</Text>
-                </View>
+                {this.getDueDate() != undefined ?
+                    <TouchableOpacity onPress={() => {this.props.onDone({start: this.state.startDate, due: this.state.dueDate})}}>
+                        <Text style={styles.saveButton}>Save Date</Text>
+                    </TouchableOpacity>
+                : null}
             </View>
         )
     }
 
+    renderDayComponent() {
+        return <View>
+            <Text>{this.props.date}</Text>
+        </View>
+    }
+
     render () {
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        }
+
         return <View style={{height: height, flex: 1, flexDirection: 'column'}}>
                 <StatusBar barStyle={'default'} animated={true}/>
                 {this.renderHeader()}
-                {this.renderSelectedDateRow()}
                 <CalendarList
                     // Initially visible month. Default = Date()
                     //current={'2012-03-01'}
@@ -155,7 +161,7 @@ export default class CalendarView extends Component {
                     // Date marking style [simple/period/multi-dot]. Default = 'simple'
                     markingType='period'
                     // Specify theme properties to override specific styles for calendar parts. Default = {}
-                    theme={{
+                    /*theme={{
                         backgroundColor: '#ffffff',
                         calendarBackground: '#ffffff',
                         //textSectionTitleColor: '#b6c1cd',
@@ -180,29 +186,43 @@ export default class CalendarView extends Component {
                               justifyContent: 'flex-start'
                             }
                         }
-                    }}
+                    }}*/
                     scrollEnabled={true}
                     // Enable or disable vertical scroll indicator. Default = false
                     showScrollIndicator={true}
                 />
+                {this.state.startDate != undefined ? this.renderSelectedDateRow() : null}
         </View>
     }
 }
 
 
 const styles = StyleSheet.create({
+    saveButton: {
+        fontFamily: 'roboto-bold',
+        color: Colors.white,
+        fontSize: 16
+    },
     selectedDates: {
         flex: 1,
         flexDirection: 'row',
         height: 80
     },
     date: {
-        color: 'red',
-        fontWeight: '700',
-        fontSize: 18,
+        color: Colors.white,
+        fontFamily: 'roboto',
+        fontSize: 14,
     },
     alignRight: {
         textAlign: 'right',
         width: 150
+    },
+    bottomBar: {
+        backgroundColor: Colors.main,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 10,
+        paddingTop: 20,
+        paddingBottom: 0
     }
 });
