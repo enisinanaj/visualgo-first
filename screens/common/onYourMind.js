@@ -15,7 +15,7 @@ export default class onYourMind extends Component {
         return (
             <View style={styles.container}>
                 <Image source={require('../img/me.png')} style={styles.profile}/>
-                <Text onPress={this.props.onFocus} style={styles.input}>New Task, Post, Survey card</Text>
+                <Text onPress={this.props.onFocus} style={styles.input}>What are we working on today?</Text>
             </View>
         )
     }

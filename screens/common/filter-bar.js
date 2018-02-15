@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     },
 
     filterButtons: {
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.borderGray,
     },
     filterButtonsSelected: {
         backgroundColor: Colors.main
