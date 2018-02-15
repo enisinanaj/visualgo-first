@@ -27,6 +27,7 @@ import BlueMenu from './screens/common/blue-menu';
 import Colors from './constants/Colors';
 import SearchBar from './screens/common/search-bar';
 import Login from './screens/Login';
+import StartScreen from './screens/StartScreen';
 
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
@@ -196,6 +197,7 @@ class AppContainer extends React.Component {
 }
 
 const MainAppNavigation = StackNavigator({
+  StartScreen: { screen: StartScreen },
   Login: { screen: Login },
   Index: { screen: AppContainer}
 },

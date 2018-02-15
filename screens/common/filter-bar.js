@@ -215,8 +215,9 @@ const styles = StyleSheet.create({
         paddingTop: 14,
         height: 44,
         //width: 44,
-        margin: 8,
+        marginRight: 8,
         marginBottom: 14,
+        marginLeft: 0,
         marginTop: 2
     },
 
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     },
     buttonNewGroupContentStyle: {
         padding: 0,
-        paddingTop: 10,
+        paddingTop: 5,
         margin: 0,
         textAlign: 'center',
         fontSize: 12,

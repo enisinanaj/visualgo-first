@@ -67,10 +67,10 @@ export default class BlueMenu extends Component {
         const resetAction = NavigationActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ routeName: 'Login' })
+                NavigationActions.navigate({routeName: 'StartScreen'})
             ]
-        });
-        this.props.navigation.dispatch(resetAction);
+          });
+          this.props.navigation.dispatch(resetAction);
     }
 
     _renderRow(data) {
@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
         color: Colors.white,
         fontSize: 26,
         fontFamily: 'roboto-thin',
-        fontWeight: '100',
         padding: 0,
         margin: 0
     },
@@ -182,7 +181,6 @@ const styles = StyleSheet.create({
     accountName: {
         color: Colors.white,
         fontSize: 26,
-        fontWeight: '100',
         margin: 0,
         padding: 0,
         marginLeft: 10,
@@ -193,7 +191,6 @@ const styles = StyleSheet.create({
         color: Colors.white,
         fontSize: 20,
         marginBottom: 30,
-        fontWeight: '200',
         marginLeft: 10,
         fontFamily: 'roboto-thin',
     }

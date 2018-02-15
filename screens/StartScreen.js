@@ -28,6 +28,7 @@ import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
 import NewGroup from './NewGroup';
 import BlueMenu from './common/blue-menu';
+import {Font, AppLoading} from "expo";
 
 import {EvilIcons} from '@expo/vector-icons';
 import _ from 'lodash';
@@ -41,177 +42,88 @@ const {width, height} = Dimensions.get('window');
 export default class Login extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-        visibleHeight: height,
-        canLogin: false,
-        passTyped: false,
-        emailTyped: false,
-        email: '',
-        pass: '',
-        showPasswordLabel: 'Show password',
-        secureEntryPassword: true,
-        keyboardIsOpen: false
-    };
+    this.state = {isReady: false};
   }
 
-  componentDidMount () {
-    Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
-    Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
-
-    const resetAction = NavigationActions.reset();
-    this.props.navigation.dispatch(resetAction);
+  componentDidMount() {
+    this.loadFonts();
   }
 
-  componentWillUnmount() {
-      Keyboard.removeListener('keyboardWillShow');
-      Keyboard.removeListener('keyboardWillHide');
+  async loadFonts() {
+      await Font.loadAsync({
+        'roboto': require('../assets/fonts/Roboto-Thin.ttf'),
+        'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf')
+      });
+
+      this.setState({ isReady: true });
   }
 
-  keyboardWillShow (e) {
-      this.setState({keyboardIsOpen: true});
-      let newSize = height - e.endCoordinates.height
-          this.setState({visibleHeight: newSize, k_visible: true})
-  }
-
-  keyboardWillHide (e) {
-    this.setState({keyboardIsOpen: false});
-      if(this.componentDidMount) {
-          this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
-      }
-  }
-
-  _renderHeader() {
-    return (
-        <View style={styles.headerView}>
-            <View style={{flexDirection: 'row', justifyContent: 'center', width: width}}>
-                <Text style={styles.viewTitle}>Login</Text>
-            </View>
-        </View>);
-  }
-
-  emailChanged(email) {
-    if(email != ''){
-      this.state.emailTyped = true;
-    }else{
-      this.state.emailTyped = false;
-    }
-
-    if(this.state.passTyped && this.state.emailTyped){
-      this.state.canLogin = true;
-      this.setState({canLogin: true});
-    }else{
-      this.setState({canLogin: false});
-    }
-  }
-
-  passwordChanged(pass) {
-    if(pass != ''){
-      this.state.passTyped = true;
-    }else{
-      this.state.passTyped = false;
-    }
-
-    if (this.state.emailTyped && this.state.passTyped) {
-      this.state.canLogin = true;
-      this.setState({canLogin: true});
-    } else {
-      this.setState({canLogin: true});
-    }
-  }
-
-  LogIn(){
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-          NavigationActions.navigate({ routeName: 'Index' })
-      ]
-    });
-    this.props.navigation.dispatch(resetAction);
-  }
-
-  showPassword(){
-    if (this.state.secureEntryPassword) {
-      this._passInput.setNativeProps({secureTextEntry: false});
-      this.setState({showPasswordLabel: 'Hide password', secureEntryPassword: false});
-    } else {
-      this._passInput.setNativeProps({secureTextEntry: true});
-      this.setState({showPasswordLabel: 'Show password', secureEntryPassword: true});      
-    }
+  logIn() {
+    this.props.navigation.push('Login');
   }
 
   render() {
     var {visibleHeight} = this.state;
-        return (
-          <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
-            <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height: 0}]}/>
 
-            <View style={{flexDirection: 'column', backgroundColor: Colors.white, height: height - 20}} resetScrollToCoords={{x: 0, y: 0}}>
-                <DefaultRow renderChildren={() => this._renderHeader()} />
-
-                {!this.state.keyboardIsOpen? 
-                  <View>
-                    <TouchableOpacity>
-                      <View style={[styles.oAuthButton, styles.buttonStyleLinkedin]}>
-                        <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH LINKEDIN</Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity>
-                      <View style={[styles.oAuthButton, styles.buttonStyleGoogle]}>
-                        <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH GOOGLE</Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    <Text style={styles.OrText}>Or... </Text>
-                  </View>
-                : null}
-
-                <Text style={styles.grayText}>Enter your e-mail address </Text>
-
-                <View style={[styles.textField]}>
-                  <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} 
-                    style={styles.textFieldContent} onChangeText={(email) => this.emailChanged(email)}/>
-                </View>
-
-                <Text style={styles.grayText}>Enter your password </Text>
-
-                <View style={[styles.textField]}>
-                  <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} 
-                    style={styles.textFieldContent} onChangeText={(pass) => this.passwordChanged(pass)}/>
-                </View>
-
-                <TouchableOpacity onPress={() => this.showPassword()}>
-                  <Text style={styles.ShowPasswordText}>{this.state.showPasswordLabel}</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity ref={component => this._buttonLogin = component} disabled={!this.state.canLogin} onPress={() => this.LogIn()}>
-                  <View style={[styles.buttonLoginDisabled, styles.oAuthButton]}>
-                    <Text style={[styles.oAuthButtonContent, styles.loginText]}>LOGIN</Text>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                  <Text style={styles.ForgottenText}>Forgotten your password?</Text>
-                </TouchableOpacity>
-            </View>
-            
-          </KeyboardAvoidingView>
-
-        )
+    if (!this.state.isReady) {
+      return <AppLoading />;
     }
-}
 
-const drawerStyles = {
-  drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
-  main: {paddingLeft: 0},
+    return (
+        <View style={styles.container}>
+            <Text style={[styles.welcomeLabel, {marginTop: 50}]}>Welcome to VisualGo!</Text>
+
+            <TouchableOpacity>
+              <View style={[styles.oAuthButton, styles.buttonStyleEmail]}>
+                <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>REGISTER WITH EMAIL</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity>
+              <View style={[styles.oAuthButton, styles.buttonStyleLinkedin]}>
+                <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>CONTINUE WITH GOOGLE</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity>
+              <View style={[styles.oAuthButton, styles.buttonStyleGoogle]}>
+                <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>CONTINUE WITH GOOGLE</Text>
+              </View>
+            </TouchableOpacity>
+
+            <Text style={[styles.welcomeLabel, {marginTop: 30}]}>OR</Text>
+
+            <TouchableOpacity ref={component => this._buttonLogin = component} onPress={() => this.logIn()}>
+              <View style={[styles.buttonLoginDisabled, styles.oAuthButton]}>
+                <Text style={[styles.oAuthButtonContent, styles.loginText]}>LOGIN</Text>
+              </View>
+            </TouchableOpacity>
+
+            <Text style={styles.notice}>By continuing you agree to VisualGo terms of service and privacy policy</Text>
+        </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
+  welcomeLabel: {
+    fontSize: 50,
+    fontFamily: 'roboto',
+    color: Colors.main,
+    marginLeft: 40,
+    marginRight: 40
+  },
+  notice:{
+    fontFamily: 'roboto',
+    color: Colors.main,
+    marginLeft: 40,
+    marginRight: 40,
+    fontSize: 18,
+    marginTop: 40
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
 
   containerIOS: {
@@ -257,12 +169,19 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
 
+  buttonStyleEmail: {
+      backgroundColor: Colors.main,
+      fontFamily: 'roboto'
+  },
+
   buttonStyleLinkedin: {
-      backgroundColor: '#2F77B0'
+    backgroundColor: '#2F77B0',
+    fontFamily: 'roboto'
   },
 
   buttonStyleGoogle: {
-    backgroundColor: '#4F86EC'
+    backgroundColor: '#4F86EC',
+    fontFamily: 'roboto'
   },
 
   buttonLoginEnabled: {
@@ -315,6 +234,7 @@ const styles = StyleSheet.create({
     color: Colors.grayText,
     marginLeft: 40,
     marginTop: 20,
+    fontFamily: 'roboto'
   },
 
   ShowPasswordText:{
