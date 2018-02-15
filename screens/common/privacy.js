@@ -14,7 +14,7 @@ import {
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
+import {EvilIcons, Entypo} from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 var tagsToShow = [
@@ -86,7 +86,7 @@ export default class PostPrivacy extends Component {
         </TouchableOpacity>
         {data.arrowVisible ? 
           <TouchableOpacity>
-            <EvilIcons name={"arrow-right"} color={Colors.main} size={32} style={{marginRight: 10}} /> 
+            <Ionicons name={"ios-arrow-dropright"} color={Colors.main} size={32} style={{marginRight: 10}} /> 
           </TouchableOpacity> : null }
       </View>);
   }
