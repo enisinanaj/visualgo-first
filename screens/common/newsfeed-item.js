@@ -10,6 +10,8 @@ import {
     Dimensions,
 } from 'react-native';
 
+import {AppLoading, Font} from 'expo';
+
 import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
 import {getProfile} from '../helpers';
@@ -35,9 +37,23 @@ export default class NewsFeedItem extends Component {
             iconTypes: ["evilicon"],
             iconColors: [Colors.main, Colors.yellow],
             likes: 0,
+            isReady: false,
             comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length
         };
     }
+
+    componentDidMount() {
+        this.loadFonts();
+      }
+    
+      async loadFonts() {
+          await Font.loadAsync({
+            'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+          });
+    
+          this.setState({ isReady: true });
+      }
 
     buttonOnPress(name) {
         console.log(name);
@@ -119,6 +135,10 @@ export default class NewsFeedItem extends Component {
     }
 
     render() {
+        if (!this.state.isReady) {
+          return <AppLoading />;
+        }
+
         return (
             <View style={[styles.container, Shadow.cardShadow]}>
                 <View>

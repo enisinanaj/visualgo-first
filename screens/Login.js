@@ -19,6 +19,7 @@ import {
     KeyboardAvoidingView
 } from 'react-native';
 
+import {Font, AppLoading} from 'expo';
 import Drawer from 'react-native-drawer'
 
 import Colors from '../constants/Colors';
@@ -47,13 +48,26 @@ export default class Login extends Component {
         pass: '',
         showPasswordLabel: 'Show password',
         secureEntryPassword: true,
-        keyboardIsOpen: false
+        keyboardIsOpen: false,
+        isReady: false
     };
   }
 
   componentDidMount () {
     Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
     Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+    this.loadFonts();
+  }
+
+  async loadFonts() {
+      await Font.loadAsync({
+        'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
+        'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
+        'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
+        'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
+      });
+
+      this.setState({ isReady: true });
   }
 
   componentWillUnmount() {
@@ -74,11 +88,18 @@ export default class Login extends Component {
       }
   }
 
+  _goBack() {
+    this.props.navigation.goBack();
+  }
+
   _renderHeader() {
     return (
         <View style={styles.headerView}>
-            <View style={{flexDirection: 'row', justifyContent: 'center', width: width}}>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-start', width: width}}>
+              <EvilIcons name={"chevron-left"} size={30} onPress={() => this._goBack()} color={Colors.main} style={{width: 22}}/>
+              <View style={{flex: 1, justifyContent: 'center', flexDirection: 'row'}}>
                 <Text style={styles.viewTitle}>Login</Text>
+              </View>
             </View>
         </View>);
   }
@@ -117,7 +138,7 @@ export default class Login extends Component {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-          NavigationActions.navigate({ routeName: 'Index' })
+          NavigationActions.navigate({routeName: 'Index'})
       ]
     });
     this.props.navigation.dispatch(resetAction);
@@ -135,65 +156,70 @@ export default class Login extends Component {
 
   render() {
     var {visibleHeight} = this.state;
-        return (
-          <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
-            <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height: 0}]}/>
+    
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
 
-            <View style={{flexDirection: 'column', backgroundColor: Colors.white, height: height - 20}} resetScrollToCoords={{x: 0, y: 0}}>
-                <DefaultRow renderChildren={() => this._renderHeader()} />
+    return (
+      <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
+        <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height: 0}]}/>
 
-                {!this.state.keyboardIsOpen? 
-                  <View>
-                    <TouchableOpacity>
-                      <View style={[styles.oAuthButton, styles.buttonStyleLinkedin]}>
-                        <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH LINKEDIN</Text>
-                      </View>
-                    </TouchableOpacity>
+        <View style={{flexDirection: 'column', backgroundColor: Colors.white, height: height - 20}} resetScrollToCoords={{x: 0, y: 0}}>
+            <DefaultRow renderChildren={() => this._renderHeader()} />
 
-                    <TouchableOpacity>
-                      <View style={[styles.oAuthButton, styles.buttonStyleGoogle]}>
-                        <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH GOOGLE</Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    <Text style={styles.OrText}>Or... </Text>
-                  </View>
-                : null}
-
-                <Text style={styles.grayText}>Enter your e-mail address </Text>
-
-                <View style={[styles.textField]}>
-                  <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} 
-                    style={styles.textFieldContent} onChangeText={(email) => this.emailChanged(email)}/>
-                </View>
-
-                <Text style={styles.grayText}>Enter your password </Text>
-
-                <View style={[styles.textField]}>
-                  <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} 
-                    style={styles.textFieldContent} onChangeText={(pass) => this.passwordChanged(pass)}/>
-                </View>
-
-                <TouchableOpacity onPress={() => this.showPassword()}>
-                  <Text style={styles.ShowPasswordText}>{this.state.showPasswordLabel}</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity ref={component => this._buttonLogin = component} disabled={!this.state.canLogin} onPress={() => this.LogIn()}>
-                  <View style={[styles.buttonLoginDisabled, styles.oAuthButton]}>
-                    <Text style={[styles.oAuthButtonContent, styles.loginText]}>LOGIN</Text>
+            {!this.state.keyboardIsOpen? 
+              <View>
+                <TouchableOpacity>
+                  <View style={[styles.oAuthButton, styles.buttonStyleLinkedin]}>
+                    <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH LINKEDIN</Text>
                   </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
-                  <Text style={styles.ForgottenText}>Forgotten your password?</Text>
+                  <View style={[styles.oAuthButton, styles.buttonStyleGoogle]}>
+                    <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH GOOGLE</Text>
+                  </View>
                 </TouchableOpacity>
-            </View>
-            
-          </KeyboardAvoidingView>
 
-        )
-    }
+                <Text style={styles.OrText}>Or... </Text>
+              </View>
+            : null}
+
+            <Text style={styles.grayText}>Enter your e-mail address </Text>
+
+            <View style={[styles.textField]}>
+              <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} 
+                style={styles.textFieldContent} onChangeText={(email) => this.emailChanged(email)}/>
+            </View>
+
+            <Text style={styles.grayText}>Enter your password </Text>
+
+            <View style={[styles.textField]}>
+              <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} 
+                style={styles.textFieldContent} onChangeText={(pass) => this.passwordChanged(pass)}/>
+            </View>
+
+            <TouchableOpacity onPress={() => this.showPassword()}>
+              <Text style={styles.ShowPasswordText}>{this.state.showPasswordLabel}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity ref={component => this._buttonLogin = component} disabled={!this.state.canLogin} onPress={() => this.LogIn()}>
+              <View style={[styles.buttonLoginDisabled, styles.oAuthButton]}>
+                <Text style={[styles.oAuthButtonContent, styles.loginText]}>LOGIN</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity>
+              <Text style={styles.ForgottenText}>Forgotten your password?</Text>
+            </TouchableOpacity>
+        </View>
+        
+      </KeyboardAvoidingView>
+
+    )
+  }
 }
 
 const drawerStyles = {
@@ -246,8 +272,9 @@ const styles = StyleSheet.create({
     marginRight: 40,
     marginLeft: 40, 
     minWidth: 75,
-    marginTop: 20,
-    alignItems: 'center'
+    marginTop: 17,
+    alignItems: 'center',
+    fontFamily: 'roboto-thin'
   },
 
   buttonStyleLinkedin: {
@@ -283,49 +310,50 @@ const styles = StyleSheet.create({
   },
 
   textFieldContent: {
-    fontSize: 52,
-    fontWeight: '100'
+    fontSize: 50,
+    fontFamily: 'roboto-thin'
   },
 
   viewTitle: {
     fontSize: 20,
-    fontWeight: '800',
+    marginLeft: -11,
     color: Colors.main,
     justifyContent: 'center',
+    fontFamily: 'roboto-bold'
   },
 
   OrText:{
     fontSize: 16,
-    fontWeight: '800',
     color: Colors.main,
     marginLeft: 40,
     marginTop: 20,
+    fontFamily: 'roboto-bold'
   },
 
   grayText:{
     fontSize: 14,
-    fontWeight: '100',
     color: Colors.grayText,
     marginLeft: 40,
     marginTop: 20,
+    fontFamily: 'roboto-thin'
   },
 
   ShowPasswordText:{
     fontSize: 16,
-    fontWeight: '800',
     color: Colors.main,
     marginLeft: 40,
     marginTop: 0,
-    marginBottom: 15
+    marginBottom: 15,
+    fontFamily: 'roboto-bold'
   },
 
   ForgottenText:{
     fontSize: 16,
-    fontWeight: '800',
     color: Colors.yellow,
     marginLeft: 40,
-    marginTop: 25,
-    marginBottom: 30
+    marginTop: 15,
+    marginBottom: 30,
+    fontFamily: 'roboto-bold'
   },
 
   headerView: {
