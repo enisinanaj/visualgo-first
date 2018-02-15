@@ -108,7 +108,7 @@ export default class CreateTask extends Component{
                         <EvilIcons name={"close"} size={22} color={Colors.main}/>
                     </Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}></Text>
+                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>New Task</Text>
                 <TouchableOpacity onPress={() => this.post()}>
                     <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Pubblica</Text>
                 </TouchableOpacity>
@@ -170,7 +170,7 @@ export default class CreateTask extends Component{
                     </View>
                     <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
                         <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
-                            Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
+                            All <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -206,9 +206,9 @@ export default class CreateTask extends Component{
 
     renderPostType() {
         return (
-            <View style={{backgroundColor: '#FFF', flexDirection: 'row',
+            <View style={{backgroundColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'flex-start', alignItems: 'center', padding: 13}}>
-                <Text style={{color: Colors.black, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
+                <Text style={{color: Colors.main, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
                     Task
                 </Text>
                 <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 30, height: 18}}>
@@ -349,17 +349,17 @@ export default class CreateTask extends Component{
 
     renderBackgroundColors() {
         return (
-            <View style={{height: 40}}>
-                <View style={{flexDirection: 'row', alignContent: 'flex-end', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
+            <View style={{height: 32}}>
+                <View style={{flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
                     <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray}}>
                         <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
                         <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
                     </View>
-                        <ListView style={{flexGrow: 8}}
-                            horizontal={true}
-                            contentContainerStyle={styles.backgroundColors}
-                            dataSource={this.state.backgroundColors}
-                            renderRow={(data) => this.renderColorBox(data)}/>
+                    <ListView
+                        horizontal={true}
+                        contentContainerStyle={styles.backgroundColors}
+                        dataSource={this.state.backgroundColors}
+                        renderRow={(data) => this.renderColorBox(data)}/>
                 </View>
             </View>
         )

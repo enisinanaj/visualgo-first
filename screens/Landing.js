@@ -39,10 +39,10 @@ import { getProfile } from './helpers/index';
 const data = ['0', '1'];
 
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
-    {title: 'All', selected: true, active: true}, 
+    {title: 'Survey', selected: true, active: true}, 
     {title: 'Post', active: true}, 
-    {title: 'Task', active: true},
-    {title: 'Survey', active: true}];
+    {title: '#Task', active: true},
+    {title: '#San Valentino', active: true}];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 

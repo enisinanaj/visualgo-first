@@ -25,7 +25,7 @@ const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const backgroundColorsArray = ['0', '1', '2', '3', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14', '15'];
 
 import Colors from '../../constants/Colors';
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import TagList from './tag-list';
@@ -151,13 +151,13 @@ export default class CreatePost extends Component{
 
     renderPostType() {
         return (
-            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
+            <View style={{backgroundColor: Colors.borderGray, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'flex-start', alignItems: 'center', padding: 13}}>
                 <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
                     Task
                 </Text>
-                <Text style={{color: Colors.black, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18}}>
+                <Text style={{color: Colors.main, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18}}>
                     Post
                 </Text>
                 <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, height: 18}}>
@@ -214,12 +214,18 @@ export default class CreatePost extends Component{
 
     renderBackgroundColors() {
         return (
-            <View style={{height: 40}}>
-                <ListView
-                    horizontal={true}
-                    contentContainerStyle={styles.backgroundColors}
-                    dataSource={this.state.backgroundColors}
-                    renderRow={(data) => this.renderColorBox(data)}/>
+            <View style={{height: 32}}>
+                <View style={{flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
+                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray}}>
+                        <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
+                        <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
+                    </View>
+                    <ListView
+                        horizontal={true}
+                        contentContainerStyle={styles.backgroundColors}
+                        dataSource={this.state.backgroundColors}
+                        renderRow={(data) => this.renderColorBox(data)}/>
+                </View>
             </View>
         )
     }
