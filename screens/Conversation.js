@@ -65,6 +65,10 @@ export default class Conversation extends Component {
         this.props.navigator.pop();
     }
 
+    _closeThemes(){
+        this.setState({showThemes: false})
+    }
+
     messageTextChanged(text){
         this.setState({newMessage: text});
 
@@ -140,7 +144,7 @@ export default class Conversation extends Component {
     }
 
     themeSelected(name){
-        this.state.newMessage = this.state.newMessage + name;
+        this.state.newMessage = this.state.newMessage + name + " ";
         this.setState({showThemes: false});
     }
 
@@ -179,28 +183,47 @@ export default class Conversation extends Component {
         var {height, visibleHeight} = this.state;
         return (
             <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
-                <View
-                    style={{flex: 1}}
+
+
+                    <View
+                    style={this.state.showThemes ? {} : {flex: 1}}
                     resetScrollToCoords={{x: 0, y: 0}}>
-                    <StatusBar barStyle={'light-content'} animated={true}/>
-                    <View style={styles.statusBlackBackground}/>
-                    <DefaultRow renderChildren={() => this._renderHeader()} />
-                    <ScrollView ref="conversationCollection" contentContainerStyle={{flexGrow: 1}} onLayout={(event) => {this.setState({contentLayout: event.nativeEvent.layout});}}>
-                        <ListView
-                            style={[styles.listView]}
-                            onScroll={this._onScroll}
-                            dataSource={this.state.convoMessages}
-                            renderRow={(data) => this._renderRow(data)}/>
-                    </ScrollView>
-                </View>
-                <View style={this.state.showThemes == true ? {flexDirection: 'column'} : {}}>
+                        <StatusBar barStyle={'light-content'} animated={true}/>
+                        
+                        <DefaultRow renderChildren={() => this._renderHeader()} />
 
-                    {this.state.showThemes == true ?
+                        {!this.state.showThemes ?
 
-
-                    <View style={{height: 160, backgroundColor: Colors.lightGray, marginBottom: 10}}>
-                        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+                            <ScrollView ref="conversationCollection" keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow: 1}} onLayout={(event) => {this.setState({contentLayout: event.nativeEvent.layout});}}>
                             <ListView
+                                style={[styles.listView]}
+                                onScroll={this._onScroll}
+                                dataSource={this.state.convoMessages}
+                                renderRow={(data) => this._renderRow(data)}/>
+                            </ScrollView>
+
+                            :
+
+                            null
+
+                        }
+
+
+                    </View>
+
+                
+
+
+                <View style={this.state.showThemes ? {flex: 1, flexDirection: 'column'} : {}}>
+
+                    {this.state.showThemes ?
+
+
+                    <View style={{flex: 1, flexDirection: 'column', backgroundColor: Colors.lightGray, marginBottom: 10}}>
+                        <EvilIcons name={"chevron-down"} size={40} onPress={() => this._closeThemes()} style={{width: 40, alignSelf: 'flex-end', marginRight: 10, marginTop: 5}}/>
+                        <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='always'>
+                            <ListView
+                                
                                 style={[styles.listView]}
                                 onScroll={this._onScroll}
                                 dataSource={this.state.themesData}
@@ -213,7 +236,7 @@ export default class Conversation extends Component {
                     null
                     }
 
-                    <View style={messageBoxStyle.newMessageAreaContainer}>
+                    <View style={[messageBoxStyle.newMessageAreaContainer, this.state.showThemes ? {} : {}]}>
                         <View style={messageBoxStyle.attachmentBackground}>
                             <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
                         </View>
@@ -297,7 +320,7 @@ const styles = StyleSheet.create({
     },
     listView: {
         paddingTop: 10,
-        flex: 1
+        
     },
     headerView: {
         flex: 1,
