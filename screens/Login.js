@@ -49,7 +49,9 @@ export default class Login extends Component {
         showPasswordLabel: 'Show password',
         secureEntryPassword: true,
         keyboardIsOpen: false,
-        isReady: false
+        isReady: false,
+        emailFieldFocused: false,
+        passwordFieldFocused: false
     };
   }
 
@@ -191,14 +193,26 @@ export default class Login extends Component {
 
             <View style={[styles.textField]}>
               <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} 
-                style={styles.textFieldContent} onChangeText={(email) => this.emailChanged(email)}/>
+                style={styles.textFieldContent} onChangeText={(email) => this.emailChanged(email)}
+                onFocus={() => this.setState({emailFieldFocused: true})} onBlur={() => this.setState({emailFieldFocused: false})}/>
+              {this.state.emailFieldFocused ? 
+                <TouchableOpacity onPress={() => {this._emailInput.clear()}}>
+                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10}}/>
+                </TouchableOpacity>
+                : null}
             </View>
 
             <Text style={styles.grayText}>Enter your password </Text>
 
             <View style={[styles.textField]}>
               <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} 
-                style={styles.textFieldContent} onChangeText={(pass) => this.passwordChanged(pass)}/>
+                style={styles.textFieldContent} onChangeText={(pass) => this.passwordChanged(pass)}
+                onFocus={() => this.setState({passwordFieldFocused: true})} onBlur={() => this.setState({passwordFieldFocused: false})}/>
+              {this.state.passwordFieldFocused ? 
+                <TouchableOpacity onPress={() => {this._passInput.clear()}}>
+                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10}}/>
+                </TouchableOpacity>
+                : null}
             </View>
 
             <TouchableOpacity onPress={() => this.showPassword()}>
