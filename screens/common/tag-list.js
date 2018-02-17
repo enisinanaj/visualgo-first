@@ -94,7 +94,7 @@ export default class TagList extends Component {
           </TouchableOpacity>
           <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Tags</Text>
           <TouchableOpacity onPress={() => this.props.closeModal(this.state.selectedTags)}>
-            <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Done</Text>
+            <Text style={{color: this.state.selectedTags.length > 0 ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Done</Text>
           </TouchableOpacity>
       </View>
     );
