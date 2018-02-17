@@ -88,9 +88,7 @@ export default class TagList extends Component {
           borderBottomColor: Colors.gray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
-            <Text>
-              <EvilIcons name={"close"} size={22} color={Colors.main}/>
-            </Text>
+            <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Cancel</Text>
           </TouchableOpacity>
           <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Tags</Text>
           <TouchableOpacity onPress={() => this.props.closeModal(this.state.selectedTags)}>
