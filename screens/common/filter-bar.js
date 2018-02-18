@@ -192,7 +192,7 @@ export default class FitlerBar extends Component {
                     horizontal={true}
                     style={styles.filtersListView}
                     dataSource={this.state.filtersSource}
-                      
+                    showsHorizontalScrollIndicator={false}
                     renderRow={(data) => this.drawElements(data)}/>
                 
             </View>;
