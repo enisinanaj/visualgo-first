@@ -18,6 +18,7 @@ import Colors from '../constants/Colors';
 import Router from '../navigation/Router';
 import {EvilIcons} from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Shadow from '../constants/Shadow';
 
 const {width, height} = Dimensions.get('window');
 
@@ -57,9 +58,9 @@ export default class ImageScreen extends Component {
                         style={styles.imageStyle}
                         source={{uri: o.url}}
                     />
-                    <View style={{position: 'absolute', top: 25, right: 10}}>
+                    <View style={[styles.removeIconStyle, Shadow.filterShadow]}>
                         <TouchableOpacity onPress={() => this._removeImage(o) }>
-                            <EvilIcons name={"close"} size={26} color={Colors.main} style={{backgroundColor: 'transparent'}} />
+                            <EvilIcons name={"close"} size={22} color={Colors.main} style={{backgroundColor: 'transparent'}} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -107,5 +108,20 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderTopColor: Colors.gray,
         borderTopWidth: StyleSheet.hairlineWidth
+    },
+    removeIconStyle: {
+        position: 'absolute',
+        top: 25,
+        right: 10,
+        zIndex: 99999999,
+        borderRadius: 14,
+        width: 28,
+        height: 28,
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        paddingLeft: 3,
+        paddingTop: 3,
+        backgroundColor: Colors.white
     }
 });

@@ -9,7 +9,8 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     Image,
-    Modal
+    Modal,
+    TouchableOpacity
 } from 'react-native';
 
 import {Font, AppLoading} from 'expo';
@@ -21,6 +22,8 @@ import _ from 'lodash';
 import SingleImage from './single-image';
 import ImageScreen from '../imageScreen';
 import Router from '../../navigation/Router';
+import EvilIcons from '@expo/vector-icons/EvilIcons';
+import Colors from '../../constants/Colors';
 
 export default class ImagePost extends Component {
     constructor(props) {
@@ -55,7 +58,7 @@ export default class ImagePost extends Component {
             case 1:
                 return (
                     <View style={styles.imageContainer}>
-                        <SingleImage image={{uri: images[0].url}}/>
+                        <SingleImage image={{uri: images[0].url}} removeSinglePhotoCallack={() => this.props.removeSinglePhotoCallack()}/>
                     </View>
                 );
                 break;

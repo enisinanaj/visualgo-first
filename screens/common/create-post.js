@@ -51,7 +51,8 @@ export default class CreatePost extends Component{
             photos: [],
             imagesListModal: false,
             text: '',
-            postBackgroundColor: '#fff'
+            postBackgroundColor: '#fff',
+            allowComments: false
         }
     }
 
@@ -120,7 +121,8 @@ export default class CreatePost extends Component{
                         <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginTop: 10}}>
                             Commenti 
                         </Text>
-                        <Switch color={Colors.main} style={styles.switchAndroid}/>
+                        <Switch color={Colors.main} style={styles.switchAndroid} value={this.state.allowComments} 
+                            onValueChange={(v) => this.setState({allowComments: v}) }/>
                     </View>
                     <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
                         <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
@@ -330,7 +332,9 @@ export default class CreatePost extends Component{
     renderSelectedImages() {
         return this.state.photos.length > 0 && 
             <View style={{marginTop: - 20, backgroundColor: 'transparent'}}>
-                <ImagePost imageCount={this.state.photos.length} images={this.state.photos} style={{}} onPress={() => {this.setState({imagesListModal: true})}}/>
+                <ImagePost imageCount={this.state.photos.length} images={this.state.photos} 
+                    style={{}} onPress={() => {this.setState({imagesListModal: true})}}
+                    removeSinglePhotoCallack={() => this.resetImages([])}/>
             </View>
     }
 
