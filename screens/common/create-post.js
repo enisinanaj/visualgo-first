@@ -22,7 +22,10 @@ import {
 
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-const backgroundColorsArray = ['0', '1', '2', '3', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14', '15'];
+const backgroundColorsArray = ['#6923b6', '#7c71de', 
+                               '#f7d6f0', '#0e3efb', '#d8b96a',
+                               '#c32ebd', '#e488f1', '#3f075d',
+                               '#198ab8', '#70d384'];
 
 import Colors from '../../constants/Colors';
 import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
@@ -108,32 +111,13 @@ export default class CreatePost extends Component{
     }
 
     renderCommentSwitchRow() {
-
-        if(Platform.OS === 'ios'){
-            return (
-                <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                    borderBottomColor: Colors.gray, flexDirection: 'row',
-                    justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
-                    <View>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
-                            Commenti <Switch color={Colors.main} style={{height: 24, marginLeft: 5, marginBottom: 5}}/>
-                        </Text>
-                    </View>
-                    <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
-                            Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        } else {
             return (
                 <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
                     borderBottomColor: Colors.gray, flexDirection: 'row',
                     justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                     <View style={styles.viewAndroid}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
-                        Commenti 
+                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginTop: 10}}>
+                            Commenti 
                         </Text>
                         <Switch color={Colors.main} style={styles.switchAndroid}/>
                     </View>
@@ -144,16 +128,13 @@ export default class CreatePost extends Component{
                     </TouchableOpacity>
                 </View>
             )
-        }
-
-
     }
 
     renderPostType() {
         return (
             <View style={{backgroundColor: Colors.borderGray, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
-                justifyContent: 'flex-start', alignItems: 'center', padding: 13}}>
+                justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 16}}>
                 <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
                     Task
                 </Text>
@@ -163,31 +144,6 @@ export default class CreatePost extends Component{
                 <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, height: 18}}>
                     Survey
                 </Text>
-            </View>
-        )
-    }
-
-    renderAvatar() {
-        return (
-            <View style={{flexDirection: 'row', padding: 16, alignItems: 'center'}}>
-                <Image source={require('../img/me.png')} style={styles.img}/>
-                <View style={{paddingLeft: 8}}>
-                    <Text style={{color: 'black', fontWeight: '600'}}>Sung Woo Park</Text>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{padding: 2, paddingLeft: 4, paddingRight: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                        marginTop: 4, borderColor: Colors.gray, borderWidth: 1, borderRadius: 5}}>
-                            <Ionicons name='md-globe' color={'gray'}/>
-                            <Text style={{color: 'gray', marginLeft: 4, marginRight: 4}}>Public</Text>
-                            <Ionicons name='md-arrow-dropdown' color={'gray'} size={16}/>
-                        </View>
-                        <View style={{padding: 2, paddingLeft: 4, paddingRight: 4, marginLeft: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                            marginTop: 4, borderColor: Colors.gray, borderWidth: 1, borderRadius: 5}}>
-                            <Ionicons name='md-navigate' color={'gray'}/>
-                            <Text style={{color: 'gray', marginLeft: 4, marginRight: 4}}>Seoul</Text>
-                            <Ionicons name='ios-close' color={'gray'} size={16}/>
-                        </View>
-                    </View>
-                </View>
             </View>
         )
     }
@@ -206,19 +162,31 @@ export default class CreatePost extends Component{
         )
     }
 
-    renderColorBox() {
+    renderColorBox(data) {
         return (
-            <TouchableOpacity style={styles.backgroundColorsItem} />
+            <TouchableOpacity style={[styles.backgroundColorsItem, {backgroundColor: data}]} />
         );
     }
 
     renderBackgroundColors() {
         return (
-            <View style={{height: 32}}>
-                <View style={{flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
-                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray}}>
-                        <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
-                        <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
+            <View style={{height: 40, justifyContent: 'center',
+                        borderTopWidth: StyleSheet.hairlineWidth,
+                        borderTopColor: Colors.gray}}>
+                <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start',
+                                  paddingLeft: 5, 
+                                  borderRightWidth: StyleSheet.hairlineWidth, 
+                                  borderRightColor: Colors.gray}}>
+                        
+                        <View style={{height: 26, width: 26, marginRight: 10, alignSelf: 'center'}}>
+                            <Image
+                                style={{flex: 1, width: undefined, height: undefined}}
+                                source={require('../../assets/images/icons/camera.png')}
+                                resizeMode="contain"/>
+                        </View>
+                        <SimpleLineIcons name={"emotsmile"} size={17} color={Colors.main} 
+                            style={{marginRight: 10, marginTop: 2, alignSelf: 'center'}} />
                     </View>
                     <ListView
                         horizontal={true}
@@ -325,8 +293,9 @@ export default class CreatePost extends Component{
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View key={i} style={[{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth},
+                    i == objs.length - 1 ? {borderBottomColor: Colors.gray, borderBottomWidth: StyleSheet.hairlineWidth}: {}]}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
                         {o.innerName != undefined && o.innerName != '' ? 
@@ -408,8 +377,6 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingRight: 10,
         backgroundColor: Colors.white,
-        borderTopWidth: StyleSheet.hairlineWidth,
-        borderColor: Colors.gray,
     }, 
 
     img: {

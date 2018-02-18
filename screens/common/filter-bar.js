@@ -16,7 +16,7 @@ const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 import Colors from '../../constants/Colors';
 import {EvilIcons} from '@expo/vector-icons';
 import Shadow from '../../constants/Shadow';
-import { Font } from 'expo';
+import { Font, AppLoading } from 'expo';
 import Router from '../../navigation/Router';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
@@ -31,8 +31,24 @@ export default class FitlerBar extends Component {
             headTitle: this.props.headTitle,
             filtersSource: ds.cloneWithRows(filters),
             searchWidth: 44,
-            searchQuery: ''
+            searchQuery: '',
+            isReady: false
         }
+    }
+
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        });
+
+        this.setState({ isReady: true });
     }
 
     _toggleSearch() {
@@ -102,9 +118,11 @@ export default class FitlerBar extends Component {
                 }else{
 
                     return (
-                        <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons, styles.buttonStyle, Shadow.filterShadow]}
+                        <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons,
+                            styles.buttonStyle, data.selected ? Shadow.filterShadow : {}]}
                             onPress={() => this.setSelected(data)}>
-                            <Text style={[data.selected ? styles.filterButtonSelected : styles.filterButton, styles.buttonContentStyle]}>{data.title}</Text>
+                            <Text style={[data.selected ? styles.filterButtonSelected : styles.filterButton,
+                                styles.buttonContentStyle]}>{data.title}</Text>
                         </TouchableOpacity>
                     )
 
@@ -161,6 +179,10 @@ export default class FitlerBar extends Component {
     }
 
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
+
         var {customStyle} = this.props || {};
 
         return <View style={styles.filterBarContainer}>
@@ -195,7 +217,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '800',
         paddingLeft: 20,
-        //fontFamily: 'Roboto-Bold'
+        fontFamily: 'roboto-bold'
     },
     filtersListView: {
         flex: 1,
@@ -236,17 +258,19 @@ const styles = StyleSheet.create({
 
     buttonContentStyle: {
         padding: 0,
-        paddingTop: 10,
+        paddingTop: 9,
         margin: 0,
         textAlign: 'center',
+        fontSize: 14,
+        fontFamily: 'roboto-light'
     },
     buttonNewGroupContentStyle: {
         padding: 0,
-        paddingTop: 5,
+        paddingTop: 10,
         margin: 0,
         textAlign: 'center',
         fontSize: 12,
-        fontWeight: 'bold',
+        fontFamily: 'roboto-regular'
     },
     buttonStyle: {
         flex: 1,
@@ -257,7 +281,6 @@ const styles = StyleSheet.create({
         marginRight: 8,
         minWidth: 75,
         marginTop: 2
-        //fontFamily: 'Roboto-Light'
     },
     buttonNewGroupStyle: {
         flex: 1,
@@ -267,8 +290,7 @@ const styles = StyleSheet.create({
         height: 44,
         marginRight: 8,
         width: 44,
-        marginTop: 2
-        
-        //fontFamily: 'Roboto-Light'
+        marginTop: 2,
+        backgroundColor: Colors.white
     }
 });

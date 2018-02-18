@@ -20,6 +20,8 @@ import Drawer from 'react-native-drawer'
 
 const {width, height} = Dimensions.get('window');
 
+import {Font, AppLoading} from 'expo';
+
 import Colors from '../constants/Colors';
 import SearchBar from './common/search-bar';
 import ButtonBar from './common/button-bar';
@@ -59,7 +61,8 @@ export default class Landing extends Component {
             header_height: new Animated.Value(96),
             dataSource: ds.cloneWithRows(data),
             take: 20,
-            skip: 0
+            skip: 0,
+            isReady: false
         };
 
         filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
@@ -73,9 +76,22 @@ export default class Landing extends Component {
         this.loadMore = _.debounce(this.loadMore, 300);
     }
 
-    componentDidMount() { 
-        setTimeout(() => {this.measureView()}, 0); 
-    } 
+    componentDidMount() {
+        this.loadFonts(() => {setTimeout(() => {this.measureView()}, 0)});
+        
+    }
+
+    async loadFonts(onLoaded) {
+        await Font.loadAsync({
+            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
+            'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
+        });
+
+        this.setState({isReady: true});
+        onLoaded();
+    }
  
     measureView() { 
         this.refs.view.measure((a, b, w, h, px, py) => { 
@@ -231,6 +247,10 @@ export default class Landing extends Component {
     }
 
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
+
         return (
             <View ref='view' style={styles.container}>
                 <ListView

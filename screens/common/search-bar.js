@@ -11,10 +11,11 @@ import {
     StyleSheet,
     Dimensions,
     Platform,
-    Modal
+    Modal,
+    Image
 } from 'react-native';
 
-import { ImagePicker } from 'expo';
+import { ImagePicker, Font, AppLoading } from 'expo';
 import ImageBrowser from '../ImageBrowser';
 
 import Colors from '../../constants/Colors';
@@ -31,25 +32,36 @@ export default class SearchBar extends Component {
             animating: false,
             open: false,
             hiddenBar: false,
-            imageBrowserOpen: false
+            imageBrowserOpen: false,
+            isReady: false
         };
 
         this.measureView = this.measureView.bind(this);
     }
 
     componentDidMount() {
-        setTimeout(() => {this.measureView()}, 0)
+        this.loadFonts(() => {setTimeout(() => {this.measureView()}, 0)});
+    }
+
+    async loadFonts(onLoaded) {
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        });
+
+        this.setState({isReady: true});
+        onLoaded();
     }
 
     measureView() {
-
         this.refs.container.measure((a, b, w, h, x, y) => {
            this.setState({height: new Animated.Value(h), original: h});
         });
     }
 
     hide() {
-
         if(this.state.animating) {
             return;
         }
@@ -101,15 +113,26 @@ export default class SearchBar extends Component {
     }
 
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
+
         const {height} = this.state;
         let styleProps = this.props.style != undefined ? this.props.style : {};
+        //<Ionicons name='ios-menu-outline' size={24} color={Colors.main}/>
+        //<Feather name="camera" size={20} color={Colors.main}/>
         return (
             <View ref='container' style={styleProps}>
                 <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}>
                     { this.state.hiddenBar ? null :
                     <View style={[styles.searchBarOuterContainer, {height: height - 18}]} ref='realSearchBar'>
                         <TouchableOpacity style={styles.icon} onPress={this.props.openMenu}>
-                            <Ionicons name='ios-menu-outline' size={24} color={Colors.main}/>
+                            <View style={{height: 26, width: 26}}>
+                                <Image
+                                    style={{flex: 1, width: undefined, height: undefined}}
+                                    source={require('../../assets/images/icons/menu.png')}
+                                    resizeMode="contain"/>
+                            </View>
                         </TouchableOpacity>
 
                         <View style={styles.searchBarContainer}>
@@ -121,7 +144,12 @@ export default class SearchBar extends Component {
                         </View>
 
                         <TouchableOpacity style={styles.icon} onPress={() => {this.setState({imageBrowserOpen: true})}}>
-                            <Feather name="camera" size={20} color={Colors.main}/>
+                            <View style={{height: 26, width: 26}}>
+                                <Image
+                                    style={{flex: 1, width: undefined, height: undefined}}
+                                    source={require('../../assets/images/icons/camera.png')}
+                                    resizeMode="contain"/>
+                            </View>
                         </TouchableOpacity>
                     </View>}
                 </Animated.View>
@@ -195,6 +223,7 @@ const styles = StyleSheet.create({
         flex: 1,
         color: "#B2B2B2",
         fontSize: 12,
-        marginLeft: 8
+        marginLeft: 8,
+        fontFamily: 'roboto-light'
     }
 })

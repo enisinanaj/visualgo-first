@@ -10,6 +10,8 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+import {Font, AppLoading} from 'expo';
+
 import {Ionicons} from '@expo/vector-icons'
 import Colors from '../../constants/Colors';
 
@@ -17,8 +19,24 @@ export default class ButtonBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            buttons: props.buttons
+            buttons: props.buttons,
+            isReady: false
         };
+    }
+    
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        });
+
+        this.setState({isReady: true});
     }
 
     renderButtons() {
@@ -36,6 +54,9 @@ export default class ButtonBar extends Component {
     }
 
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
 
         return (
             <View ref='container'>
@@ -73,6 +94,6 @@ const styles = StyleSheet.create({
         fontWeight: '200',
         marginLeft: 8,
         color: Colors.main,
-        //fontFamily: 'Roboto-Light'
+        fontFamily: 'roboto-Light'
     }
 });

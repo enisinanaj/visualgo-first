@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {StatusBar, View, TouchableOpacity, Text, Dimensions, StyleSheet} from 'react-native';
+import {StatusBar, View, TouchableOpacity, Text, Dimensions, StyleSheet, Platform} from 'react-native';
 import { Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
-import DefaultRow from '../common/default-row';
-import Colors from '../../constants/Colors';
+import Colors from '../constants/Colors';
 
 import {AppLoading, Font} from 'expo';
 import moment from 'moment';
@@ -40,9 +39,9 @@ export default class CalendarView extends Component {
 
     async loadFonts() {
         await Font.loadAsync({
-            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
+            'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
         });
 
         this.setState({ isReady: true });
@@ -60,76 +59,17 @@ export default class CalendarView extends Component {
         );
     }
 
-    setDate(date) {
-        let {dateString} = date;
-        if (this.state.startDate == undefined || this.state.dueDate != undefined) {
-            let newPeriod = {};
-            
-            newPeriod[dateString] = {selected: true, color: 'red', startingDate: true, endingDate: true};
-            this.setState({
-                startDate: date.timestamp,
-                dueDate: undefined,
-                period: newPeriod
-            });
-        } else {
-            let newPeriod = _.cloneDeep(this.state.period);
-            newPeriod[dateString] = {selected: true, color: 'red', startingDate: true, endingDate: true};
-            this.setState({
-                dueDate: date.timestamp,
-                period: newPeriod,
-                doneButtonVisible: true
-            });
-        }
-    }
-
-    getStartDate() {
-        if (this.state.startDate != undefined) {
-            return moment(this.state.startDate).locale("it").format("DD/MM/YYYY");
-        } else {
-            return "";
-        }
-    }
-
-    getDueDate() {
-        if (this.state.dueDate != undefined) {
-            return moment(this.state.dueDate).locale("it").format("DD/MM/YYYY");
-        } else {
-            return "";
-        }
-    }
-
-    renderSelectedDateRow(base) {
-        return (
-            <View style={[styles.bottomBar]}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 15}}>
-                    <Text style={styles.date}>{this.getStartDate()}</Text>
-                    {this.getDueDate() != undefined ?
-                        <Text style={[styles.date]}> - {this.getDueDate()}</Text>
-                    : null }
-                </View>
-                {this.getDueDate() != undefined ?
-                    <TouchableOpacity onPress={() => {this.props.onDone({start: this.state.startDate, due: this.state.dueDate})}}>
-                        <Text style={styles.saveButton}>Save Date</Text>
-                    </TouchableOpacity>
-                : null}
-            </View>
-        )
-    }
-
-    renderDayComponent() {
-        return <View>
-            <Text>{this.props.date}</Text>
-        </View>
-    }
-
     render () {
         if (!this.state.isReady) {
             return <AppLoading />;
         }
 
-        return <View style={{height: height, flex: 1, flexDirection: 'column'}}>
-                <StatusBar barStyle={'default'} animated={true}/>
-                {this.renderHeader()}
+        return (
+            <View style={{height: height, flex: 1, flexDirection: 'column'}}>
+                {Platform.OS === 'ios' && <StatusBar barStyle="light-content" animated={true}/>}
+                {
+                    //this.renderHeader()
+                }
                 <CalendarList
                     // Initially visible month. Default = Date()
                     //current={'2012-03-01'}
@@ -138,7 +78,7 @@ export default class CalendarView extends Component {
                     // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
                     //maxDate={'2012-05-30'}
                     // Handler which gets executed on day press. Default = undefined
-                    onDayPress={(day) => this.setDate(day)}
+                    //onDayPress={(day) => this.setDate(day)}
                     // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
                     monthFormat={'MMMM'}
                     // Handler which gets executed when visible month changes in calendar. Default = undefined
@@ -189,8 +129,7 @@ export default class CalendarView extends Component {
                     // Enable or disable vertical scroll indicator. Default = false
                     showScrollIndicator={true}
                 />
-                {this.state.startDate != undefined ? this.renderSelectedDateRow() : null}
-        </View>
+        </View>)
     }
 }
 

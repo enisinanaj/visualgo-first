@@ -12,6 +12,8 @@ import {
     Modal
 } from 'react-native';
 
+import {Font, AppLoading} from 'expo';
+
 import {getImage} from '../helpers';
 const {width, height} = Dimensions.get('window');
 
@@ -25,8 +27,24 @@ export default class ImagePost extends Component {
         super(props);
 
         this.state = {
-            imagesScreen: false
+            imagesScreen: false,
+            isReady: false
         }
+    }
+
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        });
+
+        this.setState({isReady: true});
     }
 
     renderImages() {
@@ -127,11 +145,15 @@ export default class ImagePost extends Component {
     }
 
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
+
         const {imageCount} = this.props;
         return (
             <View>
                 <View style={styles.textContainer}>
-                    <Text>{this.props.textContent}</Text>
+                    <Text style={styles.textContent}>{this.props.textContent}</Text>
                 </View>
                 {this.renderImages()}
             </View>
@@ -152,5 +174,9 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 0,
         paddingBottom: 8
+    },
+    textContent: {
+        fontFamily: 'roboto-light',
+        fontSize: 14
     }
 });

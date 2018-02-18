@@ -44,16 +44,18 @@ export default class NewsFeedItem extends Component {
 
     componentDidMount() {
         this.loadFonts();
-      }
-    
-      async loadFonts() {
-          await Font.loadAsync({
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
             'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
             'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
-          });
-    
-          this.setState({ isReady: true });
-      }
+        });
+
+        this.setState({ isReady: true });
+    }
 
     buttonOnPress(name) {
         console.log(name);
@@ -129,7 +131,7 @@ export default class NewsFeedItem extends Component {
 
         return (
             <View style={styles.content}>
-                <Text>{this.props.data.content}</Text>
+                <Text style={{fontFamily: 'roboto-light'}}>{this.props.data.content}</Text>
             </View>
         )
     }
@@ -193,12 +195,13 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         color: 'black',
-        fontWeight: '400'
+        fontFamily: 'roboto-light'
     },
 
     time: {
         color: '#999999',
         fontSize: 12,
+        fontFamily: 'roboto-light'
     },
 
     profile: {

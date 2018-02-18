@@ -9,6 +9,8 @@ import {
     StyleSheet
 } from 'react-native';
 
+import {Font, AppLoading} from 'expo';
+
 import Colors from '../../constants/Colors';
 import {Ionicons, EvilIcons} from '@expo/vector-icons';
 
@@ -20,8 +22,24 @@ export default class Button extends Component {
             name: props.name,
             icon: props.icon,
             iconType: props.iconType,
-            iconColor: props.iconColor
+            iconColor: props.iconColor,
+            isReady: false
         }
+    }
+
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        });
+
+        this.setState({isReady: true});
     }
 
     pressed(name) {
@@ -45,8 +63,6 @@ export default class Button extends Component {
 
     render() {
         const {pressed, name, icon, iconType, iconColor} = this.state;
-
-        //<Text style={[styles.text, {color: pressed ? Colors.liked : Colors.like}]}>{name}</Text>
 
         return (
             <TouchableOpacity onPress={() => this.pressed(name)} style={styles.buttonItem}>

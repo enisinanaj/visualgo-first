@@ -10,8 +10,38 @@ import {
     StyleSheet
 } from 'react-native';
 
+import {Font, AppLoading} from 'expo';
+
 export default class onYourMind extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isReady: false
+        }
+    }
+
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        });
+
+        this.setState({isReady: true});
+    }
+
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        }
+
         return (
             <View style={styles.container}>
                 <Image source={require('../img/me.png')} style={styles.profile}/>
@@ -27,7 +57,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 70,
         backgroundColor: 'white',
-        //marginTop: 10,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15
     },
@@ -39,7 +68,7 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         marginRight: 15,
         color: '#000000',
-        //fontFamily: 'Roboto-Light'
+        fontFamily: 'roboto-light'
     },
 
     profile: {
