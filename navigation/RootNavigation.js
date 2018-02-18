@@ -2,6 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   View,
+  Image
 } from 'react-native';
 import {
   StackNavigation,
@@ -14,6 +15,7 @@ import {
 
 import Colors from '../constants/Colors';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {MenuIcons} from '../screens/helpers/index';
 
 export default class RootNavigation extends React.Component {
 
@@ -25,31 +27,31 @@ export default class RootNavigation extends React.Component {
         initialTab="landing">
         <TabNavigationItem
           id="links" style={styles.tabNavigationItem}
-          renderIcon={isSelected => this._renderIcon('ios-bowtie-outline', isSelected)}>
+          renderIcon={isSelected => this._renderIcon('album', isSelected)}>
           <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
 
         <TabNavigationItem
           id="landing" style={styles.tabNavigationItem}
-          renderIcon={isSelected => this._renderIcon('ios-card-outline', isSelected)}>
+          renderIcon={isSelected => this._renderIcon('bacheca', isSelected)}>
           <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
 
         <TabNavigationItem
-          id="tasks" style={styles.tabNavigationItem}
-          renderIcon={isSelected => this._renderIcon('ios-calendar-outline', isSelected)}>
-          <StackNavigation initialRoute="landing" />
+          id="mainCalendar" style={styles.tabNavigationItem}
+          renderIcon={isSelected => this._renderIcon('calendar', isSelected)}>
+          <StackNavigation initialRoute="mainCalendar" />
         </TabNavigationItem>
 
         <TabNavigationItem
             id="chat" style={styles.tabNavigationItem}
-            renderIcon={isSelected => this._renderIcon('ios-chatbubbles-outline', isSelected)}>
+            renderIcon={isSelected => this._renderIcon('chat', isSelected)}>
           <StackNavigation initialRoute="chat" />
         </TabNavigationItem>
         
         <TabNavigationItem
             id="settings" style={styles.tabNavigationItem}
-            renderIcon={isSelected => this._renderIcon('ios-checkmark-circle-outline', isSelected)}>
+            renderIcon={isSelected => this._renderIcon('notification', isSelected)}>
           <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
 
@@ -60,21 +62,41 @@ export default class RootNavigation extends React.Component {
   }
 
   _renderIcon(name, isSelected) {
+    let image;
+    switch(name) {
+      case 'chat':
+        image = MenuIcons.CHAT_IMAGE
+        break;
+      case 'album':
+        image = MenuIcons.ALBUM_IMAGE
+        break;
+      case 'calendar':
+        image = MenuIcons.CALENDAR_IMAGE
+        break;
+      case 'notification':
+        image = MenuIcons.NOTIFICATION_IMAGE
+        break;
+      case 'bacheca':
+        image = MenuIcons.BACHECA_IMAGE
+        break;
+    }
+
     if (!isSelected) {
-      return (<Ionicons
-        name={name}
-        size={24}
-        color={Colors.main}
-      />);
+      return <View style={styles.mainIcon}>
+          <Image
+            style={{flex: 1, width: undefined, height: undefined}}
+            source={image}
+            resizeMode="contain"/>
+        </View>;
     } else {
       return (
-        <View style={{flex: 1, flexDirection: 'column', alignItems: 'center', alignContent: 'center'}}>
-          <Ionicons
-            name={name}
-            size={24}
-            color={Colors.main}
-            style={styles.mainIcon}
-          />
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
+          <View style={{height: 26, width: 26}}>
+            <Image
+              style={{flex: 1, width: undefined, height: undefined}}
+              source={image}
+              resizeMode="contain"/>
+          </View>
           <FontAwesome name={'circle'}
             style={styles.activeSignIcon}
             size={4} color={Colors.main} />
@@ -97,10 +119,13 @@ const styles = StyleSheet.create({
     color: Colors.tabIconSelected,
   },
   mainIcon: {
-    marginTop: 16
+    height: 26,
+    width: 26,
+    marginTop: -10
   },
   activeSignIcon: {
-    marginBottom: 6
+    marginTop: 2,
+    marginBottom: 2
   },
   tabNavigationItem: {
     

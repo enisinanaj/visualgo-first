@@ -25,6 +25,8 @@ import Login from '../Login';
 import {NavigationActions} from 'react-navigation';
 import {Font, AppLoading} from "expo";
 
+import {MenuIcons} from '../helpers/index';
+
 const data = ['Report', 'Visual Guideline', 'Wall', 'Calendar', 'Messages', 'To Do List', ' ', 'Anagrafiche', 'Logout'];
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -33,12 +35,12 @@ export default class BlueMenu extends Component {
         super(props);
 
         const menus = [ 
-                {name: 'Report', icon: 'ios-podium-outline', onPress: () => {}},
-                {name: 'Visual Guideline', icon: 'ios-bowtie-outline', onPress: () => {}},
-                {name: 'Wall', icon: 'ios-card-outline', onPress: () => {}},
-                {name: 'Calendar', icon: 'ios-calendar-outline', onPress: () => {}},
-                {name: 'Messages', icon: 'ios-chatbubbles-outline', onPress: () => {}},
-                {name: 'To Do List', icon: 'ios-checkmark-circle-outline', onPress: () => {}},
+                {name: 'Report', icon: 'report', onPress: () => {}},
+                {name: 'Visual Guideline', icon: 'album', onPress: () => {}},
+                {name: 'Wall', icon: 'bacheca', onPress: () => {}},
+                {name: 'Calendar', icon: 'calendar', onPress: () => {}},
+                {name: 'Messages', icon: 'chat', onPress: () => {}},
+                {name: 'To Do List', icon: 'notification', onPress: () => {}},
                 {name: ''},
                 {name: 'Anagrafiche', onPress: () => {}},
                 {name: 'Gestisci negozi, Cluster e contatti', isSubtitle: true},
@@ -80,6 +82,28 @@ export default class BlueMenu extends Component {
     }
 
     _renderIcon(data) {
+        let image;
+        switch(data.icon) {
+        case 'chat':
+            image = MenuIcons.CHAT_W_IMAGE
+            break;
+        case 'album':
+            image = MenuIcons.ALBUM_W_IMAGE
+            break;
+        case 'calendar':
+            image = MenuIcons.CALENDAR_W_IMAGE
+            break;
+        case 'notification':
+            image = MenuIcons.NOTIFICATION_W_IMAGE
+            break;
+        case 'bacheca':
+            image = MenuIcons.BACHECA_W_IMAGE
+            break;
+        case 'report':
+            image = MenuIcons.REPORT_W_IMAGE
+            break;
+        }
+
         if (data.iconType != undefined && data.iconType == 'Feather') {
             return <Feather name={data.icon} 
             size={20}
@@ -87,26 +111,31 @@ export default class BlueMenu extends Component {
             color={Colors.white}/>
         }
 
-        return <Ionicons
-            name={data.icon}
-            size={26}
-            style={{marginTop: 3, marginLeft: 10, height: 30}}
-            color={Colors.white}
-        />;
+        if (data.icon == undefined) {
+            return null;
+        }
+        
+        return <View style={[styles.mainIcon, {marginRight: 10}]}>
+            <Image
+                style={{flex: 1, width: undefined, height: undefined}}
+                source={image}
+                resizeMode="contain"/>
+        </View>;
     }
 
     renderMenuItem(data){
         return (
             <TouchableOpacity onPress={() => data.onPress()}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: Platform.OS == 'ios' ? 10 : 36}} >
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: Platform.OS == 'ios' ? 17 : 36}} >
                     {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
                     <Text
-                        style={[styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
-                            ? {marginLeft: 10, padding: 0} : {},
-                            data.iconPosition == 'right' ? {marginLeft: 10, padding: 0} : {},
-                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : Platform.OS == 'ios' ? styles.menuItemLarge : styles.menuItemAndroid]}>
+                        style={[styles.menuItem, data.iconPosition == 'left' || data.icon != undefined ? {} : {},
+                            data.iconPosition == 'right' ? {} : {},
+                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : 
+                                Platform.OS == 'ios' ? styles.menuItemLarge : styles.menuItemAndroid]}>
                             {data.name}
                     </Text>
+
                     {data.iconPosition == "right" ? this._renderIcon(data) : null}
                 </View>
             </TouchableOpacity>
@@ -127,7 +156,6 @@ export default class BlueMenu extends Component {
 
                 <ListView
                     dataSource={this.state.dataSource}
-                    
                     renderRow={Platform.OS == 'ios' ? (data) => this._renderRow(data) : (data) => this.renderMenuItem(data)}
                 />
             </View>
@@ -145,7 +173,11 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.main,
         right: 0
     },
-
+    mainIcon: {
+        height: 26,
+        width: 26,
+        marginTop: 2
+    },
     selectableDisplayPicture: {
         width: 50,
         height: 50,
