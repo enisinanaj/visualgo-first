@@ -58,7 +58,9 @@ export default class ImagePost extends Component {
             case 1:
                 return (
                     <View style={styles.imageContainer}>
-                        <SingleImage image={{uri: images[0].url}} removeSinglePhotoCallack={() => this.props.removeSinglePhotoCallack()}/>
+                        <SingleImage image={{uri: images[0].url}} 
+                            removeSinglePhotoCallack={() => this.props.removeSinglePhotoCallack()}
+                            removeSingleVisibile={this.props.removeSingleVisibile}/>
                     </View>
                 );
                 break;

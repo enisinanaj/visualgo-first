@@ -56,7 +56,6 @@ export function getProfile(profileId, getData) {
 
 export function randomProfile() {
     var random = Math.floor((Math.random() * profile.length));
-
     return profile[random];
 }
 

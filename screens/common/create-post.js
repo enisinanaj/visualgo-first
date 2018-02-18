@@ -336,7 +336,8 @@ export default class CreatePost extends Component{
             <View style={{marginTop: - 20, backgroundColor: 'transparent'}}>
                 <ImagePost imageCount={this.state.photos.length} images={this.state.photos} 
                     style={{}} onPress={() => {this.setState({imagesListModal: true})}}
-                    removeSinglePhotoCallack={() => this.resetImages([])}/>
+                    removeSinglePhotoCallack={() => this.resetImages([])}
+                    removeSingleVisibile={true}/>
             </View>
     }
 

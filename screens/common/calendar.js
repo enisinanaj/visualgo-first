@@ -103,11 +103,11 @@ export default class CalendarView extends Component {
             <View style={[styles.bottomBar]}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 15}}>
                     <Text style={styles.date}>{this.getStartDate()}</Text>
-                    {this.getDueDate() != undefined ?
+                    {this.getDueDate() != undefined && this.getDueDate() != "" ?
                         <Text style={[styles.date]}> - {this.getDueDate()}</Text>
                     : null }
                 </View>
-                {this.getDueDate() != undefined ?
+                {this.getDueDate() != undefined && this.getDueDate() != "" ?
                     <TouchableOpacity onPress={() => {this.props.onDone({start: this.state.startDate, due: this.state.dueDate})}}>
                         <Text style={styles.saveButton}>Save Date</Text>
                     </TouchableOpacity>
@@ -199,7 +199,8 @@ const styles = StyleSheet.create({
     saveButton: {
         fontFamily: 'roboto-bold',
         color: Colors.white,
-        fontSize: 16
+        fontSize: 16,
+        marginTop: -3
     },
     selectedDates: {
         flex: 1,

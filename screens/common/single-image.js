@@ -31,12 +31,15 @@ export default class SingleImage extends Component {
 
     render() {
         const {image} = this.props;
+
         return (
             <View ref="view" style={{flex: 1}}>
-                <TouchableOpacity onPress={() => this.props.removeSinglePhotoCallack()}
-                    style={[styles.removeIconStyle, Shadow.cardShadow]}>
-                    <EvilIcons name={"close"} size={22} color={Colors.main} style={{backgroundColor: 'transparent'}}/>
-                </TouchableOpacity>
+                {this.props.removeSingleVisibile != undefined && this.props.removeSingleVisibile ?
+                    <TouchableOpacity onPress={() => this.props.removeSinglePhotoCallack()}
+                        style={[styles.removeIconStyle, Shadow.cardShadow]}>
+                        <EvilIcons name={"close"} size={22} color={Colors.main} style={{backgroundColor: 'transparent'}}/>
+                    </TouchableOpacity>
+                : null}
                 <Image style={{flex: 1, height: null, width: null}} source={image} />
             </View>
         )
