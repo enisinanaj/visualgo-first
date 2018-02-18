@@ -87,7 +87,9 @@ export default class CreatePost extends Component{
                         <EvilIcons name={"close"} size={22} color={Colors.main}/>
                     </Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Nuovo Post</Text>
+                <View style={{paddingLeft: 20}}>
+                    <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>New Post</Text>
+                </View>
                 <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' ? false : true}>
                     <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Post</Text>
                 </TouchableOpacity>
@@ -214,9 +216,10 @@ export default class CreatePost extends Component{
 
     renderBackgroundColors() {
         return (
-            <View style={{height: 32}}>
+            <View style={{height: 37}}>
                 <View style={{flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
-                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray}}>
+                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray,
+                        borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: Colors.gray}}>
                         <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
                         <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
                     </View>
@@ -406,6 +409,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 10,
         paddingTop: 5,
+        paddingBottom: 5,
         paddingRight: 10,
         backgroundColor: Colors.white,
         borderTopWidth: StyleSheet.hairlineWidth,

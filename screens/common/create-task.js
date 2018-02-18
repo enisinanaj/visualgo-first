@@ -68,7 +68,8 @@ export default class CreateTask extends Component{
             storeVisible: false,
             managerVisible: false,
             assignTo: false,
-            headTitle: 'Clusters'
+            headTitle: 'Clusters',
+            taskDescription: ''
         }
     }
 
@@ -108,9 +109,11 @@ export default class CreateTask extends Component{
                         <EvilIcons name={"close"} size={22} color={Colors.main}/>
                     </Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>New Task</Text>
+                <View style={{paddingLeft: 50}}>
+                    <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>New Task</Text>
+                </View>
                 <TouchableOpacity onPress={() => this.post()}>
-                    <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Pubblica</Text>
+                    <Text style={{color: this.state.taskDescription != '' ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Pubblica</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -226,7 +229,7 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Describe Task</Text>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Task'}</Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -349,9 +352,10 @@ export default class CreateTask extends Component{
 
     renderBackgroundColors() {
         return (
-            <View style={{height: 32}}>
+            <View style={{height: 37}}>
                 <View style={{flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
-                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray}}>
+                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray, 
+                        borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: Colors.gray}}>
                         <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
                         <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
                     </View>
@@ -682,6 +686,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingTop: 5,
         paddingRight: 10,
+        paddingBottom: 5,
         backgroundColor: Colors.white,
         borderTopWidth: StyleSheet.hairlineWidth,
         borderColor: Colors.gray
