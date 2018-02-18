@@ -50,7 +50,8 @@ export default class CreatePost extends Component{
             imageBrowserOpen: false,
             photos: [],
             imagesListModal: false,
-            text: ''
+            text: '',
+            postBackgroundColor: '#fff'
         }
     }
 
@@ -150,7 +151,7 @@ export default class CreatePost extends Component{
 
     renderText() {
         return (
-            <View style={{flex: 1, padding: 16}}>
+            <View style={{flex: 1, padding: 16, backgroundColor: this.state.postBackgroundColor}}>
                 <TextInput autoFocus={true} style={{height: Platform.OS === 'ios' ? 50 : 30, fontSize: 22, textAlign: 'center', textAlignVertical: 'center', 
                     fontWeight: '300'}}
                     underlineColorAndroid={'rgba(0,0,0,0)'} 
@@ -164,7 +165,8 @@ export default class CreatePost extends Component{
 
     renderColorBox(data) {
         return (
-            <TouchableOpacity style={[styles.backgroundColorsItem, {backgroundColor: data}]} />
+            <TouchableOpacity style={[styles.backgroundColorsItem, {backgroundColor: data}]} 
+                onPress={() => {this.setState({postBackgroundColor: data})}} />
         );
     }
 
