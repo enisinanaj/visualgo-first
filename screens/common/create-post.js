@@ -92,7 +92,9 @@ export default class CreatePost extends Component{
                         <EvilIcons name={"close"} size={22} color={Colors.main}/>
                     </Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Nuovo Post</Text>
+                <View style={{paddingLeft: 20}}>
+                    <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>New Post</Text>
+                </View>
                 <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' ? false : true}>
                     <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Post</Text>
                 </TouchableOpacity>
@@ -381,6 +383,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 10,
         paddingTop: 5,
+        paddingBottom: 5,
         paddingRight: 10,
         backgroundColor: Colors.white,
     }, 
