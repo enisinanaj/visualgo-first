@@ -75,7 +75,8 @@ export default class TaskDescription extends Component {
         <ScrollView>
           <TextInput autoFocus={true} height={textInputHeight}
                 style={{fontSize: 22,
-                fontWeight: '300'}}
+                  padding: 20,
+                  fontWeight: '300'}}
                 multiline = {true}
                 underlineColorAndroid={'rgba(0,0,0,0)'} 
                 placeholderTextColor={Colors.grayText} 
