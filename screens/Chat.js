@@ -29,6 +29,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
+import AppSettings from './helpers/index';
 
 const {width, height} = Dimensions.get('window');
 const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
@@ -91,6 +92,7 @@ export default class Chat extends Component {
   }
 
   _goToConvo = (messageId) => {
+    AppSettings.appIndex.hideSearchBar();
     this.props.navigator.push(Router.getRoute('conversation', {convTitle: 'Andy'}));
   }
   
@@ -127,13 +129,13 @@ export default class Chat extends Component {
         return (
           <View style={{flex: 1}}>
                 <Drawer
-                type="static"
-                ref={(ref) => this._drawer = ref}
-                content={<BlueMenu/>}
-                openDrawerOffset={100}
-                styles={drawerStyles}
-                tweenHandler={Drawer.tweenPresets.parallax}
-                side="right">
+                  type="static"
+                  ref={(ref) => this._drawer = ref}
+                  content={<BlueMenu/>}
+                  openDrawerOffset={100}
+                  styles={drawerStyles}
+                  tweenHandler={Drawer.tweenPresets.parallax}
+                  side="right">
                     <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
                         <StatusBar barStyle={'light-content'} animated={true}/>
                         <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
@@ -147,8 +149,6 @@ export default class Chat extends Component {
                     </View>
                 </Drawer>
           </View>
-
-
         )
     }
 }

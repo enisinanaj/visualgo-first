@@ -35,7 +35,7 @@ import BlueMenu from './common/blue-menu';
 
 import _ from 'lodash';
 import Shadow from '../constants/Shadow';
-import { getProfile } from './helpers/index';
+import AppSettings, { getProfile } from './helpers/index';
 
 //1 is regular post, 2 is image
 const data = ['0', '1'];
@@ -62,7 +62,8 @@ export default class Landing extends Component {
             dataSource: ds.cloneWithRows(data),
             take: 20,
             skip: 0,
-            isReady: false
+            isReady: false,
+            isAnimatingSearchBar: false
         };
 
         filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
@@ -224,6 +225,26 @@ export default class Landing extends Component {
         const l_height = e.contentSize.height;
         const offset = e.contentOffset.y;
 
+        if (!this.state.isAnimatingSearchBar) {
+            if(offset >= this.offsetY) {
+                console.log('scrolling down'); 
+                if(offset - this.offsetY > 30) { 
+                    this.setState({isAnimatingSearchBar: true});
+
+                    setTimeout(() => {
+                        AppSettings.appIndex.hideSearchBar();
+                        this.setState({isAnimatingSearchBar: false})},
+                    150); 
+                } 
+            } else if (offset + this.content_height != l_height) { 
+                this.setState({isAnimatingSearchBar: true});
+                setTimeout(() => {
+                    AppSettings.appIndex.showSearchBar(); 
+                    this.setState({isAnimatingSearchBar: false})},
+                150);
+            }
+        }
+
         this.offsetY = offset;
         if(offset + this.content_height + 100 >= l_height) {
             this.loadMore();
@@ -237,13 +258,6 @@ export default class Landing extends Component {
                 outputRange: [1, 0],
             }),
         }
-    }
-
-    renderFade() {
-        return (
-            <Animated.View style={[styles.fade, this.getStyle()]}>
-            </Animated.View>
-        )
     }
 
     render() {

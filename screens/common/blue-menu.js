@@ -166,7 +166,7 @@ export default class BlueMenu extends Component {
 const styles = StyleSheet.create({
     drawer: {
         height,
-        paddingTop: 50,
+        paddingTop: 65,
         paddingLeft: 60, 
         width: width,
         position: 'absolute',

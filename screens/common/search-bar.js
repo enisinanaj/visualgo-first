@@ -36,14 +36,14 @@ export default class SearchBar extends Component {
             isReady: false
         };
 
-        this.measureView = this.measureView.bind(this);
+        //this.measureView = this.measureView.bind(this);
     }
 
     componentDidMount() {
-        this.loadFonts(() => {setTimeout(() => {this.measureView()}, 0)});
+        this.loadFonts(); //() => {setTimeout(() => {this.measureView()}, 0)});
     }
 
-    async loadFonts(onLoaded) {
+    async loadFonts() {
         await Font.loadAsync({
             'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
             'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
@@ -52,41 +52,7 @@ export default class SearchBar extends Component {
         });
 
         this.setState({isReady: true});
-        onLoaded();
-    }
-
-    measureView() {
-        this.refs.container.measure((a, b, w, h, x, y) => {
-           this.setState({height: new Animated.Value(h), original: h});
-        });
-    }
-
-    hide() {
-        if(this.state.animating) {
-            return;
-        }
-
-        this.setState({animating: true});
-        Animated.timing(
-            this.state.height,
-            {toValue: 0, duration: 500}
-        ).start();
-
-        this.setState({hiddenBar: true});
-    }
-
-    show() {
-        if(!this.state.animating) {
-            return;
-        }
-
-        this.setState({animating: false});
-        Animated.timing(
-            this.state.height,
-            {toValue: this.state.original, duration: 500}
-        ).start();
-
-        setTimeout(() => this.setState({hiddenBar: false}), 350);
+        //onLoaded();
     }
 
     imageBrowserCallback = (callback) => {
@@ -118,41 +84,37 @@ export default class SearchBar extends Component {
         }
 
         const {height} = this.state;
-        let styleProps = this.props.style != undefined ? this.props.style : {};
-        //<Ionicons name='ios-menu-outline' size={24} color={Colors.main}/>
-        //<Feather name="camera" size={20} color={Colors.main}/>
+
         return (
-            <View ref='container' style={styleProps}>
-                <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height}]}>
-                    { this.state.hiddenBar ? null :
-                    <View style={[styles.searchBarOuterContainer, {height: height - 18}]} ref='realSearchBar'>
-                        <TouchableOpacity style={styles.icon} onPress={this.props.openMenu}>
-                            <View style={{height: 26, width: 26}}>
-                                <Image
-                                    style={{flex: 1, width: undefined, height: undefined}}
-                                    source={require('../../assets/images/icons/menu.png')}
-                                    resizeMode="contain"/>
-                            </View>
-                        </TouchableOpacity>
+            <View style={[styles.container, {height: null, zIndex: 999}]}>
+                { this.state.hiddenBar ? null :
+                <View style={[styles.searchBarOuterContainer, {height: 48}]} ref='realSearchBar'>
+                    <TouchableOpacity style={styles.icon} onPress={this.props.openMenu}>
+                        <View style={{height: 26, width: 26}}>
+                            <Image
+                                style={{flex: 1, width: undefined, height: undefined}}
+                                source={require('../../assets/images/icons/menu.png')}
+                                resizeMode="contain"/>
+                        </View>
+                    </TouchableOpacity>
 
-                        <View style={styles.searchBarContainer}>
-                            <View style={styles.searchIcon}>
-                                <Ionicons name='ios-search' color='#b2B2B2' size={18} />
-                            </View>
-
-                            <TextInput placeholderTextColor={'#B2B2B2'} placeholder={'Search'} style={styles.searchBar}/>
+                    <View style={styles.searchBarContainer}>
+                        <View style={styles.searchIcon}>
+                            <Ionicons name='ios-search' color='#b2B2B2' size={18} />
                         </View>
 
-                        <TouchableOpacity style={styles.icon} onPress={() => {this.setState({imageBrowserOpen: true})}}>
-                            <View style={{height: 26, width: 26}}>
-                                <Image
-                                    style={{flex: 1, width: undefined, height: undefined}}
-                                    source={require('../../assets/images/icons/camera.png')}
-                                    resizeMode="contain"/>
-                            </View>
-                        </TouchableOpacity>
-                    </View>}
-                </Animated.View>
+                        <TextInput placeholderTextColor={'#B2B2B2'} placeholder={'Search'} style={styles.searchBar}/>
+                    </View>
+
+                    <TouchableOpacity style={styles.icon} onPress={() => {this.setState({imageBrowserOpen: true})}}>
+                        <View style={{height: 26, width: 26}}>
+                            <Image
+                                style={{flex: 1, width: undefined, height: undefined}}
+                                source={require('../../assets/images/icons/camera.png')}
+                                resizeMode="contain"/>
+                        </View>
+                    </TouchableOpacity>
+                </View>}
                 {this._renderImagePickerModal()}
             </View>
         )
@@ -161,13 +123,11 @@ export default class SearchBar extends Component {
 }
 
 const styles = StyleSheet.create({
-    containerIOS: {
+    container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 60,
         backgroundColor: Colors.main,
-        paddingTop: 20,
         borderBottomColor: Colors.borderGray,
         borderBottomWidth: 1,
     },
@@ -186,9 +146,10 @@ const styles = StyleSheet.create({
     searchBarOuterContainer: {
         flex: 1,
         flexDirection: 'row',
+        marginTop: 20,
         paddingBottom: 9,
         paddingTop: 9,
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
     },
 
     icon: {

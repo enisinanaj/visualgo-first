@@ -29,6 +29,8 @@ import SearchBar from './screens/common/search-bar';
 import Login from './screens/Login';
 import StartScreen from './screens/StartScreen';
 
+import AppSettings from './screens/helpers/index';
+
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
 
@@ -37,8 +39,10 @@ class AppContainer extends React.Component {
     appIsReady: false,
     menuIsOpen: false,
     mainViewHeight: new Animated.Value(height),
-    innerViewHeight: new Animated.Value(height - 65),
-    marginTop: new Animated.Value(0)
+    innerViewHeight: new Animated.Value(height - 69),
+    marginTop: new Animated.Value(0),
+    searchBarVisible: true,
+    searchBarHeight: new Animated.Value(69)
   }
 
   componentWillMount() {
@@ -47,6 +51,7 @@ class AppContainer extends React.Component {
 
   componentDidMount() {
     this.loadFontsAsync();
+    AppSettings.appIndex = this;
   }
 
   async loadFontsAsync() {
@@ -145,11 +150,50 @@ class AppContainer extends React.Component {
       Animated.timing(
         this.state.innerViewHeight,
         {
-          toValue: height - 65,
+          toValue: height - 69,
           duration: DRAWER_ANIMATION_DURATION,
         }
       )
     ]).start();
+  }
+
+  hideSearchBar(direction) {
+    Animated.parallel([
+      Animated.timing(
+        this.state.searchBarHeight, {
+          toValue: 20,
+          duration: 350,
+        }
+      ),
+      Animated.timing(
+        this.state.innerViewHeight,
+        {
+          toValue: height - 20,
+          duration: 350,
+        }
+      )
+    ]).start();
+
+    this.setState({searchBarVisible: false});
+  }
+
+  showSearchBar() {
+      Animated.parallel([
+        Animated.timing(
+          this.state.searchBarHeight, {
+            toValue: 69,
+            duration: 350,
+          }
+        ),
+        Animated.timing(
+          this.state.innerViewHeight, {
+            toValue: height - 69,
+            duration: 350,
+          }
+        )
+      ]).start();
+
+      this.setState({searchBarVisible: true});
   }
 
   render() {
@@ -169,12 +213,19 @@ class AppContainer extends React.Component {
             side="right">
             <View style={styles.container}>
               <Animated.View style={[{height: this.state.mainViewHeight, marginTop: this.state.marginTop}, {backgroundColor: Colors.white}]}>
-                <SearchBar ref='searchBar' openMenu={() => this.toggleMenu()} style={{zIndex: 999}}/>
-                  <Animated.View style={{marginTop: 0, bottom: 0, height: this.state.innerViewHeight}}>
-                    <NavigationProvider router={Router}>
-                      <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
-                    </NavigationProvider>
-                  </Animated.View>
+                <Animated.View style={{height: this.state.searchBarHeight, zIndex: 999, backgroundColor: Colors.main, overflow: 'hidden'}}
+                    removeClippedSubviews={true}>
+                  <SearchBar ref='searchBar' openMenu={() => this.toggleMenu()}/>
+                </Animated.View>
+                <Animated.View style={{marginTop: 0,
+                    bottom: 0,
+                    height: this.state.innerViewHeight,
+                    shadowColor: 'transparent',
+                    shadowOffset: {height: 0}}}>
+                  <NavigationProvider router={Router}>
+                    <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
+                  </NavigationProvider>
+                </Animated.View>
                 {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
                 {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
               </Animated.View>
@@ -203,7 +254,23 @@ const MainAppNavigation = StackNavigator({
 },
 {
   initialRouteName: 'Index',
-  headerMode: 'none'
+  headerMode: 'none',
+  navigationOptions: {
+    header: {
+      style: {
+        shadowOpacity: 0,
+        shadowOffset: {
+          height: 0,
+        },
+        shadowRadius: 0,
+      },
+      headerStyle: {
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      }
+    }
+  }
 });
 
 export default () => <MainAppNavigation />;
@@ -232,5 +299,3 @@ const styles = StyleSheet.create({
     right: 0
 }
 });
-
-// Exponent.registerRootComponent(AppContainer);

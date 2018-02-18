@@ -29,6 +29,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
+import AppSettings from './helpers/index';
 
 var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
                   {from: {name: 'me', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo', read: true, date: new Date()},
@@ -62,6 +63,7 @@ export default class Conversation extends Component {
     }
 
     _goBack() {
+        AppSettings.appIndex.showSearchBar();
         this.props.navigator.pop();
     }
 
@@ -71,11 +73,9 @@ export default class Conversation extends Component {
 
     messageTextChanged(text){
         this.setState({newMessage: text});
-
         var stringText = text + "";
 
-        if(stringText.length > 0){
-
+        if (stringText.length > 0) {
             if(stringText[stringText.length-1] == '#'){
                 this.setState({showThemes: true})
 
@@ -86,11 +86,6 @@ export default class Conversation extends Component {
         }else{
             this.setState({showThemes: false})
         }
-
-        
-
-        
-
     }
 
     componentDidMount () {
@@ -183,13 +178,10 @@ export default class Conversation extends Component {
         var {height, visibleHeight} = this.state;
         return (
             <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
-
-
-                    <View
+                <View
                     style={this.state.showThemes ? {} : {flex: 1}}
                     resetScrollToCoords={{x: 0, y: 0}}>
                         <StatusBar barStyle={'light-content'} animated={true}/>
-                        
                         <DefaultRow renderChildren={() => this._renderHeader()} />
 
                         {!this.state.showThemes ?
@@ -201,17 +193,9 @@ export default class Conversation extends Component {
                                 dataSource={this.state.convoMessages}
                                 renderRow={(data) => this._renderRow(data)}/>
                             </ScrollView>
-
-                            :
-
-                            null
-
-                        }
-
-
-                    </View>
-
-                
+                        
+                        : null}
+                </View>               
 
 
                 <View style={this.state.showThemes ? {flex: 1, flexDirection: 'column'} : {}}>
@@ -223,7 +207,6 @@ export default class Conversation extends Component {
                         <EvilIcons name={"chevron-down"} size={40} onPress={() => this._closeThemes()} style={{width: 40, alignSelf: 'flex-end', marginRight: 10, marginTop: 5}}/>
                         <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='always'>
                             <ListView
-                                
                                 style={[styles.listView]}
                                 onScroll={this._onScroll}
                                 dataSource={this.state.themesData}
