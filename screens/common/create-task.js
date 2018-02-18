@@ -23,7 +23,10 @@ import {
 
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-const backgroundColorsArray = ['0', '1', '2', '3', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14', '15'];
+const backgroundColorsArray = ['#6923b6', '#7c71de', 
+                               '#f7d6f0', '#0e3efb', '#d8b96a',
+                               '#c32ebd', '#e488f1', '#3f075d',
+                               '#198ab8', '#70d384'];
 
 import Colors from '../../constants/Colors';
 import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
@@ -211,7 +214,7 @@ export default class CreateTask extends Component{
     renderPostType() {
         return (
             <View style={{backgroundColor: Colors.borderGray, flexDirection: 'row',
-                justifyContent: 'flex-start', alignItems: 'center', padding: 13}}>
+                justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 17}}>
                 <Text style={{color: Colors.main, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
                     Task
                 </Text>
@@ -338,12 +341,6 @@ export default class CreateTask extends Component{
         })
     }
 
-    renderColorBox() {
-        return (
-            <TouchableOpacity style={styles.backgroundColorsItem} />
-        );
-    }
-
     renderSelectedTag(data){
         return (
             <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
@@ -351,14 +348,32 @@ export default class CreateTask extends Component{
         );
     }
 
+    renderColorBox(data) {
+        return (
+            <TouchableOpacity style={[styles.backgroundColorsItem, {backgroundColor: data}]} 
+                onPress={() => {this.setState({postBackgroundColor: data})}} />
+        );
+    }
+
     renderBackgroundColors() {
         return (
-            <View style={{height: 37}}>
-                <View style={{flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
-                    <View style={{flexDirection: 'row', alignContent: 'center', borderRightWidth: StyleSheet.hairlineWidth, borderRightColor: Colors.gray, 
-                        borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: Colors.gray}}>
-                        <SimpleLineIcons name={"emotsmile"} size={22} color={Colors.main} style={{marginLeft: 10, alignSelf: 'center'}} />
-                        <EvilIcons name={"camera"} color={Colors.main} size={32} style={{marginLeft: 10, marginRight: 10, alignSelf: 'center'}} />
+            <View style={{height: 40, justifyContent: 'center',
+                        borderTopWidth: StyleSheet.hairlineWidth,
+                        borderTopColor: Colors.gray}}>
+                <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start',
+                                  paddingLeft: 5, 
+                                  borderRightWidth: StyleSheet.hairlineWidth, 
+                                  borderRightColor: Colors.gray}}>
+                        
+                        <View style={{height: 26, width: 26, marginRight: 10, alignSelf: 'center'}}>
+                            <Image
+                                style={{flex: 1, width: undefined, height: undefined}}
+                                source={require('../../assets/images/icons/camera.png')}
+                                resizeMode="contain"/>
+                        </View>
+                        <SimpleLineIcons name={"emotsmile"} size={17} color={Colors.main} 
+                            style={{marginRight: 10, marginTop: 2, alignSelf: 'center'}} />
                     </View>
                     <ListView
                         horizontal={true}
@@ -689,8 +704,6 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingBottom: 5,
         backgroundColor: Colors.white,
-        borderTopWidth: StyleSheet.hairlineWidth,
-        borderColor: Colors.gray
     }, 
 
     backgroundColorsAssignTo: {
