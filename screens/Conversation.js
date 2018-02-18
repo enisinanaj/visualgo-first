@@ -30,6 +30,9 @@ import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
 import AppSettings from './helpers/index';
+import Shadow from '../constants/Shadow';
+
+import {Font, AppLoading} from 'expo';
 
 var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
                   {from: {name: 'me', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo', read: true, date: new Date()},
@@ -58,7 +61,8 @@ export default class Conversation extends Component {
             visibleHeight: height,
             newMessage: '',
             contentLayout: {},
-            showThemes: false
+            showThemes: false,
+            isReady: false
         }
     }
 
@@ -91,6 +95,15 @@ export default class Conversation extends Component {
     componentDidMount () {
         Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-bold': '../assets/fonts/Roboto-Bold.ttf'
+        });
+
+        this.setState({isReady: true});
     }
 
     componentWillUnmount() {
@@ -113,7 +126,7 @@ export default class Conversation extends Component {
     _renderHeader() {
         return (
             <View style={styles.headerView}>
-                <EvilIcons name={"chevron-left"} size={30} onPress={() => this._goBack()} style={{width: 22}}/>
+                <EvilIcons name={"chevron-left"} size={30} color={Colors.main} onPress={() => this._goBack()} style={{width: 22}}/>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', width: width - 22}}>
                     <Text style={styles.viewTitle}>{this.props.route.params.convTitle}</Text>
                     <EvilIcons name={"chevron-right"} size={22} style={{width: 22, marginTop: 3}}/>
@@ -144,18 +157,15 @@ export default class Conversation extends Component {
     }
 
     _renderThemesRow(data) {
-
-            return (
-                <TouchableOpacity onPress={() => this.themeSelected(data.name)}>
-                    <View style={styles.themeBubble}>
-                        <Image source={data.image} style={styles.displayThemePicture} />
-                        <View style={styles.themeName}>
-                            <Text style={{fontSize: 24}}># {data.name}</Text>
-                        </View>
+        return (
+            <TouchableOpacity onPress={() => this.themeSelected(data.name)}>
+                <View style={styles.themeBubble}>
+                    <Image source={data.image} style={styles.displayThemePicture} />
+                    <View style={styles.themeName}>
+                        <Text style={styles.themeLabel}># {data.name}</Text>
                     </View>
-                </TouchableOpacity>);
-        
-
+                </View>
+            </TouchableOpacity>);
     }
 
     _addMessage() {
@@ -175,6 +185,11 @@ export default class Conversation extends Component {
     }
 
     render() {
+
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        }
+
         var {height, visibleHeight} = this.state;
         return (
             <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
@@ -201,32 +216,24 @@ export default class Conversation extends Component {
                 <View style={this.state.showThemes ? {flex: 1, flexDirection: 'column'} : {}}>
 
                     {this.state.showThemes ?
+                        <View style={{flex: 1, flexDirection: 'column', backgroundColor: Colors.lightGray, marginBottom: 0}}>
+                            <EvilIcons name={"chevron-down"} size={40} onPress={() => this._closeThemes()} 
+                                style={{width: 40, alignSelf: 'flex-end', marginRight: 10, marginTop: 5}}/>
+                            <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='always'>
+                                <ListView
+                                    style={[styles.listView]}
+                                    onScroll={this._onScroll}
+                                    dataSource={this.state.themesData}
+                                    renderRow={(data) => this._renderThemesRow(data)}/>
+                            </ScrollView>
+                        </View>
+                    :null}
 
-
-                    <View style={{flex: 1, flexDirection: 'column', backgroundColor: Colors.lightGray, marginBottom: 10}}>
-                        <EvilIcons name={"chevron-down"} size={40} onPress={() => this._closeThemes()} style={{width: 40, alignSelf: 'flex-end', marginRight: 10, marginTop: 5}}/>
-                        <ScrollView contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='always'>
-                            <ListView
-                                style={[styles.listView]}
-                                onScroll={this._onScroll}
-                                dataSource={this.state.themesData}
-                                renderRow={(data) => this._renderThemesRow(data)}/>
-                        </ScrollView>
-                    </View>
-
-                    :
-
-                    null
-                    }
-
-                    <View style={[messageBoxStyle.newMessageAreaContainer, this.state.showThemes ? {} : {}]}>
+                    <View style={[messageBoxStyle.newMessageAreaContainer, this.state.k_visible ? {marginBottom: 20} : {marginBottom: 0}]}>
                         <View style={messageBoxStyle.attachmentBackground}>
                             <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
                         </View>
                         <View style={messageBoxStyle.textBoxContainer}>
-
-
-
                             <TextInput style={messageBoxStyle.textArea} ref='newMessageTextInput'
                                 onChangeText={(arg) => this.messageTextChanged(arg)}
                                 value={this.state.newMessage}
@@ -250,7 +257,10 @@ const messageBoxStyle = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         height: 60,
-        paddingBottom: 10
+        paddingBottom: 10,
+        paddingTop: 10,
+        borderTopColor: Colors.borderGray,
+        borderTopWidth: 1
     },
     attachmentBackground: {
         height: 40,
@@ -269,6 +279,8 @@ const messageBoxStyle = StyleSheet.create({
     textBoxContainer: {
         width: width - 115,
         borderRadius: 22,
+        borderWidth: 1,
+        borderColor: Colors.borderGray,
         backgroundColor: Colors.lightGray,
         flex: 1,
         flexDirection: 'row',
@@ -282,7 +294,7 @@ const messageBoxStyle = StyleSheet.create({
         width: width - 120 - 22,
         height: 40,
         paddingLeft: 15,
-        paddingRight: 15
+        paddingRight: 15,
     },
     openEmoticons: {
         marginTop: 9,
@@ -333,10 +345,18 @@ const styles = StyleSheet.create({
     },
     displayThemePicture: {
         marginLeft: 10,
-        marginRight: 5,
+        marginRight: 15,
         height: 30,
         width: 30,
-        borderRadius: 15
+        borderRadius: 15,
+        shadowColor: "#000000",
+        shadowOpacity: 0.12,
+        shadowRadius: 4,
+        shadowOffset: {
+            height: 2,
+            width: 0
+        },
+        elevation: 2
     },
     convoContainer: {
         flex: 1, 
@@ -353,12 +373,15 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     themeName: {
-        
-        
         flex: 1,
         flexDirection: 'row',
         maxWidth: width * 0.7,
         alignSelf: 'flex-end'
+    },
+    themeLabel: {
+        fontSize: 24,
+        fontFamily: 'roboto-bold',
+        narginLeft: 15
     },
     fromBubble: {
         borderRadius: 25,

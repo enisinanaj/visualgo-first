@@ -127,27 +127,16 @@ export default class Chat extends Component {
 
   render() {
         return (
-          <View style={{flex: 1}}>
-                <Drawer
-                  type="static"
-                  ref={(ref) => this._drawer = ref}
-                  content={<BlueMenu/>}
-                  openDrawerOffset={100}
-                  styles={drawerStyles}
-                  tweenHandler={Drawer.tweenPresets.parallax}
-                  side="right">
-                    <View style={{flexDirection: 'column', backgroundColor: Colors.white, height}}>
-                        <StatusBar barStyle={'light-content'} animated={true}/>
-                        <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
-                        <ListView
-                            style={styles.listView}
-                            onScroll={this._onScroll}
-                            dataSource={this.state.messages}
-                            renderRow={(data) => this._renderRow(data)}
-                            enableEmptySections={true}/>
-                        {this.renderNewGroupModal()}
-                    </View>
-                </Drawer>
+          <View style={{flexDirection: 'column', backgroundColor: Colors.white}}>
+              <StatusBar barStyle={'light-content'} animated={true}/>
+              <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
+              <ListView
+                  style={styles.listView}
+                  onScroll={this._onScroll}
+                  dataSource={this.state.messages}
+                  renderRow={(data) => this._renderRow(data)}
+                  enableEmptySections={true}/>
+              {this.renderNewGroupModal()}
           </View>
         )
     }
@@ -159,10 +148,6 @@ const drawerStyles = {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-    },
     selectableDisplayPicture: {
         width: 50,
         height: 50,
@@ -204,10 +189,10 @@ const styles = StyleSheet.create({
     },
     messageDate: {
         paddingTop: 17
-    },
+    }/*,
     listView: {
       backgroundColor: Colors.white,
-      flexDirection: 'column'
-      
-    }
+      flexDirection: 'column',
+      bottom: 0
+    }*/
   });
