@@ -24,7 +24,9 @@ export default class TaskDescription extends Component {
     super(props);
 
     this.state = {
-      visibleHeight: height
+      visibleHeight: height,
+      doneEnabled: false,
+      description: ''
     };
   }
 
@@ -59,9 +61,23 @@ export default class TaskDescription extends Component {
           <TouchableOpacity onPress={this.props.closeModal}>
             <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Cancel</Text>
           </TouchableOpacity>
-          <Text style={{color: Colors.greyText, fontWeight: '700', fontSize: 18}}>Done</Text>
       </View>
     );
+  }
+
+  renderDoneRow() {
+    return (
+        this.state.description != '' ?
+        <View style={[styles.bottomBar]}>
+          <TouchableOpacity onPress={() => {this.props.onDescriptionEntered(this.state.description)}}>
+              <Text style={styles.saveButton}>Save</Text>
+          </TouchableOpacity>
+        </View> : null
+    )
+}
+
+  setDescriptionText(text) {
+    this.setState({description: text, doneEnabled: text.length > 0});
   }
 
   render() {
@@ -72,23 +88,58 @@ export default class TaskDescription extends Component {
       <View style={{height: visibleHeight}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
+        {this.state.description.length > 0 ?
+          <TouchableOpacity onPress={() => this.setState({description: ''})} style={styles.clearField}>
+            <EvilIcons name={"close"} size={24} color={Colors.main} />
+          </TouchableOpacity>
+        : null}
         <ScrollView>
           <TextInput autoFocus={true} height={textInputHeight}
-                style={{fontSize: 22,
-                  padding: 20,
-                  fontWeight: '300'}}
-                multiline = {true}
-                underlineColorAndroid={'rgba(0,0,0,0)'} 
-                placeholderTextColor={Colors.grayText} 
-                placeholder={"Descrivi il Task"}
-                onChangeText={(text) => this.setState({text})}
-                value={this.state.text}/>
-          </ScrollView>
+              style={{fontSize: 22,
+                padding: 20,
+                fontWeight: '300'}}
+              multiline = {true}
+              underlineColorAndroid={'rgba(0,0,0,0)'} 
+              placeholderTextColor={Colors.grayText} 
+              placeholder={"Descrivi il Task"}
+              onChangeText={(text) => this.setDescriptionText(text)}
+              value={this.state.description}/>
+        </ScrollView>
+        {this.renderDoneRow()}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  
+  saveButton: {
+    fontFamily: 'roboto-bold',
+    color: Colors.white,
+    fontSize: 16,
+    marginTop: -3
+  },
+  clearField: {
+    position: 'absolute',
+    top: 80,
+    right: 15,
+    zIndex: 9999
+  },
+  doneEnabled: {
+    color: Colors.main,
+    fontWeight: '800',
+    fontSize: 18
+  },
+  doneDisabled: {
+    color: Colors.greyText,
+    fontWeight: '200',
+    fontSize: 18
+  },
+  bottomBar: {
+    backgroundColor: Colors.main,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+    paddingTop: 20,
+    paddingBottom: 20
+}
 });

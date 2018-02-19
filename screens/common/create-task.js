@@ -153,7 +153,8 @@ export default class CreateTask extends Component{
                 transparent={false}
                 visible={this.state.taskDescriptionModal}
                 onRequestClose={() => this.setState({taskDescriptionModal: false})}>
-                <TaskDescription closeModal={() => this.setState({taskDescriptionModal: false})} />
+                <TaskDescription closeModal={() => this.setState({taskDescriptionModal: false})} 
+                    onDescriptionEntered={(description) => this.setState({taskDescription: description, taskDescriptionModal: false})} />
             </Modal>
         );
     }
@@ -182,7 +183,7 @@ export default class CreateTask extends Component{
                     </TouchableOpacity>
                 </View>
             )
-        }else{
+        } else {
             return (
                 <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
                     borderBottomColor: Colors.gray, flexDirection: 'row',
@@ -232,8 +233,11 @@ export default class CreateTask extends Component{
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Task'}</Text>
+                <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} 
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>
+                        {this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Task'}
+                    </Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
