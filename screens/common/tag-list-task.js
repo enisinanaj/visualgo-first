@@ -93,14 +93,10 @@ export default class TagListTask extends Component {
     return (
       <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
           borderBottomColor: Colors.gray, flexDirection: 'row',
-          justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+          justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 30}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
-            <Text>
             <Text style={{fontSize: 16, color: 'black', fontWeight: '600', color: Colors.main}}>Cancel</Text>
-            </Text>
           </TouchableOpacity>
-          
-
       </View>
     );
   }
@@ -286,6 +282,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.main
   },
   filterBarContainer: {
-      backgroundColor: Colors.white
+      backgroundColor: Colors.white,
+      height: 100
   }
 });

@@ -122,7 +122,9 @@ export default class Chat extends Component {
           {title: 'Group', selected: false, active: true},
           {title: 'Active', selected: false, active: true},
           {title: 'New', active: false, onPress: () => this._goToNewGoup()}];
-    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Messages"} /></View>
+    return <View style={styles.filterBarContainer}>
+      <FilterBar data={filters} customStyle={{height: 100}} headTitle={"Messages"} />
+    </View>
   }
 
   render() {
@@ -185,7 +187,7 @@ const styles = StyleSheet.create({
     },
     filterBarContainer: {
         backgroundColor: Colors.white,
-        
+        height: 100
     },
     messageDate: {
         paddingTop: 17

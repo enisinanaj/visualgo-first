@@ -103,7 +103,9 @@ export default class TagList extends Component {
       {title: 'Clusters', selected: true, active: true, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
       {title: 'Store', selected: false, active: true, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
       {title: 'Manager', selected: false, active: true, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
-    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"Clusters"}/></View>
+    return <View style={styles.filterBarContainer}>
+      <FilterBar data={filters} customStyle={{height: 100}} headTitle={"Clusters"}/>
+    </View>
   }
 
   filterForClusters() {
@@ -272,6 +274,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.main
   },
   filterBarContainer: {
-      backgroundColor: Colors.white
+      backgroundColor: Colors.white,
+      height: 100
   }
 });
