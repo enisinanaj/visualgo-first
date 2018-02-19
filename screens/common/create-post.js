@@ -181,7 +181,7 @@ export default class CreatePost extends Component{
                         borderTopColor: Colors.gray}}>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1}}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start',
-                                  paddingLeft: 5, 
+                                  paddingLeft: 10, 
                                   borderRightWidth: StyleSheet.hairlineWidth, 
                                   borderRightColor: Colors.gray}}>
                         

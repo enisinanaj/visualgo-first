@@ -72,7 +72,9 @@ export default class CreateTask extends Component{
             managerVisible: false,
             assignTo: false,
             headTitle: 'Clusters',
-            taskDescription: ''
+            taskDescription: '',
+            commentsEnabled: false,
+            notificationsEnabled: false
         }
     }
 
@@ -160,56 +162,30 @@ export default class CreateTask extends Component{
     }
 
     renderCommentSwitchRow() {
-
-        if(Platform.OS === 'ios'){
-            return (
-                <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                    borderBottomColor: Colors.gray, flexDirection: 'row',
-                    justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
-                    <View>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
-                            Commenti <Switch color={Colors.main} style={{height: 24, marginLeft: 5, marginBottom: 5}}/>
-                        </Text>
-                    </View>
-                    <View>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
-                            Notification <Switch color={Colors.main} style={{height: 24, marginLeft: 5, marginBottom: 5}}/>
-                        </Text>
-                    </View>
-                    <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
-                            All <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        } else {
-            return (
-                <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                    borderBottomColor: Colors.gray, flexDirection: 'row',
-                    justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
-                    <View style={styles.viewAndroid}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
+        return (
+            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
+                borderBottomColor: Colors.gray, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
+                <View style={styles.viewAndroid}>
+                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginTop: 10}}>
                         Commenti 
-                        </Text>
-                        <Switch color={Colors.main} style={styles.switchAndroid}/>
-                    </View>
-                    <View style={styles.viewAndroid}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14}}>
-                        Notification 
-                        </Text>
-                        <Switch color={Colors.main} style={styles.switchAndroid}/>
-                    </View>
-                    <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
-                            Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
-                        </Text>
-                    </TouchableOpacity>
+                    </Text>
+                    <Switch color={Colors.main} style={styles.switchAndroid}
+                        value={this.state.commentsEnabled} onValueChange={(v) => this.setState({commentsEnabled: v})}/>
                 </View>
-            )
-        }
-
-
+                <View style={styles.viewAndroid}>
+                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginTop: 10}}>
+                        Notification 
+                    </Text>
+                    <Switch color={Colors.main} style={styles.switchAndroid}
+                        value={this.state.notificationsEnabled} onValueChange={(v) => this.setState({notificationsEnabled: v})}/>
+                </View>
+                <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
+                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
+                        Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
+                    </Text>
+                </TouchableOpacity>
+            </View>);
     }
 
     renderPostType() {
@@ -366,7 +342,7 @@ export default class CreateTask extends Component{
                         borderTopColor: Colors.gray}}>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1}}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start',
-                                  paddingLeft: 5, 
+                                  paddingLeft: 10, 
                                   borderRightWidth: StyleSheet.hairlineWidth, 
                                   borderRightColor: Colors.gray}}>
                         
@@ -742,7 +718,8 @@ const styles = StyleSheet.create({
     switchAndroid:{
         height: 24, 
         marginLeft: 5, 
-        marginBottom: 5
+        marginBottom: 5,
+        onTintColor: Colors.main
     },
 
     viewAndroid:{
