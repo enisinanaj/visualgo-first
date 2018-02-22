@@ -31,6 +31,7 @@ import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
 import PubNubReact from 'pubnub-react';
 import ChatEngine from 'chat-engine';
+import { uuid } from './helpers/index';
 
 /*
 var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
@@ -62,19 +63,15 @@ export default class Conversation extends Component {
             visibleHeight: height,
             newMessage: '',
             contentLayout: {},
-            showThemes: false
+            showThemes: false,
         }
 
-        this.pubnub = new PubNubReact({
-            publishKey: 'pub-c-b8fd1056-99b5-4f8b-8986-ce1ab877240b',
-            subscribeKey: 'sub-c-f10175d6-fa3c-11e7-8a22-26ec4b06f838',
-            uuid: 'me'
-        });
+
 
         
 
+
         
-        this.pubnub.init(this);
 
         
 
@@ -110,18 +107,46 @@ export default class Conversation extends Component {
 
         
     componentWillMount() {
+
+
+        this.pubnub = new PubNubReact({
+            publishKey: 'pub-c-b8fd1056-99b5-4f8b-8986-ce1ab877240b',
+            subscribeKey: 'sub-c-f10175d6-fa3c-11e7-8a22-26ec4b06f838',
+            uuid: uuid
+        });
+
+        this.pubnub.init(this);
+
         this.pubnub.subscribe({ channels: ['channel1'], triggerEvents: true, withPresence: true});
-      }
+
+        this.pubnub.history(
+            {
+                channel: 'channel1',
+                reverse: false, // false is the default
+                count: 100, // 100 is the default
+                stringifiedTimeToken: true // false is the default
+            },
+            (status, response) => {
+                console.log(response);
+            }
+        );
+        
+
+    }
       
-      componentWillUnmount() {
+    componentWillUnmount() {
         this.pubnub.unsubscribe({ channels: ['channel1'] });
         Keyboard.removeListener('keyboardWillShow');
         Keyboard.removeListener('keyboardWillHide');
-      }
+    }
 
     componentDidMount () {
         Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
+
+
+
     }
 
     componentWillUnmount() {
@@ -153,7 +178,7 @@ export default class Conversation extends Component {
     }
 
     _renderRow(data) {
-        if (data.from.name != 'me') {
+        if (data.from.name != '') {
             return (
                 <View style={styles.fromBubble}>
                     <Image source={data.from.image} style={styles.displayPicture} />
@@ -171,12 +196,12 @@ export default class Conversation extends Component {
 
     _renderPubNubRow(data){
 
-        console.log(data);
+        //console.log(data);
 
-        if (data.publisher != 'me') {
+        if (data.publisher != uuid) {
             return (
                 <View style={styles.fromBubble}>
-                    <Image source={data.from.image} style={styles.displayPicture} />
+                    
                     <View style={styles.messageBubble}>
                         <Text>{data.message}</Text>
                     </View>
@@ -233,7 +258,7 @@ export default class Conversation extends Component {
 
         const messages = this.pubnub.getMessage('channel1');
         
-        console.log("Message(s): " + JSON.stringify(messages));
+        //console.log("Message(s): " + JSON.stringify(messages));
 
         return (
             <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
