@@ -140,7 +140,7 @@ export default class Login extends Component {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-          NavigationActions.navigate({routeName: 'Index'})
+          NavigationActions.push({routeName: 'Index'})
       ]
     });
     this.props.navigation.dispatch(resetAction);

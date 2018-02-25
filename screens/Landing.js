@@ -227,7 +227,6 @@ export default class Landing extends Component {
 
         if (!this.state.isAnimatingSearchBar) {
             if(offset >= this.offsetY) {
-                console.log('scrolling down'); 
                 if(offset - this.offsetY > 30) { 
                     this.setState({isAnimatingSearchBar: true});
 

@@ -1,6 +1,3 @@
-/**
- * Created by ggoma on 12/21/16.
- */
 import React, {Component} from 'react';
 import {
     View,
@@ -20,7 +17,6 @@ import {
     DefaultRow
 } from 'react-native';
 
-
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const backgroundColorsArray = ['#6923b6', '#7c71de', 
@@ -28,28 +24,25 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
 
+import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
-import Octicons from '@expo/vector-icons/Octicons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons} from '@expo/vector-icons';
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
 import TaskDescription from './task-description';
-import Feather from '@expo/vector-icons/Feather';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 
-export default class CreateTask extends Component{
+export default class CreateTask extends Component {
     constructor() {
         super();
         this.state = {
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
-            //tagList: ds.cloneWithRows(allTags),
             themeModal: false,
             tagListTastModal: false,
             environmentModal: false,
@@ -74,13 +67,25 @@ export default class CreateTask extends Component{
             headTitle: 'Clusters',
             taskDescription: '',
             commentsEnabled: false,
-            notificationsEnabled: false
+            notificationsEnabled: false,
+            isReady: false
         }
     }
 
     componentDidMount () {
         Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        });
+
+        this.setState({isReady: true});
     }
 
     componentWillUnmount() {
@@ -106,11 +111,12 @@ export default class CreateTask extends Component{
 
     renderHeader() {
         return (
-            <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
+            <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, 
+                borderBottomWidth: StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
-                    <Text style={{color: Colors.main, fontWeight: '200', fontSize: 18}}>
+                    <Text style={{color: Colors.main, fontWeight: '200', fontSize: 18, fontFamily: 'roboto-regular'}}>
                         {false ? <EvilIcons name={"close"} size={22} color={Colors.main}/> : null}
                         Cancel
                     </Text>
@@ -167,23 +173,26 @@ export default class CreateTask extends Component{
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                 <View style={styles.viewAndroid}>
-                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginTop: 10}}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
                         Commenti 
                     </Text>
                     <Switch color={Colors.main} style={styles.switchAndroid}
                         value={this.state.commentsEnabled} onValueChange={(v) => this.setState({commentsEnabled: v})}/>
                 </View>
                 <View style={styles.viewAndroid}>
-                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginTop: 10}}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
                         Notification 
                     </Text>
                     <Switch color={Colors.main} style={styles.switchAndroid}
                         value={this.state.notificationsEnabled} onValueChange={(v) => this.setState({notificationsEnabled: v})}/>
                 </View>
                 <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                    <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
-                        Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
-                    </Text>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flext-start'}}>
+                        <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
+                            Tutti
+                        </Text>
+                        <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 6}} />
+                    </View>
                 </TouchableOpacity>
             </View>);
     }
@@ -192,13 +201,13 @@ export default class CreateTask extends Component{
         return (
             <View style={{backgroundColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 17}}>
-                <Text style={{color: Colors.main, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
+                <Text style={{color: Colors.main, fontSize: 14, marginRight: 30, height: 18, marginLeft: 5, fontFamily: 'roboto-regular'}}>
                     Task
                 </Text>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 30, height: 18}}>
+                <Text style={{color: Colors.black, fontSize: 14, marginRight: 30, height: 18, fontFamily: 'roboto-light'}}>
                     Post
                 </Text>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, height: 18}}>
+                <Text style={{color: Colors.black, fontSize: 14, height: 18, fontFamily: 'roboto-light'}}>
                     Survey
                 </Text>
             </View>
@@ -211,36 +220,11 @@ export default class CreateTask extends Component{
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>
+                    <Text style={styles.rowTextStyle}>
                         {this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Task'}
                     </Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
-            </View>
-        )
-    }
-
-    renderAvatar() {
-        return (
-            <View style={{flexDirection: 'row', padding: 16, alignItems: 'center'}}>
-                <Image source={require('../img/me.png')} style={styles.img}/>
-                <View style={{paddingLeft: 8}}>
-                    <Text style={{color: 'black', fontWeight: '600'}}>Sung Woo Park</Text>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{padding: 2, paddingLeft: 4, paddingRight: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                        marginTop: 4, borderColor: Colors.gray, borderWidth: 1, borderRadius: 5}}>
-                            <Ionicons name='md-globe' color={'gray'}/>
-                            <Text style={{color: 'gray', marginLeft: 4, marginRight: 4}}>Public</Text>
-                            <Ionicons name='md-arrow-dropdown' color={'gray'} size={16}/>
-                        </View>
-                        <View style={{padding: 2, paddingLeft: 4, paddingRight: 4, marginLeft: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                            marginTop: 4, borderColor: Colors.gray, borderWidth: 1, borderRadius: 5}}>
-                            <Ionicons name='md-navigate' color={'gray'}/>
-                            <Text style={{color: 'gray', marginLeft: 4, marginRight: 4}}>Seoul</Text>
-                            <Ionicons name='ios-close' color={'gray'} size={16}/>
-                        </View>
-                    </View>
-                </View>
             </View>
         )
     }
@@ -276,7 +260,7 @@ export default class CreateTask extends Component{
         const objs =
             [
                 {
-                    name: '#Theme',
+                    name: 'Choose Task #Theme',
                     onPress: () => this.setState({themeModal: true})
                 }
             ];
@@ -305,11 +289,13 @@ export default class CreateTask extends Component{
                         <View style={{flex:1}}>
                             {o.innerName != undefined && o.innerName != '' ? 
                                 <View style={{alignItems: 'center'}}>
-                                    <Text style={{color: Colors.main, fontSize: 26, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                    <Text style={styles.selectedTheme}>
+                                        {o.innerName}
+                                    </Text>
                                 </View>
                             : 
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                                <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 <Text style={{color:'red', marginLeft: 5}}>*</Text>
                             </View>
                             }
@@ -326,43 +312,6 @@ export default class CreateTask extends Component{
             <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
             
         );
-    }
-
-    renderColorBox(data) {
-        return (
-            <TouchableOpacity style={[styles.backgroundColorsItem, {backgroundColor: data}]} 
-                onPress={() => {this.setState({postBackgroundColor: data})}} />
-        );
-    }
-
-    renderBackgroundColors() {
-        return (
-            <View style={{height: 40, justifyContent: 'center',
-                        borderTopWidth: StyleSheet.hairlineWidth,
-                        borderTopColor: Colors.gray}}>
-                <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-start',
-                                  paddingLeft: 10, 
-                                  borderRightWidth: StyleSheet.hairlineWidth, 
-                                  borderRightColor: Colors.gray}}>
-                        
-                        <View style={{height: 26, width: 26, marginRight: 10, alignSelf: 'center'}}>
-                            <Image
-                                style={{flex: 1, width: undefined, height: undefined}}
-                                source={require('../../assets/images/icons/camera.png')}
-                                resizeMode="contain"/>
-                        </View>
-                        <SimpleLineIcons name={"emotsmile"} size={17} color={Colors.main} 
-                            style={{marginRight: 10, marginTop: 2, alignSelf: 'center'}} />
-                    </View>
-                    <ListView
-                        horizontal={true}
-                        contentContainerStyle={styles.backgroundColors}
-                        dataSource={this.state.backgroundColors}
-                        renderRow={(data) => this.renderColorBox(data)}/>
-                </View>
-            </View>
-        )
     }
 
     finishThemes(themes) {
@@ -393,7 +342,7 @@ export default class CreateTask extends Component{
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Ambiente</Text>
+                    <Text style={styles.rowTextStyle}>Chose Task @Environment</Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -430,9 +379,10 @@ export default class CreateTask extends Component{
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this._getDocuments()} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Visual Guideline</Text>
-                    <Ionicons name={"ios-attach"} color={Colors.main} size={32} style={{marginRight: 20}} />
+                <TouchableOpacity onPress={() => this._getDocuments()} disabled={true} 
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={[styles.rowTextStyle, {color: 'gray'}]}>Visual Guideline</Text>
+                    <Ionicons name={"ios-attach"} color={'gray'} size={32} style={{marginRight: 20}} />
                 </TouchableOpacity>
             </View>
         )
@@ -449,7 +399,7 @@ export default class CreateTask extends Component{
                         </Text>
                     :
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>Start/Due Date</Text>
+                        <Text style={styles.rowTextStyle}>Start/Due Date</Text>
                         <Text style={{color: 'red', marginLeft: 5}}>*</Text>
                     </View>}
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
@@ -465,13 +415,15 @@ export default class CreateTask extends Component{
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Feather name={this.state.addPhotoSelected ? "check-square" : "square"} size={27} color={Colors.main} />
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Foto</Text>
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Foto</Text>
                     </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <TouchableOpacity onPress={() => {this.setState({countPhoto: --this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={this.state.countPhoto > 0 ? false : true}>
                             <EvilIcons name={"minus"} color={((this.state.addPhotoSelected) && (this.state.countPhoto > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countPhoto > 0 ? Colors.black : Colors.gray}}>{this.state.countPhoto}</Text>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countPhoto > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                            {this.state.countPhoto}
+                        </Text>
                         <TouchableOpacity onPress={() => {this.setState({countPhoto: ++this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={!this.state.addPhotoSelected}>
                             <EvilIcons name={"plus"} color={(this.state.addPhotoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
@@ -488,13 +440,15 @@ export default class CreateTask extends Component{
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Feather name={!this.state.addVideoSelected ? "square" : "check-square"} size={27} color={Colors.main} />
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>Video</Text>
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Video</Text>
                     </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <TouchableOpacity onPress={() => {this.setState({countVideo: --this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={this.state.countVideo > 0 ? false : true}>
                             <EvilIcons name={"minus"} color={((this.state.addVideoSelected) && (this.state.countVideo > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countVideo > 0 ? Colors.black : Colors.gray}}>{this.state.countVideo}</Text>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countVideo > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                            {this.state.countVideo}
+                        </Text>
                         <TouchableOpacity onPress={() => {this.setState({countVideo: ++this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={!this.state.addVideoSelected}>
                             <EvilIcons name={"plus"} color={(this.state.addVideoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
@@ -511,13 +465,15 @@ export default class CreateTask extends Component{
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Feather name={this.state.add360Selected ? "check-square" : "square"} size={27} color={Colors.main} />
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5, alignSelf: 'center'}}>360°</Text>
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>360°</Text>
                     </TouchableOpacity>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}} disabled={this.state.count360 > 0 ? false : true}>
                             <EvilIcons name={"minus"} color={((this.state.add360Selected) && (this.state.count360 > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.count360 > 0 ? Colors.black : Colors.gray}}>{this.state.count360}</Text>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.count360 > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                            {this.state.count360}
+                        </Text>
                         <TouchableOpacity onPress={() => {this.setState({count360: ++this.state.count360})}} style={{alignSelf: 'center'}} disabled={!this.state.add360Selected}>
                             <EvilIcons name={"plus"} color={(this.state.add360Selected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
@@ -564,7 +520,7 @@ export default class CreateTask extends Component{
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                                <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
@@ -615,7 +571,7 @@ export default class CreateTask extends Component{
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                                <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {allTags.length == 0 || managersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
@@ -630,6 +586,10 @@ export default class CreateTask extends Component{
     }
  
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
+
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'default'} animated={true}/>
@@ -639,10 +599,9 @@ export default class CreateTask extends Component{
                     {this.renderPostType()}
                     <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
                         {this.renderTheme()}
-                        {this.renderBackgroundColors()}
                     </View>
-                    {this.renderTaskDescription()}
                     {this.renderEnvironment()}
+                    {this.renderTaskDescription()}
                     {this.renderVisualGuideline()}
                     {this.renderStartDueDate()}
                     {this.renderPhoto()}
@@ -724,5 +683,23 @@ const styles = StyleSheet.create({
 
     viewAndroid:{
         flexDirection: 'row'
+    },
+
+    selectedTheme: {
+        color: Colors.main,
+        fontSize: 26,
+        fontWeight: '500',
+        paddingLeft: 5,
+        paddingTop: 5,
+        fontFamily: 'roboto-light'
+    },
+
+    rowTextStyle: {
+        fontFamily: 'roboto-light',
+        color: '#000000',
+        fontSize: 16,
+        fontWeight: '500',
+        paddingLeft: 16,
+        paddingTop: 5
     }
 });

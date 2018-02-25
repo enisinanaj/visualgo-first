@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
     
   },
   tabNvigation: {
-    paddingTop: 16,
-    paddingBottom: 6,
+    paddingTop: 10,
+    paddingBottom: 0,
     paddingLeft: 20,
     paddingRight: 20,
   }

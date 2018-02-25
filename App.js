@@ -162,14 +162,14 @@ class AppContainer extends React.Component {
       Animated.timing(
         this.state.searchBarHeight, {
           toValue: 20,
-          duration: 350,
+          duration: 200,
         }
       ),
       Animated.timing(
         this.state.innerViewHeight,
         {
           toValue: height - 20,
-          duration: 350,
+          duration: 200,
         }
       )
     ]).start();
@@ -182,13 +182,13 @@ class AppContainer extends React.Component {
         Animated.timing(
           this.state.searchBarHeight, {
             toValue: 69,
-            duration: 350,
+            duration: 200,
           }
         ),
         Animated.timing(
           this.state.innerViewHeight, {
             toValue: height - 69,
-            duration: 350,
+            duration: 200,
           }
         )
       ]).start();
@@ -253,7 +253,7 @@ const MainAppNavigation = StackNavigator({
   Index: { screen: AppContainer}
 },
 {
-  initialRouteName: 'Index',
+  initialRouteName: 'StartScreen',
   headerMode: 'none',
   navigationOptions: {
     header: {

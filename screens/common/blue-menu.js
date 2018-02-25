@@ -107,7 +107,6 @@ export default class BlueMenu extends Component {
         if (data.iconType != undefined && data.iconType == 'Feather') {
             return <Feather name={data.icon} 
             size={20}
-            style={{marginTop: 7, marginLeft: 10, height: 30}}
             color={Colors.white}/>
         }
 
@@ -124,6 +123,12 @@ export default class BlueMenu extends Component {
     }
 
     renderMenuItem(data){
+
+        // height: Platform.OS == 'ios' ? 20 : 36
+        /*styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
+                            ? {marginLeft: 10, padding: 0} : {},
+                            data.iconPosition == 'right' ? {marginLeft: 10, padding: 0} : {},
+                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : Platform.OS == 'ios' ? styles.menuItemLarge : styles.menuItemAndroid*/
         return (
             <TouchableOpacity onPress={() => data.onPress()}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: Platform.OS == 'ios' ? 17 : 36}} >
@@ -182,21 +187,14 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        marginTop: 20,
+        marginTop: 30,
         marginLeft: 10,
-        marginBottom: 10,
-    },
-
-    menuItem: {
-        color: Colors.white,
-        fontSize: 26,
-        fontFamily: 'roboto-thin',
-        padding: 0,
-        margin: 0
     },
 
     menuItemLarge: {
-        fontSize: 26,
+        fontFamily: 'roboto-thin',
+        color: Colors.white,
+        fontSize: 28,
         height: 30
     },
 
@@ -207,22 +205,24 @@ const styles = StyleSheet.create({
 
     subtitle: {
         fontSize: 16,
-        height: 30
+        height: 30,
+        fontFamily: 'roboto-thin'
     },
 
     accountName: {
         color: Colors.white,
-        fontSize: 26,
+        fontSize: 28,
         margin: 0,
         padding: 0,
+        marginTop: 15,
         marginLeft: 10,
         fontFamily: 'roboto-thin',
     },
 
     accountEmail: {
         color: Colors.white,
-        fontSize: 20,
-        marginBottom: 30,
+        fontSize: 16,
+        marginBottom: 45,
         marginLeft: 10,
         fontFamily: 'roboto-thin',
     }

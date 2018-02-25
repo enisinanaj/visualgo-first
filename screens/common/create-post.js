@@ -27,10 +27,9 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
 
+import {Ionicons, SimpleLineIcons, EvilIcons, Octicons} from '@expo/vector-icons';
+import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
-import Octicons from '@expo/vector-icons/Octicons';
 import TagList from './tag-list';
 import PostPrivacy from './privacy';
 import ImageBrowser from '../ImageBrowser';
@@ -52,13 +51,24 @@ export default class CreatePost extends Component{
             imagesListModal: false,
             text: '',
             postBackgroundColor: '#fff',
-            allowComments: false
+            allowComments: false,
+            isReady: false
         }
     }
 
     componentDidMount () {
         Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
+            'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf'
+        });
+
+        this.setState({isReady: true});
     }
 
     componentWillUnmount() {
@@ -120,14 +130,14 @@ export default class CreatePost extends Component{
                     borderBottomColor: Colors.gray, flexDirection: 'row',
                     justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                     <View style={styles.viewAndroid}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginTop: 10}}>
+                        <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginTop: 6}}>
                             Commenti 
                         </Text>
                         <Switch color={Colors.main} style={styles.switchAndroid} value={this.state.allowComments} 
                             onValueChange={(v) => this.setState({allowComments: v}) }/>
                     </View>
                     <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                        <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 5}}>
+                        <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginRight: 5}}>
                             Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
                         </Text>
                     </TouchableOpacity>
@@ -140,13 +150,13 @@ export default class CreatePost extends Component{
             <View style={{backgroundColor: Colors.borderGray, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 16}}>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
+                <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
                     Task
                 </Text>
-                <Text style={{color: Colors.main, fontWeight: '800', fontSize: 14, marginRight: 30, height: 18}}>
+                <Text style={{color: Colors.main, fontFamily: 'roboto-rergular', fontSize: 14, marginRight: 30, height: 18}}>
                     Post
                 </Text>
-                <Text style={{color: Colors.black, fontWeight: '300', fontSize: 14, height: 18}}>
+                <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, height: 18}}>
                     Survey
                 </Text>
             </View>
@@ -303,7 +313,7 @@ export default class CreatePost extends Component{
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth},
                     i == objs.length - 1 ? {borderBottomColor: Colors.gray, borderBottomWidth: StyleSheet.hairlineWidth}: {}]}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '500', paddingLeft: 16, paddingTop: 5}}>{o.name}</Text>
+                        <Text style={styles.rowTextStyle}>{o.name}</Text>
                         {o.innerName != undefined && o.innerName != '' ? 
                             <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                         : null}
@@ -342,6 +352,10 @@ export default class CreatePost extends Component{
     }
 
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        }
+
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'default'} animated={true}/>
@@ -406,5 +420,14 @@ const styles = StyleSheet.create({
 
     viewAndroid:{
         flexDirection: 'row'
+    },
+
+    rowTextStyle: {
+        fontFamily: 'roboto-light',
+        color: '#000000',
+        fontSize: 16,
+        fontWeight: '500',
+        paddingLeft: 16,
+        paddingTop: 5
     }
 });
