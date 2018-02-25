@@ -236,7 +236,6 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingTop: 14,
         height: 44,
-        //width: 44,
         marginRight: 8,
         marginBottom: 14,
         marginLeft: 0,

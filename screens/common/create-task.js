@@ -52,7 +52,7 @@ export default class CreateTask extends Component {
             addPhotoSelected: true,
             addVideoSelected: false,
             add360Selected: false,
-            allThemes: [],
+            selectedTheme: {},
             allEnvironments: [],
             allTags: [],
             countPhoto: 1,
@@ -116,16 +116,18 @@ export default class CreateTask extends Component {
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
-                    <Text style={{color: Colors.main, fontWeight: '200', fontSize: 18, fontFamily: 'roboto-regular'}}>
+                    <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>
                         {false ? <EvilIcons name={"close"} size={22} color={Colors.main}/> : null}
                         Cancel
                     </Text>
                 </TouchableOpacity>
-                <View style={{paddingLeft: 50}}>
-                    <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>New Task</Text>
+                <View>
+                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Task</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.post()}>
-                    <Text style={{color: this.state.taskDescription != '' ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Pubblica</Text>
+                    <Text style={{color: this.state.taskDescription != '' ? 
+                            Colors.main : Colors.gray, 
+                        fontFamily: 'roboto-light', fontSize: 16}}>Pubblica</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -237,7 +239,7 @@ export default class CreateTask extends Component {
                 visible={this.state.themeModal}
                 onRequestClose={() => this.setState({themeModal: false})}>
                 
-                <ThemeList closeModal={(theme) => this.finishThemes(theme)} />
+                <ThemeList closeModal={(theme) => this.onThemeSelected(theme)} />
             </Modal>
         );
     }
@@ -265,20 +267,9 @@ export default class CreateTask extends Component {
                 }
             ];
 
-        var {allThemes} = this.state;
-        if (allThemes.length > 0) {
-            var themesLength = allThemes.filter((row) => row.category == 'themes').length;
-
-            var themesLabel = '';
-
-            if (themesLength > 1) {
-                themesLabel = themesLength + " Themes";
-            } else if (themesLength == 1) {
-                themesLabel = allThemes.filter((row) => row.category == 'themes')[0].title;
-            }
-
-            objs[0].name = "Themes";
-            objs[0].innerName = themesLabel;
+        var {selectedTheme} = this.state;
+        if (selectedTheme != undefined && selectedTheme.themeName != undefined) {
+            objs[0].innerName = selectedTheme.themeName;
         }
 
         return objs.map((o, i) => {
@@ -300,7 +291,7 @@ export default class CreateTask extends Component {
                             </View>
                             }
                         </View>
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10, marginTop: o.innerName != undefined && o.innerName != '' ? 10 : 0}} />
                     </TouchableOpacity>
                 </View>
             )
@@ -314,27 +305,12 @@ export default class CreateTask extends Component {
         );
     }
 
-    finishThemes(themes) {
-        console.log("received themes: " + themes.length);
-        this.setState({allThemes: themes, themeModal: false});
+    onThemeSelected(themes) {
+        this.setState({selectedTheme: themes, themeModal: false});
     }
 
     finishTagListTask(tags) {
-
         this.setState({allTags: tags, tagListTastModal: false});
-    }
-
-    renderThemesModal() {
-        return (
-            <Modal
-                animationType={"slide"}
-                transparent={false}
-                visible={this.state.themeModal}
-                onRequestClose={() => this.setState({themeModal: false})}>
-                
-                <ThemeList closeModal={(themes) => this.finishThemes(themes)}/>
-            </Modal>
-        );
     }
 
     renderEnvironment() {

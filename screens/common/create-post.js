@@ -103,10 +103,12 @@ export default class CreatePost extends Component{
                     </Text>
                 </TouchableOpacity>
                 <View style={{paddingLeft: 20}}>
-                    <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>New Post</Text>
+                    <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Post</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' ? false : true}>
-                    <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Post</Text>
+                    <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontSize: 16, fontFamily: 'roboto-light'}}
+                        >Post
+                    </Text>
                 </TouchableOpacity>
             </View>
         )
