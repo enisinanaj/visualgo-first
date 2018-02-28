@@ -8,6 +8,7 @@ import {
     Image,
     StyleSheet,
     Dimensions,
+    TouchableOpacity
 } from 'react-native';
 
 import {AppLoading, Font} from 'expo';
@@ -18,6 +19,7 @@ import {getProfile} from '../helpers';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import ImageVisualGuideline from './image-visual-guideline';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import Button from './button';
 import Shadow from '../../constants/Shadow';
@@ -31,10 +33,10 @@ export default class VisualGuidelineItem extends Component {
 
         this.state = {
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
-            buttons: ['Comment', 'Stats'],
-            icons: ['comment', 'ios-podium-outline'],
+            buttons: ['Comment'],
+            icons: ['comment'],
             iconTypes: ["evilicon"],
-            iconColors: [Colors.main, Colors.yellow],
+            iconColors: [Colors.main],
             likes: 0,
             isReady: false,
             comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length
@@ -94,29 +96,18 @@ export default class VisualGuidelineItem extends Component {
         )
     }
 
-    renderLikesAndComments() {
-        const {likes, comments} = this.state;
-
-        if(likes == 0 && comments == 0) {
-            return
-        }
-
-        return null /*(
-            <View style={styles.likesComments}>
-                <Text style={styles.likeText}>{likes > 0 ? <Ionicons name='md-thumbs-up' color={Colors.main}/> : ''}{likes == 0 ? '' : ' ' + likes}</Text>
-                <Text style={styles.likeText}>{comments == 0 ? '' : comments + ' Comments'}</Text>
-            </View>
-        )*/
+    renderAddButton() {
+        
     }
 
     renderLikeBar() {
-        const {buttons, icons, iconTypes, iconColors} = this.state;
-        return buttons.map((button, i) => {
             return (
-                <Button key={i} name={button} onPress={this.buttonOnPress.bind(this)} icon={icons[i]} 
-                    iconType={iconTypes[i]} iconColor={iconColors[i]} />
+                <View style={{flex: 1, alignItems: 'flex-end'}}>
+                    <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle]}>
+                        <MaterialCommunityIcons style={[styles.plusIcon, Shadow.filterShadow]} name={"plus-circle"} size={30} color={Colors.main} />
+                    </TouchableOpacity>
+                </View>
             )
-        })
     }
 
     renderContent() {
@@ -144,7 +135,7 @@ export default class VisualGuidelineItem extends Component {
                 <View>
                     {this.renderAvatar()}
                     {this.renderContent()}
-                    {this.renderLikesAndComments()}
+                    {this.renderAddButton()}
                     <View style={styles.buttonContainer}>
                         {this.renderLikeBar()}
                     </View>
@@ -215,12 +206,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderColor: Colors.borderGray,
-        height: 44,
-        paddingTop: 14,
-        paddingBottom: 14,
-        paddingLeft: 15,
-        paddingRight: 15,
-        borderTopWidth: 1,
+        height: 44
     },
 
     buttonItem: {
@@ -252,5 +238,25 @@ const styles = StyleSheet.create({
     imageStyle: {
         borderBottomLeftRadius: 14,
         borderBottomRightRadius: 14
+    },
+
+    filterButtons: {
+        backgroundColor: Colors.borderGray,
+    },
+
+    buttonNewGroupStyle: {
+        borderRadius: 22,
+        height: 44,
+        width: 44,
+        backgroundColor: 'transparent'
+    },
+
+    plusIcon: {
+        borderRadius: 15,
+        height: 30,
+        width: 30,
+        backgroundColor: 'transparent',
+        marginLeft: 6,
+        paddingTop: 2
     }
 })

@@ -25,6 +25,7 @@ import ImageScreen from '../imageScreen';
 import Router from '../../navigation/Router';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Colors from '../../constants/Colors';
+import Shadow from '../../constants/Shadow';
 
 export default class ImageVisualGuideline extends Component {
     constructor(props) {
@@ -58,10 +59,10 @@ export default class ImageVisualGuideline extends Component {
             <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
                 <View style={styles.imageContainer}>
                     <View style={{flexDirection: 'row', flex: 1, marginBottom: 4}}>
-                        <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[0].url}}/>
-                        <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[0].url}}/>
-                        <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[0].url}}/>
-                        <Image style={[styles.img, {marginLeft: 2}]} source={{uri: images[0].url}}/>
+                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
+                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
+                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
+                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -92,12 +93,13 @@ export default class ImageVisualGuideline extends Component {
 
 const styles = StyleSheet.create({
     imageContainer: {
-        height: height/2.5,
+        height: height/2.5
     },
     img: {
         flex: 1,
         width: null,
-        height: null
+        height: null,
+        borderRadius: 22
     },
     textContainer: {
         padding: 16,
