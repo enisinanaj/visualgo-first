@@ -36,7 +36,7 @@ import TaskDescription from './task-description';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 
-export default class CreateTask extends Component {
+export default class CreateVisualGuideline extends Component {
     constructor() {
         super();
         this.state = {
@@ -46,9 +46,8 @@ export default class CreateTask extends Component {
             themeModal: false,
             tagListTastModal: false,
             environmentModal: false,
-            calendarModal: false,
             privacyModal: false,
-            taskDescriptionModal: false,
+            guidelineDescriptionModal: false,
             addPhotoSelected: true,
             addVideoSelected: false,
             add360Selected: false,
@@ -118,30 +117,19 @@ export default class CreateTask extends Component {
                 <TouchableOpacity onPress={this.props.closeModal}>
                     <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>
                         {false ? <EvilIcons name={"close"} size={22} color={Colors.main}/> : null}
-                        Cancel
+                        X
                     </Text>
                 </TouchableOpacity>
                 <View>
-                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Task</Text>
+                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Guideline Album</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.post()}>
                     <Text style={{color: this.state.taskDescription != '' ? 
                             Colors.main : Colors.gray, 
-                        fontFamily: 'roboto-light', fontSize: 16}}>Pubblica</Text>
+                        fontFamily: 'roboto-light', fontSize: 16}}></Text>
                 </TouchableOpacity>
             </View>
         )
-    }
-
-    renderCalendarModal() {
-        return <Modal
-            animationType={"slide"}
-            transparent={false}
-            visible={this.state.calendarModal}
-            onRequestClose={() => this.setState({calendarModal: false})}>
-            <CalendarView closeModal={() => this.setState({calendarModal: false})} 
-                onDone={(selected) => {this.setState({...selected, calendarModal: false})}}/>
-        </Modal>;
     }
 
     renderPrivacyModal() {
@@ -156,15 +144,15 @@ export default class CreateTask extends Component {
         );
     }
 
-    renderTaskDescriptionModal() {
+    renderGuidelineDescriptionModal() {
         return (
             <Modal
                 animationType={"slide"}
                 transparent={false}
-                visible={this.state.taskDescriptionModal}
-                onRequestClose={() => this.setState({taskDescriptionModal: false})}>
-                <TaskDescription closeModal={() => this.setState({taskDescriptionModal: false})} 
-                    onDescriptionEntered={(description) => this.setState({taskDescription: description, taskDescriptionModal: false})} />
+                visible={this.state.guidelineDescriptionModal}
+                onRequestClose={() => this.setState({guidelineDescriptionModal: false})}>
+                <TaskDescription closeModal={() => this.setState({guidelineDescriptionModal: false})} 
+                    onDescriptionEntered={(description) => this.setState({taskDescription: description, guidelineDescriptionModal: false})} />
             </Modal>
         );
     }
@@ -191,7 +179,7 @@ export default class CreateTask extends Component {
                 <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flext-start'}}>
                         <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
-                            Tutti
+                            All
                         </Text>
                         <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 6}} />
                     </View>
@@ -199,31 +187,14 @@ export default class CreateTask extends Component {
             </View>);
     }
 
-    renderPostType() {
-        return (
-            <View style={{backgroundColor: Colors.borderGray, flexDirection: 'row',
-                justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 17}}>
-                <Text style={{color: Colors.main, fontSize: 14, marginRight: 30, height: 18, marginLeft: 5, fontFamily: 'roboto-regular'}}>
-                    Task
-                </Text>
-                <Text style={{color: Colors.black, fontSize: 14, marginRight: 30, height: 18, fontFamily: 'roboto-light'}}>
-                    Post
-                </Text>
-                <Text style={{color: Colors.black, fontSize: 14, height: 18, fontFamily: 'roboto-light'}}>
-                    Survey
-                </Text>
-            </View>
-        )
-    }
-
-    renderTaskDescription() {
+    renderGuidelineDescription() {
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} 
+                <TouchableOpacity onPress={() => this.setState({guidelineDescriptionModal: true})} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={styles.rowTextStyle}>
-                        {this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Task'}
+                        {this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Album'}
                     </Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
@@ -262,7 +233,7 @@ export default class CreateTask extends Component {
         const objs =
             [
                 {
-                    name: 'Choose Task #Theme',
+                    name: 'Choose #Theme',
                     onPress: () => this.setState({themeModal: true})
                 }
             ];
@@ -318,7 +289,7 @@ export default class CreateTask extends Component {
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={styles.rowTextStyle}>Choose Task @Environment</Text>
+                    <Text style={styles.rowTextStyle}>Choose @Environment</Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -351,110 +322,15 @@ export default class CreateTask extends Component {
         }
     }
 
-    renderVisualGuideline() {
+    renderUploadAttach() {
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this._getDocuments()} disabled={true} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.rowTextStyle, {color: 'gray'}]}>Visual Guideline</Text>
+                    <Text style={[styles.rowTextStyle, {color: 'gray'}]}>Upload Attachements</Text>
                     <Ionicons name={"ios-attach"} color={'gray'} size={32} style={{marginRight: 20}} />
                 </TouchableOpacity>
-            </View>
-        )
-    }
-
-    renderStartDueDate() {
-        return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({calendarModal: true})}>
-                    {this.state.start != undefined && this.state.due != undefined ?
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 16, paddingTop: 5, color: Colors.main}}>
-                            {moment(this.state.start).locale("it").format("DD/MM/YYYY")} - {moment(this.state.due).locale("it").format("DD/MM/YYYY")}
-                        </Text>
-                    :
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={styles.rowTextStyle}>Start/Due Date</Text>
-                        <Text style={{color: 'red', marginLeft: 5}}>*</Text>
-                    </View>}
-                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                </TouchableOpacity>
-            </View>
-        )
-    }
-
-    renderPhoto() {
-        return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Feather name={this.state.addPhotoSelected ? "check-square" : "square"} size={27} color={Colors.main} />
-                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Foto</Text>
-                    </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <TouchableOpacity onPress={() => {this.setState({countPhoto: --this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={this.state.countPhoto > 0 ? false : true}>
-                            <EvilIcons name={"minus"} color={((this.state.addPhotoSelected) && (this.state.countPhoto > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
-                        </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countPhoto > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
-                            {this.state.countPhoto}
-                        </Text>
-                        <TouchableOpacity onPress={() => {this.setState({countPhoto: ++this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={!this.state.addPhotoSelected}>
-                            <EvilIcons name={"plus"} color={(this.state.addPhotoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        )
-    }
-
-    renderVideo() {
-        return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Feather name={!this.state.addVideoSelected ? "square" : "check-square"} size={27} color={Colors.main} />
-                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Video</Text>
-                    </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <TouchableOpacity onPress={() => {this.setState({countVideo: --this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={this.state.countVideo > 0 ? false : true}>
-                            <EvilIcons name={"minus"} color={((this.state.addVideoSelected) && (this.state.countVideo > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
-                        </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countVideo > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
-                            {this.state.countVideo}
-                        </Text>
-                        <TouchableOpacity onPress={() => {this.setState({countVideo: ++this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={!this.state.addVideoSelected}>
-                            <EvilIcons name={"plus"} color={(this.state.addVideoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        )
-    }
-
-    render360() {
-        return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Feather name={this.state.add360Selected ? "check-square" : "square"} size={27} color={Colors.main} />
-                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>360°</Text>
-                    </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}} disabled={this.state.count360 > 0 ? false : true}>
-                            <EvilIcons name={"minus"} color={((this.state.add360Selected) && (this.state.count360 > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
-                        </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.count360 > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
-                            {this.state.count360}
-                        </Text>
-                        <TouchableOpacity onPress={() => {this.setState({count360: ++this.state.count360})}} style={{alignSelf: 'center'}} disabled={!this.state.add360Selected}>
-                            <EvilIcons name={"plus"} color={(this.state.add360Selected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
             </View>
         )
     }
@@ -463,11 +339,105 @@ export default class CreateTask extends Component {
         this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Clusters', tagListTastModal: true});
     }
 
-    renderAssignTo() {
+    renderSendTo() {
         const objs =
             [
                 {
-                    name: 'Assegna a...',
+                    name: 'Manda notifica a...',
+                    onPress: () => this.prepareAssignToModal()
+                }
+            ];
+
+        var {allTags} = this.state;
+
+        if (allTags.length > 0) {
+            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+            console.log(clustersLength);
+            var clustersLabel = '';
+
+            if (clustersLength > 1) {
+                clustersLabel += clustersLength + " Clusters";
+            } else if (clustersLength == 1) {
+                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
+            }
+
+            objs[0].name = "Assegnato a ";
+            objs[0].innerName = clustersLabel;
+        }
+
+        return objs.map((o, i) => {
+            return (o.visible == undefined || o.visible) && (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flex:1}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Text style={styles.rowTextStyle}>{o.name}</Text>
+                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                        </View>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    renderShareWith() {
+        const objs =
+            [
+                {
+                    name: 'Condividi con...',
+                    onPress: () => this.prepareAssignToModal()
+                }
+            ];
+
+        var {allTags} = this.state;
+
+        if (allTags.length > 0) {
+            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+            console.log(clustersLength);
+            var clustersLabel = '';
+
+            if (clustersLength > 1) {
+                clustersLabel += clustersLength + " Clusters";
+            } else if (clustersLength == 1) {
+                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
+            }
+
+            objs[0].name = "Assegnato a ";
+            objs[0].innerName = clustersLabel;
+        }
+
+        return objs.map((o, i) => {
+            return (o.visible == undefined || o.visible) && (
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flex:1}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Text style={styles.rowTextStyle}>{o.name}</Text>
+                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                        </View>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    renderAddContributor() {
+        const objs =
+            [
+                {
+                    name: 'Add contributor...',
                     onPress: () => this.prepareAssignToModal()
                 }
             ];
@@ -514,53 +484,6 @@ export default class CreateTask extends Component {
         this.setState({clustersVisible: false, storeVisible: false, managerVisible: true, headTitle: 'Managers', tagListTastModal: true});
     }
 
-    renderTaskAdmins() {
-        const objs =
-            [
-                {
-                    name: 'Amministratori del Task',
-                    onPress: () => this.prepareTaskAdminsModal()
-                }
-            ];
-
-        var {allTags} = this.state;
-
-        if (allTags.length > 0) {
-            var managersLength = allTags.filter((row) => row.category == 'managers').length;
-            console.log(managersLength);
-            var managersLabel = '';
-
-            if (managersLength > 1) {
-                managersLabel += managersLength + " Managers";
-            } else if (managersLength == 1) {
-                managersLabel += allTags.filter((row) => row.category == 'managers')[0].title;
-            }
-
-            objs[0].name = "Task Manager ";
-            objs[0].innerName = managersLabel;
-        }
-
-        return objs.map((o, i) => {
-            return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{flex:1}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || managersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
-                                {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                                : null}
-                            </View>
-                        </View>
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
-    }
- 
     render() {
         if (!this.state.isReady) {
             return <AppLoading />
@@ -572,26 +495,21 @@ export default class CreateTask extends Component {
                 {this.renderHeader()}
                 <ScrollView>
                     {this.renderCommentSwitchRow()}
-                    {this.renderPostType()}
                     <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
                         {this.renderTheme()}
                     </View>
                     {this.renderEnvironment()}
-                    {this.renderTaskDescription()}
-                    {this.renderVisualGuideline()}
-                    {this.renderStartDueDate()}
-                    {this.renderPhoto()}
-                    {this.renderVideo()}
-                    {this.render360()}
-                    {this.renderAssignTo()}
-                    {this.renderTaskAdmins()}
+                    {this.renderGuidelineDescription()}
+                    {this.renderSendTo()}
+                    {this.renderShareWith()}
+                    {this.renderAddContributor()}
+                    {this.renderUploadAttach()}
                 </ScrollView>
                 {this.renderThemeModal()}
                 {this.renderEnvironmentsModal()}
-                {this.renderCalendarModal()}
                 {this.renderPrivacyModal()}
                 {this.renderTagListTaskModal()}
-                {this.renderTaskDescriptionModal()}
+                {this.renderGuidelineDescriptionModal()}
             </View>
         )
     }
