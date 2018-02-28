@@ -13,6 +13,7 @@ import NewGroup from '../screens/NewGroup'
 import Login from '../screens/Login'
 import ImagePost from '../screens/common/image-post';
 import MainCalendar from '../screens/MainCalendar';
+import VisualGuidelines from '../screens/VisualGuidelines';
 
 
 export default createRouter(() => ({
@@ -26,5 +27,6 @@ export default createRouter(() => ({
     conversation: () => ConversationView,
     newGroup: () => NewGroup,
     login: () => Login,
-    imagePost: () => ImagePost
+    imagePost: () => ImagePost,
+    visualGuidelines: () => VisualGuidelines
 }));
