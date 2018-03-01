@@ -53,7 +53,7 @@ export default class CreateTask extends Component {
             addVideoSelected: false,
             add360Selected: false,
             selectedTheme: {},
-            allEnvironments: [],
+            environmentName: '',
             allTags: [],
             countPhoto: 1,
             countVideo: 0,
@@ -269,27 +269,22 @@ export default class CreateTask extends Component {
 
         var {selectedTheme} = this.state;
         if (selectedTheme != undefined && selectedTheme.themeName != undefined) {
-            objs[0].innerName = selectedTheme.themeName;
+            objs[0].name = selectedTheme.themeName;
         }
 
         return objs.map((o, i) => {
+
             return (
-                <View key={i} style={{flexDirection: 'row', height: o.innerName != undefined && o.innerName != '' ? 112 : 56, alignItems: 'center', paddingLeft: 16,
+                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
-                            {o.innerName != undefined && o.innerName != '' ? 
-                                <View style={{alignItems: 'center'}}>
-                                    <Text style={styles.selectedTheme}>
-                                        {o.innerName}
-                                    </Text>
-                                </View>
-                            : 
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                <Text style={{color:'red', marginLeft: 5}}>*</Text>
+                                <Text style={[styles.rowTextStyle, selectedTheme.themeName == undefined ? {} : {color: Colors.main}]}>
+                                    {o.name}
+                                </Text>
+                                {selectedTheme.themeName == undefined ? <Text style={{color:'red', marginLeft: 5}}>*</Text> : null}
                             </View>
-                            }
                         </View>
                         <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10, marginTop: o.innerName != undefined && o.innerName != '' ? 10 : 0}} />
                     </TouchableOpacity>
@@ -317,17 +312,19 @@ export default class CreateTask extends Component {
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this.setState({environmentModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={styles.rowTextStyle}>Chose Task @Environment</Text>
+                <TouchableOpacity onPress={() => this.setState({environmentModal: true})} 
+                                  style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={[styles.rowTextStyle, this.state.environmentName != '' ? {color: Colors.main} : {}]}>
+                        {this.state.environmentName == '' ? 'Chose Task @Environment' : this.state.environmentName}
+                    </Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
         )
     }
 
-    finishEnvironments(environments) {
-        console.log("received environments: " + environments.length);
-        this.setState({allEnvironments: environments, environmentModal: false});
+    finishEnvironments(environment) {
+        this.setState({environmentName: environment.environmentName, environmentModal: false});
     }
 
     renderEnvironmentsModal() {
@@ -355,10 +352,10 @@ export default class CreateTask extends Component {
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this._getDocuments()} disabled={true} 
+                <TouchableOpacity onPress={() => this._getDocuments()} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.rowTextStyle, {color: 'gray'}]}>Visual Guideline</Text>
-                    <Ionicons name={"ios-attach"} color={'gray'} size={32} style={{marginRight: 20}} />
+                    <Text style={[styles.rowTextStyle, {color: Colors.black}]}>Visual Guideline</Text>
+                    <Ionicons name={"ios-attach"} color={Colors.main} size={28} style={{marginRight: 20}} />
                 </TouchableOpacity>
             </View>
         )

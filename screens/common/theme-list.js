@@ -25,6 +25,7 @@ import {Font, AppLoading} from 'expo';
 
 import _ from 'lodash';
 import Shadow from '../../constants/Shadow';
+import ExtendedStatus from './ExtendedStatus';
 
 const {width, height} = Dimensions.get('window');
 
@@ -125,120 +126,6 @@ export default class ThemeList extends Component {
     themesToShow = themes;
   }
 
-  imageBrowserCallback = (callback) => {
-    callback.then((photos) => {
-
-      let newPhotos = [];
-      photos.forEach(element => {
-          newPhotos.push({url: element.uri != null ? element.uri : element.file});
-      });
-
-      this.setState({
-        imageBrowserOpen: false,
-        photos: newPhotos
-      })
-    }).catch((e) => console.log(e))
-}
-
-  _renderImagePickerModal() {
-    return (
-      <Modal
-          animationType={"slide"}
-          transparent={false}
-          visible={this.state.imageBrowserOpen}
-          onRequestClose={() => this.setState({imageBrowserOpen: false})}>
-          
-          <ImageBrowser max={1} callback={this.imageBrowserCallback}/>
-      </Modal>
-    );
-  }
-
-  editThemeName(v) {
-    if (v == undefined || v == '' ||  v == ' ' || v == '#') {
-      v = '# ';
-    }
-
-    if (v.indexOf('#') < 0) {
-      v = '# ' + v;
-    }
-
-    this.setState({themeDescription: v});
-  }
-
-  renderCreateTheme() {
-    if (!this.state.creatingNew) {
-      return (
-        <TouchableOpacity onPress={() => this.setState({creatingNew: true})}>
-          <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                  borderBottomColor: Colors.borderGray, flexDirection: 'row', height: 50,
-                  justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
-              <Text style={{height: 30, fontSize: 16, marginTop: 10, textAlignVertical: 'center', fontFamily: 'roboto-light'}}>
-                  Create New #Theme
-              </Text>
-              <EvilIcons name={"chevron-right"} size={24} color={Colors.main} />
-          </View>
-        </TouchableOpacity>
-      )
-    } else {
-      /**/
-      return <View>
-        <View style={{backgroundColor: '#FFF', borderBottomWidth: StyleSheet.hairlineWidth,
-                  borderBottomColor: Colors.borderGray, flexDirection: 'column', height: 'auto',
-                  justifyContent: 'flex-start', padding: 0}}>
-          {this.state.photos.length == 1 ? 
-              <View style={{height: 250, width: width, position: 'relative', left: 0, zIndex: 10}}>
-                <SingleImage image={{uri: this.state.photos[0].url}} removeSingleVisibile={false}/>
-                <TextInput autoFocus={false} style={{height: 30, fontSize: 20, marginTop: 10, marginBottom: 10,
-                    marginLeft: 20, 
-                    position: 'absolute',
-                    top: 100,
-                    textAlign: 'center',
-                    textShadowOffset: {width: 7, height: 7},
-                    textShadowColor: '#000',
-                    textShadowRadius: 10,
-                    fontFamily: 'roboto-bold',
-                    color: 'white', width: width - 70, zIndex: 15}}
-                  placeholder={"New theme"} placeholderTextColor={Colors.gray}
-                  underlineColorAndroid={'rgba(0,0,0,0)'}
-                  value={this.state.themeDescription} onChangeText={(v) => this.editThemeName(v)} />
-                <TouchableOpacity onPress={() => this.setState({themeDescription: '', photos: []})}
-                  style={[{backgroundColor: Colors.white, height: 36, width: 36, borderRadius: 18, position: 'absolute',
-                           top: 105, right: 20},
-                  Shadow.filterShadow]}>
-                  <EvilIcons name={"close"} size={22} color={Colors.main} style={{marginTop: 10, marginLeft: 7, zIndex: 17, backgroundColor: 'transparent'}}/>
-                </TouchableOpacity>
-              </View>
-            :
-            <View style={{flexDirection: 'row', height: 50, width: width, zIndex: 20, backgroundColor: 'transparent'}}>
-              <TextInput autoFocus={false} style={{height: 30, fontSize: 16, marginTop: 10, marginBottom: 10,
-                                  marginLeft: 20, 
-                                  fontFamily: 'roboto-light',
-                                  color: Colors.main, width: width - 60, zIndex: 15}}
-                placeholder={"New theme"} placeholderTextColor={Colors.gray}
-                underlineColorAndroid={'rgba(0,0,0,0)'}
-                value={this.state.themeDescription} onChangeText={(v) => this.editThemeName(v)} />
-                <TouchableOpacity onPress={() => this.setState({themeDescription: ''})}>
-                  <EvilIcons name={"close"} size={22} color={Colors.main} style={{marginRight: 16, marginTop: 16, marginBottom: 10, zIndex: 17}}/>
-                </TouchableOpacity>
-            </View>}
-        </View>
-        <View style={{backgroundColor: '#FFF', borderBottomWidth: StyleSheet.hairlineWidth,
-                  borderBottomColor: Colors.borderGray, height: 50, padding: 16}}>
-              <TouchableOpacity onPress={() => this.setState({imageBrowserOpen: true})} 
-                style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                  <Text style={{height: 30, fontSize: 16, marginTop: 10, textAlignVertical: 'center', fontFamily: 'roboto-light'}}>
-                      {this.state.photos.length > 0 ? 'Choose #Theme Image' : 'Change #Theme Image'}
-                  </Text>
-                  <Text style={{color:'red', marginLeft: 3, marginTop: 7}}>*</Text>
-                </View>
-                <EvilIcons name={"chevron-right"} size={24} color={Colors.main} />
-              </TouchableOpacity>
-            </View>
-      </View>
-    }
-  }
-
   toggleRow(rowData) {
     rowData.selected = !rowData.selected;
 
@@ -250,7 +137,7 @@ export default class ThemeList extends Component {
     }
 
     this.setState({themeSource: ds.cloneWithRows(themesToShow)});
-    this.props.closeModal(this.state.selectedThemes);
+    this.props.closeModal({themeName: rowData.title, photo: undefined});
   }
 
   renderSelectableComponent(data) {
@@ -336,7 +223,8 @@ export default class ThemeList extends Component {
       <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
-        {this.renderCreateTheme()}
+        <ExtendedStatus onStateChange={(v) => this.setState({creatingNew: v})}
+          onDone={(value, photos) => this.setState({photos: photos, themeDescription: value})} />
         <ScrollView>
           {!this.state.creatingNew ?  <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} noborder={true}/> : null}
           {!this.state.creatingNew ? <ListView
@@ -347,7 +235,6 @@ export default class ThemeList extends Component {
           /> : null}
         </ScrollView>
         {this.renderSaveBar()}
-        {this._renderImagePickerModal()}
       </View>
     );
   }
@@ -398,16 +285,16 @@ const styles = StyleSheet.create({
   bottomBar: {
     backgroundColor: Colors.main,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-    height: 40
+    justifyContent: 'flex-end',
+    padding: 15,
+    height: "auto"
   },
   saveButton: {
     fontFamily: 'roboto-bold',
     color: Colors.white,
     fontSize: 16,
-    width: width,
-    paddingRight: 20,
+    marginRight: 10,
+    width: 180,
     textAlign: 'right'
   },
 });

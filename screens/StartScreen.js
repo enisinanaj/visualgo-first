@@ -154,7 +154,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingBottom: 10,
     fontWeight: '100',
-    paddingTop: 5
+    paddingTop: 3.5,
+    backgroundColor: 'transparent'
   },
 
   oAuthButton: {

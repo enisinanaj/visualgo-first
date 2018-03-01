@@ -185,7 +185,7 @@ export default class Login extends Component {
                   </View>
                 </TouchableOpacity>
 
-                <Text style={styles.OrText}>Or... </Text>
+                <Text style={styles.OrText}>Or...</Text>
               </View>
             : null}
 
@@ -194,10 +194,12 @@ export default class Login extends Component {
             <View style={[styles.textField]}>
               <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} 
                 style={styles.textFieldContent} onChangeText={(email) => this.emailChanged(email)}
-                onFocus={() => this.setState({emailFieldFocused: true})} onBlur={() => this.setState({emailFieldFocused: false})}/>
+                onFocus={() => this.setState({emailFieldFocused: true})} onBlur={() => this.setState({emailFieldFocused: false})}
+                numberOfLines={1} adjustsFontSizeToFit={true} miniminimumFontScale={16}
+                />
               {this.state.emailFieldFocused ? 
                 <TouchableOpacity onPress={() => {this._emailInput.clear()}}>
-                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10}}/>
+                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10, backgroundColor: 'transparent'}}/>
                 </TouchableOpacity>
                 : null}
             </View>
@@ -207,10 +209,11 @@ export default class Login extends Component {
             <View style={[styles.textField]}>
               <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} 
                 style={styles.textFieldContent} onChangeText={(pass) => this.passwordChanged(pass)}
-                onFocus={() => this.setState({passwordFieldFocused: true})} onBlur={() => this.setState({passwordFieldFocused: false})}/>
+                onFocus={() => this.setState({passwordFieldFocused: true})} onBlur={() => this.setState({passwordFieldFocused: false})}
+                numberOfLines={1}/>
               {this.state.passwordFieldFocused ? 
                 <TouchableOpacity onPress={() => {this._passInput.clear()}}>
-                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10}}/>
+                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10, backgroundColor: 'transparent'}}/>
                 </TouchableOpacity>
                 : null}
             </View>
@@ -275,7 +278,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingBottom: 10,
     fontWeight: '100',
-    paddingTop: 5
+    paddingTop: 3.5,
+    backgroundColor: 'transparent'
   },
 
   oAuthButton: {
@@ -320,12 +324,14 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     height: 55,
     marginTop: 0,
-    marginBottom: 5
+    marginBottom: 5,
   },
 
   textFieldContent: {
-    fontSize: 50,
-    fontFamily: 'roboto-thin'
+    fontSize: 45,
+    fontFamily: 'roboto-thin',
+    miniminimumFontScale: 16,
+    adjustsFontSizeToFit: true,
   },
 
   viewTitle: {

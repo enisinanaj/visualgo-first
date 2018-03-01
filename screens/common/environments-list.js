@@ -15,27 +15,29 @@ import {
   Dimensions,
   ScrollView } from 'react-native';
 
-import DefaultRow from '../common/default-row';
-import FilterBar from '../common/filter-bar';
+import {Font, AppLoading} from 'expo';
+
+import DefaultRow from './default-row';
+import FilterBar from './filter-bar';
+import ExtendedStatusWithBackgroundColor from './ExtendedStatusWithBackgroundColor';
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Shadow from '../../constants/Shadow';
+import {EvilIcons, Ionicons, FontAwesome} from '@expo/vector-icons';
 
 import _ from 'lodash';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const {width, height} = Dimensions.get('window');
 
 const environment = [
-  {title: 'Front Door', color: Colors.borderGray, id: 1},
-  {title: 'Main window', color: Colors.chat_bg, id: 2},
-  {title: 'Cash Desk', color: Colors.chat_line, id: 3},
-  {title: 'Main window 2 Floor', color: Colors.gray, id: 4},
-  {title: 'Entrance', color: Colors.liked, id: 5},
-  {title: 'Entrance 2 Floor', color: Colors.main, id: 6},
-  {title: 'Cash Desk 2 Floor', color: Colors.black, id: 7},
-  {title: 'Windows', color: Colors.oldMain, id: 8},
-  {title: '2 Floor', color: Colors.main, id: 9}];
+  {title: '@Front Door', color: Colors.borderGray, id: 1},
+  {title: '@Main window', color: Colors.chat_bg, id: 2},
+  {title: '@Cash Desk', color: Colors.chat_line, id: 3},
+  {title: '@Main window 2 Floor', color: Colors.gray, id: 4},
+  {title: '@Entrance', color: Colors.liked, id: 5},
+  {title: '@Entrance 2 Floor', color: Colors.main, id: 6},
+  {title: '@Cash Desk 2 Floor', color: Colors.black, id: 7},
+  {title: '@Windows', color: Colors.oldMain, id: 8},
+  {title: '@2 Floor', color: Colors.main, id: 9}];
 
 var environmentsToShow = environment;
 var currentCategory = "environment";
@@ -48,11 +50,27 @@ export default class EnvironmentList extends Component {
 
     this.state = {
       environmentSource: ds.cloneWithRows(environmentsToShow),
-      selectedEnvironments: []
+      background: '',
+      environment: '',
+      isReady: false,
+      insertion: false
     };
 
     this._onScroll = this._onScroll.bind(this);
     this.loadMore = _.debounce(this.loadMore, 300);
+  }
+
+  componentDidMount() {
+    this.loadFonts();
+  }
+
+  async loadFonts() {
+    await Font.loadAsync({
+      "roboto-light": "../../assets/fonts/Roboto-Light.ttf",
+      "roboto-bold": "../../assets/fonts/Roboto-Bold.ttf"
+    });
+
+    this.setState({isReady: true});
   }
 
   _onRefresh() {
@@ -76,16 +94,18 @@ export default class EnvironmentList extends Component {
 
   loadMore() {
     this.setState({loading: true});
+
+    //call service here
     this.setState({environmentSource: ds.cloneWithRows(environmentsToShow)});
   }
 
   renderHeader() {
     return (
       <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
-          borderBottomColor: Colors.gray, flexDirection: 'row',
+          borderBottomColor: Colors.borderGray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
-          <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
-            <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Cancel</Text>
+          <TouchableOpacity onPress={() => {this.props.closeModal({environmentName: ''})}}>
+            <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Cancel</Text>
           </TouchableOpacity>
       </View>
     );
@@ -93,7 +113,9 @@ export default class EnvironmentList extends Component {
 
   renderFilters() {
     filters = [{type: 'search', searchPlaceHolder: 'Search Environments', fixedOpen: true, autoFocus: false}];
-    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"}/></View>
+    return <View style={styles.filterBarContainer}>
+      <FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"}/>
+    </View>
   }
 
   filterForEnvironments() {
@@ -102,99 +124,66 @@ export default class EnvironmentList extends Component {
     environmentsToShow = environments;
   }
 
-  renderCreateEnvironment() {
-    return (
-        <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.gray, flexDirection: 'row', height: 56,
-                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
-            <TextInput autoFocus={false} style={{height: 30, fontSize: 18, textAlignVertical: 'center', 
-                fontWeight: '300', width: width}}
-                underlineColorAndroid={'rgba(0,0,0,0)'} 
-                placeholderTextColor={Colors.grayText} 
-                placeholder={"Create new Environment"}/>
-        </View>
-    )
-  }
-
-  toggleRow(rowData) {
-    rowData.selected = !rowData.selected;
-
-    if(rowData.selected) {
-      rowData.category = currentCategory;
-      this.state.selectedEnvironments.push(rowData);
-    } else {
-      this.setState({selectedEnvironments: this.state.selectedEnvironments.filter(value => value != rowData)});
-    }
-
-    this.setState({environmentSource: ds.cloneWithRows(environmentsToShow)});
-  }
-
   renderSelectableComponent(data) {
-    if (data.color != undefined) {
       return (
-        <FontAwesome name={"circle"} 
+        <View style={[{marginLeft: 10, width: 30, height: 30, borderRadius: 15, backgroundColor: 'transparent', marginRight: 5}, 
+                      Shadow.filterShadow]}>
+          <FontAwesome name={"circle"} 
               size={30} color={data.color} />
+        </View>
       );
-    }
-    
-    return (
-      <Image source={data.img} style={[styles.selectableDisplayPicture,
-        data.selected ? styles.selectedDisplayPicture : {}]} />
-    );
   }
 
   renderEnvironmentRow(data) {
     return (
       <View style={styles.rowContainer}>
-        <TouchableOpacity onPress={() => this.props.closeModal(this.state.selectedEnvironments)} style={styles.rowContainer}>
+        <TouchableOpacity onPress={() => this.props.closeModal({environmentName: data.title, background: data.color})} 
+            style={styles.rowContainer}>
           {this.renderSelectableComponent(data)}
           <View style={styles.textInRow}>
-            <Text style={[styles.rowTitle, data.selected ? styles.rowSelected : {}]}>{data.title}</Text>
+            <Text style={[styles.rowTitle, data.selected ? styles.rowSelected : {}, {color: data.color}]}>{data.title}</Text>
           </View>
         </TouchableOpacity>
       </View>);
   }
 
   _renderRow(data) {
-    return <DefaultRow arguments={data} renderChildren={() => this.renderEnvironmentRow(data)} />
+    return <DefaultRow arguments={data} renderChildren={() => this.renderEnvironmentRow(data)} noborder={true}/>
   }
 
-  _renderSelectedEnvironmentElement(data) {
-    if (data.category != 'managers') {
-      return (
-      <TouchableOpacity onPress={() => this.toggleRow(data)}>
-        <Text style={{color: Colors.white, marginRight: 13, marginTop: 10}}>{data.title}</Text>
-      </TouchableOpacity>
-      )
-    } else {
-      return (
-        <TouchableOpacity onPress={() => this.toggleRow(data)}>
-          <Image source={data.img} style={styles.selectedDisplayPictureInFooter} />
-        </TouchableOpacity>
-      ) 
+  renderSaveBar() {
+    if (this.state.background == undefined || this.state.environment == '' 
+      || this.state.environment == '@' || this.state.environment == '@ ') {
+        return null;
     }
+
+    return (
+      <View style={[styles.bottomBar]}>
+          <TouchableOpacity onPress={() => {this.props.closeModal({environmentName: this.state.environment, background: this.state.background})}}>
+              <Text style={styles.saveButton}>Save and Select</Text>
+          </TouchableOpacity>
+      </View>
+    )
   }
 
-  _renderSelectedEnvironments() {
-    var dataSource = ds.cloneWithRows(this.state.selectedEnvironments);
-    var result = <ListView
-        dataSource={dataSource}
-        horizontal={true}
-        renderRow={(data) => this._renderSelectedEnvironmentElement(data)}
-        
-      />;
-
-    return result;
+  onNewDone(text, backgroundColor) {
+    this.setState({background: backgroundColor, environment: text});
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
+
     return (
       <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
+        <ExtendedStatusWithBackgroundColor onDone={(text, color) => {this.onNewDone(text, color)}} 
+            onStateChange={(state) => {this.setState({insertion: state})}} />
+        {!this.state.insertion ?
         <ScrollView>
-          {this.renderCreateEnvironment()}
-          <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
+          <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} noborder={true} />
           <ListView
             style={styles.listView}
             onScroll={this._onScroll}
@@ -202,7 +191,8 @@ export default class EnvironmentList extends Component {
             renderRow={(data) => this._renderRow(data)}
           
           />
-        </ScrollView>
+        </ScrollView> : null}
+        {this.renderSaveBar()}
       </View>
     );
   }
@@ -233,9 +223,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   rowTitle: {
-    fontWeight: '200',
+    fontFamily: 'roboto-bold',
     fontSize: 24,
-    color: Colors.grayText
   },
   rowSubTitle: {
     color: Colors.grayText,
@@ -266,5 +255,25 @@ const styles = StyleSheet.create({
   },
   filterBarContainer: {
       backgroundColor: Colors.white
-  }
+  },
+  bottomBar: {
+    backgroundColor: Colors.main,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 15,
+    height: "auto",
+    position: 'absolute',
+    width: width,
+    bottom: 0
+  },
+  saveButton: {
+    fontFamily: 'roboto-bold',
+    color: Colors.white,
+    fontSize: 16,
+    marginRight: 10,
+    width: 180,
+    textAlign: 'right',
+    left: 0,
+    right: 0
+  },
 });

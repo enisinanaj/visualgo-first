@@ -136,6 +136,7 @@ export default class TagList extends Component {
       this.setState({selectedTags: this.state.selectedTags.filter(value => value != rowData)});
     }
 
+    this.refs.selectedTagsView.scrollToEnd();
     this.setState({tagSource: ds.cloneWithRows(tagsToShow)});
   }
 
@@ -189,6 +190,7 @@ export default class TagList extends Component {
   _renderSelectedTags() {
     var dataSource = ds.cloneWithRows(this.state.selectedTags);
     var result = <ListView
+        ref={"selectedTagsView"}
         dataSource={dataSource}
         horizontal={true}
         renderRow={(data) => this._renderSelectedTagElement(data)}
