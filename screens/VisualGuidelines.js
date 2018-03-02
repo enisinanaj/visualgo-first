@@ -26,12 +26,12 @@ import Colors from '../constants/Colors';
 import SearchBar from './common/search-bar';
 import ButtonBar from './common/button-bar';
 import OnYourMind from './common/onYourMind';
-import NewsFeedItem from './common/newsfeed-item';
-import TaskFeedItem from './common/taskfeed-item';
+import VisualGuidelineItem from './common/visual-guideline-item';
 import CreatePost from './common/create-post';
 import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
 import BlueMenu from './common/blue-menu';
+import CreateVisualGuideline from './common/create-visual-guideline';
 
 
 import _ from 'lodash';
@@ -39,17 +39,11 @@ import Shadow from '../constants/Shadow';
 import AppSettings, { getProfile } from './helpers/index';
 
 //1 is regular post, 2 is image
-const data = ['0', '1'];
-
-const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
-    {title: 'Survey', selected: true, active: true}, 
-    {title: 'Post', active: true}, 
-    {title: '#Task', active: true},
-    {title: '#San Valentino', active: true}];
+const data = ['0'];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-export default class Landing extends Component {
+export default class VisualGuidelines extends Component {
     constructor(props) {
         super(props);
 
@@ -64,10 +58,11 @@ export default class Landing extends Component {
             take: 20,
             skip: 0,
             isReady: false,
-            isAnimatingSearchBar: false
+            isAnimatingSearchBar: false,
+            visualGuidelineModal: false
         };
 
-        filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
+        //filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
 
         this._loadPosts();
 
@@ -81,6 +76,23 @@ export default class Landing extends Component {
     componentDidMount() {
         this.loadFonts(() => {setTimeout(() => {this.measureView()}, 0)});
         
+    }
+
+    prepareVisualGuidelinesModal() {
+        this.setState({visualGuidelineModal: true});
+    }
+
+    renderVisualGuidelinesModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.visualGuidelineModal}
+                onRequestClose={() => this.setState({visualGuidelineModal: false})}>
+                
+                <CreateVisualGuideline  />
+            </Modal>
+        );
     }
 
     async loadFonts(onLoaded) {
@@ -154,28 +166,19 @@ export default class Landing extends Component {
     }
 
     _renderRow(data) {
+        filters = [{title: 'New', active: true, onPress: () => this.prepareVisualGuidelinesModal()},
+            {type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
+            {title: '#San Valentino', selected: true, active: true}, 
+            {title: '@Ambiente', active: true}, 
+            {title: '#Task', active: true},
+            {title: '#Sale', active: true}];
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
-                    <FilterBar data={filters} headTitle={"My Wall"} />
+                    <FilterBar data={filters} headTitle={"Guideline"} />
                 </View>;
-        } else if (data == '1') {
-            return (
-                <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
-                    <OnYourMind onFocus={() => this.setState({modalPost: true})}/>
-                    <ButtonBar ref='buttonBar' buttons={[
-                        {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
-                        {title: 'Post', onPress: () => this.setState({modalPost: true})},
-                        {title: 'Survey'}]}/>
-                </View>
-            )
         }
 
-        return (
-            <View>
-                <TaskFeedItem data={data}/>
-                <NewsFeedItem data={data}/>
-            </View>
-        )
+        return <VisualGuidelineItem data={data}/>
     }
 
     newPostHandler(obj) {
@@ -285,6 +288,7 @@ export default class Landing extends Component {
                     renderRow={(data) => this._renderRow(data)}
                 />
                 {this.renderModal()}
+                {this.renderVisualGuidelinesModal()}
             </View>
         )
     }

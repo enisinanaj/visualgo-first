@@ -28,7 +28,7 @@ export default class RootNavigation extends React.Component {
         <TabNavigationItem
           id="links" style={styles.tabNavigationItem}
           renderIcon={isSelected => this._renderIcon('album', isSelected)}>
-          <StackNavigation initialRoute="landing" />
+          <StackNavigation initialRoute="visualGuidelines" />
         </TabNavigationItem>
 
         <TabNavigationItem
