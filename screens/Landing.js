@@ -27,6 +27,7 @@ import SearchBar from './common/search-bar';
 import ButtonBar from './common/button-bar';
 import OnYourMind from './common/onYourMind';
 import NewsFeedItem from './common/newsfeed-item';
+import TaskFeedItem from './common/taskfeed-item';
 import CreatePost from './common/create-post';
 import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
@@ -169,7 +170,12 @@ export default class Landing extends Component {
             )
         }
 
-        return <NewsFeedItem data={data}/>
+        return (
+            <View>
+                <TaskFeedItem data={data}/>
+                <NewsFeedItem data={data}/>
+            </View>
+        )
     }
 
     newPostHandler(obj) {
