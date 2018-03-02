@@ -38,6 +38,8 @@ export default class FitlerBar extends Component {
 
     componentDidMount() {
         this.loadFonts();
+
+        setTimeout(() => this.setState({filtersSource: ds.cloneWithRows(this.props.data), searchQuery: ''}), 300)
     }
 
     async loadFonts() {
@@ -52,51 +54,106 @@ export default class FitlerBar extends Component {
     }
 
     _toggleSearch() {
-        if (this.state.searchWidth == 44) {
-            this.setState({searchWidth: width - 50});
-        } else {
-            this.setState({searchWidth: 44});
+        var filters = this.props.data;
+        var searchButton = filters.filter(it => it.type == 'search');
+
+        if (searchButton == undefined || !searchButton.fixedOpen) {
+            if (this.state.searchWidth == 44) {
+                this.setState({searchWidth: width - 50});
+            } else {
+                this.setState({searchWidth: 44});
+            }
         }
 
-        var filters = this.props.data;
-        filters.push('last-padding');
-        this.setState({filtersSource: ds.cloneWithRows(filters)});
+        var lastPadding = filters.filter(it => it == 'last-padding');
+        if (lastPadding == undefined || lastPadding == null) {
+            filters.push('last-padding');
+        }
 
-        $this = this;
+        this.setState({filtersSource: ds.cloneWithRows(filters), searchQuery: ''});
     }
 
-    _setQuery(q) {
+    _setQuery(sender, q) {
+        console.log("sender: " + sender);
+        console.log("query: " + q);
+
         this.setState({searchQuery: q});
+
+        if (sender.onType != undefined) {
+            sender.onType(q);
+        }
+
+        return true;
     }
 
     drawElements(data) {
-        if (data.visible === true || data.visible == undefined) {
-            if (data.type === 'search' ) {
+        if (data.visible == undefined || data.visible === true) {
+            if (data.type === 'search' && !data.fixedOpen) {
                 return (
-                    <TouchableOpacity style={[
-                            styles.searchButtonContainer, 
+                    <View style={[styles.searchButtonContainer, 
                             Shadow.filterShadow, 
-                            {width: data.fixedOpen ? width - 50 : this.state.searchWidth}
-                        ]} onPress={() => this._toggleSearch()}>
-                        <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
-                        {this.state.searchWidth > 44 || data.fixedOpen
+                            {width: this.state.searchWidth}]}>
+                        <TouchableOpacity onPress={() => this._toggleSearch()}>
+                            <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
+                        </TouchableOpacity>
+                        {this.state.searchWidth > 44
                             ? 
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
                                     placeholder={data.searchPlaceHolder}
                                     autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
                                     style={{backgroundColor: 'transparent', width: 200}}
-                                    onChangeText={(arg) => {this._setQuery(arg); data.onType(arg)} }
-                                    ref="searchTextBox" value={this.state.searchQuery}/> 
+                                    onChangeText={(arg) => {this._setQuery(data, arg)} }
+                                    ref="searchTextBox" value={this.state.searchQuery} /> 
                                 {!data.fixedOpen ?
                                     <TouchableOpacity onPress={() => this._toggleSearch()}>
                                         <EvilIcons name={"close"} size={20} color={Colors.main} />
                                     </TouchableOpacity>
                                 : null}
                             </View>
-                            : null}
-                    </TouchableOpacity>
+                        : null}
+                    </View>
                 )
+            } else if (data.type === 'search' && data.fixedOpen) {
+                var searchWidth = width - 50;
+                return (
+                    <View style={[styles.searchButtonContainer, 
+                        Shadow.filterShadow, 
+                        {width: searchWidth}]}>
+                    <TouchableOpacity onPress={() => this._toggleSearch()}>
+                        <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
+                    </TouchableOpacity>
+                    {searchWidth > 44
+                        ? 
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
+                                placeholder={data.searchPlaceHolder}
+                                autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
+                                style={{backgroundColor: 'transparent', width: 200}}
+                                onChangeText={(arg) => {this._setQuery(data, arg)} }
+                                ref="searchTextBox" value={this.state.searchQuery} />
+                        </View>
+                    : null}
+                </View>); 
+                
+                <View style={[styles.searchButtonContainer, 
+                            Shadow.filterShadow, 
+                            {width: width - 50}]}>
+                    <TouchableOpacity onPress={() => this._toggleSearch()}>
+                        <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
+                    </TouchableOpacity>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
+                            placeholder={data.searchPlaceHolder}
+                            autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
+                            style={{backgroundColor: 'transparent', width: 200}}
+                            onChangeText={(arg) => {this._setQuery(data, arg)} }
+                            ref="searchTextBox" value={this.state.searchQuery}/>
+                        <TouchableOpacity onPress={() => this.setState({filtersSource: ds.cloneWithRows(filters), searchQuery: ''})}>
+                            <EvilIcons name={"close"} size={20} color={Colors.main} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             }
 
             if (data == 'last-padding') {
@@ -105,8 +162,7 @@ export default class FitlerBar extends Component {
                 );
             }
 
-            if(data.active){
-
+            if(data.active != undefined && data.active){
                 if(data.title ===  'New'){
                     return (
                         <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle, Shadow.filterShadow]}
@@ -116,7 +172,6 @@ export default class FitlerBar extends Component {
                         </TouchableOpacity>
                     )
                 }else{
-
                     return (
                         <TouchableOpacity style={[data.selected ? styles.filterButtonsSelected : styles.filterButtons,
                             styles.buttonStyle, data.selected ? Shadow.filterShadow : {}]}
@@ -125,10 +180,7 @@ export default class FitlerBar extends Component {
                                 styles.buttonContentStyle]}>{data.title}</Text>
                         </TouchableOpacity>
                     )
-
                 }
-
-
             }
         }
 
@@ -175,6 +227,7 @@ export default class FitlerBar extends Component {
         if (b.headTitle) {
             this.setState({headTitle: b.headTitle})
         }
+
         this.setState({filtersSource: ds.cloneWithRows(buttons)});
     }
 

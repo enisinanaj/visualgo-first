@@ -112,7 +112,7 @@ export default class EnvironmentList extends Component {
   }
 
   renderFilters() {
-    filters = [{type: 'search', searchPlaceHolder: 'Search Environments', fixedOpen: true, autoFocus: false}];
+    var filters = [{type: 'search', searchPlaceHolder: 'Search Environments', fixedOpen: true, autoFocus: false}];
     return <View style={styles.filterBarContainer}>
       <FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"}/>
     </View>

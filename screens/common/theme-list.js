@@ -114,10 +114,10 @@ export default class ThemeList extends Component {
   }
 
   renderFilters() {
-    filters = [{type: 'search', searchPlaceHolder: 'Search Themes', fixedOpen: true, autoFocus: false}];
-    return <View style={styles.filterBarContainer}>
-        <FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"}/>
-      </View>
+    var filters = [{type: 'search', searchPlaceHolder: 'Search Themes', fixedOpen: true, autoFocus: false}];
+    return (<View style={styles.filterBarContainer}>
+        <FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"} />
+      </View>);
   }
 
   filterForThemes() {
@@ -226,7 +226,8 @@ export default class ThemeList extends Component {
         <ExtendedStatus onStateChange={(v) => this.setState({creatingNew: v})}
           onDone={(value, photos) => this.setState({photos: photos, themeDescription: value})} />
         <ScrollView>
-          {!this.state.creatingNew ?  <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} noborder={true}/> : null}
+          {!this.state.creatingNew ?  
+            this.renderFilters() : null}
           {!this.state.creatingNew ? <ListView
             style={styles.listView}
             onScroll={this._onScroll}
