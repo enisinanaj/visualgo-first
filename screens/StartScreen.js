@@ -52,6 +52,7 @@ export default class Login extends Component {
   async loadFonts() {
       await Font.loadAsync({
         'roboto': require('../assets/fonts/Roboto-Thin.ttf'),
+        'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
         'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf')
       });
 
@@ -73,28 +74,28 @@ export default class Login extends Component {
         <View style={styles.container}>
             <Text style={[styles.welcomeLabel, {marginTop: 50}]}>Welcome to VisualGo!</Text>
 
-            <TouchableOpacity>
-              <View style={[styles.oAuthButton, styles.buttonStyleEmail]}>
-                <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>REGISTER WITH EMAIL</Text>
+            <TouchableOpacity disabled={true}>
+              <View style={[styles.oAuthButton, styles.buttonStyleEmail, styles.buttonDisabled, Shadow.filterShadow]}>
+                <Text style={[styles.oAuthButtonContent]}>REGISTER WITH EMAIL</Text>
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity>
-              <View style={[styles.oAuthButton, styles.buttonStyleLinkedin]}>
-                <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>CONTINUE WITH GOOGLE</Text>
+            <TouchableOpacity disabled={true}>
+              <View style={[styles.oAuthButton, styles.buttonStyleLinkedin, styles.buttonDisabled, Shadow.filterShadow]}>
+                <Text style={[styles.oAuthButtonContent]}>CONTINUE WITH GOOGLE</Text>
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity>
-              <View style={[styles.oAuthButton, styles.buttonStyleGoogle]}>
-                <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>CONTINUE WITH GOOGLE</Text>
+            <TouchableOpacity disabled={true}>
+              <View style={[styles.oAuthButton, styles.buttonStyleGoogle, styles.buttonDisabled, Shadow.filterShadow]}>
+                <Text style={[styles.oAuthButtonContent]}>CONTINUE WITH GOOGLE</Text>
               </View>
             </TouchableOpacity>
 
-            <Text style={[styles.welcomeLabel, {marginTop: 30}]}>OR</Text>
+            <Text style={[styles.welcomeLabel, {marginTop: 30}]}>Or...</Text>
 
             <TouchableOpacity ref={component => this._buttonLogin = component} onPress={() => this.logIn()}>
-              <View style={[styles.buttonLoginDisabled, styles.oAuthButton]}>
+              <View style={[styles.oAuthButton, styles.buttonLoginEnabled]}>
                 <Text style={[styles.oAuthButtonContent, styles.loginText]}>LOGIN</Text>
               </View>
             </TouchableOpacity>
@@ -107,18 +108,18 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   welcomeLabel: {
-    fontSize: 50,
+    fontSize: 48,
     fontFamily: 'roboto',
     color: Colors.main,
     marginLeft: 40,
     marginRight: 40
   },
   notice:{
-    fontFamily: 'roboto',
+    fontFamily: 'roboto-light',
     color: Colors.main,
     marginLeft: 40,
     marginRight: 40,
-    fontSize: 18,
+    fontSize: 16,
     marginTop: 40
   },
   container: {
@@ -126,42 +127,19 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
 
-  containerIOS: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 60,
-    backgroundColor: Colors.main,
-    paddingTop: 20,
-    borderBottomColor: Colors.borderGray,
-    borderBottomWidth: 1,
-  },
-
-  containerAndroid:{
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 64,
-    backgroundColor: Colors.main,
-    paddingTop: 24,
-    borderBottomColor: Colors.borderGray,
-    borderBottomWidth: 1,
-  },
-
   oAuthButtonContent: {
     textAlign: 'center',
     color: Colors.white,
-    fontSize: 20,
-    paddingBottom: 10,
-    fontWeight: '100',
-    paddingTop: 3.5,
+    fontSize: 18,
+    height: 'auto',
+    fontFamily: 'roboto-light',
     backgroundColor: 'transparent'
   },
 
   oAuthButton: {
     flexDirection: 'column',
+    justifyContent: 'center',
     borderRadius: 25,
-    padding: 10,
     height: 50,
     marginRight: 40,
     marginLeft: 40, 
@@ -189,12 +167,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main,
   },
 
-  buttonLoginDisabled: {
-    backgroundColor: Colors.borderGray,
+  buttonDisabled: {
+    opacity: 0.3
   },
 
   loginText: {
-    color: Colors.black
+    color: Colors.white
   },
 
   textField: {

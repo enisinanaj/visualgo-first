@@ -24,6 +24,7 @@ import Drawer from 'react-native-drawer'
 
 import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
+import DisabledStyle from '../constants/DisabledStyle';
 import DefaultRow from './common/default-row';
 
 import {EvilIcons} from '@expo/vector-icons';
@@ -123,13 +124,12 @@ export default class Login extends Component {
 
   passwordChanged(pass) {
     if(pass != ''){
-      this.state.passTyped = true;
+      this.setState({passTyped: true});
     }else{
-      this.state.passTyped = false;
+      this.setState({passTyped: false});
     }
 
     if (this.state.emailTyped && this.state.passTyped) {
-      this.state.canLogin = true;
       this.setState({canLogin: true});
     } else {
       this.setState({canLogin: true});
@@ -157,7 +157,7 @@ export default class Login extends Component {
   }
 
   render() {
-    var {visibleHeight} = this.state;
+    var {visibleHeight, passTyped, emailTyped, emailFieldFocused, passwordFieldFocused, secureEntryPassword} = this.state;
     
     if (!this.state.isReady) {
       return <AppLoading />;
@@ -173,15 +173,15 @@ export default class Login extends Component {
 
             {!this.state.keyboardIsOpen? 
               <View>
-                <TouchableOpacity>
-                  <View style={[styles.oAuthButton, styles.buttonStyleLinkedin]}>
-                    <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH LINKEDIN</Text>
+                <TouchableOpacity disabled={true}>
+                  <View style={[styles.oAuthButton, styles.buttonStyleLinkedin, DisabledStyle.disabled, Shadow.filterShadow]}>
+                    <Text style={[styles.oAuthButtonContent]}>LOGIN WITH LINKEDIN</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity>
-                  <View style={[styles.oAuthButton, styles.buttonStyleGoogle]}>
-                    <Text style={[styles.oAuthButtonContent, Platform.OS == 'ios' ? styles.loginOauth : {} ]}>LOGIN WITH GOOGLE</Text>
+                <TouchableOpacity disabled={true}>
+                  <View style={[styles.oAuthButton, styles.buttonStyleGoogle, DisabledStyle.disabled, Shadow.filterShadow]}>
+                    <Text style={[styles.oAuthButtonContent]}>LOGIN WITH GOOGLE</Text>
                   </View>
                 </TouchableOpacity>
 
@@ -191,29 +191,34 @@ export default class Login extends Component {
 
             <Text style={styles.grayText}>Enter your e-mail address </Text>
 
-            <View style={[styles.textField]}>
+            <View style={[styles.textField, emailFieldFocused ? {borderBottomColor: Colors.main} : {}]}>
               <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} 
-                style={styles.textFieldContent} onChangeText={(email) => this.emailChanged(email)}
+                style={emailTyped ? styles.textFieldUserContent : styles.textFieldContent} 
+                onChangeText={(email) => this.emailChanged(email)}
                 onFocus={() => this.setState({emailFieldFocused: true})} onBlur={() => this.setState({emailFieldFocused: false})}
                 numberOfLines={1} adjustsFontSizeToFit={true} miniminimumFontScale={16}
                 />
-              {this.state.emailFieldFocused ? 
+              {emailFieldFocused || emailTyped ? 
                 <TouchableOpacity onPress={() => {this._emailInput.clear()}}>
-                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10, backgroundColor: 'transparent'}}/>
+                  <EvilIcons name={"close-o"} size={26} color={Colors.main} 
+                    style={styles.clearFieldButton}/>
                 </TouchableOpacity>
                 : null}
             </View>
 
             <Text style={styles.grayText}>Enter your password </Text>
 
-            <View style={[styles.textField]}>
+            <View style={[styles.textField, passwordFieldFocused ? {borderBottomColor: Colors.main} : {}]}>
               <TextInput ref={component => this._passInput = component} secureTextEntry={true} placeholderTextColor={Colors.main} placeholder={'Password'} 
-                style={styles.textFieldContent} onChangeText={(pass) => this.passwordChanged(pass)}
+                style={[passTyped ? styles.textFieldUserContent : styles.textFieldContent,
+                  secureEntryPassword && passTyped ? {fontSize: 28} : {}]}
+                onChangeText={(pass) => this.passwordChanged(pass)}
                 onFocus={() => this.setState({passwordFieldFocused: true})} onBlur={() => this.setState({passwordFieldFocused: false})}
                 numberOfLines={1}/>
-              {this.state.passwordFieldFocused ? 
+              {passwordFieldFocused || passTyped ? 
                 <TouchableOpacity onPress={() => {this._passInput.clear()}}>
-                  <EvilIcons name={"close-o"} size={26} color={Colors.main} style={{position: 'absolute', right: 0, bottom: 10, backgroundColor: 'transparent'}}/>
+                  <EvilIcons name={"close-o"} size={26} color={Colors.main} 
+                    style={styles.clearFieldButton}/>
                 </TouchableOpacity>
                 : null}
             </View>
@@ -223,8 +228,8 @@ export default class Login extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity ref={component => this._buttonLogin = component} disabled={!this.state.canLogin} onPress={() => this.LogIn()}>
-              <View style={[styles.buttonLoginDisabled, styles.oAuthButton]}>
-                <Text style={[styles.oAuthButtonContent, styles.loginText]}>LOGIN</Text>
+              <View style={[passTyped && emailTyped ? styles.buttonLoginEnabled : styles.buttonLoginDisabled, styles.oAuthButton]}>
+                <Text style={[styles.oAuthButtonContent, passTyped && emailTyped ? {} : styles.loginTextDisabled]}>LOGIN</Text>
               </View>
             </TouchableOpacity>
 
@@ -275,15 +280,14 @@ const styles = StyleSheet.create({
   oAuthButtonContent: {
     textAlign: 'center',
     color: Colors.white,
-    fontSize: 20,
-    paddingBottom: 10,
-    fontWeight: '100',
-    paddingTop: 3.5,
+    fontSize: 18,
+    fontFamily: 'roboto-light',
     backgroundColor: 'transparent'
   },
 
   oAuthButton: {
     flexDirection: 'column',
+    justifyContent: 'center',
     borderRadius: 25,
     padding: 10,
     height: 50,
@@ -291,8 +295,7 @@ const styles = StyleSheet.create({
     marginLeft: 40, 
     minWidth: 75,
     marginTop: 17,
-    alignItems: 'center',
-    fontFamily: 'roboto-thin'
+    alignItems: 'center'
   },
 
   buttonStyleLinkedin: {
@@ -304,38 +307,57 @@ const styles = StyleSheet.create({
   },
 
   buttonLoginEnabled: {
-    backgroundColor: Colors.main,
+    backgroundColor: Colors.main
   },
 
   buttonLoginDisabled: {
-    backgroundColor: Colors.borderGray,
+    backgroundColor: '#F0F0F0'
   },
 
-  loginText: {
-    color: Colors.black
+  loginTextDisabled: {
+    color: '#cccccc'
   },
 
   textField: {
     marginLeft: 40,
     marginRight: 40,
-    borderBottomColor: Colors.grayText,
+    borderBottomColor: '#e5e5e5',
     borderBottomWidth: StyleSheet.hairlineWidth,
     paddingBottom: 5,
     paddingTop: 5,
     height: 55,
     marginTop: 0,
     marginBottom: 5,
+    flexDirection: 'row',
+    justifyContent: 'start'
   },
 
   textFieldContent: {
-    fontSize: 45,
-    fontFamily: 'roboto-thin',
-    miniminimumFontScale: 16,
-    adjustsFontSizeToFit: true,
+    fontSize: 48,
+    flex: 1,
+    marginLeft: 0,
+    marginRight: 3,
+    fontFamily: 'roboto-thin'
+  },
+
+  textFieldUserContent: {
+    height: 45,
+    flex: 1,
+    marginLeft: 0,
+    marginRight: 3,
+    marginTop: 2,
+    fontSize: 18,
+    fontFamily: 'roboto-bold',
+    color: Colors.main,
+  },
+
+  clearFieldButton: {
+    marginTop: 14.5,
+    backgroundColor: 'transparent'
   },
 
   viewTitle: {
-    fontSize: 20,
+    fontSize: 18,
     marginLeft: -11,
     color: Colors.main,
     justifyContent: 'center',
@@ -343,7 +365,7 @@ const styles = StyleSheet.create({
   },
 
   OrText:{
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.main,
     marginLeft: 40,
     marginTop: 20,
@@ -351,11 +373,11 @@ const styles = StyleSheet.create({
   },
 
   grayText:{
-    fontSize: 14,
-    color: Colors.grayText,
+    fontSize: 16,
+    color: Colors.grayText98,
     marginLeft: 40,
     marginTop: 20,
-    fontFamily: 'roboto-thin'
+    fontFamily: 'roboto-light'
   },
 
   ShowPasswordText:{
@@ -381,7 +403,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'stretch',
-    paddingTop: 5,
-    paddingBottom: 5,   
+    paddingTop: 5 
   }
 });

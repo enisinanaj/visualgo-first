@@ -8,6 +8,7 @@ export default {
     searchBar: '#efefef',
     black: '#212121',
     grayText: '#898F9C',
+    grayText98: '#989898',
     gray: '#D3D6DB',
     chat_bg: '#3F4045',
     chat_line: '#72757A',
