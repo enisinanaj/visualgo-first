@@ -26,7 +26,7 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
 
 import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
@@ -37,6 +37,7 @@ import TaskDescription from './task-description';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import DisabledStyle from '../../constants/DisabledStyle';
+import Shadow from '../../constants/Shadow';
 
 export default class CreateTask extends Component {
     constructor() {
@@ -84,6 +85,7 @@ export default class CreateTask extends Component {
     async loadFonts() {
         await Font.loadAsync({
             'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
             'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
         });
 
@@ -229,10 +231,17 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={styles.rowTextStyle}>
-                        {this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Task'}
-                    </Text>
-                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    {this.state.taskDescription != '' ?
+                        <Text style={[styles.rowTextStyle, {marginRight: 70, color: Colors.main}]} numberOfLines={1}>
+                            {this.state.taskDescription}
+                        </Text>
+                    : 
+                        <Text style={styles.rowTextStyle}>
+                            Describe Task
+                        </Text>
+                    }
+                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10,
+                        position: 'absolute', right: 0}} />
                 </TouchableOpacity>
             </View>
         )
@@ -323,14 +332,24 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} 
                                   style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                            <Text style={[styles.rowTextStyle, environment.environmentName != undefined ? {color: Colors.main} : {}]}>
-                                {environment.environmentName == undefined ? 
-                                    'Choose Task @Environment' : environment.environmentName}
-                            </Text>
-                            {environment.environmentName == undefined ? 
-                                <Text style={{color:'red', marginLeft: 5}}>*</Text> : null}
-                        </View>
+                        {environment.environmentName == undefined ?
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Text style={[styles.rowTextStyle]}>
+                                    Choose Task @Environment
+                                </Text>
+                                <Text style={{color:'red', marginLeft: 5}}>*</Text>
+                            </View>
+                        :
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 12}}>
+                                <View style={[{width: 22, height: 22, borderRadius: 11, backgroundColor: 'transparent', marginRight: 5, marginTop: 5}, 
+                                            Shadow.filterShadow]}>
+                                    <FontAwesome name={"circle"} size={22} color={environment.background} />
+                                </View>
+                                <Text style={[styles.rowTextStyle, {color: environment.background, paddingLeft: 0, fontFamily: 'roboto-bold'}]}>
+                                    {environment.environmentName}
+                                </Text>
+                            </View>
+                        }
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -374,7 +393,10 @@ export default class CreateTask extends Component {
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} 
                     disabled={isDisabled}>
                     <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}]}>Visual Guideline</Text>
-                    <Ionicons name={"ios-attach"} color={isDisabled ? Colors.grayText : Colors.main} size={28} style={{marginRight: 20}} />
+                    <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
+                        <Ionicons name={"ios-attach"} color={isDisabled ? Colors.grayText : Colors.main} size={28} style={{marginRight: 0}} />
+                        <EvilIcons name={"chevron-right"} color={isDisabled ? Colors.grayText : Colors.main} size={32} />
+                    </View>
                 </TouchableOpacity>
             </View>
         )

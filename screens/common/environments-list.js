@@ -104,7 +104,7 @@ export default class EnvironmentList extends Component {
       <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
           borderBottomColor: Colors.borderGray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
-          <TouchableOpacity onPress={() => {this.props.closeModal({environmentName: ''})}}>
+          <TouchableOpacity onPress={() => {this.props.closeModal({})}}>
             <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Cancel</Text>
           </TouchableOpacity>
       </View>
