@@ -321,9 +321,12 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} 
                                   style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.rowTextStyle, this.state.environmentName != '' ? {color: Colors.main} : {}]}>
-                        {this.state.environmentName == '' ? 'Choose Task @Environment' : this.state.environmentName}
-                    </Text>
+                        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            <Text style={[styles.rowTextStyle, this.state.environmentName != '' ? {color: Colors.main} : {}]}>
+                                {this.state.environmentName == '' ? 'Choose Task @Environment' : this.state.environmentName}
+                            </Text>
+                            {this.state.environmentName == '' ? <Text style={{color:'red', marginLeft: 5}}>*</Text> : null}
+                        </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -380,7 +383,6 @@ export default class CreateTask extends Component {
                     :
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={styles.rowTextStyle}>Start/Due Date</Text>
-                        <Text style={{color: 'red', marginLeft: 5}}>*</Text>
                     </View>}
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
