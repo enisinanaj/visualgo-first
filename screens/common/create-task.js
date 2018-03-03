@@ -55,7 +55,7 @@ export default class CreateTask extends Component {
             addVideoSelected: false,
             add360Selected: false,
             selectedTheme: {},
-            environmentName: '',
+            environment: {},
             allTags: [],
             countPhoto: 1,
             countVideo: 0,
@@ -316,16 +316,20 @@ export default class CreateTask extends Component {
     }
 
     renderEnvironment() {
+        var {environment} = this.state;
+
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} 
                                   style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                            <Text style={[styles.rowTextStyle, this.state.environmentName != '' ? {color: Colors.main} : {}]}>
-                                {this.state.environmentName == '' ? 'Choose Task @Environment' : this.state.environmentName}
+                            <Text style={[styles.rowTextStyle, environment.environmentName != undefined ? {color: Colors.main} : {}]}>
+                                {environment.environmentName == undefined ? 
+                                    'Choose Task @Environment' : environment.environmentName}
                             </Text>
-                            {this.state.environmentName == '' ? <Text style={{color:'red', marginLeft: 5}}>*</Text> : null}
+                            {environment.environmentName == undefined ? 
+                                <Text style={{color:'red', marginLeft: 5}}>*</Text> : null}
                         </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
@@ -334,7 +338,8 @@ export default class CreateTask extends Component {
     }
 
     finishEnvironments(environment) {
-        this.setState({environmentName: environment.environmentName, environmentModal: false});
+        console.log("selected environement: " + JSON.stringify(environment));
+        this.setState({environment: environment, environmentModal: false});
     }
 
     renderEnvironmentsModal() {
@@ -359,13 +364,17 @@ export default class CreateTask extends Component {
     }
 
     renderVisualGuideline() {
+        var {environment, selectedTheme} = this.state;
+        var isDisabled = environment.environmentName == undefined || selectedTheme.themeName == undefined;
+
         return (
             <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this._getDocuments()} 
-                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.rowTextStyle, {color: Colors.black}]}>Visual Guideline</Text>
-                    <Ionicons name={"ios-attach"} color={Colors.main} size={28} style={{marginRight: 20}} />
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} 
+                    disabled={isDisabled}>
+                    <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}]}>Visual Guideline</Text>
+                    <Ionicons name={"ios-attach"} color={isDisabled ? Colors.grayText : Colors.main} size={28} style={{marginRight: 20}} />
                 </TouchableOpacity>
             </View>
         )
