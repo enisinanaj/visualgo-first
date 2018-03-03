@@ -30,6 +30,7 @@ import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons} from '@expo/vec
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
+import NoOpModal from './NoOpModal';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
 import TaskDescription from './task-description';
@@ -207,12 +208,17 @@ export default class CreateTask extends Component {
                 <Text style={{color: Colors.main, fontSize: 14, marginRight: 30, height: 18, marginLeft: 5, fontFamily: 'roboto-regular'}}>
                     Task
                 </Text>
-                <Text style={{color: Colors.black, fontSize: 14, marginRight: 30, height: 18, fontFamily: 'roboto-light'}}>
-                    Post
-                </Text>
-                <Text style={{color: Colors.black, fontSize: 14, height: 18, fontFamily: 'roboto-light'}}>
-                    Survey
-                </Text>
+                <TouchableOpacity onPress={() => {this.props.handleTypeChange != undefined ? this.props.handleTypeChange('post') : {}}}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginRight: 30, height: 18, fontFamily: 'roboto-light'}}>
+                        Post
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this._noOpSurvey.toggleState()} style={DisabledStyle.disabled}>
+                    <Text style={{color: Colors.black, fontSize: 14, height: 18, fontFamily: 'roboto-light'}}>
+                        Survey
+                    </Text>
+                    <NoOpModal featureName={"Survey "} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
+                </TouchableOpacity>
             </View>
         )
     }
@@ -517,7 +523,7 @@ export default class CreateTask extends Component {
             [
                 {
                     name: 'Amministratori del Task',
-                    onPress: () => this.prepareTaskAdminsModal()
+                    onPress: () => this._noOpModal != undefined ? this._noOpModal.toggleState() : {}
                 }
             ];
 
@@ -542,8 +548,7 @@ export default class CreateTask extends Component {
             return (o.visible == undefined || o.visible) && (
                 <View key={i} style={[{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}, DisabledStyle.disabled]}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
-                        disabled={true}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
@@ -555,6 +560,7 @@ export default class CreateTask extends Component {
                         </View>
                         <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                     </TouchableOpacity>
+                    <NoOpModal featureName={"Task administrators "} ref={(noOpModal) => this._noOpModal = noOpModal} />
                 </View>
             )
         })

@@ -35,6 +35,8 @@ import PostPrivacy from './privacy';
 import ImageBrowser from '../ImageBrowser';
 import ImagePost from './image-post';
 import ImageScreen from '../imageScreen';
+import NoOpModal from './NoOpModal';
+import DisabledStyle from '../../constants/DisabledStyle';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -152,15 +154,21 @@ export default class CreatePost extends Component{
             <View style={{backgroundColor: Colors.borderGray, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 16}}>
-                <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
-                    Task
-                </Text>
+                <TouchableOpacity onPress={() => {this.props.handleTypeChange != undefined ? this.props.handleTypeChange('task') : {}}}>
+                    <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
+                        Task
+                    </Text>
+                </TouchableOpacity>
+                
                 <Text style={{color: Colors.main, fontFamily: 'roboto-rergular', fontSize: 14, marginRight: 30, height: 18}}>
                     Post
                 </Text>
-                <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, height: 18}}>
-                    Survey
-                </Text>
+                <TouchableOpacity onPress={() => this._noOpSurvey.toggleState()} style={DisabledStyle.disabled}>
+                    <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, height: 18}}>
+                        Survey
+                    </Text>
+                    <NoOpModal featureName={"Survey "} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
+                </TouchableOpacity>
             </View>
         )
     }

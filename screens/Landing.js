@@ -32,7 +32,7 @@ import CreatePost from './common/create-post';
 import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
 import BlueMenu from './common/blue-menu';
-
+import NoOpModal from './common/NoOpModal';
 
 import _ from 'lodash';
 import Shadow from '../constants/Shadow';
@@ -42,8 +42,8 @@ import AppSettings, { getProfile } from './helpers/index';
 const data = ['0', '1'];
 
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
-    {title: 'Survey', selected: true, active: true}, 
-    {title: 'Post', active: true}, 
+    {title: 'Survey', selected: true, active: false}, 
+    {title: 'Post', active: false}, 
     {title: '#Task', active: true},
     {title: '#San Valentino', active: true}];
 
@@ -165,7 +165,8 @@ export default class Landing extends Component {
                     <ButtonBar ref='buttonBar' buttons={[
                         {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
                         {title: 'Post', onPress: () => this.setState({modalPost: true})},
-                        {title: 'Survey'}]}/>
+                        {title: 'Survey', onPress: () => this._noOpSurvey.toggleState(), noOp: true}]}/>
+                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
                 </View>
             )
         }
@@ -196,6 +197,20 @@ export default class Landing extends Component {
         this.setState({modalTask: false});
     }
 
+    _handleTypeChange(t) {
+        if (t == 'post') {
+            this.setState({
+                modalTask: false,
+                modalPost: true
+            });
+        } else if (t == 'task') {
+            this.setState({
+                modalPost: false,
+                modalTask: true,
+            });
+        }
+    }
+
     renderModal() {
         return (
             <View>
@@ -204,14 +219,16 @@ export default class Landing extends Component {
                     transparent={false}
                     visible={this.state.modalPost}
                     onRequestClose={() => this.setState({modalPost: false})}>
-                    <CreatePost closeModal={(obj) => this.newPostHandler(obj)} navigator={this.props.navigator}/>
+                    <CreatePost closeModal={(obj) => this.newPostHandler(obj)} navigator={this.props.navigator} 
+                        handleTypeChange={(t) => this._handleTypeChange(t)}/>
                 </Modal>
                 <Modal
                     animationType={"slide"}
                     transparent={false}
                     visible={this.state.modalTask}
                     onRequestClose={() => this.setState({modalTask: false})}>
-                    <CreateTask closeModal={(obj) => this.newTaskHandler(obj)} />
+                    <CreateTask closeModal={(obj) => this.newTaskHandler(obj)} 
+                        handleTypeChange={(t) => this._handleTypeChange(t)}/>
                 </Modal>
             </View>
         )

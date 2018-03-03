@@ -25,7 +25,9 @@ import Drawer from 'react-native-drawer'
 import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
 import DisabledStyle from '../constants/DisabledStyle';
+
 import DefaultRow from './common/default-row';
+import NoOpModal from './common/NoOpModal';
 
 import {EvilIcons} from '@expo/vector-icons';
 import _ from 'lodash';
@@ -173,16 +175,18 @@ export default class Login extends Component {
 
             {!this.state.keyboardIsOpen? 
               <View>
-                <TouchableOpacity disabled={true}>
+                <TouchableOpacity onPress={() => this._noOpLinkedin.toggleState()}>
                   <View style={[styles.oAuthButton, styles.buttonStyleLinkedin, DisabledStyle.disabled, Shadow.filterShadow]}>
                     <Text style={[styles.oAuthButtonContent]}>LOGIN WITH LINKEDIN</Text>
                   </View>
+                  <NoOpModal featureName={"LinkedIn login "} ref={(noOpModal) => this._noOpLinkedin = noOpModal} />
                 </TouchableOpacity>
 
-                <TouchableOpacity disabled={true}>
+                <TouchableOpacity onPress={() => {this._noOpGoogle.toggleState()}}>
                   <View style={[styles.oAuthButton, styles.buttonStyleGoogle, DisabledStyle.disabled, Shadow.filterShadow]}>
                     <Text style={[styles.oAuthButtonContent]}>LOGIN WITH GOOGLE</Text>
                   </View>
+                  <NoOpModal featureName={"Google login "} ref={(noOpModal) => this._noOpGoogle = noOpModal} />
                 </TouchableOpacity>
 
                 <Text style={styles.OrText}>Or...</Text>

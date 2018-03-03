@@ -14,6 +14,7 @@ import {Font, AppLoading} from 'expo';
 
 import {Ionicons} from '@expo/vector-icons'
 import Colors from '../../constants/Colors';
+import DisabledStyle from '../../constants/DisabledStyle';
 
 export default class ButtonBar extends Component {
     constructor(props) {
@@ -44,7 +45,7 @@ export default class ButtonBar extends Component {
         return buttons.map((button, i) => {
             return (
                 <View key={i} style={styles.buttonItem}>
-                    <TouchableOpacity onPress={button.onPress}>
+                    <TouchableOpacity onPress={button.onPress} style={button.noOp ? DisabledStyle.disabled : {}}>
                         <Text style={styles.text}>{button.title}</Text>
                     </TouchableOpacity>
                 </View>
@@ -70,7 +71,9 @@ export default class ButtonBar extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-between',
         height: 40,
         backgroundColor: Colors.white,
         borderTopWidth: 1,
@@ -91,8 +94,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         backgroundColor: 'transparent',
-        fontWeight: '200',
-        marginLeft: 8,
+        textAlign: 'center',
         color: Colors.main,
         fontFamily: 'roboto-Light'
     }

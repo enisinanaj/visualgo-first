@@ -25,6 +25,7 @@ import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
 import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
+import NoOpModal from './common/NoOpModal';
 import FilterBar from './common/filter-bar';
 import NewGroup from './NewGroup';
 import BlueMenu from './common/blue-menu';
@@ -74,22 +75,25 @@ export default class Login extends Component {
         <View style={styles.container}>
             <Text style={[styles.welcomeLabel, {marginTop: 50}]}>Welcome to VisualGo!</Text>
 
-            <TouchableOpacity disabled={true}>
+            <TouchableOpacity onPress={() => this._noOpModalEmail.toggleState()}>
               <View style={[styles.oAuthButton, styles.buttonStyleEmail, styles.buttonDisabled, Shadow.filterShadow]}>
                 <Text style={[styles.oAuthButtonContent]}>REGISTER WITH EMAIL</Text>
               </View>
+              <NoOpModal featureName={"Email Registration "} ref={(noOpModal) => this._noOpModalEmail = noOpModal} />
             </TouchableOpacity>
 
-            <TouchableOpacity disabled={true}>
+            <TouchableOpacity onPress={() => this._noOpModalLinkedin.toggleState()}>
               <View style={[styles.oAuthButton, styles.buttonStyleLinkedin, styles.buttonDisabled, Shadow.filterShadow]}>
-                <Text style={[styles.oAuthButtonContent]}>CONTINUE WITH GOOGLE</Text>
+                <Text style={[styles.oAuthButtonContent]}>CONTINUE WITH LINKEDIN</Text>
               </View>
+              <NoOpModal featureName={"LinkedIn login "} ref={(noOpModal) => this._noOpModalLinkedin = noOpModal} />
             </TouchableOpacity>
 
-            <TouchableOpacity disabled={true}>
+            <TouchableOpacity onPress={() => this._noOpModalGoogle.toggleState()}>
               <View style={[styles.oAuthButton, styles.buttonStyleGoogle, styles.buttonDisabled, Shadow.filterShadow]}>
                 <Text style={[styles.oAuthButtonContent]}>CONTINUE WITH GOOGLE</Text>
               </View>
+              <NoOpModal featureName={"Google login "} ref={(noOpModal) => this._noOpModalGoogle = noOpModal} />
             </TouchableOpacity>
 
             <Text style={[styles.welcomeLabel, {marginTop: 30}]}>Or...</Text>
