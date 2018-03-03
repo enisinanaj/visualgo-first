@@ -35,6 +35,7 @@ import TagListTask from './tag-list-task';
 import TaskDescription from './task-description';
 import moment from 'moment';
 import locale from 'moment/locale/it'
+import DisabledStyle from '../../constants/DisabledStyle';
 
 export default class CreateTask extends Component {
     constructor() {
@@ -494,7 +495,7 @@ export default class CreateTask extends Component {
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {(allTags.length == 0 || clustersLength == 0) && false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                                 : null}
@@ -539,13 +540,14 @@ export default class CreateTask extends Component {
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View key={i} style={[{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}, DisabledStyle.disabled]}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
+                        disabled={true}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || managersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {(allTags.length == 0 || managersLength == 0) && false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                                 : null}
