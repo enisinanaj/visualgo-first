@@ -152,7 +152,7 @@ export default class EnvironmentList extends Component {
 
   renderSelectableComponent(data) {
       return (
-        <View style={[{marginLeft: 10, width: 30, height: 30, borderRadius: 15, backgroundColor: 'transparent', marginRight: 5}, 
+        <View style={[{marginLeft: 10, width: 30, height: 30, borderRadius: 15, backgroundColor: 'transparent', marginRight: 0, marginTop: 5}, 
                       Shadow.filterShadow]}>
           <FontAwesome name={"circle"} 
               size={30} color={data.color} />
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   textInRow: {
-    marginLeft: 10,
+    marginLeft: 5,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'

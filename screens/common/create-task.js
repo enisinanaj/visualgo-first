@@ -117,8 +117,11 @@ export default class CreateTask extends Component {
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, 
                 borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.gray, flexDirection: 'row',
+                borderBottomColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                {Platform.OS === 'ios' ? 
+                    <View style={{position: 'absolute', top: 0, height: 20, width: width, backgroundColor: Colors.main}} />
+                : null}
                 <TouchableOpacity onPress={this.props.closeModal}>
                     <EvilIcons name={"close"} size={22} color={Colors.main}/>
                 </TouchableOpacity>
@@ -173,7 +176,7 @@ export default class CreateTask extends Component {
     renderCommentSwitchRow() {
         return (
             <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.gray, flexDirection: 'row',
+                borderBottomColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                 <View style={styles.viewAndroid}>
                     <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
@@ -203,7 +206,7 @@ export default class CreateTask extends Component {
     renderPostType() {
         return (
             <View style={{backgroundColor: Colors.borderGray, flexDirection: 'row',
-                justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 17}}>
+                justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 15}}>
                 <Text style={{color: Colors.main, fontSize: 14, marginRight: 30, height: 18, marginLeft: 5, fontFamily: 'roboto-regular'}}>
                     Task
                 </Text>
@@ -224,8 +227,8 @@ export default class CreateTask extends Component {
 
     renderTaskDescription() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({taskDescriptionModal: true})} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     {this.state.taskDescription != '' ?
@@ -238,7 +241,7 @@ export default class CreateTask extends Component {
                         </Text>
                     }
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10,
-                        position: 'absolute', right: 0}} />
+                        position: 'absolute', right: 0, top: -3}} />
                 </TouchableOpacity>
             </View>
         )
@@ -272,38 +275,49 @@ export default class CreateTask extends Component {
     }
 
     renderTheme() {
-        const objs =
-            [
-                {
-                    name: 'Choose Task #Theme',
-                    onPress: () => this.setState({themeModal: true})
-                }
-            ];
-
         var {selectedTheme} = this.state;
-        if (selectedTheme != undefined && selectedTheme.themeName != undefined) {
-            objs[0].name = selectedTheme.themeName;
+
+        if (selectedTheme.themeName != undefined) {
+            var img = {uri: selectedTheme.photo.url};
         }
 
-        return objs.map((o, i) => {
-
-            return (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+        return (
+            selectedTheme.themeName == undefined ?
+                <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={() => this.setState({themeModal: true})} 
+                        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={[styles.rowTextStyle, selectedTheme.themeName == undefined ? {} : {color: Colors.main}]}>
-                                    {o.name}
-                                </Text>
-                                {selectedTheme.themeName == undefined ? <Text style={{color:'red', marginLeft: 5}}>*</Text> : null}
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
+                                <Text style={[styles.rowTextStyle]}>Choose Task #Theme</Text>
+                                <Text style={{color:'red', marginLeft: 5}}>*</Text>
                             </View>
                         </View>
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10, marginTop: o.innerName != undefined && o.innerName != '' ? 10 : 0}} />
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            :
+                <View style={{flexDirection: 'row', height: 70, alignItems: 'center', paddingLeft: 0,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 0}}>
+                    <TouchableOpacity onPress={() => this.setState({themeModal: true})} 
+                        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flex:1}}>
+                            <Image style={{flex: 1, height: 70, width: width, 
+                                           position:'absolute', resizeMode: 'center', top: -19, left: 0}} 
+                                source={img} />
+                            <View style={{flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+                                <Text style={{color: Colors.white, fontSize: 22, fontFamily: 'roboto-bold',
+                                            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                                            textShadowOffset: {width: 1, height: 1},
+                                            textShadowRadius: 10, flex: 1, padding: 3, textAlign: 'center'}}>
+                                    {selectedTheme.themeName}
+                                </Text>
+                            </View>
+                        </View>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10, backgroundColor: 'transparent'}} />
                     </TouchableOpacity>
                 </View>
             )
-        })
     }
 
     renderSelectedTag(data){
@@ -325,12 +339,12 @@ export default class CreateTask extends Component {
         var {environment} = this.state;
 
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} 
                                   style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         {environment.environmentName == undefined ?
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={[styles.rowTextStyle]}>
                                     Choose Task @Environment
                                 </Text>
@@ -384,12 +398,14 @@ export default class CreateTask extends Component {
         var isDisabled = environment.environmentName == undefined || selectedTheme.themeName == undefined;
 
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this._getDocuments()} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} 
                     disabled={isDisabled}>
-                    <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}]}>Visual Guideline</Text>
+                    <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}, {marginTop: 4}]}>
+                        Visual Guideline
+                    </Text>
                     <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
                         <Ionicons name={"ios-attach"} color={isDisabled ? Colors.grayText : Colors.main} size={28} style={{marginRight: 0}} />
                         <EvilIcons name={"chevron-right"} color={isDisabled ? Colors.grayText : Colors.main} size={32} />
@@ -401,15 +417,15 @@ export default class CreateTask extends Component {
 
     renderStartDueDate() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({calendarModal: true})}>
                     {this.state.start != undefined && this.state.due != undefined ?
                         <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 16, paddingTop: 5, color: Colors.main}}>
                             {moment(this.state.start).locale("it").format("DD/MM/YYYY")} - {moment(this.state.due).locale("it").format("DD/MM/YYYY")}
                         </Text>
                     :
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 4}}>
                         <Text style={styles.rowTextStyle}>Start/Due Date</Text>
                     </View>}
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
@@ -420,8 +436,8 @@ export default class CreateTask extends Component {
 
     renderPhoto() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Feather name={this.state.addPhotoSelected ? "check-square" : "square"} size={27} color={Colors.main} />
@@ -445,8 +461,8 @@ export default class CreateTask extends Component {
 
     renderVideo() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Feather name={!this.state.addVideoSelected ? "square" : "check-square"} size={27} color={Colors.main} />
@@ -470,8 +486,8 @@ export default class CreateTask extends Component {
 
     render360() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Feather name={this.state.add360Selected ? "check-square" : "square"} size={27} color={Colors.main} />
@@ -525,12 +541,12 @@ export default class CreateTask extends Component {
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={styles.rowTextStyle}>{o.name}</Text>
+                                <Text style={[styles.rowTextStyle, {marginTop: 4}]}>{o.name}</Text>
                                 {(allTags.length == 0 || clustersLength == 0) && false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
@@ -576,15 +592,16 @@ export default class CreateTask extends Component {
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={[{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}, DisabledStyle.disabled]}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} 
+                                      style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}, DisabledStyle.disabled]}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={styles.rowTextStyle}>{o.name}</Text>
+                                <Text style={[styles.rowTextStyle, {marginTop: 4}]}>{o.name}</Text>
                                 {(allTags.length == 0 || managersLength == 0) && false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 16, paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                                 : null}
                             </View>
                         </View>
@@ -603,7 +620,7 @@ export default class CreateTask extends Component {
 
         return (
             <View style={{height: this.state.visibleHeight}}>
-                <StatusBar barStyle={'default'} animated={true}/>
+                <StatusBar barStyle={'light-content'} animated={true}/>
                 {this.renderHeader()}
                 <ScrollView>
                     {this.renderCommentSwitchRow()}
@@ -711,6 +728,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         paddingLeft: 5,
-        paddingTop: 5
+        paddingTop: 0
     }
 });

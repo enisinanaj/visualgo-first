@@ -32,15 +32,15 @@ import ExtendedStatus from './ExtendedStatus';
 const {width, height} = Dimensions.get('window');
 
 const themes = [
-  {title: '# SanValentino', img: require('../img/elmo.jpg'), id: 1},
-  {title: '# SaldiFebbraio', img: require('../img/bob.png'), id: 2},
-  {title: '# Sale', img: require('../img/cookiemonster.jpeg'), id: 3},
-  {title: '# NewCollection', img: require('../img/elmo.jpg'), id: 4},
-  {title: '# FlowersTheme', img: require('../img/elmo.jpg'), id: 5},
-  {title: '# SanValentino', img: require('../img/elmo.jpg'), id: 6},
-  {title: '# SaldiFebbraio', img: require('../img/bob.png'), id: 7},
-  {title: '# Sale', img: require('../img/elmo.jpg'), id: 8},
-  {title: '# NewCollection', img: require('../img/elmo.jpg'), id: 9}];
+  {title: '# SanValentino', img: {url: 'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}, id: 1},
+  {title: '# SaldiFebbraio', img: {url: 'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}, id: 2},
+  {title: '# Sale', img: {url: 'http://retaildesignblog.net/wp-content/uploads/2015/12/Guy-Laroche-Store-by-Square-Design-Interiors-Athens-Greece-02.jpg'}, id: 3},
+  {title: '# NewCollection', img: {url: 'https://media.timeout.com/images/103399489/image.jpg'}, id: 4},
+  {title: '# FlowersTheme', img: {url: 'https://i1.wp.com/businessingambia.com/wp-content/uploads/2016/06/Clothing-store.jpg?resize=678%2C381'}, id: 5},
+  {title: '# SanValentino', img: {url: 'https://media.timeout.com/images/103399489/image.jpg'}, id: 6},
+  {title: '# SaldiFebbraio', img: {url: 'https://amp.businessinsider.com/images/55a6caf42acae716008b7018-750-562.jpg'}, id: 7},
+  {title: '# Sale', img: {url: 'http://retaildesignblog.net/wp-content/uploads/2012/11/VILA-Clothes-shop-by-Riis-Retail-Copenhagen.jpg'}, id: 8},
+  {title: '# NewCollection', img: {url: 'https://media.timeout.com/images/103399489/image.jpg'}, id: 9}];
 
 var themesToShow = themes;
 var currentCategory = "themes";
@@ -161,7 +161,7 @@ export default class ThemeList extends Component {
     }
 
     this.setState({themeSource: ds.cloneWithRows(themesToShow)});
-    this.props.closeModal({themeName: rowData.title, photo: undefined});
+    this.props.closeModal({themeName: rowData.title, photo: rowData.img});
   }
 
   renderSelectableComponent(data) {
@@ -173,9 +173,9 @@ export default class ThemeList extends Component {
               size={24} color={Colors.gray} />
       );
     }
-    
+
     return (
-      <Image source={data.img} style={styles.selectableDisplayPicture} />
+      <Image source={{uri: data.img.url}} style={styles.selectableDisplayPicture} />
     );
   }
 
@@ -193,34 +193,6 @@ export default class ThemeList extends Component {
 
   _renderRow(data) {
     return <DefaultRow arguments={data} renderChildren={() => this.renderThemeRow(data)} noborder={true} />
-  }
-
-  _renderSelectedThemeElement(data) {
-    if (data.category != 'managers') {
-      return (
-      <TouchableOpacity onPress={() => this.toggleRow(data)}>
-        <Text style={{color: Colors.white, marginRight: 13, marginTop: 10}}>{data.title}</Text>
-      </TouchableOpacity>
-      )
-    } else {
-      return (
-        <TouchableOpacity onPress={() => this.toggleRow(data)}>
-          <Image source={data.img} style={styles.selectedDisplayPictureInFooter} />
-        </TouchableOpacity>
-      ) 
-    }
-  }
-
-  _renderSelectedThemes() {
-    var dataSource = ds.cloneWithRows(this.state.selectedThemes);
-    var result = <ListView
-        dataSource={dataSource}
-        horizontal={true}
-        renderRow={(data) => this._renderSelectedThemeElement(data)}
-        
-      />;
-
-    return result;
   }
 
   renderSaveBar() {
@@ -301,7 +273,7 @@ const styles = StyleSheet.create({
   selectableDisplayPicture: {
     width: 35,
     height: 35,
-    borderRadius: 25,
+    borderRadius: 17.5,
     marginLeft: 10
   },
   filterBarContainer: {

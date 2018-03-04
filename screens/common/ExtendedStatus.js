@@ -158,7 +158,7 @@ export default class ExtendedStatus extends Component {
                         borderBottomColor: Colors.borderGray, flexDirection: 'column', height: 'auto',
                         justifyContent: 'flex-start', padding: 0}}>
                 {this.state.photos.length == 1 ? 
-                    <View style={{height: 250, width: width, position: 'relative', left: 0, zIndex: 10}}>
+                    <View style={{height: 240, width: width, position: 'relative', left: 0, zIndex: 10}}>
                         <SingleImage image={{uri: this.state.photos[0].url}} removeSingleVisibile={false}/>
                         <TextInput autoFocus={false} style={{height: 30, fontSize: 20, marginTop: 10, marginBottom: 10,
                             marginLeft: 20, 

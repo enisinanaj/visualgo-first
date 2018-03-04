@@ -148,7 +148,7 @@ export default class ExtendedStatus extends Component {
                         borderBottomColor: Colors.borderGray, flexDirection: 'column', height: 'auto',
                         justifyContent: 'flex-start', padding: 0}}>
                 {this.state.postBackgroundColor != '' ? 
-                    <View style={{height: 250, width: width, position: 'relative', left: 0, zIndex: 10, backgroundColor: this.state.postBackgroundColor}}>
+                    <View style={{height: 240, width: width, position: 'relative', left: 0, zIndex: 10, backgroundColor: this.state.postBackgroundColor}}>
                         <TextInput autoFocus={false} style={{height: 30, fontSize: 20, marginTop: 10, marginBottom: 10,
                                 marginLeft: 20, 
                                 position: 'absolute',

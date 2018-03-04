@@ -97,8 +97,11 @@ export default class CreatePost extends Component{
     renderHeader() {
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.gray, flexDirection: 'row',
+                borderBottomColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                {Platform.OS === 'ios' ? 
+                    <View style={{position: 'absolute', top: 0, height: 20, width: width, backgroundColor: Colors.main}} />
+                : null}
                 <TouchableOpacity onPress={this.props.closeModal}>
                     <Text>
                         <EvilIcons name={"close"} size={22} color={Colors.main}/>
@@ -131,7 +134,7 @@ export default class CreatePost extends Component{
     renderCommentSwitchRow() {
             return (
                 <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                    borderBottomColor: Colors.gray, flexDirection: 'row',
+                    borderBottomColor: Colors.borderGray, flexDirection: 'row',
                     justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                     <View style={styles.viewAndroid}>
                         <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginTop: 6}}>
@@ -152,7 +155,7 @@ export default class CreatePost extends Component{
     renderPostType() {
         return (
             <View style={{backgroundColor: Colors.borderGray, borderBottomWidth:StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.gray, flexDirection: 'row',
+                borderBottomColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'flex-start', alignItems: 'center', padding: 13, paddingTop: 16}}>
                 <TouchableOpacity onPress={() => {this.props.handleTypeChange != undefined ? this.props.handleTypeChange('task') : {}}}>
                     <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginRight: 30, height: 18, marginLeft: 5}}>
@@ -198,7 +201,7 @@ export default class CreatePost extends Component{
         return (
             <View style={{height: 40, justifyContent: 'center',
                         borderTopWidth: StyleSheet.hairlineWidth,
-                        borderTopColor: Colors.gray}}>
+                        borderTopColor: Colors.borderGray}}>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1}}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start',
                                   paddingLeft: 10, 
@@ -319,9 +322,9 @@ export default class CreatePost extends Component{
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={[{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth},
-                    i == objs.length - 1 ? {borderBottomColor: Colors.gray, borderBottomWidth: StyleSheet.hairlineWidth}: {}]}>
+                <View key={i} style={[{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth},
+                    i == objs.length - 1 ? {borderBottomColor: Colors.borderGray, borderBottomWidth: StyleSheet.hairlineWidth}: {}]}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={styles.rowTextStyle}>{o.name}</Text>
                         {o.innerName != undefined && o.innerName != '' ? 
@@ -368,7 +371,7 @@ export default class CreatePost extends Component{
 
         return (
             <View style={{height: this.state.visibleHeight}}>
-                <StatusBar barStyle={'default'} animated={true}/>
+                <StatusBar barStyle={'light-content'} animated={true}/>
                 {this.renderHeader()}
                 <ScrollView>
                     {this.renderCommentSwitchRow()}
@@ -437,7 +440,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontSize: 16,
         fontWeight: '500',
-        paddingLeft: 16,
+        paddingLeft: 4,
         paddingTop: 5
     }
 });

@@ -38,11 +38,11 @@ const stores = [
   {title: 'Fashion', subtitle: '47 Negozi', selected: false }];
 
 const managers = [
-  {title: 'Roseanne Font', subtitle: 'Milan Store', img: require('../img/elmo.jpg'), selected: false }, 
-  {title: 'Denis Mcgraw', subtitle: 'Rome Store', img: require('../img/bob.png'), selected: false },
-  {title: 'Love Guerette', subtitle: 'Paris Store', img: require('../img/cookiemonster.jpeg'), selected: false },
-  {title: 'Marget Divers', subtitle: 'London Store', img: require('../img/elmo.jpg'), selected: false },
-  {title: 'Moriah Fewell', subtitle: 'Shanghai Store', img: require('../img/me.png'), selected: false }];
+  {title: 'Roseanne Font', subtitle: 'Milan Store', img: require('../img/dp1.jpg'), selected: false }, 
+  {title: 'Denis Mcgraw', subtitle: 'Rome Store', img: require('../img/dp2.jpg'), selected: false },
+  {title: 'Love Guerette', subtitle: 'Paris Store', img: require('../img/dp1.jpg'), selected: false },
+  {title: 'Marget Divers', subtitle: 'London Store', img: require('../img/dp3.jpg'), selected: false },
+  {title: 'Moriah Fewell', subtitle: 'Shanghai Store', img: require('../img/dp2.jpg'), selected: false }];
 
 var tagsToShow = clusters;
 var currentCategory = "clusters";
@@ -190,7 +190,7 @@ export default class TagListTask extends Component {
     if (data.img == undefined) {
       return (
         <Ionicons name={data.selected ? "ios-checkmark-circle" : "ios-checkmark-circle-outline"} 
-              size={30} color={data.selected ? Colors.main : Colors.gray} />
+              size={30} color={data.selected ? Colors.main : Colors.gray} style={{marginLeft: 10}} />
       );
     }
     
@@ -318,9 +318,10 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   selectableDisplayPicture: {
-    width: 50,
-    height: 50,
-    borderRadius: 25
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginLeft: 10
   },
   selectedDisplayPictureInFooter: {
     width: 40,

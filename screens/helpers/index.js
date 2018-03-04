@@ -3,28 +3,27 @@
  */
 const profile = [
     {
-        source: require('../img/bob.png'),
-        name: 'Bob the Builder',
+        source: require('../img/dp2.jpg'),
+        name: 'Marco',
         online: false,
     },
     {
-        source: require('../img/cookiemonster.jpeg'),
-        name: 'Cookie Monster',
+        source: require('../img/dp1.jpg'),
+        name: 'Jennifer',
         online: true,
     },
     {
         source: require('../img/elmo.jpg'),
-        name: 'Elmo',
+        name: 'Christina',
         online: false,
     }
 ];
 
 const images = {
-    '1': require('../img/1.jpg'),
-    '2': require('../img/2.jpg'),
-    '3': require('../img/3.jpg'),
-    '4': require('../img/4.jpg'),
-    '5': require('../img/5.jpg')
+    '1': require('../img/shopping1.jpg'),
+    '2': require('../img/shopping2.jpg'),
+    '3': require('../img/shopping3.jpg'),
+    '4': require('../img/shopping4.jpg')
 }
 
 export const MenuIcons = {
