@@ -11,6 +11,8 @@ import {
   ScrollView,
   Keyboard } from 'react-native';
 
+import {Font, AppLoading} from 'expo';
+
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
@@ -33,6 +35,14 @@ export default class TaskDescription extends Component {
   componentDidMount () {
     Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
     Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
+    this.loadFonts();
+  }
+
+  async loadFonts() {
+    await Font.loadAsync({
+      'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
+    });
   }
 
   componentWillUnmount() {
@@ -59,7 +69,7 @@ export default class TaskDescription extends Component {
           borderBottomColor: Colors.gray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={this.props.closeModal}>
-            <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Cancel</Text>
+            <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-light'}}>Cancel</Text>
           </TouchableOpacity>
       </View>
     );

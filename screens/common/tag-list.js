@@ -7,15 +7,18 @@ import {
   StyleSheet,
   RefreshControl,
   StatusBar,
+  Keyboard,
+  KeyboardAvoidingView,
   Image,
+  Dimensions,
   TouchableOpacity,
   ListView } from 'react-native';
 
+import {Font, AppLoading} from 'expo';
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {EvilIcons, Ionicons} from '@expo/vector-icons';
 
 import _ from 'lodash';
 
@@ -44,6 +47,7 @@ var tagsToShow = clusters;
 var currentCategory = "clusters";
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const {width, height} = Dimensions.get('window');
 
 export default class TagList extends Component {
   constructor(props) {
@@ -51,11 +55,48 @@ export default class TagList extends Component {
 
     this.state = {
       tagSource: ds.cloneWithRows(tagsToShow),
-      selectedTags: []
+      selectedTags: [],
+      isReady: false,
+      visibleHeight: height
     };
 
     this._onScroll = this._onScroll.bind(this);
     this.loadMore = _.debounce(this.loadMore, 300);
+  }
+
+  componentDidMount() {
+    Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+    Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
+    this.loadFonts();
+  }
+
+  async loadFonts() {
+    console.log("loading fonts...");
+    await Font.loadAsync({
+      'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
+      'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf'
+    });
+
+    this.setState({isReady: true});
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardWillShow');
+    Keyboard.removeListener('keyboardWillHide');
+  }
+
+  keyboardWillShow (e) {
+    this.setState({keyboardIsOpen: true});
+    let newSize = height - e.endCoordinates.height;
+    this.setState({visibleHeight: newSize, k_visible: true})
+  }
+
+  keyboardWillHide (e) {
+    this.setState({keyboardIsOpen: false});
+    if(this.componentDidMount) {
+        this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+    }
   }
 
   _onRefresh() {
@@ -88,11 +129,7 @@ export default class TagList extends Component {
           borderBottomColor: Colors.gray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
-            <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Cancel</Text>
-          </TouchableOpacity>
-          <Text style={{fontSize: 16, color: 'black', fontWeight: '600'}}>Tags</Text>
-          <TouchableOpacity onPress={() => this.props.closeModal(this.state.selectedTags)}>
-            <Text style={{color: this.state.selectedTags.length > 0 ? Colors.main : Colors.gray, fontWeight: '700', fontSize: 18}}>Done</Text>
+            <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Cancel</Text>
           </TouchableOpacity>
       </View>
     );
@@ -194,15 +231,19 @@ export default class TagList extends Component {
         dataSource={dataSource}
         horizontal={true}
         renderRow={(data) => this._renderSelectedTagElement(data)}
-        
       />;
-
     return result;
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
+
+    var {visibleHeight} = this.state;
+
     return (
-      <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
+      <KeyboardAvoidingView style={{height: visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
         <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
@@ -214,8 +255,13 @@ export default class TagList extends Component {
         />
         <View style={[styles.selectedTags, this.state.selectedTags.length > 0 ? {height: 60, padding: 10} : {}]}>
           {this._renderSelectedTags()}
+          <TouchableOpacity  onPress={() => this.props.closeModal(this.state.selectedTags)}>
+            {this.state.selectedTags.length > 0 ? 
+              <Text style={{color: Colors.white, fontFamily: 'roboto-bold', fontSize: 18, paddingRight: 10, marginTop: 8}}>Done</Text> 
+            : null }
+          </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -259,6 +305,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main,
     padding: 0,
     margin: 0,
+    flexDirection: 'row',
   },
   selectableDisplayPicture: {
     width: 50,

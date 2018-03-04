@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   ListView,
   TextInput,
+  Keyboard,
+  KeyboardAvoidingView,
   Platform,
   Dimensions,
   ScrollView } from 'react-native';
@@ -56,7 +58,8 @@ export default class ThemeList extends Component {
       creatingNew: false,
       imageBrowserOpen: false,
       photos: [],
-      themeDescription: ''
+      themeDescription: '',
+      visibleHeight: height
     };
 
     this._onScroll = this._onScroll.bind(this);
@@ -64,6 +67,9 @@ export default class ThemeList extends Component {
   }
 
   componentDidMount() {
+    Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+    Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
     this.loadFonts();
   }
 
@@ -75,6 +81,24 @@ export default class ThemeList extends Component {
     });
 
     this.setState({isReady: true});
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardWillShow');
+    Keyboard.removeListener('keyboardWillHide');
+  }
+
+  keyboardWillShow (e) {
+    this.setState({keyboardIsOpen: true});
+    let newSize = height - e.endCoordinates.height;
+    this.setState({visibleHeight: newSize, k_visible: true})
+  }
+
+  keyboardWillHide (e) {
+    this.setState({keyboardIsOpen: false});
+    if(this.componentDidMount) {
+        this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+    }
   }
 
   _onRefresh() {
@@ -220,7 +244,7 @@ export default class ThemeList extends Component {
     }
 
     return (
-      <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
+      <KeyboardAvoidingView style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
         <ExtendedStatus onStateChange={(v) => this.setState({creatingNew: v})}
@@ -236,7 +260,7 @@ export default class ThemeList extends Component {
           /> : null}
         </ScrollView>
         {this.renderSaveBar()}
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

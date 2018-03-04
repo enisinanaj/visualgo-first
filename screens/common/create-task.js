@@ -120,10 +120,7 @@ export default class CreateTask extends Component {
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
-                    <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>
-                        {false ? <EvilIcons name={"close"} size={22} color={Colors.main}/> : null}
-                        Cancel
-                    </Text>
+                    <EvilIcons name={"close"} size={22} color={Colors.main}/>
                 </TouchableOpacity>
                 <View>
                     <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Task</Text>
@@ -340,7 +337,7 @@ export default class CreateTask extends Component {
                                 <Text style={{color:'red', marginLeft: 5}}>*</Text>
                             </View>
                         :
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 12}}>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 7}}>
                                 <View style={[{width: 22, height: 22, borderRadius: 11, backgroundColor: 'transparent', marginRight: 5, marginTop: 5}, 
                                             Shadow.filterShadow]}>
                                     <FontAwesome name={"circle"} size={22} color={environment.background} />
@@ -480,7 +477,7 @@ export default class CreateTask extends Component {
                         <Feather name={this.state.add360Selected ? "check-square" : "square"} size={27} color={Colors.main} />
                         <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>360°</Text>
                     </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 5}}>
                         <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}} disabled={this.state.count360 > 0 ? false : true}>
                             <EvilIcons name={"minus"} color={((this.state.add360Selected) && (this.state.count360 > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
                         </TouchableOpacity>
@@ -713,7 +710,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontSize: 16,
         fontWeight: '500',
-        paddingLeft: 16,
+        paddingLeft: 5,
         paddingTop: 5
     }
 });

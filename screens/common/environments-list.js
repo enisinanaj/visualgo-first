@@ -10,6 +10,8 @@ import {
   Image,
   TouchableOpacity,
   ListView,
+  Keyboard,
+  KeyboardAvoidingView,
   TextInput,
   Platform,
   Dimensions,
@@ -53,7 +55,8 @@ export default class EnvironmentList extends Component {
       background: '',
       environment: '',
       isReady: false,
-      insertion: false
+      insertion: false,
+      visibleHeight: height
     };
 
     this._onScroll = this._onScroll.bind(this);
@@ -61,6 +64,9 @@ export default class EnvironmentList extends Component {
   }
 
   componentDidMount() {
+    Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+    Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
     this.loadFonts();
   }
 
@@ -71,6 +77,26 @@ export default class EnvironmentList extends Component {
     });
 
     this.setState({isReady: true});
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardWillShow');
+    Keyboard.removeListener('keyboardWillHide');
+  }
+
+  keyboardWillShow (e) {
+    console.log("keyboard will showm");
+    this.setState({keyboardIsOpen: true});
+    let newSize = height - e.endCoordinates.height;
+    this.setState({visibleHeight: newSize, k_visible: true})
+  }
+
+  keyboardWillHide (e) {
+    console.log("keyboard will hide");
+    this.setState({keyboardIsOpen: false});
+    if(this.componentDidMount) {
+        this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+    }
   }
 
   _onRefresh() {
@@ -159,9 +185,9 @@ export default class EnvironmentList extends Component {
 
     return (
       <View style={[styles.bottomBar]}>
-          <TouchableOpacity onPress={() => {this.props.closeModal({environmentName: this.state.environment, background: this.state.background})}}>
-              <Text style={styles.saveButton}>Save and Select</Text>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => {this.props.closeModal({environmentName: this.state.environment, background: this.state.background})}}>
+            <Text style={styles.saveButton}>Save and Select</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -175,25 +201,29 @@ export default class EnvironmentList extends Component {
       return <AppLoading />;
     }
 
+    var {visibleHeight} = this.state;
+
     return (
-      <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
+      <KeyboardAvoidingView style={{height: visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
         <ExtendedStatusWithBackgroundColor onDone={(text, color) => {this.onNewDone(text, color)}} 
             onStateChange={(state) => {this.setState({insertion: state})}} />
-        {!this.state.insertion ?
         <ScrollView>
-          <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} noborder={true} />
-          <ListView
-            style={styles.listView}
-            onScroll={this._onScroll}
-            dataSource={this.state.environmentSource}
-            renderRow={(data) => this._renderRow(data)}
-          
-          />
-        </ScrollView> : null}
+          {!this.state.insertion ?
+            <View>
+              <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} noborder={true} />
+              <ListView
+                style={styles.listView}
+                onScroll={this._onScroll}
+                dataSource={this.state.environmentSource}
+                renderRow={(data) => this._renderRow(data)}
+              />
+            </View>
+          : null}
+        </ScrollView>
         {this.renderSaveBar()}
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -256,15 +286,13 @@ const styles = StyleSheet.create({
   filterBarContainer: {
       backgroundColor: Colors.white
   },
+  
   bottomBar: {
     backgroundColor: Colors.main,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: 15,
-    height: "auto",
-    position: 'absolute',
-    width: width,
-    bottom: 0
+    height: "auto"
   },
   saveButton: {
     fontFamily: 'roboto-bold',
@@ -272,8 +300,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 10,
     width: 180,
-    textAlign: 'right',
-    left: 0,
-    right: 0
+    textAlign: 'right'
   },
 });

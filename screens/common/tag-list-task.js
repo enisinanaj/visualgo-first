@@ -8,14 +8,18 @@ import {
   RefreshControl,
   StatusBar,
   Image,
+  Dimensions,
+  Keyboard,
+  KeyboardAvoidingView,
   TouchableOpacity,
   ListView } from 'react-native';
 
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {EvilIcons, Ionicons} from '@expo/vector-icons';
+
+import {Font, AppLoading} from 'expo';
 
 import _ from 'lodash';
 
@@ -44,6 +48,7 @@ var tagsToShow = clusters;
 var currentCategory = "clusters";
   
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const {width, height} = Dimensions.get('window');
 
 export default class TagListTask extends Component {
   constructor(props) {
@@ -58,11 +63,48 @@ export default class TagListTask extends Component {
 
     this.state = {
       tagSource: ds.cloneWithRows(tagsToShow),
-      selectedTags: []
+      selectedTags: [],
+      visibleHeight: height,
+      isReady: false
     };
 
     this._onScroll = this._onScroll.bind(this);
     this.loadMore = _.debounce(this.loadMore, 300);
+  }
+
+  componentDidMount() {
+    Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
+    Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+
+    this.loadFonts();
+  }
+
+  async loadFonts() {
+    await Font.loadAsync({
+      'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
+      'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf',
+      'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf'
+    });
+
+    this.setState({isReady: true});
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardWillShow');
+    Keyboard.removeListener('keyboardWillHide');
+  }
+
+  keyboardWillShow (e) {
+    this.setState({keyboardIsOpen: true});
+    let newSize = height - e.endCoordinates.height;
+    this.setState({visibleHeight: newSize, k_visible: true})
+  }
+
+  keyboardWillHide (e) {
+    this.setState({keyboardIsOpen: false});
+    if(this.componentDidMount) {
+        this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+    }
   }
 
   _onRefresh() {
@@ -95,7 +137,7 @@ export default class TagListTask extends Component {
           borderBottomColor: Colors.gray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 30}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
-            <Text style={{fontSize: 16, color: 'black', fontWeight: '600', color: Colors.main}}>Cancel</Text>
+            <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-light', color: Colors.main}}>Cancel</Text>
           </TouchableOpacity>
       </View>
     );
@@ -108,7 +150,9 @@ export default class TagListTask extends Component {
       {title: 'Clusters', selected: clustersVisible ? true : false, active: true, visible: clustersVisible, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
       {title: 'Store', selected: false, active: true, visible: storeVisible, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
       {title: 'Manager', selected: ((!clustersVisible) && (!storeVisible) && (managerVisible)) ? true : false, active: true, visible: managerVisible, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
-    return <View style={styles.filterBarContainer}><FilterBar data={filters} customStyle={{height: 100}} headTitle={this.props.headTitle}/></View>
+    return <View style={styles.filterBarContainer}>
+      <FilterBar data={filters} customStyle={{height: 100}} headTitle={this.props.headTitle}/>
+    </View>
   }
 
   filterForClusters() {
@@ -195,15 +239,20 @@ export default class TagListTask extends Component {
         dataSource={dataSource}
         horizontal={true}
         renderRow={(data) => this._renderSelectedTagElement(data)}
-        
       />;
 
     return result;
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
+
+    var {visibleHeight} = this.state;
+
     return (
-      <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
+      <KeyboardAvoidingView style={{height: visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>
         <StatusBar barStyle={'default'} animated={true}/>
         {this.renderHeader()}
         <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
@@ -217,10 +266,12 @@ export default class TagListTask extends Component {
         <View style={[styles.selectedTags, this.state.selectedTags.length > 0 ? {height: 60, padding: 10} : {}]}>
           {this._renderSelectedTags()}
           <TouchableOpacity  onPress={() => this.props.closeModal(this.state.selectedTags)}>
-            {this.state.selectedTags.length > 0 ? <Text style={{color: Colors.white, fontWeight: '700', fontSize: 18, paddingRight: 10, marginTop: 8}}>Done</Text> : null }
+            {this.state.selectedTags.length > 0 ? 
+              <Text style={{color: Colors.white, fontFamily: 'roboto-bold', fontSize: 18, paddingRight: 10, marginTop: 8}}>Done</Text> 
+            : null }
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

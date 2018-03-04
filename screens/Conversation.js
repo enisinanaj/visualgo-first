@@ -112,8 +112,8 @@ export default class Conversation extends Component {
     }
 
     keyboardWillShow (e) {
-        let newSize = Dimensions.get('window').height - e.endCoordinates.height
-            this.setState({visibleHeight: newSize, k_visible: true})
+        let newSize = Dimensions.get('window').height - e.endCoordinates.height;
+        this.setState({visibleHeight: newSize, k_visible: true})
     }
 
     keyboardWillHide (e) {
