@@ -16,6 +16,7 @@ import {
 
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
+import NoOpModal from '../common/NoOpModal';
 import Colors from '../../constants/Colors';
 import {EvilIcons, Ionicons} from '@expo/vector-icons';
 
@@ -44,8 +45,8 @@ const managers = [
   {title: 'Marget Divers', subtitle: 'London Store', img: require('../img/dp3.jpg'), selected: false },
   {title: 'Moriah Fewell', subtitle: 'Shanghai Store', img: require('../img/dp2.jpg'), selected: false }];
 
-var tagsToShow = clusters;
-var currentCategory = "clusters";
+var tagsToShow = managers;
+var currentCategory = "managers";
   
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const {width, height} = Dimensions.get('window');
@@ -147,11 +148,13 @@ export default class TagListTask extends Component {
     const {clustersVisible, storeVisible, managerVisible} = this.props;
 
     filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Manager'}, 
-      {title: 'Clusters', selected: clustersVisible ? true : false, active: true, visible: clustersVisible, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
-      {title: 'Store', selected: false, active: true, visible: storeVisible, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
-      {title: 'Manager', selected: ((!clustersVisible) && (!storeVisible) && (managerVisible)) ? true : false, active: true, visible: managerVisible, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
+      {title: 'Clusters', selected: false, active: true, visible: clustersVisible, onPress: () => this._noOpClusters.toggleState(), headTitle: 'Clusters', disabled: true},
+      {title: 'Store', selected: false, active: true, visible: storeVisible, onPress: () => this._noOpStores.toggleState(), headTitle: 'Stores', disabled: true},
+      {title: 'Manager', selected: true, active: true, visible: managerVisible, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
     return <View style={styles.filterBarContainer}>
       <FilterBar data={filters} customStyle={{height: 100}} headTitle={this.props.headTitle}/>
+      <NoOpModal featureName={"Cluster Tagging"} ref={(noOpModal) => this._noOpClusters = noOpModal} />
+      <NoOpModal featureName={"Stores Tagging"} ref={(noOpModal) => this._noOpStores = noOpModal} />
     </View>
   }
 

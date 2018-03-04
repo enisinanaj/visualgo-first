@@ -42,8 +42,8 @@ import AppSettings, { getProfile } from './helpers/index';
 const data = ['0', '1'];
 
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
-    {title: 'Survey', active: true}, 
-    {title: 'Post', active: true}, 
+    {title: 'Survey', active: true, disabled: true}, 
+    {title: 'Post', active: true, disabled: true}, 
     {title: '#Task', selected: true, active: true},
     {title: '#San Valentino', active: true, selected: true}];
 

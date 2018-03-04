@@ -356,7 +356,8 @@ export default class CreateTask extends Component {
                                             Shadow.filterShadow]}>
                                     <FontAwesome name={"circle"} size={22} color={environment.background} />
                                 </View>
-                                <Text style={[styles.rowTextStyle, {color: environment.background, paddingLeft: 0, fontFamily: 'roboto-bold'}]}>
+                                <Text style={[styles.rowTextStyle, {color: environment.background, paddingLeft: 0, fontFamily: 'roboto-bold',
+                                              marginTop: 5}]}>
                                     {environment.environmentName}
                                 </Text>
                             </View>
@@ -510,7 +511,7 @@ export default class CreateTask extends Component {
     }
 
     prepareAssignToModal() {
-        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Clusters', tagListTastModal: true});
+        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Managers', tagListTastModal: true});
     }
 
     renderAssignTo() {
@@ -537,6 +538,18 @@ export default class CreateTask extends Component {
 
             objs[0].name = "Assegnato a ";
             objs[0].innerName = clustersLabel;
+
+            var managersLength = allTags.filter((row) => row.category == 'managers').length;
+            console.log(managersLength);
+            var managersLabel = '';
+
+            if (managersLength > 1) {
+                managersLabel += managersLength + " Managers";
+            } else if (managersLength == 1) {
+                managersLabel += allTags.filter((row) => row.category == 'managers')[0].title;
+            }
+
+            objs[0].innerName = managersLabel;
         }
 
         return objs.map((o, i) => {
@@ -573,23 +586,6 @@ export default class CreateTask extends Component {
                 }
             ];
 
-        var {allTags} = this.state;
-
-        if (allTags.length > 0) {
-            var managersLength = allTags.filter((row) => row.category == 'managers').length;
-            console.log(managersLength);
-            var managersLabel = '';
-
-            if (managersLength > 1) {
-                managersLabel += managersLength + " Managers";
-            } else if (managersLength == 1) {
-                managersLabel += allTags.filter((row) => row.category == 'managers')[0].title;
-            }
-
-            objs[0].name = "Task Manager ";
-            objs[0].innerName = managersLabel;
-        }
-
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
                 <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
@@ -599,9 +595,9 @@ export default class CreateTask extends Component {
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={[styles.rowTextStyle, {marginTop: 4}]}>{o.name}</Text>
-                                {(allTags.length == 0 || managersLength == 0) && false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 16, paddingLeft: 5, paddingTop: 0}}>{o.innerName}</Text>
                                 : null}
                             </View>
                         </View>

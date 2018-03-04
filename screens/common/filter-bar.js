@@ -192,6 +192,11 @@ export default class FitlerBar extends Component {
     setSelected(b) {
         var buttons = this.props.data;
 
+        if (b.onPress != undefined && b.disabled) {
+            b.onPress();
+            return;
+        }
+
         for (let i = 0; i < buttons.length; i++) {
             buttons[i].selected = false;
 
@@ -220,7 +225,9 @@ export default class FitlerBar extends Component {
             }
         }
 
-        if (b.onSelected != undefined) {
+        if (b.onPress != undefined) {
+            b.onPress();
+        } else if (b.onSelected != undefined) {
             b.onSelected();
         }
 
