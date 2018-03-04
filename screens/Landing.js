@@ -80,7 +80,16 @@ export default class Landing extends Component {
 
     componentDidMount() {
         this.loadFonts(() => {setTimeout(() => {this.measureView()}, 0)});
-        
+
+        for (i in filters) {
+            if (filters[i].title == 'Survey') {
+                filters[i].onPress = () => this._noOpSurveyInFilter.toggleState();
+            }
+
+            if (filters[i].title == 'Post') {
+                filters[i].onPress = () => this._noOpPosts.toggleState();
+            }
+        }
     }
 
     async loadFonts(onLoaded) {
@@ -157,6 +166,8 @@ export default class Landing extends Component {
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
                     <FilterBar data={filters} headTitle={"My Wall"} />
+                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
+                    <NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
                 </View>;
         } else if (data == '1') {
             return (

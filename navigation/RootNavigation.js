@@ -1,20 +1,9 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image
-} from 'react-native';
-import {
-  StackNavigation,
-  TabNavigation,
-  TabNavigationItem,
-} from '@expo/ex-navigation';
-import {
-  Ionicons,
-} from '@expo/vector-icons';
+import {StyleSheet, View, Image} from 'react-native';
+import {StackNavigation,TabNavigation, TabNavigationItem} from '@expo/ex-navigation';
+import {Ionicons, FontAwesome} from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {MenuIcons} from '../screens/helpers/index';
 
 export default class RootNavigation extends React.Component {
