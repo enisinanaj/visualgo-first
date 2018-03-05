@@ -38,6 +38,9 @@ export const MenuIcons = {
     NOTIFICATION_W_IMAGE: require('../../assets/images/icons/notifications_white.png'),
     ALBUM_W_IMAGE: require('../../assets/images/icons/album_white.png'),
     REPORT_W_IMAGE: require('../../assets/images/icons/report_white.png'),
+    REPORT_MENU_DISABLED: require('../../assets/images/icons/ReportDisabled.png'),
+    CALENDAR_MENU_DISABLED: require('../../assets/images/icons/CalendarDisabled.png'),
+    MESSAGES_MENU_DISABLED: require('../../assets/images/icons/MessagesDisabled.png')
 }
 
 export default settings = {
