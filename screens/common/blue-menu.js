@@ -15,40 +15,39 @@ import {
 import Router from '../../navigation/Router';
 
 const {width, height} = Dimensions.get('window');
-import {EvilIcons} from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import ChatSearchBar from './chat-search-bar';
-import DefaultRow from '../common/default-row';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Feather from '@expo/vector-icons/Feather';
+import DefaultRow from './default-row';
+import NoOpModal from './NoOpModal';
+import {Feather, Ionicons, EvilIcons} from '@expo/vector-icons';
 import Login from '../Login';
 import {NavigationActions} from 'react-navigation';
 import {Font, AppLoading} from "expo";
 
 import {MenuIcons} from '../helpers/index';
-
-const data = ['Report', 'Visual Guideline', 'Wall', 'Calendar', 'Messages', 'To Do List', ' ', 'Anagrafiche', 'Logout'];
+import DisabledStyle from '../../constants/DisabledStyle';
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class BlueMenu extends Component {
     constructor(props) {
         super(props);
 
+        console.log(JSON.stringify(props.tabNavigation));
+
         const menus = [ 
-                {name: 'Report', icon: 'report', onPress: () => {}},
-                {name: 'Visual Guideline', icon: 'album', onPress: () => {}},
-                {name: 'Wall', icon: 'bacheca', onPress: () => {}},
-                {name: 'Calendar', icon: 'calendar', onPress: () => {}},
-                {name: 'Messages', icon: 'chat', onPress: () => {}},
-                {name: 'To Do List', icon: 'notification', onPress: () => {}},
-                {name: ''},
-                {name: 'Anagrafiche', onPress: () => {}},
-                {name: 'Gestisci negozi, Cluster e contatti', isSubtitle: true},
-                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}},
-                {name: ''}];
+                {name: 'Report', icon: 'report', onPress: () => {this['report'].toggleState()}, disabled: true, id: 'report'},
+                {name: 'Visual Guideline', icon: 'album', onPress: () => {this.props.source.navigateTo('visualGuidelines')}, id: 'visual_guideline'},
+                {name: 'Wall', icon: 'bacheca', onPress: () => {}, id: 'wall'},
+                {name: 'Calendar', icon: 'calendar', onPress: () => {this['calendar'].toggleState()}, disabled: true, id: 'calendar'},
+                {name: 'Messages', icon: 'chat', onPress: () => {this['messages'].toggleState()}, disabled: true, id: 'messages'},
+                {name: 'To Do List', icon: 'notification', onPress: () => {}, id: 'to_do_list'},
+                {name: 'Anagrafiche', onPress: () => {this['anagrafiche'].toggleState()}, style: {marginTop: 40}, disabled: true, id: 'anagrafiche'},
+                {name: 'Gestisci Negozi, cluster e contatti', isSubtitle: true, disabled: true, id: 'anagrafiche'},
+                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}, style: {marginTop: 15}, id: 'logout'}];
 
         this.state = {
             dataSource: ds.cloneWithRows(menus),
+            menus: menus,
             isReady: false
         }
     }
@@ -75,39 +74,35 @@ export default class BlueMenu extends Component {
           this.props.navigation.dispatch(resetAction);
     }
 
-    _renderRow(data) {
-        return (
-            <DefaultRow arguments={data} noborder={true} renderChildren={() => this.renderMenuItem(data)}/>
-        )
-    }
-
     _renderIcon(data) {
         let image;
         switch(data.icon) {
-        case 'chat':
-            image = MenuIcons.CHAT_W_IMAGE
-            break;
-        case 'album':
-            image = MenuIcons.ALBUM_W_IMAGE
-            break;
-        case 'calendar':
-            image = MenuIcons.CALENDAR_W_IMAGE
-            break;
-        case 'notification':
-            image = MenuIcons.NOTIFICATION_W_IMAGE
-            break;
-        case 'bacheca':
-            image = MenuIcons.BACHECA_W_IMAGE
-            break;
-        case 'report':
-            image = MenuIcons.REPORT_W_IMAGE
-            break;
+            case 'chat':
+                image = data.disabled ? MenuIcons.MESSAGES_MENU_DISABLED : MenuIcons.CHAT_W_IMAGE
+                break;
+            case 'album':
+                image = MenuIcons.ALBUM_W_IMAGE
+                break;
+            case 'calendar':
+                image = data.disabled ? MenuIcons.CALENDAR_MENU_DISABLED : MenuIcons.CALENDAR_W_IMAGE
+                break;
+            case 'notification':
+                image = MenuIcons.NOTIFICATION_W_IMAGE
+                break;
+            case 'bacheca':
+                image = MenuIcons.BACHECA_W_IMAGE
+                break;
+            case 'report':
+                image = data.disabled ? MenuIcons.REPORT_MENU_DISABLED : MenuIcons.REPORT_W_IMAGE
+                break;
         }
 
         if (data.iconType != undefined && data.iconType == 'Feather') {
-            return <Feather name={data.icon} 
-            size={20}
-            color={Colors.white}/>
+            return <View style={[styles.mainIcon, {marginLeft: 10, marginTop: 7}]}>
+                <Feather name={data.icon} 
+                    size={20}
+                    color={Colors.white}/>
+            </View>
         }
 
         if (data.icon == undefined) {
@@ -116,37 +111,33 @@ export default class BlueMenu extends Component {
         
         return <View style={[styles.mainIcon, {marginRight: 10}]}>
             <Image
-                style={{flex: 1, width: undefined, height: undefined}}
+                style={[{flex: 1, width: undefined, height: undefined}]}
                 source={image}
                 resizeMode="contain"/>
         </View>;
     }
 
-    renderMenuItem(data){
-
-        // height: Platform.OS == 'ios' ? 20 : 36
-        /*styles.menuItem, data.iconPosition == 'left' || (data.iconPosition == undefined && data.icon != undefined) 
-                            ? {marginLeft: 10, padding: 0} : {},
-                            data.iconPosition == 'right' ? {marginLeft: 10, padding: 0} : {},
-                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : Platform.OS == 'ios' ? styles.menuItemLarge : styles.menuItemAndroid*/
+    renderMenuItem(data) {
         return (
-            <TouchableOpacity onPress={() => data.onPress()}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', height: Platform.OS == 'ios' ? 17 : 36}} >
-                    {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
-                    <Text
-                        style={[styles.menuItem, data.iconPosition == 'left' || data.icon != undefined ? {} : {},
-                            data.iconPosition == 'right' ? {} : {},
-                            data.isSubtitle != undefined && data.isSubtitle ? styles.subtitle : 
-                                Platform.OS == 'ios' ? styles.menuItemLarge : styles.menuItemAndroid]}>
-                            {data.name}
-                    </Text>
-
-                    {data.iconPosition == "right" ? this._renderIcon(data) : null}
-                </View>
+            <TouchableOpacity onPress={() => data.onPress != undefined ? data.onPress() : {}} 
+                style={[{flexDirection: 'row'}, data.style != undefined ? data.style : {marginTop: 5}]}>
+                {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
+                <Text style={[data.isSubtitle ? styles.subtitle : styles.menuItemLarge, data.disabled ? styles.disabledMenu : {}]}>
+                    {data.name}
+                </Text>
+                {data.iconPosition == "right" ? this._renderIcon(data) : null}
+                {data.disabled ?
+                    <NoOpModal featureName={data.name} ref={(noOpModal) => this[data.id] = noOpModal} />
+                : null}
             </TouchableOpacity>
         )
     }
 
+    _renderMenuItems() {
+        return this.state.menus.map((menu, i) => {
+            return this.renderMenuItem(menu);
+        })
+    }
 
     render() {
         if (!this.state.isReady) {
@@ -155,14 +146,13 @@ export default class BlueMenu extends Component {
 
         return (
             <View style={styles.drawer}>
-                <Image source={require('../img/elmo.jpg')} style={styles.selectableDisplayPicture} />
-                <Text style={styles.accountName}>Giannino De Gianni</Text>
-                <Text style={styles.accountEmail}>giannino@warda.it</Text>
+                <Image source={require('../img/dp1.jpg')} style={styles.selectableDisplayPicture} />
+                <Text style={styles.accountName}>Daniela Contessa</Text>
+                <Text style={styles.accountEmail}>daniela.contessa@warda.it</Text>
 
-                <ListView
-                    dataSource={this.state.dataSource}
-                    renderRow={Platform.OS == 'ios' ? (data) => this._renderRow(data) : (data) => this.renderMenuItem(data)}
-                />
+                <View style={{flex: 1, flexDirection: 'column', marginTop: 40, justifyContent: 'flex-start'}}>
+                    {this._renderMenuItems()}
+                </View>
             </View>
         )
     }
@@ -171,23 +161,25 @@ export default class BlueMenu extends Component {
 const styles = StyleSheet.create({
     drawer: {
         height,
-        paddingTop: 65,
-        paddingLeft: 60, 
+        paddingTop: 70,
+        paddingLeft: 95, 
         width: width,
         position: 'absolute',
         backgroundColor: Colors.main,
         right: 0
     },
+
     mainIcon: {
         height: 26,
         width: 26,
-        marginTop: 2
+        marginTop: 2 
     },
+
     selectableDisplayPicture: {
         width: 50,
         height: 50,
         borderRadius: 25,
-        marginTop: 30,
+        marginTop: 0,
         marginLeft: 10,
     },
 
@@ -195,7 +187,6 @@ const styles = StyleSheet.create({
         fontFamily: 'roboto-thin',
         color: Colors.white,
         fontSize: 28,
-        height: 30
     },
 
     menuItemAndroid: {
@@ -205,7 +196,10 @@ const styles = StyleSheet.create({
 
     subtitle: {
         fontSize: 16,
-        height: 30,
+        height: 'auto',
+        marginTop: 0,
+        width: 165,
+        color: Colors.white,
         fontFamily: 'roboto-thin'
     },
 
@@ -214,7 +208,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         margin: 0,
         padding: 0,
-        marginTop: 15,
+        marginTop: 7,
         marginLeft: 10,
         fontFamily: 'roboto-thin',
     },
@@ -222,8 +216,11 @@ const styles = StyleSheet.create({
     accountEmail: {
         color: Colors.white,
         fontSize: 16,
-        marginBottom: 45,
         marginLeft: 10,
         fontFamily: 'roboto-thin',
+    },
+
+    disabledMenu: {
+        color: Colors.black
     }
 });
