@@ -43,7 +43,10 @@ export default class RootNavigation extends React.Component {
             renderIcon={isSelected => this._renderIcon('notification', isSelected)}>
           <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
+
       </TabNavigation>
+
+      
     );
   }
 
