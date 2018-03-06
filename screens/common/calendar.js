@@ -101,7 +101,7 @@ export default class CalendarView extends Component {
     renderSelectedDateRow(base) {
         return (
             <View style={[styles.bottomBar]}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 15}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 20}}>
                     <Text style={styles.date}>{this.getStartDate()}</Text>
                     {this.getDueDate() != undefined && this.getDueDate() != "" ?
                         <Text style={[styles.date]}> - {this.getDueDate()}</Text>
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
         fontFamily: 'roboto-bold',
         color: Colors.white,
         fontSize: 16,
-        marginTop: -3
+        marginTop: -2
     },
     selectedDates: {
         flex: 1,

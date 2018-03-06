@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         marginTop: 0,
-        marginLeft: 10,
+        marginLeft: 0,
     },
 
     menuItemLarge: {
@@ -209,14 +209,14 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
         marginTop: 7,
-        marginLeft: 10,
+        marginLeft: 0,
         fontFamily: 'roboto-thin',
     },
 
     accountEmail: {
         color: Colors.white,
         fontSize: 16,
-        marginLeft: 10,
+        marginLeft: 0,
         fontFamily: 'roboto-thin',
     },
 

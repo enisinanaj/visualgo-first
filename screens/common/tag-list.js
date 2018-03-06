@@ -212,7 +212,7 @@ export default class TagList extends Component {
     if (data.category != 'managers') {
       return (
       <TouchableOpacity onPress={() => this.toggleRow(data)}>
-        <Text style={{color: Colors.white, marginRight: 13, marginTop: 10}}>{data.title}</Text>
+        <Text style={{color: Colors.white, marginRight: 13, marginTop: 12, fontSize: 12}}>{data.title}</Text>
       </TouchableOpacity>
       )
     } else {

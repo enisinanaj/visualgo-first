@@ -422,7 +422,7 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({calendarModal: true})}>
                     {this.state.start != undefined && this.state.due != undefined ?
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 16, paddingTop: 5, color: Colors.main}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 0, paddingTop: 5, color: Colors.main}}>
                             {moment(this.state.start).locale("it").format("DD/MM/YYYY")} - {moment(this.state.due).locale("it").format("DD/MM/YYYY")}
                         </Text>
                     :
@@ -440,19 +440,24 @@ export default class CreateTask extends Component {
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Feather name={this.state.addPhotoSelected ? "check-square" : "square"} size={27} color={Colors.main} />
-                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Foto</Text>
+                    <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} 
+                        style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 2}}>
+                        {this.state.addPhotoSelected ?
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
+                        :   
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/unchecked.png")} />
+                        }
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Foto</Text>
                     </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10}}>
                         <TouchableOpacity onPress={() => {this.setState({countPhoto: --this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={this.state.countPhoto > 0 ? false : true}>
-                            <EvilIcons name={"minus"} color={((this.state.addPhotoSelected) && (this.state.countPhoto > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
+                            <EvilIcons name={"minus"} color={((this.state.addPhotoSelected) && (this.state.countPhoto > 0)) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countPhoto > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 20, color: this.state.countPhoto > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
                             {this.state.countPhoto}
                         </Text>
                         <TouchableOpacity onPress={() => {this.setState({countPhoto: ++this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={!this.state.addPhotoSelected}>
-                            <EvilIcons name={"plus"} color={(this.state.addPhotoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
+                            <EvilIcons name={"plus"} color={(this.state.addPhotoSelected) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -465,19 +470,24 @@ export default class CreateTask extends Component {
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Feather name={!this.state.addVideoSelected ? "square" : "check-square"} size={27} color={Colors.main} />
-                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Video</Text>
+                    <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} 
+                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 2}}>
+                        {this.state.addVideoSelected ?
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
+                        :   
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/unchecked.png")} />
+                        }
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Video</Text>
                     </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10}}>
                         <TouchableOpacity onPress={() => {this.setState({countVideo: --this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={this.state.countVideo > 0 ? false : true}>
-                            <EvilIcons name={"minus"} color={((this.state.addVideoSelected) && (this.state.countVideo > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
+                            <EvilIcons name={"minus"} color={((this.state.addVideoSelected) && (this.state.countVideo > 0)) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.countVideo > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 20, color: this.state.countVideo > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
                             {this.state.countVideo}
                         </Text>
                         <TouchableOpacity onPress={() => {this.setState({countVideo: ++this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={!this.state.addVideoSelected}>
-                            <EvilIcons name={"plus"} color={(this.state.addVideoSelected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
+                            <EvilIcons name={"plus"} color={(this.state.addVideoSelected) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -490,19 +500,24 @@ export default class CreateTask extends Component {
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Feather name={this.state.add360Selected ? "check-square" : "square"} size={27} color={Colors.main} />
-                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 16, paddingTop: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>360°</Text>
+                    <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} 
+                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 2}}>
+                        {this.state.add360Selected ?
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
+                        :   
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/unchecked.png")} />
+                        }
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>360°</Text>
                     </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 5}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10}}>
                         <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}} disabled={this.state.count360 > 0 ? false : true}>
-                            <EvilIcons name={"minus"} color={((this.state.add360Selected) && (this.state.count360 > 0)) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
+                            <EvilIcons name={"minus"} color={((this.state.add360Selected) && (this.state.count360 > 0)) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
                         </TouchableOpacity>
-                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 21, color: this.state.count360 > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 20, color: this.state.count360 > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
                             {this.state.count360}
                         </Text>
                         <TouchableOpacity onPress={() => {this.setState({count360: ++this.state.count360})}} style={{alignSelf: 'center'}} disabled={!this.state.add360Selected}>
-                            <EvilIcons name={"plus"} color={(this.state.add360Selected) ? Colors.main : Colors.gray} size={32} style={{marginRight: 5}} />
+                            <EvilIcons name={"plus"} color={(this.state.add360Selected) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
                         </TouchableOpacity>
                     </View>
                 </View>
