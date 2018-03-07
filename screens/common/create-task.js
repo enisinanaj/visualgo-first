@@ -422,7 +422,7 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({calendarModal: true})}>
                     {this.state.start != undefined && this.state.due != undefined ?
-                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 0, paddingTop: 5, color: Colors.main}}>
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 2, paddingTop: 5, color: Colors.main}}>
                             {moment(this.state.start).locale("it").format("DD/MM/YYYY")} - {moment(this.state.due).locale("it").format("DD/MM/YYYY")}
                         </Text>
                     :
@@ -441,7 +441,7 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} 
-                        style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 2}}>
+                        style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 4}}>
                         {this.state.addPhotoSelected ?
                             <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
                         :   
@@ -471,7 +471,7 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} 
-                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 2}}>
+                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 4}}>
                         {this.state.addVideoSelected ?
                             <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
                         :   
@@ -501,7 +501,7 @@ export default class CreateTask extends Component {
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} 
-                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 2}}>
+                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 4}}>
                         {this.state.add360Selected ?
                             <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
                         :   
