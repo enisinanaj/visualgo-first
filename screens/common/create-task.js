@@ -609,7 +609,7 @@ export default class CreateTask extends Component {
                                       style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}, DisabledStyle.disabled]}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={[styles.rowTextStyle, {marginTop: 4}]}>{o.name}</Text>
+                                <Text style={[styles.rowTextStyle, {marginTop: 4, color: Colors.main}]}>{o.name}</Text>
                                 {false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, paddingLeft: 5, paddingTop: 0}}>{o.innerName}</Text>
