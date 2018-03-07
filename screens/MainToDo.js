@@ -1,16 +1,19 @@
 import React from 'react';
-import { StyleSheet, FlatList, Platform, fontWeight, Image, backgroundColor, Text, fontFamily, fontSize, View, Button, TouchableHighlight, TextInput, TouchableOpacity, Alert,} from 'react-native';
+import { StyleSheet, FlatList, Platform, fontWeight, 
+    Image, backgroundColor, Text, fontFamily, fontSize, View, 
+    Button, TouchableHighlight, TextInput, TouchableOpacity, 
+    Alert, ScrollView} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import { NavigatorIOS, } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 
 
-export default class page2 extends React.Component {
+export default class MainToDo extends React.Component {
     render() {
         return (
         
     
-    <View style={styles.mainContainer}>   
+    <ScrollView style={styles.mainContainer}>
     
         <View style={styles.subContainer}>
 
@@ -109,20 +112,17 @@ export default class page2 extends React.Component {
      </View>
 
      <View style={styles.TaskMediaContainer}>
-         <View style={styles.TaskMedia}>
-                     <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>
-                     
-             </View>
-                 
-             <View style={styles.TaskMedia}>
-             <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>
-                             
-             </View>
-         
-             <View style={styles.TaskMedia}>
-             <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>
-                                                         
-             </View>
+        <View style={styles.TaskMedia}>
+            <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>     
+        </View>
+            
+        <View style={styles.TaskMedia}>
+            <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>             
+        </View>
+    
+        <View style={styles.TaskMedia}>
+            <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>             
+        </View>
      </View>
 
   </View>
@@ -130,7 +130,7 @@ export default class page2 extends React.Component {
      
  </View>
 
-    </View>
+    </ScrollView>
     
 
          ); }
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
 
     subContainer: {
       flexDirection: 'row',
-      marginTop:50,
+      marginTop: 5,
       borderBottomWidth: 1,
       borderColor: '#F4F6F6',
       paddingBottom: 10,
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
     ThreeDotsIcon: {
         position: 'absolute',
         right: 5,
+        marginTop: -5,
         color:'blue', 
     },
 

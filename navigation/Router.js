@@ -14,7 +14,7 @@ import Login from '../screens/Login'
 import ImagePost from '../screens/common/image-post';
 import MainCalendar from '../screens/MainCalendar';
 import VisualGuidelines from '../screens/VisualGuidelines';
-import MainTodo from '../screens/MainTodo';
+import MainTodo from '../screens/MainToDo';
 
 
 export default createRouter(() => ({
