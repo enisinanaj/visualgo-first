@@ -330,8 +330,8 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         margin: 0,
         textAlign: 'center',
-        fontSize: 12,
-        fontFamily: 'roboto-regular'
+        fontSize: 14,
+        fontFamily: 'roboto-bold'
     },
     buttonStyle: {
         flex: 1,

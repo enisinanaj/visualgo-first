@@ -88,7 +88,7 @@ export default class VisualGuidelines extends Component {
                 visible={this.state.visualGuidelineModal}
                 onRequestClose={() => this.setState({visualGuidelineModal: false})}>
                 
-                <CreateVisualGuideline  />
+                <CreateVisualGuideline closeModal={() => this.setState({visualGuidelineModal: false})}  />
             </Modal>
         );
     }

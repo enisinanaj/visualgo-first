@@ -110,18 +110,17 @@ export default class CreateVisualGuideline extends Component {
 
     renderHeader() {
         return (
-            <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, 
+            <View style={{backgroundColor: '#FFF', paddingTop: 16, 
                 borderBottomWidth: StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
                     <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>
-                        {false ? <EvilIcons name={"close"} size={22} color={Colors.main}/> : null}
-                        X
+                        <EvilIcons name={"close"} size={22} color={Colors.main}/>
                     </Text>
                 </TouchableOpacity>
                 <View>
-                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Guideline Album</Text>
+                    <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Guideline Album</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.post()}>
                     <Text style={{color: this.state.taskDescription != '' ? 
@@ -160,7 +159,7 @@ export default class CreateVisualGuideline extends Component {
     renderCommentSwitchRow() {
         return (
             <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.gray, flexDirection: 'row',
+                borderBottomColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                 <View style={styles.viewAndroid}>
                     <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
@@ -189,8 +188,8 @@ export default class CreateVisualGuideline extends Component {
 
     renderGuidelineDescription() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({guidelineDescriptionModal: true})} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={styles.rowTextStyle}>
@@ -245,8 +244,8 @@ export default class CreateVisualGuideline extends Component {
 
         return objs.map((o, i) => {
             return (
-                <View key={i} style={{flexDirection: 'row', height: o.innerName != undefined && o.innerName != '' ? 112 : 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View key={i} style={{flexDirection: 'row', height: o.innerName != undefined && o.innerName != '' ? 112 : 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             {o.innerName != undefined && o.innerName != '' ? 
@@ -286,8 +285,8 @@ export default class CreateVisualGuideline extends Component {
 
     renderEnvironment() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={styles.rowTextStyle}>Choose @Environment</Text>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
@@ -324,8 +323,8 @@ export default class CreateVisualGuideline extends Component {
 
     renderUploadAttach() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this._getDocuments()} disabled={true} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={[styles.rowTextStyle, {color: 'gray'}]}>Upload Attachements</Text>
@@ -367,8 +366,8 @@ export default class CreateVisualGuideline extends Component {
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
@@ -414,8 +413,8 @@ export default class CreateVisualGuideline extends Component {
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
@@ -461,8 +460,8 @@ export default class CreateVisualGuideline extends Component {
 
         return objs.map((o, i) => {
             return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
@@ -491,7 +490,8 @@ export default class CreateVisualGuideline extends Component {
 
         return (
             <View style={{height: this.state.visibleHeight}}>
-                <StatusBar barStyle={'default'} animated={true}/>
+                <StatusBar barStyle={'light-content'} animated={true}/>
+                {Platform.OS === 'ios' ? <View style={{height: 20, backgroundColor: Colors.main}}></View> : null}
                 {this.renderHeader()}
                 <ScrollView>
                     {this.renderCommentSwitchRow()}
@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontSize: 16,
         fontWeight: '500',
-        paddingLeft: 16,
+        paddingLeft: 4,
         paddingTop: 5
     }
 });
