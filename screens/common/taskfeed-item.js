@@ -167,19 +167,21 @@ export default class TaskFeedItem extends Component {
         const {data} = this.props;
         if(data.media != undefined && data.media.length > 0) {
             return (
-                <View style={[styles.container, Shadow.cardShadow]}>
-                    <View>
-                        {this.renderAvatar()}
-                        <View style={{margin: 0, padding: 0, marginTop: 9}}>
-                            {this.renderContent()}
+                <TouchableOpacity onPress={() => {this.openTaksDetail()}}> 
+                    <View style={[styles.container, Shadow.cardShadow]}>
+                        <View>
+                            {this.renderAvatar()}
+                            <View style={{margin: 0, padding: 0, marginTop: 9}}>
+                                {this.renderContent()}
+                            </View>
+                            {this.renderLikesAndComments()}
+                            <View style={styles.buttonContainer}>
+                                {this.renderLikeBar()}
+                            </View>
                         </View>
-                        {this.renderLikesAndComments()}
-                        <View style={styles.buttonContainer}>
-                            {this.renderLikeBar()}
-                        </View>
+                        {this.renderTaskModal()}
                     </View>
-                    {this.renderTaskModal()}
-                </View>
+                </TouchableOpacity>
             )
         }
 
