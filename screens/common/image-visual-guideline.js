@@ -56,16 +56,25 @@ export default class ImageVisualGuideline extends Component {
         const {imageCount, images} = this.props;
 
         return(
-            <TouchableWithoutFeedback onPress={this.openImages.bind(this)}>
-                <View style={styles.imageContainer}>
-                    <View style={{flexDirection: 'row', flex: 1, marginBottom: 4}}>
-                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
-                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
-                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
-                        <Image style={[styles.img, {marginLeft: 5}, Shadow.filterShadow]} source={{uri: images[0].url}}/>
+            <View>
+                <ScrollView style={styles.imagesContainer} horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
+                        <Image style={styles.img} source={{uri: 'http://www.thesimplesociety.com/wordpress/wp-content/uploads/happy_shop_window_12AW_01.jpg'}} resizeMode={"cover"}/>
                     </View>
-                </View>
-            </TouchableWithoutFeedback>
+                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
+                        <Image style={styles.img} source={{uri: 'https://image.slidesharecdn.com/learn-the-best-way-to-be-romantic-with-text-the-romance-back-1414463779183-141027213645-conversion-gate01/95/text-the-romance-back-download-pdf-1-638.jpg?cb=1414445823'}} resizeMode={"cover"}/>
+                    </View>
+                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
+                        <Image style={styles.img} source={{uri: 'http://www.oltrefrontieraprogetti.it/en/wp-content/uploads/2015/05/shop_window_ferragamo_autumn_winter_2014.jpg'}} resizeMode={"cover"}/>
+                    </View>
+                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
+                        <Image style={styles.img} source={{uri: 'http://thebwd.com/wp-content/uploads/2013/12/best-window-displays_armani-exchange_2013_christmas_shop-studios_01-960x579.jpg'}} resizeMode={"cover"}/>
+                    </View>
+                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
+                        <Image style={styles.img} source={{uri: 'http://www.oltrefrontieraprogetti.it/en/wp-content/uploads/2015/05/shop_windows_autumn_winter_la_perla_2014.jpg'}} resizeMode={"cover"}/>
+                    </View>
+                </ScrollView>
+            </View>
                 
         );
     }
@@ -79,27 +88,30 @@ export default class ImageVisualGuideline extends Component {
             return <AppLoading />
         }
 
-        const {imageCount} = this.props;
-        return (
-            <View>
-                <View style={styles.textContainer}>
-                    <Text style={styles.textContent}>{this.props.textContent}</Text>
-                </View>
-                {this.renderImages()}
-            </View>
-        )
+        return this.renderImages();
     }
 }
 
 const styles = StyleSheet.create({
+    imagesContainer: {
+        height: 180,
+        width: width,
+        positition: 'absolute',
+        top: -210,
+        zIndex: 9999
+    },
     imageContainer: {
-        height: height/2.5
+        width: 110,
+        height: 170,
+        marginRight: 4,
+        marginLeft: 4,
+        borderRadius: 10
     },
     img: {
         flex: 1,
-        width: null,
-        height: null,
-        borderRadius: 22
+        width: 110,
+        height: 170,
+        borderRadius: 10
     },
     textContainer: {
         padding: 16,
