@@ -288,7 +288,10 @@ export default class CreateVisualGuideline extends Component {
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({environmentModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={styles.rowTextStyle}>Choose @Environment</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <Text style={styles.rowTextStyle}>Choose @Environment</Text>
+                        <Text style={{color:'red', marginLeft: 5}}>*</Text>
+                    </View>
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
@@ -372,7 +375,6 @@ export default class CreateVisualGuideline extends Component {
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                                 : null}
@@ -419,7 +421,6 @@ export default class CreateVisualGuideline extends Component {
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                                 : null}
@@ -466,7 +467,6 @@ export default class CreateVisualGuideline extends Component {
                         <View style={{flex:1}}>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
                                 {o.innerName != undefined && o.innerName != '' ? 
                                     <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
                                 : null}
