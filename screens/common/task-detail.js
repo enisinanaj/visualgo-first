@@ -459,10 +459,35 @@ export default class TaskDetail extends Component {
         })
     }
 
+    renderArchiveMenu() {
+        return (
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'row', marginTop: 4}}>
+                        <Text style={[styles.rowTextStyle, {color: Colors.main}]}>Archivia Task</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderDeleteMenu() {
+        return (
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'row', marginTop: 4}}>
+                        <Text style={[styles.rowTextStyle, {color: '#E64E17'}]}>Elimina Task</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     renderSelectedTag(data){
         return (
             <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
-            
         );
     }
 
@@ -556,6 +581,8 @@ export default class TaskDetail extends Component {
                     {this.render360()}
                     {this.renderAssignTo()}
                     {this.renderTaskAdmins()}
+                    {this.renderArchiveMenu()}
+                    {this.renderDeleteMenu()}
                 </ScrollView>
                 {this.renderThemeModal()}
                 {this.renderEnvironmentsModal()}
