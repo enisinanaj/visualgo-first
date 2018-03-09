@@ -31,14 +31,20 @@ export default class TaskFeedItem extends Component {
     constructor(props) {
         super(props);
 
+        this.props.data.theme = {
+            name: '#Theme'
+        };
+
+        this.props.data.environment = {
+            name: '@Ambiente',
+            color: '#FC9D9D'
+        };
 
         this.state = {
             //profile: getProfile(this.props.data.creator),
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
-            buttons: ['Comment', 'Stats'],
-            icons: ['comment', 'ios-podium-outline'],
-            iconTypes: ["evilicon"],
-            iconColors: [Colors.main, Colors.yellow],
+            buttons: [{title: 'Comment', icon: 'comment', onPress: () => {}, iconType: 'evilicon', iconColor: Colors.main}, 
+                      {title: 'Stats', icon: 'ios-podium-outline', onPress: () => {}, iconColor: Colors.yellow}],
             likes: 0,
             isReady: false,
             comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length,
@@ -88,10 +94,20 @@ export default class TaskFeedItem extends Component {
         }
 
         return (
-            <View style={styles.avatarContainer}>
-                <Image style={styles.profile} source={{uri: profile.media.url}}/>
+            <View style={[styles.avatarContainer]}>
+                <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
+                    <Image style={styles.taskThumbnail} source={{uri: this.props.data.media[0].url}} />
+                </View>
+                <View style={[styles.avatarPhotoContainer, Shadow.filterShadow]}>
+                    <Image style={styles.profile} source={{uri: profile.media.url}}/>
+                </View>
                 <View style={styles.nameContainer}>
-                    <Text style={styles.name}>{profile.name} #Task @Ambiente</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                        <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
+                        <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
+                            {this.props.data.environment.name}
+                        </Text>
+                    </View>
                     <Text style={styles.time}>50% - {time}</Text>
                 </View>
                 <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
@@ -110,11 +126,11 @@ export default class TaskFeedItem extends Component {
     }
 
     renderLikeBar() {
-        const {buttons, icons, iconTypes, iconColors} = this.state;
+        const {buttons} = this.state;
         return buttons.map((button, i) => {
             return (
-                <Button key={i} name={button} onPress={this.buttonOnPress.bind(this)} icon={icons[i]} 
-                    iconType={iconTypes[i]} iconColor={iconColors[i]} />
+                <Button key={i} name={button} onPress={this.buttonOnPress.bind(this)} icon={button.icon} 
+                    iconType={button.iconType} iconColor={button.iconColor} />
             )
         })
     }
@@ -123,10 +139,7 @@ export default class TaskFeedItem extends Component {
         const {data} = this.props;
         if(data.media != undefined && data.media.length > 0) {
             return (
-                <TouchableOpacity onPress={() => {this.openTaksDetail()}}>
-                    <ImagePost imageCount={1} images={data.media} style={styles.imageStyle}
-                        onPress={() => {}}/>
-                </TouchableOpacity>
+                <Image source={{ uri: data.media[0].url}} style={{height: 180, width: null, resizeMode: 'center'}} />
             )
         }
     }
@@ -135,14 +148,14 @@ export default class TaskFeedItem extends Component {
         this.setState({taskModal: true});
     }
 
-    renderTaskModal() {
+    renderTaskModal(data) {
         return (
           <Modal
             animationType={"slide"}
             transparent={false}
             visible={this.state.taskModal}
             onRequestClose={() => this.setState({taskModal: false})}>
-            <TaskDetail closeModal={() => this.setState({taskModal: false})}/>
+            <TaskDetail data={data} closeModal={() => this.setState({taskModal: false})}/>
           </Modal>
         );
       }
@@ -154,17 +167,21 @@ export default class TaskFeedItem extends Component {
         const {data} = this.props;
         if(data.media != undefined && data.media.length > 0) {
             return (
-                <View style={[styles.container, Shadow.cardShadow]}>
-                    <View>
-                        {this.renderAvatar()}
-                        {this.renderContent()}
-                        {this.renderLikesAndComments()}
-                        <View style={styles.buttonContainer}>
-                            {this.renderLikeBar()}
+                <TouchableOpacity onPress={() => {this.openTaksDetail()}}> 
+                    <View style={[styles.container, Shadow.cardShadow]}>
+                        <View>
+                            {this.renderAvatar()}
+                            <View style={{margin: 0, padding: 0, marginTop: 9}}>
+                                {this.renderContent()}
+                            </View>
+                            {this.renderLikesAndComments()}
+                            <View style={styles.buttonContainer}>
+                                {this.renderLikeBar()}
+                            </View>
                         </View>
+                        {this.renderTaskModal(data)}
                     </View>
-                    {this.renderTaskModal()}
-                </View>
+                </TouchableOpacity>
             )
         }
 
@@ -205,26 +222,66 @@ const styles = StyleSheet.create({
 
     nameContainer: {
         marginLeft: 8,
-        justifyContent: 'space-around'
+        marginTop: 3.20,
+        justifyContent: 'flex-start',
     },
 
     name: {
-        fontSize: 16,
+        fontSize: 14,
         color: 'black',
-        fontFamily: 'roboto-light'
+        fontFamily: 'roboto-bold',
+        height: 16
+    },
+
+    environment: {
+        fontSize: 14,
+        height: 16,
+        color: 'black',
+        fontFamily: 'roboto-bold',
+        marginLeft: 4
     },
 
     time: {
         color: '#999999',
         fontSize: 12,
-        fontFamily: 'roboto-light'
+        fontFamily: 'roboto-light',
+        marginTop: 3
     },
 
+    taskThumbnailContainer: {
+        height: 38,
+        width: 38,
+        borderRadius: 4,
+        borderColor: Colors.white,
+        borderWidth: 2.5,
+        backgroundColor: 'white',
+        flexDirection: 'column',
+        justifyContent: 'flex-start'
+    },
+    taskThumbnail: {
+        backgroundColor: 'transparent',
+        height: 33,
+        width: 33,
+        borderRadius: 4
+    },
     profile: {
         backgroundColor: 'transparent',
-        height: 40,
-        width: 40,
-        borderRadius: 20
+        height: 24,
+        width: 24,
+        borderRadius: 12,
+    },
+    avatarPhotoContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 15,
+        left: 15,
+        height: 28,
+        width: 28,
+        borderRadius: 14,
+        borderWidth: 2,
+        borderColor: Colors.white
     },
 
     buttonContainer: {
@@ -234,7 +291,7 @@ const styles = StyleSheet.create({
         borderColor: Colors.borderGray,
         height: 44,
         paddingTop: 14,
-        paddingBottom: 14,
+        paddingBottom: 15,
         paddingLeft: 15,
         paddingRight: 15,
         borderTopWidth: 1,

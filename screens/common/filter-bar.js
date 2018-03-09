@@ -14,7 +14,7 @@ const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
+import {EvilIcons, Ionicons} from '@expo/vector-icons';
 import Shadow from '../../constants/Shadow';
 import { Font, AppLoading } from 'expo';
 import Router from '../../navigation/Router';
@@ -155,6 +155,18 @@ export default class FitlerBar extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+            }
+
+            if (data.title === 'Stats') {
+                return (
+                    <View style={[styles.statsButtonContainer, 
+                        Shadow.filterShadow, 
+                        {width: this.state.searchWidth}]}>
+                    <TouchableOpacity onPress={() => this._toggleSearch()}>
+                        <Ionicons name={'ios-podium-outline'} size={22} color={Colors.yellow} style={{left: 2, width: 22, marginRight: 10}}/>
+                    </TouchableOpacity>
+                    </View>
+                )
             }
 
             if (data == 'last-padding') {
@@ -304,6 +316,19 @@ const styles = StyleSheet.create({
         marginTop: 2
     },
 
+    statsButtonContainer: {
+        flex: 1,
+        backgroundColor: Colors.white,
+        borderRadius: 22,
+        padding: 10,
+        paddingLeft:12,
+        height: 44,
+        marginRight: 8,
+        marginBottom: 14,
+        marginLeft: 0,
+        marginTop: 2
+    },
+
     filterButtons: {
         backgroundColor: Colors.borderGray,
     },
@@ -330,8 +355,8 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         margin: 0,
         textAlign: 'center',
-        fontSize: 12,
-        fontFamily: 'roboto-regular'
+        fontSize: 14,
+        fontFamily: 'roboto-bold'
     },
     buttonStyle: {
         flex: 1,
