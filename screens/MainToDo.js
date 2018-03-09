@@ -11,6 +11,7 @@ import FilterBar from './common/filter-bar';
 import NoOpModal from './common/NoOpModal';
 import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
+import {TaskAvatar} from '../constants/StyleSheetCommons';
 
 const {width, height} = Dimensions.get('window');
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
@@ -57,21 +58,21 @@ export default class MainToDo extends React.Component {
 
     renderCardTitle() {
         return (
-            <View style={[styles.avatarContainer]}>
-                <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
-                    <Image style={styles.taskThumbnail} source={{uri: 'https://media.timeout.com/images/103399489/image.jpg'}} />
+            <View style={[TaskAvatar.avatarContainer]}>
+                <View style={[TaskAvatar.taskThumbnailContainer, Shadow.filterShadow]}>
+                    <Image style={TaskAvatar.taskThumbnail} source={{uri: 'https://media.timeout.com/images/103399489/image.jpg'}} />
                 </View>
-                <View style={[styles.avatarPhotoContainer, Shadow.filterShadow]}>
-                    <Image style={styles.profile} source={require('./img/dp2.jpg')}/>
+                <View style={[TaskAvatar.avatarPhotoContainer, Shadow.filterShadow]}>
+                    <Image style={TaskAvatar.profile} source={require('./img/dp2.jpg')}/>
                 </View>
-                <View style={styles.nameContainer}>
+                <View style={TaskAvatar.nameContainer}>
                     <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
-                        <Text style={styles.name}>Task #Theme</Text>
-                        <Text style={[styles.environment, {color: '#3FD1EB'}]}>
+                        <Text style={TaskAvatar.name}>Task #Theme</Text>
+                        <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
                             @Ambiente
                         </Text>
                     </View>
-                    <Text style={styles.time}>User made the action - Date Hour</Text>
+                    <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
                 </View>
                 <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
             </View>
@@ -225,75 +226,6 @@ const styles = StyleSheet.create({
     TaskMediaIcon: {
         color:'#9E9E9E',
         opacity:0.5,
-    },
-
-    avatarContainer: {
-        paddingBottom: 0,
-        flexDirection: 'row',
-    },
-
-    nameContainer: {
-        marginLeft: 8,
-        marginTop: 3.20,
-        justifyContent: 'flex-start',
-    },
-
-    name: {
-        fontSize: 14,
-        color: 'black',
-        fontFamily: 'roboto-bold',
-        height: 16
-    },
-
-    environment: {
-        fontSize: 14,
-        height: 16,
-        color: 'black',
-        fontFamily: 'roboto-bold',
-        marginLeft: 4
-    },
-
-    time: {
-        color: '#999999',
-        fontSize: 12,
-        fontFamily: 'roboto-light',
-        marginTop: 3
-    },
-
-    taskThumbnailContainer: {
-        height: 38,
-        width: 38,
-        borderRadius: 4,
-        borderColor: Colors.white,
-        borderWidth: 2.5,
-        backgroundColor: 'white',
-        flexDirection: 'column',
-        justifyContent: 'flex-start'
-    },
-    taskThumbnail: {
-        backgroundColor: 'transparent',
-        height: 33,
-        width: 33,
-        borderRadius: 4
-    },
-    profile: {
-        backgroundColor: 'transparent',
-        height: 24,
-        width: 24,
-        borderRadius: 12,
-    },
-    avatarPhotoContainer: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 15,
-        left: 15,
-        height: 28,
-        width: 28,
-        borderRadius: 14,
-        borderWidth: 2,
-        borderColor: Colors.white
-    },
+    }
 }
 );

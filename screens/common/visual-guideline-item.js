@@ -23,6 +23,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import Button from './button';
 import Shadow from '../../constants/Shadow';
+import {TaskAvatar} from '../../constants/StyleSheetCommons';
 
 const {width, height} = Dimensions.get('window');
 
@@ -58,24 +59,30 @@ export default class VisualGuidelineItem extends Component {
         this.setState({ isReady: true });
     }
 
-    buttonOnPress(name) {
-        console.log(name);
-        switch(name) {
-            case 'Like':
-                this.setState({likes: this.state.likes + 1});
-                break;
-            case 'Dislike':
-                this.setState({likes: this.state.likes - 1});
-                break;
-            case 'Comment':
-                this.setState({comments: this.state.comments + 1});
-                break;
-            default:
-                return
-        }
+    renderAvatar() {
+        return (
+            <View style={[TaskAvatar.avatarContainer]}>
+                <View style={[TaskAvatar.taskThumbnailContainer, Shadow.filterShadow]}>
+                    <Image style={TaskAvatar.taskThumbnail} source={{uri: 'https://media.timeout.com/images/103399489/image.jpg'}} />
+                </View>
+                <View style={[TaskAvatar.avatarPhotoContainer, Shadow.filterShadow]}>
+                    <Image style={TaskAvatar.profile} source={require('../img/dp2.jpg')}/>
+                </View>
+                <View style={TaskAvatar.nameContainer}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                        <Text style={TaskAvatar.name}>Guideline #Theme</Text>
+                        <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
+                            @Ambiente
+                        </Text>
+                    </View>
+                    <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
+                </View>
+                <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
+            </View>
+        );
     }
 
-    renderAvatar() {
+    renderCardTitle() {
         const {time} = this.state;
         let profile = {};
         try {
@@ -84,45 +91,26 @@ export default class VisualGuidelineItem extends Component {
             return null;
         }
 
+        return this.renderAvatar();
+    }
+
+    renderPlusButton() {
         return (
-            <View style={styles.avatarContainer}>
-                <Image style={styles.profile} source={{uri: profile.media.url}}/>
-                <View style={styles.nameContainer}>
-                    <Text style={styles.title}>{profile.name} #Theme @Ambiente</Text>
-                    <Text style={styles.subtitle}>Andy - {time}</Text>
-                </View>
-                <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
+            <View style={{flex: 1, alignItems: 'flex-end'}}>
+                <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle, Shadow.filterShadow]}>
+                    <MaterialCommunityIcons style={[styles.plusIcon, Shadow.filterShadow]} name={"plus-circle"} size={28} color={Colors.main} />
+                </TouchableOpacity>
             </View>
         )
-    }
-
-    renderAddButton() {
-        
-    }
-
-    renderLikeBar() {
-            return (
-                <View style={{flex: 1, alignItems: 'flex-end'}}>
-                    <TouchableOpacity style={[styles.filterButtons, styles.buttonNewGroupStyle]}>
-                        <MaterialCommunityIcons style={[styles.plusIcon, Shadow.filterShadow]} name={"plus-circle"} size={30} color={Colors.main} />
-                    </TouchableOpacity>
-                </View>
-            )
     }
 
     renderContent() {
         const {data} = this.props;
         if(data.media != undefined && data.media.length > 0) {
             return (
-                <ImageVisualGuideline imageCount={data.media.length} images={data.media} style={styles.imageStyle} onPress={() => {}}/>
+                <ImageVisualGuideline imageCount={data.media.length} images={data.media}/>
             )
         }
-
-        return (
-            <View style={styles.content}>
-                <Text style={{fontFamily: 'roboto-light'}}>{this.props.data.content}</Text>
-            </View>
-        )
     }
 
     render() {
@@ -131,15 +119,14 @@ export default class VisualGuidelineItem extends Component {
         }
 
         return (
-            <View style={[styles.container, Shadow.cardShadow]}>
-                <View>
-                    {this.renderAvatar()}
-                    {this.renderContent()}
-                    {this.renderAddButton()}
+            <View style={{height: 290, padding: 0, margin: 0}}>
+                <View style={[styles.container, Shadow.cardShadow]}>
+                    {this.renderCardTitle()}
                     <View style={styles.buttonContainer}>
-                        {this.renderLikeBar()}
+                        {this.renderPlusButton()}
                     </View>
                 </View>
+                {this.renderContent()}
             </View>
         )
     }
@@ -147,58 +134,19 @@ export default class VisualGuidelineItem extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        height: 280,
         backgroundColor: 'white',
-        marginBottom: 6,
+        marginTop: 10,
         borderRadius: 20,
         marginLeft: 5,
         marginRight: 5,
-    },
-
-    content: {
-        padding: 15,
-        paddingTop: 0,
-        paddingBottom: 15
+        padding: 19
     },
 
     line: {
         margin: 16,
         marginBottom: 0,
         borderColor: '#ddd'
-    },
-
-    avatarContainer: {
-        paddingBottom: 0,
-        flexDirection: 'row',
-        marginBottom: 10,
-        marginRight: 15,
-        marginLeft: 15,
-        marginTop: 15
-    },
-
-    nameContainer: {
-        marginLeft: 8,
-        justifyContent: 'space-around'
-    },
-
-    title: {
-        fontSize: 14,
-        color: 'black',
-        fontWeight: '800',
-        fontFamily: 'roboto-bold'
-    },
-
-    subtitle: {
-        color: '#999999',
-        fontSize: 12,
-        fontFamily: 'roboto-light'
-    },
-
-    profile: {
-        backgroundColor: 'transparent',
-        height: 40,
-        width: 40,
-        borderRadius: 20
     },
 
     buttonContainer: {
@@ -216,38 +164,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    text: {
-        fontSize: 14,
-        fontWeight: '700',
-        marginLeft: 8,
-        color: Colors.main
-    },
-
-    likeText: {
-        fontSize: 12,
-        color: Colors.grayText
-    },
-
-    likesComments: {
-        padding: 16,
-        paddingBottom: 0,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-
-    imageStyle: {
-        borderBottomLeftRadius: 14,
-        borderBottomRightRadius: 14
-    },
-
     filterButtons: {
         backgroundColor: Colors.borderGray,
+        marginTop: 188,
+        marginRight: -8
     },
 
     buttonNewGroupStyle: {
-        borderRadius: 22,
-        height: 44,
-        width: 44,
+        borderRadius: 14,
+        height: 28,
+        width: 28,
         backgroundColor: 'transparent'
     },
 

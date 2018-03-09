@@ -62,9 +62,7 @@ export default class VisualGuidelines extends Component {
             visualGuidelineModal: false
         };
 
-        //filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
-
-        this._loadPosts();
+        this._loadAlbums();
 
         this.offsetY = 0;
         this.offsetX = new Animated.Value(0);
@@ -90,7 +88,7 @@ export default class VisualGuidelines extends Component {
                 visible={this.state.visualGuidelineModal}
                 onRequestClose={() => this.setState({visualGuidelineModal: false})}>
                 
-                <CreateVisualGuideline  />
+                <CreateVisualGuideline closeModal={() => this.setState({visualGuidelineModal: false})}  />
             </Modal>
         );
     }
@@ -114,10 +112,10 @@ export default class VisualGuidelines extends Component {
     } 
 
     _clearPosts() {
-        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
+        this.setState({dataSource: ds.cloneWithRows(['0'])});
     }
 
-    _loadPosts(query) {
+    _loadAlbums(query) {
 
         var addQuery = query != undefined ? '&q=' + query : '';
 
@@ -137,27 +135,6 @@ export default class VisualGuidelines extends Component {
             });
     }
 
-    _clearTasks() {
-        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
-    }
-
-    _loadTasks(query) {
-        var addQuery = query != undefined ? '&q=' + query : '';
-
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                responseJson.forEach(element => {
-                    data.push(element);
-                });
-
-                this.setState({dataSource: ds.cloneWithRows(data)});
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
     _onRefresh() {
         this.setState({refreshing: true});
         setTimeout(() => {
@@ -170,7 +147,7 @@ export default class VisualGuidelines extends Component {
             {type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
             {title: '#San Valentino', selected: true, active: true}, 
             {title: '@Ambiente', active: true}, 
-            {title: '#Task', active: true},
+            {title: 'Task', active: true},
             {title: '#Sale', active: true}];
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
@@ -178,46 +155,11 @@ export default class VisualGuidelines extends Component {
                 </View>;
         }
 
-        return <VisualGuidelineItem data={data}/>
-    }
-
-    newPostHandler(obj) {
-        if (obj != undefined && obj.reload) {
-            this._clearPosts();
-            this._loadPosts();
+        if (data.media.length > 0) {
+            return <VisualGuidelineItem data={data}/>
         }
 
-        this.setState({modalPost: false});
-    }
-
-    newTaskHandler(obj) {
-        if (obj != undefined && obj.reload) {
-            this._clearTasks();
-            this._loadTasks();
-        }
-
-        this.setState({modalTask: false});
-    }
-
-    renderModal() {
-        return (
-            <View>
-                <Modal
-                    animationType={"slide"}
-                    transparent={false}
-                    visible={this.state.modalPost}
-                    onRequestClose={() => this.setState({modalPost: false})}>
-                    <CreatePost closeModal={(obj) => this.newPostHandler(obj)} navigator={this.props.navigator}/>
-                </Modal>
-                <Modal
-                    animationType={"slide"}
-                    transparent={false}
-                    visible={this.state.modalTask}
-                    onRequestClose={() => this.setState({modalTask: false})}>
-                    <CreateTask closeModal={(obj) => this.newTaskHandler(obj)} />
-                </Modal>
-            </View>
-        )
+        return null;
     }
 
     loadMore() {
@@ -226,7 +168,7 @@ export default class VisualGuidelines extends Component {
             loading: true
         });
         
-        this._loadPosts();
+        this._loadAlbums();
     }
 
     _onScroll(event) {
@@ -287,7 +229,6 @@ export default class VisualGuidelines extends Component {
                     dataSource={this.state.dataSource}
                     renderRow={(data) => this._renderRow(data)}
                 />
-                {this.renderModal()}
                 {this.renderVisualGuidelinesModal()}
             </View>
         )
