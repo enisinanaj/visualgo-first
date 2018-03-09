@@ -238,13 +238,14 @@ export default class TaskDetail extends Component {
 
     renderText() {
         return (
-            <View style={{flex: 1, padding: 16, backgroundColor: this.state.postBackgroundColor}}>
-                <TextInput autoFocus={false} style={{height: Platform.OS === 'ios' ? 50 : 30, fontSize: 16, textAlign: 'left',  
+            <View style={{flex: 1, padding: 16, paddingBottom: 0}}>
+                {this.renderTextAvatar()}
+                <TextInput autoFocus={false} style={{height: Platform.OS === 'ios' ? 30 : 30, fontSize: 16, textAlign: 'left',  
                     fontWeight: '300'}}
                     underlineColorAndroid={'rgba(0,0,0,0)'} 
                     placeholderTextColor={Colors.grayText}
-                    disabled={true}
                     multiline = {true}
+                    numberOfLines = {6}
                     height={200}
                     value='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'/>
             </View>
@@ -549,6 +550,18 @@ export default class TaskDetail extends Component {
         )
     }
 
+    renderTextAvatar() {
+        return (
+            <View style={styles.textAvatarContainer}>
+                <Image source={require('../img/me.png')} style={styles.profile}/>
+                <View style={flexDirection='column'}>
+                    <Text style={styles.titleAvatar}>User Name</Text>
+                    <Text style={styles.subtitleAvatar}>Date Hour</Text>
+                </View>
+            </View>
+        )
+    }
+
     prepareAssignToModal() {
         this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Clusters', tagListTastModal: true});
     }
@@ -714,5 +727,43 @@ const styles = StyleSheet.create({
         height: 26,
         width: 26,
         borderRadius: 4,    
+    },
+
+    textAvatarContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 70,
+        backgroundColor: 'white',
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        marginTop: -10
+    },
+
+    profile: {
+        backgroundColor: 'transparent',
+        marginLeft: 4,
+        height: 40,
+        width: 40,
+        borderRadius: 20
+    },
+
+    titleAvatar: {
+        flex: 1,
+        fontSize: 16,
+        height: 23,
+        marginLeft: 8,
+        marginTop: 13,
+        color: '#000000',
+        fontFamily: 'roboto-light'
+    },
+
+    subtitleAvatar: {
+        flex: 1,
+        fontSize: 12,
+        height: 23,
+        marginLeft: 8,
+        marginTop: -5,
+        color: '#999999',
+        fontFamily: 'roboto-light'
     },
 });
