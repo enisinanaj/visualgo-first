@@ -148,14 +148,14 @@ export default class TaskFeedItem extends Component {
         this.setState({taskModal: true});
     }
 
-    renderTaskModal() {
+    renderTaskModal(data) {
         return (
           <Modal
             animationType={"slide"}
             transparent={false}
             visible={this.state.taskModal}
             onRequestClose={() => this.setState({taskModal: false})}>
-            <TaskDetail closeModal={() => this.setState({taskModal: false})}/>
+            <TaskDetail data={data} closeModal={() => this.setState({taskModal: false})}/>
           </Modal>
         );
       }
@@ -179,7 +179,7 @@ export default class TaskFeedItem extends Component {
                                 {this.renderLikeBar()}
                             </View>
                         </View>
-                        {this.renderTaskModal()}
+                        {this.renderTaskModal(data)}
                     </View>
                 </TouchableOpacity>
             )

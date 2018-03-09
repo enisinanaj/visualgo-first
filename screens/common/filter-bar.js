@@ -14,7 +14,7 @@ const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
+import {EvilIcons, Ionicons} from '@expo/vector-icons';
 import Shadow from '../../constants/Shadow';
 import { Font, AppLoading } from 'expo';
 import Router from '../../navigation/Router';
@@ -157,6 +157,18 @@ export default class FitlerBar extends Component {
                 </View>
             }
 
+            if (data.title === 'Stats') {
+                return (
+                    <View style={[styles.statsButtonContainer, 
+                        Shadow.filterShadow, 
+                        {width: this.state.searchWidth}]}>
+                    <TouchableOpacity onPress={() => this._toggleSearch()}>
+                        <Ionicons name={'ios-podium-outline'} size={22} color={Colors.yellow} style={{left: 2, width: 22, marginRight: 10}}/>
+                    </TouchableOpacity>
+                    </View>
+                )
+            }
+
             if (data == 'last-padding') {
                 return (
                     <View style={{width: 30, backgroundColor: 'transparent'}}></View>
@@ -297,6 +309,19 @@ const styles = StyleSheet.create({
         borderRadius: 22,
         padding: 10,
         paddingTop: 14,
+        height: 44,
+        marginRight: 8,
+        marginBottom: 14,
+        marginLeft: 0,
+        marginTop: 2
+    },
+
+    statsButtonContainer: {
+        flex: 1,
+        backgroundColor: Colors.white,
+        borderRadius: 22,
+        padding: 10,
+        paddingLeft:12,
         height: 44,
         marginRight: 8,
         marginBottom: 14,

@@ -34,11 +34,16 @@ import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
 import TaskDescription from './task-description';
 import moment from 'moment';
-import locale from 'moment/locale/it'
+import locale from 'moment/locale/it';
+import FilterBar from './filter-bar';
+import DisabledStyle from '../../constants/DisabledStyle';
+import NoOpModal from './NoOpModal';
+import Shadow from '../../constants/Shadow';
 
 export default class TaskDetail extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = {
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
@@ -110,26 +115,73 @@ export default class TaskDetail extends Component {
 
     renderHeader() {
         return (
-            <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, 
-                borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.gray, flexDirection: 'row',
-                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
-                <TouchableOpacity onPress={this.props.closeModal}>
-                    <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>
-                        {false ? <EvilIcons name={"close"} size={22} color={Colors.main}/> : null}
-                        X
-                    </Text>
-                </TouchableOpacity>
-                <View>
-                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>Guideline #Theme @Ambiente</Text>
+            <View style={{flexDirection: 'row', height: 55, alignItems: 'center', paddingLeft: 0,
+                    borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray, 
+                    paddingTop: Platform.OS === 'ios' ? 36 : 16, padding: 16}}>
+                <View style={{flex:1, paddingTop: 5}}>
+                    <Image style={{flex: 1, height: 50, width: width, 
+                                    position:'absolute', resizeMode: 'center', top: -19, left: 0}} 
+                                    source={{uri:'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}} />
+                    <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between'}}>
+                        <View style={{flexDirection: 'row'}}>
+                            <TouchableOpacity onPress={this.props.closeModal}>
+                                <EvilIcons name={"close"} size={22} color={Colors.main}/>
+                            </TouchableOpacity>
+                            <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                                <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
+                                <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
+                                    {this.props.data.environment.name}
+                                </Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity>
+                            <Image source={require("../../assets/images/icons/twoCards.png")} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <TouchableOpacity onPress={() => this.post()}>
-                    <Text style={{color: this.state.taskDescription != '' ? 
-                            Colors.main : Colors.gray, 
-                        fontFamily: 'roboto-light', fontSize: 16}}>Add +</Text>
-                </TouchableOpacity>
             </View>
         )
+    }
+
+    renderFilters() {
+        filters = [{title: 'Stats', icon: 'ios-podium-outline', onPress: () => {}},
+            {title: 'Summary', selected: true, active: true}, 
+            {title: 'All Stores', active: true}, 
+            {title: 'Pending', active: true}];
+        
+        return <View style={styles.filterBarContainer}>
+                    <FilterBar data={filters} headTitle={""} />
+                </View>;
+    }
+
+    renderCommentSwitchRow() {
+        return (
+            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
+                borderBottomColor: Colors.borderGray, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
+                <View style={styles.viewAndroid}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
+                        Comments 
+                    </Text>
+                    <Switch color={Colors.main} style={styles.switchAndroid}
+                        value={this.state.commentsEnabled} onValueChange={(v) => this.setState({commentsEnabled: v})}/>
+                </View>
+                <View style={styles.viewAndroid}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
+                        Notification 
+                    </Text>
+                    <Switch color={Colors.main} style={styles.switchAndroid}
+                        value={this.state.notificationsEnabled} onValueChange={(v) => this.setState({notificationsEnabled: v})}/>
+                </View>
+                <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flext-start'}}>
+                        <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
+                            All
+                        </Text>
+                        <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 6}} />
+                    </View>
+                </TouchableOpacity>
+            </View>);
     }
 
     renderPrivacyModal() {
@@ -199,6 +251,214 @@ export default class TaskDetail extends Component {
         )
     }
 
+    renderStartDueDate() {
+        return (
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} onPress={() => this.setState({calendarModal: true})}>
+                    {this.state.start != undefined && this.state.due != undefined ?
+                        <Text style={{color: 'gray', fontSize: 16, fontWeight: '200', paddingLeft: 2, paddingTop: 5, color: Colors.main}}>
+                            {moment(this.state.start).locale("it").format("DD/MM/YYYY")} - {moment(this.state.due).locale("it").format("DD/MM/YYYY")}
+                        </Text>
+                    :
+                    <View style={{flexDirection: 'row', marginTop: 4}}>
+                        <Text style={styles.rowTextStyle}>Start/Due Date</Text>
+                    </View>}
+                    <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderPhoto() {
+        return (
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <TouchableOpacity onPress={() => this.setState({addPhotoSelected: !this.state.addPhotoSelected, countPhoto: 0})} 
+                        style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 4}}>
+                        {this.state.addPhotoSelected ?
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
+                        :   
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/unchecked.png")} />
+                        }
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Foto</Text>
+                    </TouchableOpacity>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10}}>
+                        <TouchableOpacity onPress={() => {this.setState({countPhoto: --this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={this.state.countPhoto > 0 ? false : true}>
+                            <EvilIcons name={"minus"} color={((this.state.addPhotoSelected) && (this.state.countPhoto > 0)) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 20, color: this.state.countPhoto > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                            {this.state.countPhoto}
+                        </Text>
+                        <TouchableOpacity onPress={() => {this.setState({countPhoto: ++this.state.countPhoto})}} style={{alignSelf: 'center'}} disabled={!this.state.addPhotoSelected}>
+                            <EvilIcons name={"plus"} color={(this.state.addPhotoSelected) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    renderVideo() {
+        return (
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <TouchableOpacity onPress={() => this.setState({addVideoSelected: !this.state.addVideoSelected, countVideo: 0})} 
+                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 4}}>
+                        {this.state.addVideoSelected ?
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
+                        :   
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/unchecked.png")} />
+                        }
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>Video</Text>
+                    </TouchableOpacity>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10}}>
+                        <TouchableOpacity onPress={() => {this.setState({countVideo: --this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={this.state.countVideo > 0 ? false : true}>
+                            <EvilIcons name={"minus"} color={((this.state.addVideoSelected) && (this.state.countVideo > 0)) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 20, color: this.state.countVideo > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                            {this.state.countVideo}
+                        </Text>
+                        <TouchableOpacity onPress={() => {this.setState({countVideo: ++this.state.countVideo})}} style={{alignSelf: 'center'}} disabled={!this.state.addVideoSelected}>
+                            <EvilIcons name={"plus"} color={(this.state.addVideoSelected) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    render360() {
+        return (
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <TouchableOpacity onPress={() => this.setState({add360Selected: !this.state.add360Selected, count360: 0})} 
+                                      style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 4}}>
+                        {this.state.add360Selected ?
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/checked.png")} />
+                        :   
+                            <Image style={{width: 18, height: 16, resizeMode: 'center', marginTop: 3}} source={require("../../assets/images/icons/unchecked.png")} />
+                        }
+                        <Text style={{color: '#000000', fontSize: 16, paddingLeft: 5, alignSelf: 'center', fontFamily: 'roboto-light'}}>360°</Text>
+                    </TouchableOpacity>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10}}>
+                        <TouchableOpacity onPress={() => {this.setState({count360: --this.state.count360})}} style={{alignSelf: 'center'}} disabled={this.state.count360 > 0 ? false : true}>
+                            <EvilIcons name={"minus"} color={((this.state.add360Selected) && (this.state.count360 > 0)) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                        <Text style={{marginRight: 5, alignSelf: 'center', fontSize: 20, color: this.state.count360 > 0 ? Colors.black : Colors.gray, fontFamily: 'roboto-light'}}>
+                            {this.state.count360}
+                        </Text>
+                        <TouchableOpacity onPress={() => {this.setState({count360: ++this.state.count360})}} style={{alignSelf: 'center'}} disabled={!this.state.add360Selected}>
+                            <EvilIcons name={"plus"} color={(this.state.add360Selected) ? Colors.main : Colors.gray} size={27} style={{marginRight: 5}} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    prepareAssignToModal() {
+        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Managers', tagListTastModal: true});
+    }
+
+    renderAssignTo() {
+        const objs =
+            [
+                {
+                    name: 'Assigned to',
+                    onPress: () => this.prepareAssignToModal()
+                }
+            ];
+
+        var {allTags} = this.state;
+
+        if (allTags.length > 0) {
+            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+            console.log(clustersLength);
+            var clustersLabel = '';
+
+            if (clustersLength > 1) {
+                clustersLabel += clustersLength + " Clusters";
+            } else if (clustersLength == 1) {
+                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
+            }
+
+            objs[0].name = "Assegnato a ";
+            objs[0].innerName = clustersLabel;
+
+            var managersLength = allTags.filter((row) => row.category == 'managers').length;
+            console.log(managersLength);
+            var managersLabel = '';
+
+            if (managersLength > 1) {
+                managersLabel += managersLength + " Managers";
+            } else if (managersLength == 1) {
+                managersLabel += allTags.filter((row) => row.category == 'managers')[0].title;
+            }
+
+            objs[0].innerName = managersLabel;
+        }
+
+        return objs.map((o, i) => {
+            return (o.visible == undefined || o.visible) && (
+                <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flex:1}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Text style={[styles.rowTextStyle, {marginTop: 4}]}>{o.name}</Text>
+                                {(allTags.length == 0 || clustersLength == 0) && false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                        </View>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            )
+        })
+    }
+
+    prepareTaskAdminsModal() {
+        this.setState({clustersVisible: false, storeVisible: false, managerVisible: true, headTitle: 'Managers', tagListTastModal: true});
+    }
+
+    renderTaskAdmins() {
+        const objs =
+            [
+                {
+                    name: 'Task Manager',
+                    onPress: () => this._noOpModal != undefined ? this._noOpModal.toggleState() : {}
+                }
+            ];
+
+        return objs.map((o, i) => {
+            return (o.visible == undefined || o.visible) && (
+                <View key={i} style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                    <TouchableOpacity onPress={o.onPress} 
+                                      style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}, DisabledStyle.disabled]}>
+                        <View style={{flex:1}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Text style={[styles.rowTextStyle, {marginTop: 4, color: Colors.main}]}>{o.name}</Text>
+                                {false ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
+                                {o.innerName != undefined && o.innerName != '' ? 
+                                    <Text style={{color: Colors.main, fontSize: 16, paddingLeft: 5, paddingTop: 0}}>{o.innerName}</Text>
+                                : null}
+                            </View>
+                        </View>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                    <NoOpModal featureName={"Task administrators "} ref={(noOpModal) => this._noOpModal = noOpModal} />
+                </View>
+            )
+        })
+    }
+
     renderSelectedTag(data){
         return (
             <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
@@ -242,12 +502,23 @@ export default class TaskDetail extends Component {
 
     renderUploadAttach() {
         return (
-            <View style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this._getDocuments()} disabled={true} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.rowTextStyle, {color: 'gray'}]}>Upload Attachements</Text>
-                    <Ionicons name={"ios-attach"} color={'gray'} size={32} style={{marginRight: 20}} />
+                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16, marginTop: 10}}>
+                        <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
+                            <Image style={styles.taskThumbnail} source={{uri: this.props.data.media[0].url}} />
+                        </View>
+                        <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
+                        <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
+                            {this.props.data.environment.name}
+                        </Text>
+                    </View>
+                    <View style={{flexDirection:'row', justifyContent:'flex-end'}}>
+                        <Ionicons name={"ios-attach"} color={Colors.main} size={32} style={{marginRight: 5, marginTop: 2}} />
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10, marginTop: 5}} />
+                    </View>
                 </TouchableOpacity>
             </View>
         )
@@ -255,100 +526,6 @@ export default class TaskDetail extends Component {
 
     prepareAssignToModal() {
         this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Clusters', tagListTastModal: true});
-    }
-
-    renderShareWith() {
-        const objs =
-            [
-                {
-                    name: 'Condividi con...',
-                    onPress: () => this.prepareAssignToModal()
-                }
-            ];
-
-        var {allTags} = this.state;
-
-        if (allTags.length > 0) {
-            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
-            console.log(clustersLength);
-            var clustersLabel = '';
-
-            if (clustersLength > 1) {
-                clustersLabel += clustersLength + " Clusters";
-            } else if (clustersLength == 1) {
-                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
-            }
-
-            objs[0].name = "Assegnato a ";
-            objs[0].innerName = clustersLabel;
-        }
-
-        return objs.map((o, i) => {
-            return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{flex:1}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
-                                {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                                : null}
-                            </View>
-                        </View>
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
-    }
-
-    renderAddContributor() {
-        const objs =
-            [
-                {
-                    name: 'Add contributor...',
-                    onPress: () => this.prepareAssignToModal()
-                }
-            ];
-
-        var {allTags} = this.state;
-
-        if (allTags.length > 0) {
-            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
-            console.log(clustersLength);
-            var clustersLabel = '';
-
-            if (clustersLength > 1) {
-                clustersLabel += clustersLength + " Clusters";
-            } else if (clustersLength == 1) {
-                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
-            }
-
-            objs[0].name = "Assegnato a ";
-            objs[0].innerName = clustersLabel;
-        }
-
-        return objs.map((o, i) => {
-            return (o.visible == undefined || o.visible) && (
-                <View key={i} style={{flexDirection: 'row', height: 56, alignItems: 'center', paddingLeft: 16,
-                    borderTopColor: Colors.gray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{flex:1}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={styles.rowTextStyle}>{o.name}</Text>
-                                {allTags.length == 0 || clustersLength == 0 ? <Text style={{color: 'red', marginLeft: 5}}>*</Text> : null }
-                                {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
-                                : null}
-                            </View>
-                        </View>
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
-                    </TouchableOpacity>
-                </View>
-            )
-        })
     }
 
     prepareTaskAdminsModal() {
@@ -360,17 +537,25 @@ export default class TaskDetail extends Component {
             return <AppLoading />
         }
 
+        const {data} = this.props;
+
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'default'} animated={true}/>
                 {this.renderHeader()}
                 <ScrollView>
+                    {this.renderFilters()}
+                    {this.renderCommentSwitchRow()}
                     <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
                         {this.renderText()}
                     </View>
-                    {this.renderShareWith()}
-                    {this.renderAddContributor()}
                     {this.renderUploadAttach()}
+                    {this.renderStartDueDate()}
+                    {this.renderPhoto()}
+                    {this.renderVideo()}
+                    {this.render360()}
+                    {this.renderAssignTo()}
+                    {this.renderTaskAdmins()}
                 </ScrollView>
                 {this.renderThemeModal()}
                 {this.renderEnvironmentsModal()}
@@ -455,12 +640,52 @@ const styles = StyleSheet.create({
         fontFamily: 'roboto-light'
     },
 
+    name: {
+        fontSize: 14,
+        color: 'black',
+        fontFamily: 'roboto-bold',
+        height: 16
+    },
+    
+    environment: {
+        fontSize: 14,
+        height: 16,
+        color: 'black',
+        fontFamily: 'roboto-bold',
+        marginLeft: 4
+    },
+
     rowTextStyle: {
         fontFamily: 'roboto-light',
         color: '#000000',
         fontSize: 16,
         fontWeight: '500',
-        paddingLeft: 16,
-        paddingTop: 5
-    }
+        paddingLeft: 4
+    },
+
+    filterBarContainer: {
+        borderBottomColor: Colors.borderGray,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        height: 85
+    },
+
+    taskThumbnailContainer: {
+        height: 30,
+        width: 30,
+        borderRadius: 4,
+        borderColor: Colors.white,
+        borderWidth: 2,
+        backgroundColor: 'white',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        marginTop: -6,
+        marginRight: 6
+    },
+
+    taskThumbnail: {
+        backgroundColor: 'transparent',
+        height: 26,
+        width: 26,
+        borderRadius: 4,    
+    },
 });
