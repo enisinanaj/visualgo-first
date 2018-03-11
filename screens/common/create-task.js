@@ -30,6 +30,7 @@ import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} fr
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
+import NewAlbum from './create-album';
 import NoOpModal from './NoOpModal';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
@@ -71,7 +72,8 @@ export default class CreateTask extends Component {
             taskDescription: '',
             commentsEnabled: false,
             notificationsEnabled: false,
-            isReady: false
+            isReady: false,
+            albumModal: false
         }
     }
 
@@ -386,12 +388,21 @@ export default class CreateTask extends Component {
         );
     }
 
-    _getDocuments() {
-        try {
-            Expo.DocumentPicker.getDocumentAsync({});
-        } catch (e) {
-            
-        }
+    createAlbum(album) {
+        this.setState({album: album, albumModal: false});
+    }
+
+    renderAlbumModal() {
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.albumModal}
+                onRequestClose={() => this.setState({albumModal: false})}>
+                
+                <NewAlbum closeModal={(album) => this.createAlbum(album)} theme={this.state.selectedTheme} environment={this.state.environment} />
+            </Modal>
+        );
     }
 
     renderVisualGuideline() {
@@ -401,7 +412,7 @@ export default class CreateTask extends Component {
         return (
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this._getDocuments()} 
+                <TouchableOpacity onPress={() => this.setState({albumModal: true})} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} 
                     disabled={isDisabled}>
                     <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}, {marginTop: 4}]}>
@@ -412,6 +423,7 @@ export default class CreateTask extends Component {
                         <EvilIcons name={"chevron-right"} color={isDisabled ? Colors.grayText : Colors.main} size={32} />
                     </View>
                 </TouchableOpacity>
+                {this.renderAlbumModal()}
             </View>
         )
     }

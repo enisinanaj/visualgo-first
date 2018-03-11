@@ -16,8 +16,6 @@ import {
     Button
 } from 'react-native';
 
-import Drawer from 'react-native-drawer'
-
 const {width, height} = Dimensions.get('window');
 
 import {Font, AppLoading} from 'expo';
@@ -31,7 +29,6 @@ import TaskFeedItem from './common/taskfeed-item';
 import CreatePost from './common/create-post';
 import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
-import BlueMenu from './common/blue-menu';
 import NoOpModal from './common/NoOpModal';
 
 import _ from 'lodash';
@@ -316,11 +313,6 @@ export default class Landing extends Component {
             </View>
         )
     }
-}
-
-const drawerStyles = {
-    drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
-    main: {paddingLeft: 0},
 }
 
 const styles= StyleSheet.create({

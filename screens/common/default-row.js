@@ -33,7 +33,8 @@ export default class DefaultRow extends Component {
             <View style={[styles.defaultRow, this.state.drawBorder ? styles.border : {},
                 this.state.usePadding ? styles.padding : {},
                 this.props.style ? this.props.style : {}]}>
-                {this.props.renderChildren(this.props.arguments)}
+                {this.props.renderChildren ? this.props.renderChildren(this.props.arguments) : null}
+                {this.props.children ? this.props.children : null}
             </View>
         );
     }
