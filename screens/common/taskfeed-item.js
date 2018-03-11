@@ -9,23 +9,25 @@ import {
     StyleSheet,
     Dimensions,
     TouchableOpacity,
-    Modal
+    Modal,
+    Switch
 } from 'react-native';
 
 import {AppLoading, Font} from 'expo';
+import {Ionicons, Octicons} from '@expo/vector-icons';
+import moment from 'moment';
+import locale from 'moment/locale/it'
+import {getProfile, MenuIcons} from '../helpers';
 
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
 import DisabledStyle from '../../constants/DisabledStyle';
 
-import {Ionicons} from '@expo/vector-icons';
-import {getProfile} from '../helpers';
-import moment from 'moment';
-import locale from 'moment/locale/it'
 import ImagePost from './image-post';
 import TaskDetail from './task-detail';
 import Button from './button';
 import NoOpModal from './NoOpModal';
+import ContextualActionsMenu from './ContextualActionsMenu';
 
 const {width, height} = Dimensions.get('window');
 
@@ -52,8 +54,41 @@ export default class TaskFeedItem extends Component {
             likes: 0,
             isReady: false,
             comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length,
-            taskModal: false
+            taskModal: false,
+            contextualMenuActions: [{title: 'Elimina Task', image: MenuIcons.DELETE_TASK, onPress: () => {}}, 
+                                    {title: 'Modifica Task', image: MenuIcons.EDIT_TASK, onPress: () => {}}, 
+                                    {title: 'Archivia Task', image: MenuIcons.ARCHIVE_TASK, disabled: true, onPress: () => {}},
+                                    {advanced: true, renderContent: () => this.renderAdvancedMenuContent(), onPress: () => {}}]
         };
+    }
+
+    renderAdvancedMenuContent() {
+        return (
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
+                        Commenti 
+                    </Text>
+                    <Switch color={Colors.main} style={styles.switchAndroid}
+                        value={this.state.commentsEnabled} onValueChange={(v) => this.setState({commentsEnabled: v})}/>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
+                        Notification 
+                    </Text>
+                    <Switch color={Colors.main} style={styles.switchAndroid}
+                        value={this.state.notificationsEnabled} onValueChange={(v) => this.setState({notificationsEnabled: v})}/>
+                </View>
+                <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flext-start'}}>
+                        <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
+                            Tutti
+                        </Text>
+                        <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 6}} />
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     componentDidMount() {
@@ -97,7 +132,9 @@ export default class TaskFeedItem extends Component {
                     </View>
                     <Text style={styles.time}>50% - {time}</Text>
                 </View>
-                <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
+                <TouchableOpacity onPress={() => this.contextualMenu.toggleState()} style={{position: 'absolute', right: 0, top: -10}}>
+                    <Ionicons name="ios-more-outline" color={Colors.main} size={30} />
+                </TouchableOpacity>
             </View>
         )
     }
@@ -171,6 +208,7 @@ export default class TaskFeedItem extends Component {
                             </View>
                         </View>
                         {this.renderTaskModal(data)}
+                        <ContextualActionsMenu ref={e => this.contextualMenu = e} buttons={this.state.contextualMenuActions} />
                     </View>
                 </TouchableOpacity>
             )
@@ -317,5 +355,11 @@ const styles = StyleSheet.create({
     imageStyle: {
         borderBottomLeftRadius: 14,
         borderBottomRightRadius: 14
+    },
+    switchAndroid:{
+        height: 24, 
+        marginLeft: 5, 
+        marginBottom: 5,
+        onTintColor: Colors.main
     }
 })

@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
 
 import Colors from '../../constants/Colors';
 import {EvilIcons} from '@expo/vector-icons';
 
 export default class DefaultRow extends Component {
+
+    static propTypes = {
+        renderChildren: PropTypes.func.isRequired,
+        style: PropTypes.string,
+        drawBorder: PropTypes.bool,
+        usePadding: PropTypes.bool
+    };
 
     constructor(props) {
         super(props);
@@ -23,7 +31,8 @@ export default class DefaultRow extends Component {
     render() {
         return (
             <View style={[styles.defaultRow, this.state.drawBorder ? styles.border : {},
-                this.state.usePadding ? styles.padding : {}]}>
+                this.state.usePadding ? styles.padding : {},
+                this.props.style ? this.props.style : {}]}>
                 {this.props.renderChildren(this.props.arguments)}
             </View>
         );

@@ -12,18 +12,18 @@ import {
 } from 'react-native';
 
 import {AppLoading, Font} from 'expo';
-
-import Colors from '../../constants/Colors';
-import {Ionicons} from '@expo/vector-icons';
-import {getProfile} from '../helpers';
 import moment from 'moment';
 import locale from 'moment/locale/it'
-import ImageVisualGuideline from './image-visual-guideline';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
 
-import Button from './button';
+import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
 import {TaskAvatar} from '../../constants/StyleSheetCommons';
+import {getProfile, MenuIcons} from '../helpers';
+import ImageVisualGuideline from './image-visual-guideline';
+import Button from './button';
+import NoOpModal from './NoOpModal';
+import ContextualActionsMenu from './ContextualActionsMenu';
 
 const {width, height} = Dimensions.get('window');
 
@@ -40,7 +40,11 @@ export default class VisualGuidelineItem extends Component {
             iconColors: [Colors.main],
             likes: 0,
             isReady: false,
-            comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length
+            comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length,
+            contextualMenuActions: [{title: 'Condividi', image: MenuIcons.USER_SHARE, onPress: () => {}}, 
+                                    {title: 'Modifica', image: MenuIcons.EDIT_TASK, onPress: () => {}}, 
+                                    {title: 'Elimina', image: MenuIcons.DELETE_TASK, onPress: () => {}},
+                                    {title: 'Archivia Album', image: MenuIcons.ARCHIVE_TASK, disabled: true, onPress: () => {}}]
         };
     }
 
@@ -77,7 +81,10 @@ export default class VisualGuidelineItem extends Component {
                     </View>
                     <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
                 </View>
-                <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
+                <TouchableOpacity style={{position: 'absolute', right: 0, top: -10}} onPress={() => this.contextualMenu.toggleState()}>
+                    <Ionicons name="ios-more-outline" color={Colors.main} size={30} />
+                </TouchableOpacity>
+                <ContextualActionsMenu ref={e => this.contextualMenu = e} buttons={this.state.contextualMenuActions} />
             </View>
         );
     }

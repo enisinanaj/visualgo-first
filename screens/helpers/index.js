@@ -40,7 +40,16 @@ export const MenuIcons = {
     REPORT_W_IMAGE: require('../../assets/images/icons/report_white.png'),
     REPORT_MENU_DISABLED: require('../../assets/images/icons/ReportDisabled.png'),
     CALENDAR_MENU_DISABLED: require('../../assets/images/icons/CalendarDisabled.png'),
-    MESSAGES_MENU_DISABLED: require('../../assets/images/icons/MessagesDisabled.png')
+    MESSAGES_MENU_DISABLED: require('../../assets/images/icons/MessagesDisabled.png'),
+    DELETE_TASK: require('../../assets/images/icons/delete-task.png'),
+    EDIT_TASK: require('../../assets/images/icons/edit-task.png'),
+    ARCHIVE_TASK: require('../../assets/images/icons/archive-task.png'),
+    THUMB_UP: require('../../assets/images/icons/thumb-up.png'),
+    THUMB_DOWN: require('../../assets/images/icons/thumb-down.png'),
+    HISTORY: require('../../assets/images/icons/history.png'),
+    ALERT: require('../../assets/images/icons/alert.png'),
+    COMMENT: require('../../assets/images/icons/comment.png'),
+    USER_SHARE: require('../../assets/images/icons/user-share.png'),
 }
 
 export default settings = {

@@ -251,7 +251,7 @@ const MainAppNavigation = StackNavigator({
   Index: { screen: AppContainer}
 },
 {
-  initialRouteName: 'StartScreen',
+  initialRouteName: 'Index',
   headerMode: 'none',
   navigationOptions: {
     header: {

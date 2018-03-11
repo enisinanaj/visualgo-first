@@ -7,8 +7,12 @@ import { StyleSheet, FlatList, Platform, fontWeight,
 import {Ionicons, Entypo} from '@expo/vector-icons';
 import {Font, AppLoading} from 'expo';
 
+import {MenuIcons} from './helpers/index';
+
 import FilterBar from './common/filter-bar';
 import NoOpModal from './common/NoOpModal';
+import ContextualActionsMenu from './common/ContextualActionsMenu';
+
 import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
 import {TaskAvatar} from '../constants/StyleSheetCommons';
@@ -26,7 +30,12 @@ export default class MainToDo extends React.Component {
         super(props);
 
         this.state = {
-            isReady: false
+            isReady: false,
+            contextualMenuActions: [{title: 'Approva 1 file', image: MenuIcons.THUMB_UP, onPress: () => {}}, 
+                                    {title: 'Rigetta 1 file', image: MenuIcons.THUMB_DOWN, onPress: () => {}}, 
+                                    {title: 'Alert', image: MenuIcons.ALERT, onPress: () => {}},
+                                    {title: 'Commenta task', image: MenuIcons.COMMENT, onPress: () => {}},
+                                    {title: 'Cronologia Notifiche Store per singolo task', featureName: 'Cronologia Notifiche', image: MenuIcons.HISTORY, disabled: true, onPress: () => {}}]
         }
     }
 
@@ -56,6 +65,10 @@ export default class MainToDo extends React.Component {
         this.setState({isReady: true});
     }
 
+    openContextualMenu(index) {
+        this.contextualMenu.toggleState();
+    }
+
     renderCardTitle() {
         return (
             <View style={[TaskAvatar.avatarContainer]}>
@@ -74,7 +87,9 @@ export default class MainToDo extends React.Component {
                     </View>
                     <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
                 </View>
-                <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
+                <TouchableOpacity onPress={() => this.openContextualMenu(1)} style={{position: 'absolute', right: 0, top: -10}}>
+                    <Ionicons name="ios-more-outline" color={Colors.main} size={30} />
+                </TouchableOpacity>
             </View>
         );
     }
@@ -147,7 +162,7 @@ export default class MainToDo extends React.Component {
                 </View>
                 {this.renderSectionTitle()}
                 {this.renderElements()}
-
+                <ContextualActionsMenu ref={e => this.contextualMenu = e} buttons={this.state.contextualMenuActions} />
             </ScrollView>
         );
     }
