@@ -15,15 +15,17 @@ import {
 import {AppLoading, Font} from 'expo';
 
 import Colors from '../../constants/Colors';
+import Shadow from '../../constants/Shadow';
+import DisabledStyle from '../../constants/DisabledStyle';
+
 import {Ionicons} from '@expo/vector-icons';
 import {getProfile} from '../helpers';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import ImagePost from './image-post';
 import TaskDetail from './task-detail';
-
 import Button from './button';
-import Shadow from '../../constants/Shadow';
+import NoOpModal from './NoOpModal';
 
 const {width, height} = Dimensions.get('window');
 
@@ -43,8 +45,10 @@ export default class TaskFeedItem extends Component {
         this.state = {
             //profile: getProfile(this.props.data.creator),
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
-            buttons: [{title: 'Comment', icon: 'comment', onPress: () => {}, iconType: 'evilicon', iconColor: Colors.main}, 
-                      {title: 'Stats', icon: 'ios-podium-outline', onPress: () => {}, iconColor: Colors.yellow}],
+            buttons: [{title: 'Comment', iconImage: require("../../assets/images/icons/comment.png"), 
+                        onPress: () => {}}, 
+                      {title: 'Stats', id: 'statsButton', iconImage: require("../../assets/images/icons/stats-outlined.png"), 
+                        onPress: () => {this['statsButton'].toggleState()}, disabled: true}],
             likes: 0,
             isReady: false,
             comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length,
@@ -65,23 +69,6 @@ export default class TaskFeedItem extends Component {
         });
 
         this.setState({ isReady: true });
-    }
-
-    buttonOnPress(name) {
-        console.log(name);
-        switch(name) {
-            case 'Like':
-                this.setState({likes: this.state.likes + 1});
-                break;
-            case 'Dislike':
-                this.setState({likes: this.state.likes - 1});
-                break;
-            case 'Comment':
-                this.setState({comments: this.state.comments + 1});
-                break;
-            default:
-                return
-        }
     }
 
     renderAvatar() {
@@ -129,8 +116,12 @@ export default class TaskFeedItem extends Component {
         const {buttons} = this.state;
         return buttons.map((button, i) => {
             return (
-                <Button key={i} name={button} onPress={this.buttonOnPress.bind(this)} icon={button.icon} 
-                    iconType={button.iconType} iconColor={button.iconColor} />
+                <TouchableOpacity onPress={() => {button.onPress()}} style={button.disabled ? DisabledStyle.disabled : {}}>
+                    <Image source={button.iconImage} style={{width: 20, height: 16}} resizeMode={"center"} />
+                    {button.disabled ?
+                        <NoOpModal featureName={button.title} ref={(noOpModal) => this[button.id] = noOpModal} />    
+                    : null}
+                </TouchableOpacity>
             )
         })
     }
