@@ -157,7 +157,7 @@ export default class FitlerBar extends Component {
                 </View>
             }
 
-            if (data.title === 'Stats') {
+            if ((data.title === 'Stats') && (data.active == true)) {
                 return (
                     <View style={[styles.statsButtonContainer, 
                         Shadow.filterShadow, 

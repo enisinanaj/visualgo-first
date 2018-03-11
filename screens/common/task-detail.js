@@ -26,7 +26,7 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
 
 import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, Entypo} from '@expo/vector-icons';
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
@@ -39,6 +39,7 @@ import FilterBar from './filter-bar';
 import DisabledStyle from '../../constants/DisabledStyle';
 import NoOpModal from './NoOpModal';
 import Shadow from '../../constants/Shadow';
+import {TaskAvatar} from '../../constants/StyleSheetCommons';
 
 export default class TaskDetail extends Component {
     constructor(props) {
@@ -72,7 +73,8 @@ export default class TaskDetail extends Component {
             taskDescription: '',
             commentsEnabled: false,
             notificationsEnabled: false,
-            isReady: false
+            isReady: false,
+            showTaskComment: false
         }
     }
 
@@ -144,10 +146,11 @@ export default class TaskDetail extends Component {
     }
 
     renderFilters() {
-        filters = [{title: 'Stats', icon: 'ios-podium-outline', onPress: () => {}},
+        filters = [{type: 'search', searchPlaceHolder: '', visible: false},
+            {title: 'Stats', icon: 'ios-podium-outline', onPress: () => {}, active: true},
             {title: 'Summary', selected: true, active: true}, 
-            {title: 'All Stores', active: true}, 
-            {title: 'Pending', active: true}];
+            {title: 'All Stores', selected: false, active: true}, 
+            {title: 'Pending', selected: false, active: true}];
         
         return <View style={styles.filterBarContainer}>
                     <FilterBar data={filters} headTitle={""} />
@@ -238,7 +241,7 @@ export default class TaskDetail extends Component {
 
     renderText() {
         return (
-            <View style={{flex: 1, padding: 16, paddingBottom: 0}}>
+            <View style={{padding: 16, paddingBottom: 0}}>
                 {this.renderTextAvatar()}
                 <TextInput autoFocus={false} style={{height: Platform.OS === 'ios' ? 30 : 30, fontSize: 16, textAlign: 'left',  
                     fontWeight: '300'}}
@@ -246,10 +249,72 @@ export default class TaskDetail extends Component {
                     placeholderTextColor={Colors.grayText}
                     multiline = {true}
                     numberOfLines = {6}
-                    height={200}
+                    height={140}
                     value='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'/>
             </View>
         )
+    }
+
+    renderStores() {
+        var arr = [0,1,2,3,4,5,6,7,8,9];
+
+        return arr.map((obj, i) => {
+            return <View>
+                <View style={[styles.SingleStoreContainer, Shadow.cardShadow]}>
+                    {this.renderCardTitle()}
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', position: 'relative', top: 85}}>
+                        <Image source={require("../../assets/images/icons/comment_filled_main.png")} 
+                            style={{height: 12, width: 13, resizeMode: 'center'}} />
+                    </View>
+                </View>
+                <View>
+                    <ScrollView style={styles.StoreContainer} showsHorizontalScrollIndicator={false}
+                        horizontal={true}>
+                        <View style={[styles.Store, Shadow.smallCardShadow]}>
+                            <Entypo name={"image-inverted"} size={30} style={styles.StoreIcon}/>
+                        </View>
+                        <View style={[styles.Store, Shadow.smallCardShadow]}>
+                            <Entypo name={"video-camera"} size={30} style={styles.StoreIcon}/>            
+                        </View>
+                        <View style={[styles.Store, Shadow.smallCardShadow]}>
+                            <Entypo name={"image-inverted"} size={30} style={styles.StoreIcon}/>                                        
+                        </View>
+                        <View style={[styles.Store, Shadow.smallCardShadow]}>
+                            <Entypo name={"video-camera"} size={30} style={styles.StoreIcon}/>            
+                        </View>
+                        <View style={[styles.Store, Shadow.smallCardShadow]}>
+                            <Entypo name={"image-inverted"} size={30} style={styles.StoreIcon}/>                                        
+                        </View>
+                        <View style={[styles.Store, Shadow.smallCardShadow]}>
+                            <Entypo name={"video-camera"} size={30} style={styles.StoreIcon}/>            
+                        </View>
+                        <View style={[styles.Store, Shadow.smallCardShadow]}>
+                            <Entypo name={"image-inverted"} size={30} style={styles.StoreIcon}/>                                        
+                        </View>
+                    </ScrollView>
+                </View>
+            </View>
+        });
+    }
+
+    renderCardTitle() {
+        return (
+            <View style={[TaskAvatar.avatarContainer]}>
+                <View style={[TaskAvatar.taskThumbnailContainer, Shadow.filterShadow]}>
+                    <Image style={TaskAvatar.taskThumbnail} source={{uri: 'https://media.timeout.com/images/103399489/image.jpg'}} />
+                </View>
+                <View style={[TaskAvatar.avatarPhotoContainer, Shadow.filterShadow]}>
+                    <Image style={TaskAvatar.profile} source={require('../img/dp2.jpg')}/>
+                </View>
+                <View style={TaskAvatar.nameContainer}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                        <Text style={TaskAvatar.name}>Store ID</Text>
+                    </View>
+                    <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
+                </View>
+                <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
+            </View>
+        );
     }
 
     renderStartDueDate() {
@@ -486,6 +551,42 @@ export default class TaskDetail extends Component {
         )
     }
 
+    renderTaskComment() {
+        if (this.state.showTaskComment) {
+            return (
+                <TouchableOpacity onPress={() => {this.setState({showTaskComment: false})}} >
+                    <View style={[styles.taskCommentVisibleContainer, Shadow.cardShadow]}>
+                        <View>
+                            <Text></Text>
+                        </View>
+                        <View>
+                            <Entypo name={"chevron-thin-down"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
+                        </View>
+                        <View>
+                            <Text style={styles.taskTextStyle}>4 Comment</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            )    
+        } else {
+            return (
+                <TouchableOpacity onPress={() => {this.setState({showTaskComment: true})}} >
+                    <View style={[styles.taskCommentContainer, Shadow.cardShadow]}>
+                        <View>
+                            <Text></Text>
+                        </View>
+                        <View>
+                            <Entypo name={"chevron-thin-up"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
+                        </View>
+                        <View>
+                            <Text style={styles.taskTextStyle}>Task Comment</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
+    }
+
     renderSelectedTag(data){
         return (
             <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
@@ -576,34 +677,49 @@ export default class TaskDetail extends Component {
         }
 
         const {data} = this.props;
-
-        return (
-            <View style={{height: this.state.visibleHeight}}>
-                <StatusBar barStyle={'default'} animated={true}/>
-                {this.renderHeader()}
-                <ScrollView>
-                    {this.renderFilters()}
-                    {this.renderCommentSwitchRow()}
-                    <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
-                        {this.renderText()}
-                    </View>
-                    {this.renderUploadAttach()}
-                    {this.renderStartDueDate()}
-                    {this.renderPhoto()}
-                    {this.renderVideo()}
-                    {this.render360()}
-                    {this.renderAssignTo()}
-                    {this.renderTaskAdmins()}
-                    {this.renderArchiveMenu()}
-                    {this.renderDeleteMenu()}
-                </ScrollView>
-                {this.renderThemeModal()}
-                {this.renderEnvironmentsModal()}
-                {this.renderPrivacyModal()}
-                {this.renderTagListTaskModal()}
-                {this.renderGuidelineDescriptionModal()}
-            </View>
-        )
+        
+        if (false) { //if filters.
+            return (
+                <View style={{height: this.state.visibleHeight}}>
+                    <StatusBar barStyle={'default'} animated={true}/>
+                    {this.renderHeader()}
+                    <ScrollView>
+                        {this.renderFilters()}
+                        {this.renderStores()}
+                    </ScrollView>
+                </View>
+            )
+        } else {
+            return (
+                <View style={{height: this.state.visibleHeight}}>
+                    <StatusBar barStyle={'default'} animated={true}/>
+                    {this.renderHeader()}
+                    <ScrollView>
+                        {this.renderFilters()}
+                        
+                        {this.renderCommentSwitchRow()}
+                        <View style={{bottom: Platform.OS === 'ios' ? 0 : 20}}>
+                            {this.renderText()}
+                        </View>
+                        {this.renderUploadAttach()}
+                        {this.renderStartDueDate()}
+                        {this.renderPhoto()}
+                        {this.renderVideo()}
+                        {this.render360()}
+                        {this.renderAssignTo()}
+                        {this.renderTaskAdmins()}
+                        {this.renderArchiveMenu()}
+                        {this.renderDeleteMenu()}
+                    </ScrollView>
+                    {this.renderTaskComment()}
+                    {this.renderThemeModal()}
+                    {this.renderEnvironmentsModal()}
+                    {this.renderPrivacyModal()}
+                    {this.renderTagListTaskModal()}
+                    {this.renderGuidelineDescriptionModal()}
+                </View>
+            )
+        }
     }
 }
 
@@ -762,8 +878,75 @@ const styles = StyleSheet.create({
         fontSize: 12,
         height: 23,
         marginLeft: 8,
-        marginTop: -5,
+        marginTop: -20,
         color: '#999999',
         fontFamily: 'roboto-light'
     },
+
+    StoreContainer:{
+        flexDirection: 'row',
+        position: 'absolute',
+        top: -95,
+        width: width,
+        height: 100,
+        zIndex: 9999
+    },
+
+    Store:{
+        marginRight:7,
+        backgroundColor:'white',
+        height:65,
+        width:65,
+        borderRadius:10,
+        padding:5,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center'
+
+    },
+    StoreIcon: {
+        color:'#9E9E9E',
+        opacity:0.5,
+    },
+    SingleStoreContainer:{
+        marginLeft:10,
+        marginRight:10,
+        backgroundColor:'white',
+        marginTop:10,
+        height:160,
+        borderRadius:20,
+        padding:15,
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    
+    taskCommentVisibleContainer:{
+        padding: 5,
+        height: 500,
+        backgroundColor: Colors.main,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    taskCommentContainer:{
+        padding: 5,
+        height: 50,
+        backgroundColor: Colors.main,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    taskTextStyle: {
+        padding: 10,
+        paddingTop: 16,
+        margin: 0,
+        textAlign: 'center',
+        fontSize: 14,
+        fontFamily: 'roboto-light',
+        color: '#FFFFFF'
+    }
 });
