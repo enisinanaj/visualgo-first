@@ -14,7 +14,8 @@ import {
     Platform,
     Modal,
     ScrollView,
-    DefaultRow
+    TouchableHighlight,
+    KeyboardAvoidingView
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -23,6 +24,12 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#f7d6f0', '#0e3efb', '#d8b96a',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
+const messages = [{from: {name: 'John', image: require('../img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
+                {from: {name: 'Andy', image: require('../img/bob.png')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo', read: true, date: new Date()},
+                {from: {name: 'Ivan', image: require('../img/cookiemonster.jpeg')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo Lorem', read: false, date: new Date()},
+                {from: {name: 'John', image: require('../img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
+                {from: {name: 'Andy', image: require('../img/bob.png')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo Lorem Dolo', read: true, date: new Date()},
+                {from: {name: 'Ivan', image: require('../img/cookiemonster.jpeg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
 
 import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
@@ -40,13 +47,15 @@ import DisabledStyle from '../../constants/DisabledStyle';
 import NoOpModal from './NoOpModal';
 import Shadow from '../../constants/Shadow';
 import {TaskAvatar} from '../../constants/StyleSheetCommons';
+import nodeEmoji from 'node-emoji';
+import DefaultRow from './default-row';
 
 export default class TaskDetail extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            visibleHeight: Dimensions.get('window').height,
+            visibleHeight: height,
             k_visible: false,
             backgroundColors: ds.cloneWithRows(backgroundColorsArray),
             themeModal: false,
@@ -74,7 +83,8 @@ export default class TaskDetail extends Component {
             commentsEnabled: false,
             notificationsEnabled: false,
             isReady: false,
-            showTaskComment: false
+            showTaskComment: false,
+            messages: ds.cloneWithRows(messages)
         }
     }
 
@@ -551,22 +561,77 @@ export default class TaskDetail extends Component {
         )
     }
 
-    renderTaskComment() {
-        if (this.state.showTaskComment) {
-            return (
-                <TouchableOpacity onPress={() => {this.setState({showTaskComment: false})}} >
-                    <View style={[styles.taskCommentVisibleContainer, Shadow.cardShadow]}>
-                        <View>
-                            <Text></Text>
-                        </View>
-                        <View>
-                            <Entypo name={"chevron-thin-down"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
-                        </View>
-                        <View>
-                            <Text style={styles.taskTextStyle}>4 Comment</Text>
-                        </View>
+    _renderRow(data) {
+        return <DefaultRow style={{padding: 0}} arguments={data} noborder={true} renderChildren={() => this.renderMessageRow(data)} />
+    }
+
+    renderMessageRow(data) {
+        return (
+            <View style={styles.rowContainer}>
+                <TouchableOpacity style={styles.rowContainer}>
+                    <Image source={data.from.image} style={styles.selectableDisplayPicture} />
+                    <View style={styles.textInRow}>
+                        <Text style={[styles.rowTitle, !data.read ? styles.unreadMessage : {}]}>{data.from.name}
+                            <Text style={styles.rowSubTitle}> {data.message}</Text>
+                        </Text>
                     </View>
                 </TouchableOpacity>
+            </View>);
+      }
+
+    renderTaskComment() {
+        var {height, visibleHeight} = this.state;
+
+        if (this.state.showTaskComment) {
+            return (
+                <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
+                    <Modal
+                    animationType="slide"
+                    transparent={true}
+                    onRequestClose={() => {
+                    alert('Modal has been closed.');
+                    }}>
+                        <TouchableHighlight
+                        style={styles.taskCommentVisibleContainer}
+                        onPress={() => {
+                            this.setState({showTaskComment: false});
+                        }}>
+                        <View style={[styles.commentContainer, Shadow.cardShadow]}>
+                            <View style={[styles.rowCommentContainer, Shadow.filterShadow]}>
+                                <View>
+                                    <Text></Text>
+                                </View>
+                                <View>
+                                    <Entypo name={"chevron-thin-down"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
+                                </View>
+                                <View>
+                                    <Text style={styles.taskTextStyle}>4 Comment</Text>
+                                </View>
+                            </View>
+                            <ListView
+                                style={styles.listView}
+                                onScroll={this._onScroll}
+                                dataSource={this.state.messages}
+                                renderRow={(data) => this._renderRow(data)}
+                                enableEmptySections={true}/>
+                            <View style={[styles.newMessageAreaContainer, Shadow.filterShadow, this.state.k_visible ? {marginBottom: 20} : {marginBottom: 0}]}>
+                                <View style={styles.textBoxContainer}>
+                                    <TextInput style={styles.textArea} ref='newMessageTextInput'
+                                        onChangeText={(arg) => this.messageTextChanged(arg)}
+                                        placeholder={'Scrivi un commento...'}
+                                        value={this.state.newMessage}
+                                        underlineColorAndroid={'rgba(0,0,0,0)'} 
+                                        />
+                                    <Image
+                                        style={{flex: 1, width: undefined, height: undefined}}
+                                        source={require('../../assets/images/icons/camera.png')}
+                                        resizeMode="contain"/>
+                                </View>
+                            </View>
+                        </View>
+                        </TouchableHighlight>
+                    </Modal>
+                </KeyboardAvoidingView>
             )    
         } else {
             return (
@@ -919,16 +984,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between'
     },
-    
-    taskCommentVisibleContainer:{
-        padding: 5,
-        height: 500,
-        backgroundColor: Colors.main,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
 
     taskCommentContainer:{
         padding: 5,
@@ -948,5 +1003,128 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'roboto-light',
         color: '#FFFFFF'
+    },
+    
+    taskCommentVisibleContainer: {
+        marginTop: 0, 
+        backgroundColor: 'rgba(0,0,0, 0.3)', 
+        flex: 1,
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        height: height, 
+        width: width
+    },
+
+    commentContainer: {
+        padding: 5,
+        bottom: 0,
+        position: 'absolute',
+        height: 375, 
+        backgroundColor: '#FFFFFF', 
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        width: width
+    },
+
+    rowCommentContainer: {
+        padding: 5,
+        top: 0,
+        position: 'absolute',
+        height: 50, 
+        backgroundColor: Colors.main, 
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        width: width,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    rowContainer: {
+        paddingTop: 5,
+        flex: 1,
+        flexDirection: 'row'
+    },
+
+    selectableDisplayPicture: {
+        width: 50,
+        height: 50,
+        borderRadius: 25
+    },
+
+    textInRow: {
+        marginLeft: 10,
+        marginTop: 5,
+        flex: 1,
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: Colors.borderGray,
+        borderRadius: 10
+    },
+
+    rowTitle: {
+        paddingLeft: 5,
+        fontWeight: '400',
+        fontSize: 18,
+        paddingTop: 1,
+        backgroundColor: 'transparent'
+    },
+
+    newMessageAreaContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 65,
+        backgroundColor: '#FFFFFF',
+        width: width
+    },
+
+    rowSubTitle: {
+        fontFamily: 'roboto-light',
+        color: Colors.grayText,
+        fontSize: 14,
+        paddingLeft: 5,
+        paddingTop: 5,
+        backgroundColor: 'transparent',
+        width: width - 120
+    },
+    
+    messageDate: {
+        paddingTop: 17
+    },
+
+    listView: {
+        backgroundColor: Colors.white,
+        flexDirection: 'column',
+        bottom: 0,
+        marginTop: 50
+    },
+
+    textBoxContainer: {
+        width: width - 115,
+        borderRadius: 22,
+        borderWidth: 1,
+        borderColor: Colors.main,
+        backgroundColor: Colors.white,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 40,
+        marginRight: 10,
+        marginTop: 10,
+        marginLeft: 10
+    },
+
+    textArea: {
+        backgroundColor: 'transparent',
+        color: Colors.black,
+        width: width - 120 - 22,
+        height: 40,
+        paddingLeft: 15,
+        paddingRight: 15,
+    },
+
+    cameraEmoticon: {
+        marginTop: 9,
+        marginRight: 0,
+        backgroundColor: 'transparent'
     }
 });
