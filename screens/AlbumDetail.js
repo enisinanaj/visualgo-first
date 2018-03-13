@@ -6,9 +6,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 
-
-
-export default class page2 extends React.Component {
+export default class AlbumDetail extends React.Component {
     render() {
         return (
 

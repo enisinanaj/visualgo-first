@@ -156,7 +156,7 @@ export default class VisualGuidelines extends Component {
         }
 
         if (data.media.length > 0) {
-            return <VisualGuidelineItem data={data}/>
+            return <VisualGuidelineItem data={data} {...this.props}/>
         }
 
         return null;

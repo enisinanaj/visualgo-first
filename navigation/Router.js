@@ -15,6 +15,7 @@ import ImagePost from '../screens/common/image-post';
 import MainCalendar from '../screens/MainCalendar';
 import VisualGuidelines from '../screens/VisualGuidelines';
 import MainTodo from '../screens/MainToDo';
+import AlbumDetail from '../screens/AlbumDetail';
 
 
 export default createRouter(() => ({
@@ -30,5 +31,6 @@ export default createRouter(() => ({
     login: () => Login,
     imagePost: () => ImagePost,
     visualGuidelines: () => VisualGuidelines,
-    mainTodo: () => MainTodo
+    mainTodo: () => MainTodo,
+    albumDetail: () => AlbumDetail
 }));

@@ -15,7 +15,7 @@ import {
     Modal,
     ScrollView
 } from 'react-native';
-import {Font, AppLoading, Camera, Permissions, ImagePicker} from 'expo';
+import {Font, AppLoading, Camera, Permissions, ImagePicker, DocumentPicker} from 'expo';
 import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome, Entypo} from '@expo/vector-icons';
 import moment from 'moment';
 import locale from 'moment/locale/it'
@@ -89,7 +89,7 @@ export default class NewAlbum extends Component {
 
     _getDocuments() {
         try {
-            Expo.DocumentPicker.getDocumentAsync({});
+            DocumentPicker.getDocumentAsync({});
         } catch (e) {
             
         }

@@ -24,6 +24,7 @@ import ImageVisualGuideline from './image-visual-guideline';
 import Button from './button';
 import NoOpModal from './NoOpModal';
 import ContextualActionsMenu from './ContextualActionsMenu';
+import Router from '../../navigation/Router';
 
 const {width, height} = Dimensions.get('window');
 
@@ -120,13 +121,17 @@ export default class VisualGuidelineItem extends Component {
         }
     }
 
+    goToAlbumDetail() {
+        this.props.navigator.push(Router.getRoute('albumDetail', {albumId: '1'}));
+    }
+
     render() {
         if (!this.state.isReady) {
           return <AppLoading />;
         }
 
         return (
-            <View style={{height: 290, padding: 0, margin: 0}}>
+            <TouchableOpacity style={{height: 290, padding: 0, margin: 0}} onPress={() => {this.goToAlbumDetail()}} >
                 <View style={[styles.container, Shadow.cardShadow]}>
                     {this.renderCardTitle()}
                     <View style={styles.buttonContainer}>
@@ -134,7 +139,7 @@ export default class VisualGuidelineItem extends Component {
                     </View>
                 </View>
                 {this.renderContent()}
-            </View>
+            </TouchableOpacity>
         )
     }
 }
