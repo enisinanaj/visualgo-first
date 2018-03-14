@@ -257,14 +257,14 @@ export default class FitlerBar extends Component {
             return <AppLoading />
         }
 
-        var {customStyle} = this.props || {};
+        var {customStyle, innerStyle} = this.props;
 
-        return <View style={styles.filterBarContainer}>
+        return <View style={[styles.filterBarContainer, customStyle ? customStyle : {}]}>
                 {this.state.headTitle.length > 0 ? <Text style={styles.filterBarHeader}>{this.state.headTitle}</Text> : null}
 
                 <ListView
                     horizontal={true}
-                    style={styles.filtersListView}
+                    style={[styles.filtersListView, innerStyle ? innerStyle : {}]}
                     dataSource={this.state.filtersSource}
                     showsHorizontalScrollIndicator={false}
                     renderRow={(data) => this.drawElements(data)}/>

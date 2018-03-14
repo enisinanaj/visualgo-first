@@ -42,7 +42,7 @@ export default class BlueMenu extends Component {
                 {name: 'Messages', icon: 'chat', onPress: () => {this['messages'].toggleState()}, disabled: true, id: 'messages'},
                 {name: 'To Do List', icon: 'notification', onPress: () => {}, id: 'to_do_list'},
                 {name: 'Anagrafiche', onPress: () => {this['anagrafiche'].toggleState()}, style: {marginTop: 40}, disabled: true, id: 'anagrafiche'},
-                {name: 'Gestisci Negozi, cluster e contatti', isSubtitle: true, disabled: true, id: 'anagrafiche'},
+                {name: 'Gestisci Negozi, cluster e contatti', isSubtitle: true, disabled: true, id: 'anagrafiche', noOpLabel: 'Anagrafiche'},
                 {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}, style: {marginTop: 15}, id: 'logout'}];
 
         this.state = {
@@ -127,7 +127,7 @@ export default class BlueMenu extends Component {
                 </Text>
                 {data.iconPosition == "right" ? this._renderIcon(data) : null}
                 {data.disabled ?
-                    <NoOpModal featureName={data.name} ref={(noOpModal) => this[data.id] = noOpModal} />
+                    <NoOpModal featureName={data.noOpLabel ? data.noOpLabel : data.name} ref={(noOpModal) => this[data.id] = noOpModal} />
                 : null}
             </TouchableOpacity>
         )

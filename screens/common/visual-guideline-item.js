@@ -73,7 +73,7 @@ export default class VisualGuidelineItem extends Component {
                 <View style={[TaskAvatar.avatarPhotoContainer, Shadow.filterShadow]}>
                     <Image style={TaskAvatar.profile} source={require('../img/dp2.jpg')}/>
                 </View>
-                <View style={TaskAvatar.nameContainer}>
+                <TouchableOpacity style={TaskAvatar.nameContainer} onPress={() => {this.goToAlbumDetail()}}>
                     <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
                         <Text style={TaskAvatar.name}>Guideline #Theme</Text>
                         <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
@@ -81,7 +81,7 @@ export default class VisualGuidelineItem extends Component {
                         </Text>
                     </View>
                     <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity style={{position: 'absolute', right: 0, top: -10}} onPress={() => this.contextualMenu.toggleState()}>
                     <Ionicons name="ios-more-outline" color={Colors.main} size={30} />
                 </TouchableOpacity>
@@ -131,7 +131,7 @@ export default class VisualGuidelineItem extends Component {
         }
 
         return (
-            <TouchableOpacity style={{height: 290, padding: 0, margin: 0}} onPress={() => {this.goToAlbumDetail()}} >
+            <View style={{height: 290, padding: 0, margin: 0}} >
                 <View style={[styles.container, Shadow.cardShadow]}>
                     {this.renderCardTitle()}
                     <View style={styles.buttonContainer}>
@@ -139,7 +139,7 @@ export default class VisualGuidelineItem extends Component {
                     </View>
                 </View>
                 {this.renderContent()}
-            </TouchableOpacity>
+            </View>
         )
     }
 }

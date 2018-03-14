@@ -98,7 +98,8 @@ export default class TaskDetail extends Component {
     async loadFonts() {
         await Font.loadAsync({
             'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf')
         });
 
         this.setState({isReady: true});
@@ -127,15 +128,14 @@ export default class TaskDetail extends Component {
 
     renderHeader() {
         return (
-            <View style={{flexDirection: 'row', height: 55, alignItems: 'center', paddingLeft: 0,
-                    borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray, 
-                    paddingTop: Platform.OS === 'ios' ? 36 : 16, padding: 16}}>
-                <View style={{flex:1, paddingTop: 5}}>
-                    <Image style={{flex: 1, height: 50, width: width, 
-                                    position:'absolute', resizeMode: 'center', top: -19, left: 0}} 
+            <View style={{flexDirection: 'row', height: 48, alignItems: 'center', paddingLeft: 0,
+                    borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
+                <View style={{flex:1}}>
+                    <Image style={{flex: 1, height: 48, width: width, 
+                                    position:'absolute', resizeMode: 'center', top: -12, left: 0, opacity: 0.1}} 
                                     source={{uri:'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}} />
                     <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between'}}>
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 4, paddingTop: 5}}>
                             <TouchableOpacity onPress={this.props.closeModal}>
                                 <EvilIcons name={"close"} size={22} color={Colors.main}/>
                             </TouchableOpacity>
@@ -146,7 +146,7 @@ export default class TaskDetail extends Component {
                                 </Text>
                             </View>
                         </View>
-                        <TouchableOpacity>
+                        <TouchableOpacity style={{marginTop: 3, marginRight: 10}}>
                             <Image source={require("../../assets/images/icons/twoCards.png")} />
                         </TouchableOpacity>
                     </View>
@@ -163,7 +163,8 @@ export default class TaskDetail extends Component {
             {title: 'Pending', selected: false, active: true}];
         
         return <View style={styles.filterBarContainer}>
-                    <FilterBar data={filters} headTitle={""} />
+                    <FilterBar data={filters} headTitle={""} customStyle={{height: 80, paddingTop: 0}}
+                        innerStyle={{paddingLeft: 10}}/>
                 </View>;
     }
 
@@ -253,14 +254,10 @@ export default class TaskDetail extends Component {
         return (
             <View style={{padding: 16, paddingBottom: 0}}>
                 {this.renderTextAvatar()}
-                <TextInput autoFocus={false} style={{height: Platform.OS === 'ios' ? 30 : 30, fontSize: 16, textAlign: 'left',  
-                    fontWeight: '300'}}
-                    underlineColorAndroid={'rgba(0,0,0,0)'} 
-                    placeholderTextColor={Colors.grayText}
-                    multiline = {true}
-                    numberOfLines = {6}
-                    height={140}
-                    value='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'/>
+                <Text style={{height: 'auto', fontFamily: 'roboto-light', fontSize: 16, textAlign: 'left', paddingBottom: 5, marginBottom: 5}}
+                    numberOfLines = {6}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </Text>
             </View>
         )
     }
@@ -562,7 +559,9 @@ export default class TaskDetail extends Component {
     }
 
     _renderRow(data) {
-        return <DefaultRow style={{padding: 0}} arguments={data} noborder={true} renderChildren={() => this.renderMessageRow(data)} />
+        return <DefaultRow style={{padding: 0}} arguments={data} noborder={true}>
+            {this.renderMessageRow(data)}
+        </DefaultRow>
     }
 
     renderMessageRow(data) {
@@ -584,54 +583,54 @@ export default class TaskDetail extends Component {
 
         if (this.state.showTaskComment) {
             return (
-                <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
                     <Modal
                     animationType="slide"
                     transparent={true}
-                    onRequestClose={() => {
-                    alert('Modal has been closed.');
-                    }}>
-                        <TouchableHighlight
-                        style={styles.taskCommentVisibleContainer}
-                        onPress={() => {
-                            this.setState({showTaskComment: false});
-                        }}>
-                        <View style={[styles.commentContainer, Shadow.cardShadow]}>
-                            <View style={[styles.rowCommentContainer, Shadow.filterShadow]}>
-                                <View>
-                                    <Text></Text>
+                    onRequestClose={() => {}}>
+                        <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
+                            <TouchableHighlight
+                            style={styles.taskCommentVisibleContainer}
+                            onPress={() => {
+                                this.setState({showTaskComment: false});
+                            }}>
+                            <View style={[styles.commentContainer, Shadow.cardShadow]}>
+                                <View style={[styles.rowCommentContainer, Shadow.filterShadow]}>
+                                    <View>
+                                        <Text></Text>
+                                    </View>
+                                    <View>
+                                        <Entypo name={"chevron-thin-down"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
+                                    </View>
+                                    <View>
+                                        <Text style={[styles.taskTextStyle]}>Task Comment</Text>
+                                    </View>
                                 </View>
-                                <View>
-                                    <Entypo name={"chevron-thin-down"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
-                                </View>
-                                <View>
-                                    <Text style={styles.taskTextStyle}>4 Comment</Text>
+                                <ListView
+                                    style={styles.listView}
+                                    onScroll={this._onScroll}
+                                    dataSource={this.state.messages}
+                                    renderRow={(data) => this._renderRow(data)}
+                                    enableEmptySections={true}/>
+                                <View style={[styles.newMessageAreaContainer, Shadow.filterShadow]}>
+                                    <View style={styles.textBoxContainer}>
+                                        <TextInput style={styles.textArea} ref='newMessageTextInput'
+                                            onChangeText={(arg) => this.messageTextChanged(arg)}
+                                            placeholder={'Scrivi un commento...'}
+                                            value={this.state.newMessage}
+                                            underlineColorAndroid={'rgba(0,0,0,0)'} 
+                                            />
+                                        <View style={{height: 26, width: 26, marginTop: 5, marginRight: 10}}>
+                                            <Image
+                                                style={{flex: 1, width: undefined, height: undefined}}
+                                                source={require('../../assets/images/icons/camera.png')}
+                                                resizeMode="contain"/>
+                                        </View>
+                                    </View>
                                 </View>
                             </View>
-                            <ListView
-                                style={styles.listView}
-                                onScroll={this._onScroll}
-                                dataSource={this.state.messages}
-                                renderRow={(data) => this._renderRow(data)}
-                                enableEmptySections={true}/>
-                            <View style={[styles.newMessageAreaContainer, Shadow.filterShadow, this.state.k_visible ? {marginBottom: 20} : {marginBottom: 0}]}>
-                                <View style={styles.textBoxContainer}>
-                                    <TextInput style={styles.textArea} ref='newMessageTextInput'
-                                        onChangeText={(arg) => this.messageTextChanged(arg)}
-                                        placeholder={'Scrivi un commento...'}
-                                        value={this.state.newMessage}
-                                        underlineColorAndroid={'rgba(0,0,0,0)'} 
-                                        />
-                                    <Image
-                                        style={{flex: 1, width: undefined, height: undefined}}
-                                        source={require('../../assets/images/icons/camera.png')}
-                                        resizeMode="contain"/>
-                                </View>
-                            </View>
-                        </View>
-                        </TouchableHighlight>
+                            </TouchableHighlight>
+                        </KeyboardAvoidingView>
                     </Modal>
-                </KeyboardAvoidingView>
             )    
         } else {
             return (
@@ -644,7 +643,7 @@ export default class TaskDetail extends Component {
                             <Entypo name={"chevron-thin-up"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
                         </View>
                         <View>
-                            <Text style={styles.taskTextStyle}>Task Comment</Text>
+                            <Text style={[styles.taskTextStyle, {backgroundColor: 'transparent'}]}>Task Comment</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -757,7 +756,8 @@ export default class TaskDetail extends Component {
         } else {
             return (
                 <View style={{height: this.state.visibleHeight}}>
-                    <StatusBar barStyle={'default'} animated={true}/>
+                    <StatusBar barStyle={'light-content'} animated={true}/>
+                    <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
                     {this.renderHeader()}
                     <ScrollView>
                         {this.renderFilters()}
@@ -887,7 +887,7 @@ const styles = StyleSheet.create({
     filterBarContainer: {
         borderBottomColor: Colors.borderGray,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        height: 85
+        height: 65
     },
 
     taskThumbnailContainer: {
@@ -922,10 +922,10 @@ const styles = StyleSheet.create({
 
     profile: {
         backgroundColor: 'transparent',
-        marginLeft: 4,
-        height: 40,
-        width: 40,
-        borderRadius: 20
+        marginLeft: 0,
+        height: 38,
+        width: 38,
+        borderRadius: 19
     },
 
     titleAvatar: {
@@ -933,7 +933,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         height: 23,
         marginLeft: 8,
-        marginTop: 13,
+        marginTop: 15,
         color: '#000000',
         fontFamily: 'roboto-light'
     },
@@ -943,7 +943,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         height: 23,
         marginLeft: 8,
-        marginTop: -20,
+        marginTop: -16,
         color: '#999999',
         fontFamily: 'roboto-light'
     },
@@ -986,28 +986,28 @@ const styles = StyleSheet.create({
     },
 
     taskCommentContainer:{
-        padding: 5,
-        height: 50,
+        paddingRight: 5,
+        height: 40,
         backgroundColor: Colors.main,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
 
     taskTextStyle: {
-        padding: 10,
-        paddingTop: 16,
+        padding: 13,
         margin: 0,
         textAlign: 'center',
         fontSize: 14,
-        fontFamily: 'roboto-light',
-        color: '#FFFFFF'
+        fontFamily: 'roboto-regular',
+        color: '#FFFFFF',
+        backgroundColor: 'transparent'
     },
     
     taskCommentVisibleContainer: {
-        marginTop: 0, 
-        backgroundColor: 'rgba(0,0,0, 0.3)', 
+        marginTop: 65, 
+        backgroundColor: 'rgba(256,256,256, 0.84)', 
         flex: 1,
         flexDirection: 'row', 
         justifyContent: 'center', 
@@ -1027,13 +1027,13 @@ const styles = StyleSheet.create({
     },
 
     rowCommentContainer: {
-        padding: 5,
+        paddingRight: 5,
         top: 0,
         position: 'absolute',
-        height: 50, 
+        height: 40, 
         backgroundColor: Colors.main, 
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         width: width,
         flexDirection: 'row',
         justifyContent: 'space-between'
@@ -1046,25 +1046,27 @@ const styles = StyleSheet.create({
     },
 
     selectableDisplayPicture: {
-        width: 50,
-        height: 50,
-        borderRadius: 25
+        width: 41,
+        height: 41,
+        borderRadius: 20.5
     },
 
     textInRow: {
         marginLeft: 10,
-        marginTop: 5,
+        marginRight: 10,
+        marginTop: 0,
         flex: 1,
         flexDirection: 'row',
         borderWidth: 1,
-        borderColor: Colors.borderGray,
-        borderRadius: 10
+        borderColor: '#E5E5E5',
+        borderRadius: 10,
+        padding: 5
     },
 
     rowTitle: {
         paddingLeft: 5,
-        fontWeight: '400',
-        fontSize: 18,
+        fontFamily: 'roboto-regular',
+        fontSize: 12,
         paddingTop: 1,
         backgroundColor: 'transparent'
     },
@@ -1072,17 +1074,20 @@ const styles = StyleSheet.create({
     newMessageAreaContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        height: 65,
+        height: 60,
+        marginLeft: -5,
+        marginBottom: -5,
         backgroundColor: '#FFFFFF',
         width: width
     },
 
     rowSubTitle: {
-        fontFamily: 'roboto-light',
-        color: Colors.grayText,
-        fontSize: 14,
+        fontFamily: 'roboto-regular',
+        color: '#9A9A9A',
+        fontSize: 12,
         paddingLeft: 5,
         paddingTop: 5,
+        paddingBottom: 4,
         backgroundColor: 'transparent',
         width: width - 120
     },
@@ -1095,12 +1100,13 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         flexDirection: 'column',
         bottom: 0,
-        marginTop: 50
+        marginTop: 40,
+        paddingBottom: 10
     },
 
     textBoxContainer: {
         width: width - 115,
-        borderRadius: 22,
+        borderRadius: 23,
         borderWidth: 1,
         borderColor: Colors.main,
         backgroundColor: Colors.white,

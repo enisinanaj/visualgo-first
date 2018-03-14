@@ -48,7 +48,7 @@ export const MenuIcons = {
     THUMB_DOWN: require('../../assets/images/icons/thumb-down.png'),
     HISTORY: require('../../assets/images/icons/history.png'),
     ALERT: require('../../assets/images/icons/alert.png'),
-    COMMENT: require('../../assets/images/icons/comment.png'),
+    COMMENT: require('../../assets/images/icons/comment-outline.png'),
     USER_SHARE: require('../../assets/images/icons/user-share.png'),
 }
 
