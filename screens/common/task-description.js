@@ -28,7 +28,8 @@ export default class TaskDescription extends Component {
     this.state = {
       visibleHeight: height,
       doneEnabled: false,
-      description: ''
+      description: '',
+      isReady: false
     };
   }
 
@@ -43,6 +44,8 @@ export default class TaskDescription extends Component {
     await Font.loadAsync({
       'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
     });
+
+    this.setState({isReady: true});
   }
 
   componentWillUnmount() {
@@ -91,6 +94,10 @@ export default class TaskDescription extends Component {
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
+
     var {visibleHeight} = this.state;
     var textInputHeight = visibleHeight - 80; //80 => renderHeader().height more or less (need to check on Android)
     
@@ -105,9 +112,11 @@ export default class TaskDescription extends Component {
         : null}
         <ScrollView>
           <TextInput autoFocus={true} height={textInputHeight}
-              style={{fontSize: 22,
+              style={{fontSize: 16,
                 padding: 20,
-                fontWeight: '300'}}
+                paddingTop: 10,
+                fontFamily: 'roboto-light',
+                paddingRight: 40}}
               multiline = {true}
               underlineColorAndroid={'rgba(0,0,0,0)'} 
               placeholderTextColor={Colors.grayText} 

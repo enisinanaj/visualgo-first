@@ -614,11 +614,10 @@ export default class TaskDetail extends Component {
                                 <View style={[styles.newMessageAreaContainer, Shadow.filterShadow]}>
                                     <View style={styles.textBoxContainer}>
                                         <TextInput style={styles.textArea} ref='newMessageTextInput'
-                                            onChangeText={(arg) => this.messageTextChanged(arg)}
+                                            onChangeText={(arg) => this.setState({newMessage: arg})}
                                             placeholder={'Scrivi un commento...'}
                                             value={this.state.newMessage}
-                                            underlineColorAndroid={'rgba(0,0,0,0)'} 
-                                            />
+                                            underlineColorAndroid={'rgba(0,0,0,0)'} />
                                         <View style={{height: 26, width: 26, marginTop: 5, marginRight: 10}}>
                                             <Image
                                                 style={{flex: 1, width: undefined, height: undefined}}

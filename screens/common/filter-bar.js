@@ -103,14 +103,12 @@ export default class FitlerBar extends Component {
                                 <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
                                     placeholder={data.searchPlaceHolder}
                                     autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
-                                    style={{backgroundColor: 'transparent', width: 200}}
+                                    style={{backgroundColor: 'transparent', width: 200, fontFamily: 'roboto-light', fontSize: 14}}
                                     onChangeText={(arg) => {this._setQuery(data, arg)} }
                                     ref="searchTextBox" value={this.state.searchQuery} /> 
-                                {!data.fixedOpen ?
-                                    <TouchableOpacity onPress={() => this._toggleSearch()}>
-                                        <EvilIcons name={"close"} size={20} color={Colors.main} />
-                                    </TouchableOpacity>
-                                : null}
+                                <TouchableOpacity onPress={() => this._toggleSearch()}>
+                                    <EvilIcons name={"close"} size={20} color={Colors.main} />
+                                </TouchableOpacity>
                             </View>
                         : null}
                     </View>
@@ -130,9 +128,12 @@ export default class FitlerBar extends Component {
                             <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
                                 placeholder={data.searchPlaceHolder}
                                 autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
-                                style={{backgroundColor: 'transparent', width: 200}}
+                                style={{backgroundColor: 'transparent', width: 200, fontFamily: 'roboto-light', fontSize: 14}}
                                 onChangeText={(arg) => {this._setQuery(data, arg)} }
                                 ref="searchTextBox" value={this.state.searchQuery} />
+                            <TouchableOpacity onPress={() => this._toggleSearch()}>
+                                <EvilIcons name={"close"} size={20} color={Colors.main} />
+                            </TouchableOpacity>
                         </View>
                     : null}
                 </View>); 
@@ -162,9 +163,7 @@ export default class FitlerBar extends Component {
                     <View style={[styles.statsButtonContainer, 
                         Shadow.filterShadow, 
                         {width: this.state.searchWidth}]}>
-                    <TouchableOpacity onPress={() => this._toggleSearch()}>
                         <Ionicons name={'ios-podium-outline'} size={22} color={Colors.yellow} style={{left: 2, width: 22, marginRight: 10}}/>
-                    </TouchableOpacity>
                     </View>
                 )
             }
