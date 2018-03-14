@@ -26,7 +26,7 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
 
 import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
@@ -34,7 +34,8 @@ import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
 import TaskDescription from './task-description';
 import moment from 'moment';
-import locale from 'moment/locale/it'
+import locale from 'moment/locale/it';
+import Shadow from '../../constants/Shadow';
 
 export default class CreateVisualGuideline extends Component {
     constructor() {
@@ -53,7 +54,9 @@ export default class CreateVisualGuideline extends Component {
             add360Selected: false,
             selectedTheme: {},
             allEnvironments: [],
-            allTags: [],
+            allNotify: [],
+            allShared: [],
+            allContributors: [],
             countPhoto: 1,
             countVideo: 0,
             count360: 0,
@@ -67,7 +70,11 @@ export default class CreateVisualGuideline extends Component {
             taskDescription: '',
             commentsEnabled: false,
             notificationsEnabled: false,
-            isReady: false
+            isReady: false,
+            environment: {},
+            sharedClicked: false,
+            notifyClicked: false,
+            contributorsClicked: false
         }
     }
 
@@ -229,43 +236,49 @@ export default class CreateVisualGuideline extends Component {
     }
 
     renderTheme() {
-        const objs =
-            [
-                {
-                    name: 'Choose #Theme',
-                    onPress: () => this.setState({themeModal: true})
-                }
-            ];
-
         var {selectedTheme} = this.state;
-        if (selectedTheme != undefined && selectedTheme.themeName != undefined) {
-            objs[0].innerName = selectedTheme.themeName;
+
+        if (selectedTheme.themeName != undefined) {
+            var img = {uri: selectedTheme.photo.url};
         }
 
-        return objs.map((o, i) => {
-            return (
-                <View key={i} style={{flexDirection: 'row', height: o.innerName != undefined && o.innerName != '' ? 112 : 44, alignItems: 'center', paddingLeft: 16,
+        return (
+            selectedTheme.themeName == undefined ?
+                <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                     borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                    <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <TouchableOpacity onPress={() => this.setState({themeModal: true})} 
+                        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
-                            {o.innerName != undefined && o.innerName != '' ? 
-                                <View style={{alignItems: 'center'}}>
-                                    <Text style={styles.selectedTheme}>
-                                        {o.innerName}
-                                    </Text>
-                                </View>
-                            : 
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                <Text style={styles.rowTextStyle}>{o.name}</Text>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
+                                <Text style={[styles.rowTextStyle]}>Choose Task #Theme</Text>
                                 <Text style={{color:'red', marginLeft: 5}}>*</Text>
                             </View>
-                            }
                         </View>
-                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10, marginTop: o.innerName != undefined && o.innerName != '' ? 10 : 0}} />
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
+                    </TouchableOpacity>
+                </View>
+            :
+                <View style={{flexDirection: 'row', height: 70, alignItems: 'center', paddingLeft: 0,
+                    borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 0}}>
+                    <TouchableOpacity onPress={() => this.setState({themeModal: true})} 
+                        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flex:1}}>
+                            <Image style={{flex: 1, height: 70, width: width, 
+                                           position:'absolute', resizeMode: 'center', top: -19, left: 0}} 
+                                source={img} />
+                            <View style={{flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+                                <Text style={{color: Colors.white, fontSize: 22, fontFamily: 'roboto-bold',
+                                            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                                            textShadowOffset: {width: 1, height: 1},
+                                            textShadowRadius: 10, flex: 1, padding: 3, textAlign: 'center'}}>
+                                    {selectedTheme.themeName}
+                                </Text>
+                            </View>
+                        </View>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10, backgroundColor: 'transparent'}} />
                     </TouchableOpacity>
                 </View>
             )
-        })
     }
 
     renderSelectedTag(data){
@@ -280,27 +293,51 @@ export default class CreateVisualGuideline extends Component {
     }
 
     finishTagListTask(tags) {
-        this.setState({allTags: tags, tagListTastModal: false});
+        if (this.state.contributorsClicked) {
+            this.setState({allContributors: tags, tagListTastModal: false, contributorsClicked: false});
+        } else if (this.state.notifyClicked) {
+            this.setState({allNotify: tags, tagListTastModal: false, notifyClicked: false});
+        } else if  (this.state.sharedClicked) {
+            this.setState({allShared: tags, tagListTastModal: false, sharedClicked: false});
+        }
     }
 
     renderEnvironment() {
+        var {environment} = this.state;
+
         return (
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this.setState({environmentModal: true})} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Text style={styles.rowTextStyle}>Choose @Environment</Text>
-                        <Text style={{color:'red', marginLeft: 5}}>*</Text>
-                    </View>
+                <TouchableOpacity onPress={() => this.setState({environmentModal: true})} 
+                                  style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        {environment.environmentName == undefined ?
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
+                                <Text style={[styles.rowTextStyle]}>
+                                    Choose Task @Environment
+                                </Text>
+                                <Text style={{color:'red', marginLeft: 5}}>*</Text>
+                            </View>
+                        :
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', marginLeft: 7}}>
+                                <View style={[{width: 22, height: 22, borderRadius: 11, backgroundColor: 'transparent', marginRight: 5, marginTop: 5}, 
+                                            Shadow.filterShadow]}>
+                                    <FontAwesome name={"circle"} size={22} color={environment.background} />
+                                </View>
+                                <Text style={[styles.rowTextStyle, {color: environment.background, paddingLeft: 0, fontFamily: 'roboto-bold',
+                                              marginTop: 5}]}>
+                                    {environment.environmentName}
+                                </Text>
+                            </View>
+                        }
                     <EvilIcons name={"chevron-right"} color={Colors.main} size={32} style={{marginRight: 10}} />
                 </TouchableOpacity>
             </View>
         )
     }
 
-    finishEnvironments(environments) {
-        console.log("received environments: " + environments.length);
-        this.setState({allEnvironments: environments, environmentModal: false});
+    finishEnvironments(environment) {
+        console.log("selected environement: " + JSON.stringify(environment));
+        this.setState({environment: environment, environmentModal: false});
     }
 
     renderEnvironmentsModal() {
@@ -337,8 +374,8 @@ export default class CreateVisualGuideline extends Component {
         )
     }
 
-    prepareAssignToModal() {
-        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Clusters', tagListTastModal: true});
+    prepareSendToModal() {
+        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Manager', tagListTastModal: true, notifyClicked: true});
     }
 
     renderSendTo() {
@@ -346,24 +383,24 @@ export default class CreateVisualGuideline extends Component {
             [
                 {
                     name: 'Manda notifica a...',
-                    onPress: () => this.prepareAssignToModal()
+                    onPress: () => this.prepareSendToModal()
                 }
             ];
 
-        var {allTags} = this.state;
+        var {allNotify} = this.state;
 
-        if (allTags.length > 0) {
-            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+        if (allNotify.length > 0) {
+            var clustersLength = allNotify.filter((row) => row.category == 'managers').length;
             console.log(clustersLength);
             var clustersLabel = '';
 
             if (clustersLength > 1) {
-                clustersLabel += clustersLength + " Clusters";
+                clustersLabel += clustersLength + " Managers";
             } else if (clustersLength == 1) {
-                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
+                clustersLabel += allNotify.filter((row) => row.category == 'managers')[0].title;
             }
 
-            objs[0].name = "Assegnato a ";
+            objs[0].name = "Mando notifica a ";
             objs[0].innerName = clustersLabel;
         }
 
@@ -385,6 +422,10 @@ export default class CreateVisualGuideline extends Component {
                 </View>
             )
         })
+    }
+
+    prepareShareWithModal() {
+        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Manager', tagListTastModal: true, sharedClicked: true});
     }
 
     renderShareWith() {
@@ -392,24 +433,24 @@ export default class CreateVisualGuideline extends Component {
             [
                 {
                     name: 'Condividi con...',
-                    onPress: () => this.prepareAssignToModal()
+                    onPress: () => this.prepareShareWithModal()
                 }
             ];
 
-        var {allTags} = this.state;
+        var {allShared} = this.state;
 
-        if (allTags.length > 0) {
-            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+        if (allShared.length > 0) {
+            var clustersLength = allShared.filter((row) => row.category == 'managers').length;
             console.log(clustersLength);
             var clustersLabel = '';
 
             if (clustersLength > 1) {
-                clustersLabel += clustersLength + " Clusters";
+                clustersLabel += clustersLength + " Managers";
             } else if (clustersLength == 1) {
-                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
+                clustersLabel += allShared.filter((row) => row.category == 'managers')[0].title;
             }
 
-            objs[0].name = "Assegnato a ";
+            objs[0].name = "Condiviso con ";
             objs[0].innerName = clustersLabel;
         }
 
@@ -433,29 +474,33 @@ export default class CreateVisualGuideline extends Component {
         })
     }
 
+    prepareAddContributorModal() {
+        this.setState({clustersVisible: true, storeVisible: true, managerVisible: true, headTitle: 'Manager', tagListTastModal: true, contributorsClicked: true});
+    }
+
     renderAddContributor() {
         const objs =
             [
                 {
                     name: 'Add contributor...',
-                    onPress: () => this.prepareAssignToModal()
+                    onPress: () => this.prepareAddContributorModal()
                 }
             ];
 
-        var {allTags} = this.state;
+        var {allContributors} = this.state;
 
-        if (allTags.length > 0) {
-            var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
+        if (allContributors.length > 0) {
+            var clustersLength = allContributors.filter((row) => row.category == 'managers').length;
             console.log(clustersLength);
             var clustersLabel = '';
 
             if (clustersLength > 1) {
-                clustersLabel += clustersLength + " Clusters";
+                clustersLabel += clustersLength + " Managers";
             } else if (clustersLength == 1) {
-                clustersLabel += allTags.filter((row) => row.category == 'clusters')[0].title;
+                clustersLabel += allContributors.filter((row) => row.category == 'managers')[0].title;
             }
 
-            objs[0].name = "Assegnato a ";
+            objs[0].name = "Contributor ";
             objs[0].innerName = clustersLabel;
         }
 
