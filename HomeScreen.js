@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Text, Image, View, Button } from 'react-native';
 
 const HomeScreen = ({ navigation }) => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  <View style={{ flex: 1, alignItems: 'center'}}>
     <Text>Home Screen</Text>
     <Button
       onPress={() => navigation.navigate('Details')}

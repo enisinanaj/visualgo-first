@@ -28,6 +28,7 @@ import Colors from './constants/Colors';
 import SearchBar from './screens/common/search-bar';
 import Login from './screens/Login';
 import StartScreen from './screens/StartScreen';
+import TaskSummaryScreen from './screens/TaskSummaryScreen';
 
 import AppSettings from './screens/helpers/index';
 
@@ -248,10 +249,11 @@ class AppContainer extends React.Component {
 const MainAppNavigation = StackNavigator({
   StartScreen: { screen: StartScreen },
   Login: { screen: Login },
-  Index: { screen: AppContainer}
+  Index: { screen: AppContainer},
+  TaskSummaryScreen: { screen: TaskSummaryScreen}
 },
 {
-  initialRouteName: 'Index',
+  initialRouteName: 'TaskSummaryScreen',
   headerMode: 'none',
   navigationOptions: {
     header: {

@@ -729,7 +729,7 @@ const styles = StyleSheet.create({
         height: 24, 
         marginLeft: 5, 
         marginBottom: 5,
-        onTintColor: Colors.main
+        backgroundColor: Colors.main
     },
 
     viewAndroid:{

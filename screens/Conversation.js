@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     themeLabel: {
         fontSize: 24,
         fontFamily: 'roboto-bold',
-        narginLeft: 15
+        marginLeft: 15
     },
     fromBubble: {
         borderRadius: 25,

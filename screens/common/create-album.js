@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     },
     environmentCircle: {
         backgroundColor: 'transparent',
-        borederRadius: 15,
+        borderRadius: 15,
         height: 30,
         width: 30,
         marginRight: 12,
