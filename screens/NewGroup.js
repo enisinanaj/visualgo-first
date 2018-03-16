@@ -59,7 +59,7 @@ export default class NewGroup extends Component {
 
     renderHeader() {
         return (
-            <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
+            <View style={{backgroundColor: '#FFF', paddingTop: 16, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
                 justifyContent: 'flex-start', alignItems: 'flex-start', padding: 16}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
@@ -171,6 +171,9 @@ export default class NewGroup extends Component {
             <View style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}}>
                 
                 <StatusBar barStyle={'light-content'} animated={true}/>
+                {Platform.os === 'ios' ? 
+                    <View style={{height: 20, backgroundColor: Colors.main}}></View> 
+                : null}
                 {this.renderHeader()}
                 <View style={{flexDirection: 'row', margin: 10, paddingBottom: -10}}>
                     <TouchableOpacity>

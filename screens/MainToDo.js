@@ -13,9 +13,13 @@ import FilterBar from './common/filter-bar';
 import NoOpModal from './common/NoOpModal';
 import ContextualActionsMenu from './common/ContextualActionsMenu';
 
+import Router from '../navigation/Router';
+
 import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
 import {TaskAvatar} from '../constants/StyleSheetCommons';
+
+import AppSettings from './helpers/index'
 
 const {width, height} = Dimensions.get('window');
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
@@ -66,7 +70,12 @@ export default class MainToDo extends React.Component {
     }
 
     openContextualMenu(index) {
+        AppSettings.appIndex.removeSearchBar();
         this.contextualMenu.toggleState();
+    }
+
+    navigateToCollabView() {
+        this.props.navigator.push(Router.getRoute('collabView'), {navigator: this.props.navigator});
     }
 
     renderCardTitle() {
@@ -78,7 +87,7 @@ export default class MainToDo extends React.Component {
                 <View style={[TaskAvatar.avatarPhotoContainer, Shadow.filterShadow]}>
                     <Image style={TaskAvatar.profile} source={require('./img/dp2.jpg')}/>
                 </View>
-                <View style={TaskAvatar.nameContainer}>
+                <TouchableOpacity style={TaskAvatar.nameContainer} onPress={() => this.navigateToCollabView()}>
                     <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
                         <Text style={TaskAvatar.name}>Task #Theme</Text>
                         <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
@@ -86,7 +95,7 @@ export default class MainToDo extends React.Component {
                         </Text>
                     </View>
                     <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.openContextualMenu(1)} style={{position: 'absolute', right: 0, top: -10}}>
                     <Ionicons name="ios-more-outline" color={Colors.main} size={30} />
                 </TouchableOpacity>

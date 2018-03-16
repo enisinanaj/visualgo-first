@@ -39,8 +39,14 @@ export default class FitlerBar extends Component {
 
     componentDidMount() {
         this.loadFonts();
-
-        setTimeout(() => this.setState({filtersSource: ds.cloneWithRows(this.props.data), searchQuery: ''}), 300)
+        setTimeout(() => {
+            this.setState({filtersSource: ds.cloneWithRows(this.props.data), searchQuery: ''});
+            try {
+                this.searchBoxRef.measure( (fx, fy, width, height, px, py) => {
+                    this.setState({searchBoxX: px});
+                });
+            } catch (e) {}
+        }, 300)
     }
 
     async loadFonts() {
@@ -57,6 +63,8 @@ export default class FitlerBar extends Component {
     _toggleSearch() {
         var filters = this.props.data;
         var searchButton = filters.filter(it => it.type == 'search');
+
+        this.listViewRef.scrollTo({x: this.state.searchBoxX - 20, y: 0, animated: true});
 
         if (searchButton == undefined || !searchButton.fixedOpen) {
             if (this.state.searchWidth == 44) {
@@ -93,7 +101,7 @@ export default class FitlerBar extends Component {
                 return (
                     <View style={[styles.searchButtonContainer, 
                             Shadow.filterShadow, 
-                            {width: this.state.searchWidth}]}>
+                            {width: this.state.searchWidth}]} ref={searchBox => this.searchBoxRef = searchBox}>
                         <TouchableOpacity onPress={() => this._toggleSearch()}>
                             <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
                         </TouchableOpacity>
@@ -118,7 +126,7 @@ export default class FitlerBar extends Component {
                 return (
                     <View style={[styles.searchButtonContainer, 
                         Shadow.filterShadow, 
-                        {width: searchWidth}]}>
+                        {width: searchWidth}]} ref={searchBox => this.searchBoxRef = searchBox}>
                     <TouchableOpacity onPress={() => this._toggleSearch()}>
                         <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
                     </TouchableOpacity>
@@ -136,26 +144,7 @@ export default class FitlerBar extends Component {
                             </TouchableOpacity>
                         </View>
                     : null}
-                </View>); 
-                
-                <View style={[styles.searchButtonContainer, 
-                            Shadow.filterShadow, 
-                            {width: width - 50}]}>
-                    <TouchableOpacity onPress={() => this._toggleSearch()}>
-                        <EvilIcons name={'search'} size={22} color={Colors.main} style={{left: 2, width: 22, marginRight: 10}}/>
-                    </TouchableOpacity>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <TextInput underlineColorAndroid={'rgba(0,0,0,0)'} 
-                            placeholder={data.searchPlaceHolder}
-                            autoFocus={data.autoFocus != undefined ? data.autoFocus : true}
-                            style={{backgroundColor: 'transparent', width: 200}}
-                            onChangeText={(arg) => {this._setQuery(data, arg)} }
-                            ref="searchTextBox" value={this.state.searchQuery}/>
-                        <TouchableOpacity onPress={() => this.setState({filtersSource: ds.cloneWithRows(filters), searchQuery: ''})}>
-                            <EvilIcons name={"close"} size={20} color={Colors.main} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                </View>);
             }
 
             if ((data.title === 'Stats') && (data.active == true)) {
@@ -263,6 +252,7 @@ export default class FitlerBar extends Component {
 
                 <ListView
                     horizontal={true}
+                    ref={lv => this.listViewRef = lv}
                     style={[styles.filtersListView, innerStyle ? innerStyle : {}]}
                     dataSource={this.state.filtersSource}
                     showsHorizontalScrollIndicator={false}
@@ -297,7 +287,7 @@ const styles = StyleSheet.create({
         height: 72,
         paddingBottom: 14,
         paddingTop: 10,
-        paddingLeft: 20,
+        paddingLeft: 10,
         paddingBottom: 0,
         right: 0
     },
@@ -309,9 +299,9 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingTop: 14,
         height: 44,
-        marginRight: 8,
+        marginRight: 0,
         marginBottom: 14,
-        marginLeft: 0,
+        marginLeft: 10,
         marginTop: 2
     },
 
@@ -363,7 +353,7 @@ const styles = StyleSheet.create({
         padding: 17,
         paddingTop: 5,
         height: 44,
-        marginRight: 8,
+        marginLeft: 8,
         minWidth: 75,
         marginTop: 2
     },
@@ -373,7 +363,8 @@ const styles = StyleSheet.create({
         padding: 8,
         paddingTop: 5,
         height: 44,
-        marginRight: 8,
+        marginRight: 0,
+        marginLeft: 8,
         width: 44,
         marginTop: 2,
         backgroundColor: Colors.white

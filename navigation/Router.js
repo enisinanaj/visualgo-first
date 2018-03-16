@@ -16,6 +16,7 @@ import MainCalendar from '../screens/MainCalendar';
 import VisualGuidelines from '../screens/VisualGuidelines';
 import MainTodo from '../screens/MainToDo';
 import AlbumDetail from '../screens/AlbumDetail';
+import CollabView from '../screens/CollabView';
 
 
 export default createRouter(() => ({
@@ -32,5 +33,6 @@ export default createRouter(() => ({
     imagePost: () => ImagePost,
     visualGuidelines: () => VisualGuidelines,
     mainTodo: () => MainTodo,
-    albumDetail: () => AlbumDetail
+    albumDetail: () => AlbumDetail,
+    collabView: () => CollabView
 }));

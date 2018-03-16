@@ -24,13 +24,8 @@ import {Font, AppLoading} from 'expo';
 
 import Colors from '../constants/Colors';
 import SearchBar from './common/search-bar';
-import ButtonBar from './common/button-bar';
-import OnYourMind from './common/onYourMind';
 import VisualGuidelineItem from './common/visual-guideline-item';
-import CreatePost from './common/create-post';
-import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
-import BlueMenu from './common/blue-menu';
 import CreateVisualGuideline from './common/create-visual-guideline';
 
 
@@ -251,14 +246,6 @@ const styles= StyleSheet.create({
         height,
         backgroundColor: 'black',
         width: width * 4/5,
-    },
-    onYourMindContainer: {
-        marginTop: 6,
-        marginBottom: 6,
-        marginRight: 5,
-        marginLeft: 5,
-        padding: 0,
-        borderRadius: 14,
     },
     filterBarContainer: {
         backgroundColor: Colors.white,

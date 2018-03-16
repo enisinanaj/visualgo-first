@@ -88,7 +88,8 @@ export default class CreateVisualGuideline extends Component {
     async loadFonts() {
         await Font.loadAsync({
             'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf')
         });
 
         this.setState({isReady: true});
@@ -198,7 +199,7 @@ export default class CreateVisualGuideline extends Component {
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this.setState({guidelineDescriptionModal: true})} 
-                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 4}}>
                     <Text style={styles.rowTextStyle}>
                         {this.state.taskDescription != '' ? this.state.taskDescription : 'Describe Album'}
                     </Text>
@@ -362,13 +363,23 @@ export default class CreateVisualGuideline extends Component {
     }
 
     renderUploadAttach() {
+
+        var {environment, selectedTheme} = this.state;
+        var isDisabled = environment.environmentName == undefined || selectedTheme.themeName == undefined;
+
         return (
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
-                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this._getDocuments()} disabled={true} 
-                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.rowTextStyle, {color: 'gray'}]}>Upload Attachements</Text>
-                    <Ionicons name={"ios-attach"} color={'gray'} size={32} style={{marginRight: 20}} />
+                borderBottomColor: Colors.borderGray, borderBottomWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity onPress={() => {}} 
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} 
+                    disabled={isDisabled}>
+                    <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}, {marginTop: 4}]}>
+                        Visual Guideline
+                    </Text>
+                    <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
+                        <Ionicons name={"ios-attach"} color={isDisabled ? Colors.grayText : Colors.main} size={28} style={{marginRight: 0}} />
+                        <EvilIcons name={"chevron-right"} color={isDisabled ? Colors.grayText : Colors.main} size={32} />
+                    </View>
                 </TouchableOpacity>
             </View>
         )
@@ -410,10 +421,12 @@ export default class CreateVisualGuideline extends Component {
                     borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5, paddingTop: 4}}>
+                                        {o.innerName}
+                                    </Text>
                                 : null}
                             </View>
                         </View>
@@ -460,10 +473,12 @@ export default class CreateVisualGuideline extends Component {
                     borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5, paddingTop: 4}}>
+                                        {o.innerName}
+                                    </Text>
                                 : null}
                             </View>
                         </View>
@@ -510,10 +525,10 @@ export default class CreateVisualGuideline extends Component {
                     borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                     <TouchableOpacity onPress={o.onPress} style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flex:1}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontWeight: '500', paddingLeft: 5, paddingTop: 5}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5, paddingTop: 4}}>{o.innerName}</Text>
                                 : null}
                             </View>
                         </View>
@@ -637,8 +652,7 @@ const styles = StyleSheet.create({
         fontFamily: 'roboto-light',
         color: '#000000',
         fontSize: 16,
-        fontWeight: '500',
-        paddingLeft: 4,
-        paddingTop: 5
+        paddingLeft: 5,
+        paddingTop: 0
     }
 });

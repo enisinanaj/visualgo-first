@@ -29,7 +29,7 @@ import SearchBar from './screens/common/search-bar';
 import Login from './screens/Login';
 import StartScreen from './screens/StartScreen';
 
-import AppSettings from './screens/helpers/index';
+import AppSettings, { AppConfig } from './screens/helpers';
 
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
@@ -51,6 +51,7 @@ class AppContainer extends React.Component {
 
   componentDidMount() {
     this.loadFontsAsync();
+    //AppConfig.storeKeyValue('index', this);
     AppSettings.appIndex = this;
   }
 
@@ -172,6 +173,10 @@ class AppContainer extends React.Component {
       )
     ]).start();
 
+    this.removeSearchBar();
+  }
+
+  removeSearchBar() {
     this.setState({searchBarVisible: false});
   }
 
@@ -251,7 +256,7 @@ const MainAppNavigation = StackNavigator({
   Index: { screen: AppContainer}
 },
 {
-  initialRouteName: 'Index',
+  initialRouteName: 'StartScreen',
   headerMode: 'none',
   navigationOptions: {
     header: {
