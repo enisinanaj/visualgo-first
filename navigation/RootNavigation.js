@@ -2,7 +2,6 @@ import React from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {StackNavigation,TabNavigation, TabNavigationItem} from '@expo/ex-navigation';
 import {Ionicons, FontAwesome} from '@expo/vector-icons';
-import Navigator from 'native-navigation';
 
 import Colors from '../constants/Colors';
 import {MenuIcons} from '../screens/helpers/index';
