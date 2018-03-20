@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 5,
     flexDirection: 'row',
-    justifyContent: 'start'
+    justifyContent: 'flex-start'
   },
 
   textFieldContent: {

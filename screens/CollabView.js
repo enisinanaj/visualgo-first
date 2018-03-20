@@ -205,7 +205,7 @@ export default class CollabView extends Component {
                             <TouchableOpacity onPress={() => this.goBack()}>
                                 <EvilIcons name={"chevron-left"} size={22} color={Colors.main}/>
                             </TouchableOpacity>
-                            <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                                 <Text style={styles.name}>Task #Theme</Text>
                                 <Text style={[styles.environment, {color: '#3FD1EB'}]}>
                                     @Ambiente

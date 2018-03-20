@@ -195,7 +195,7 @@ export default class CreateTask extends Component {
                         value={this.state.notificationsEnabled} onValueChange={(v) => this.setState({notificationsEnabled: v})}/>
                 </View>
                 <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flext-start'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
                             Tutti
                         </Text>
@@ -729,7 +729,6 @@ const styles = StyleSheet.create({
         height: 24, 
         marginLeft: 5, 
         marginBottom: 5,
-        onTintColor: Colors.main
     },
 
     viewAndroid:{
