@@ -33,12 +33,18 @@ import AppSettings, {AppConfig} from './helpers/index';
 import Shadow from '../constants/Shadow';
 
 import {Font, AppLoading} from 'expo';
+import PubNubReact from 'pubnub-react';
+import ChatEngine from 'chat-engine';
+import { uuid } from './helpers/index';
 
+/*
 var messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
                   {from: {name: 'me', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo', read: true, date: new Date()},
                   {from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
+*/
 
 
+                  
 var themes = [
                 {name: "San Valentino", image: require('./img/elmo.jpg')},
                 {name: "Saldi Febbraio", image: require('./img/bob.png')},
@@ -56,7 +62,7 @@ export default class Conversation extends Component {
         super(props);
 
         this.state = {
-            convoMessages: ds.cloneWithRows(messages),
+            //convoMessages: ds.cloneWithRows(messages),
             themesData: ds.cloneWithRows(themes),
             visibleHeight: height,
             newMessage: '',
@@ -64,6 +70,16 @@ export default class Conversation extends Component {
             showThemes: false,
             isReady: false
         }
+
+
+
+        
+
+
+        
+
+        
+
     }
 
     _goBack() {
@@ -91,6 +107,32 @@ export default class Conversation extends Component {
         }else{
             this.setState({showThemes: false})
         }
+
+    } 
+
+        
+    componentWillMount() {
+
+
+        this.pubnub = new PubNubReact({
+            publishKey: 'pub-c-b8fd1056-99b5-4f8b-8986-ce1ab877240b',
+            subscribeKey: 'sub-c-f10175d6-fa3c-11e7-8a22-26ec4b06f838',
+            uuid: uuid
+        });
+
+        this.pubnub.init(this);
+
+        this.pubnub.subscribe({ channels: ['channel1'], triggerEvents: true, withPresence: true});
+
+
+        
+
+    }
+      
+    componentWillUnmount() {
+        this.pubnub.unsubscribe({ channels: ['channel1'] });
+        Keyboard.removeListener('keyboardWillShow');
+        Keyboard.removeListener('keyboardWillHide');
     }
 
     componentDidMount () {
@@ -105,11 +147,14 @@ export default class Conversation extends Component {
         });
 
         this.setState({isReady: true});
+
+
+
+
     }
 
     componentWillUnmount() {
-        Keyboard.removeListener('keyboardWillShow');
-        Keyboard.removeListener('keyboardWillHide');
+
     }
 
     keyboardWillShow (e) {
@@ -121,10 +166,11 @@ export default class Conversation extends Component {
         if(this.componentDidMount) {
             this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
         }
-
     }
 
     _renderHeader() {
+
+
         return (
             <View style={styles.headerView}>
                 <EvilIcons name={"chevron-left"} size={30} color={Colors.main} onPress={() => this._goBack()} style={{width: 22}}/>
@@ -136,10 +182,30 @@ export default class Conversation extends Component {
     }
 
     _renderRow(data) {
-        if (data.from.name != 'me') {
+        if (data.from.name != '') {
             return (
                 <View style={styles.fromBubble}>
                     <Image source={data.from.image} style={styles.displayPicture} />
+                    <View style={styles.messageBubble}>
+                        <Text>{data.message}</Text>
+                    </View>
+                </View>);
+        }
+
+        return (
+            <View style={styles.messageBubble}>
+                <Text>{data.message}</Text>
+            </View>);
+    }
+
+    _renderPubNubRow(data){
+
+        //console.log(data);
+
+        if (data.publisher != uuid) {
+            return (
+                <View style={styles.fromBubble}>
+                    
                     <View style={styles.messageBubble}>
                         <Text>{data.message}</Text>
                     </View>
@@ -175,11 +241,12 @@ export default class Conversation extends Component {
         }
         
         var {newMessage} = this.state;
-        messages.push(
-            {from: {name: 'me', image: require('./img/elmo.jpg')}, message: newMessage, read: false, date: new Date()}
-        );
+        //messages.push({from: {name: 'me', image: require('./img/elmo.jpg')}, message: newMessage, read: false, date: new Date()});
 
-        this.setState({convoMessages: ds.cloneWithRows(messages)});
+        this.pubnub.publish({ message: this.state.newMessage, channel: 'channel1' });
+
+
+        //this.setState({convoMessages: ds.cloneWithRows(messages)});
         this.refs['newMessageTextInput'].clear();
         this.setState({newMessage: ""}); 
         this.refs['conversationCollection'].scrollToEnd();
@@ -192,6 +259,13 @@ export default class Conversation extends Component {
         }
 
         var {height, visibleHeight} = this.state;
+
+        
+
+        const messages = this.pubnub.getMessage('channel1');
+        
+        //console.log("Message(s): " + JSON.stringify(messages));
+
         return (
             <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
                 <View
@@ -200,14 +274,18 @@ export default class Conversation extends Component {
                         <StatusBar barStyle={'light-content'} animated={true}/>
                         <DefaultRow renderChildren={() => this._renderHeader()} />
 
+                        
+
                         {!this.state.showThemes ?
+
+                            
 
                             <ScrollView ref="conversationCollection" keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow: 1}} onLayout={(event) => {this.setState({contentLayout: event.nativeEvent.layout});}}>
                             <ListView
                                 style={[styles.listView]}
                                 onScroll={this._onScroll}
-                                dataSource={this.state.convoMessages}
-                                renderRow={(data) => this._renderRow(data)}/>
+                                dataSource={ds.cloneWithRows(messages)}
+                                renderRow={(data) => this._renderPubNubRow(data)}/>
                             </ScrollView>
                         
                         : null}
@@ -230,7 +308,7 @@ export default class Conversation extends Component {
                         </View>
                     :null}
 
-                    <View style={[messageBoxStyle.newMessageAreaContainer, this.state.k_visible ? {marginBottom: 20} : {marginBottom: 0}]}>
+                    <View style={[messageBoxStyle.newMessageAreaContainer, this.state.showThemes ? {} : {}]}>
                         <View style={messageBoxStyle.attachmentBackground}>
                             <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
                         </View>

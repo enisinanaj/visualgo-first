@@ -19,6 +19,8 @@ const profile = [
     }
 ];
 
+export const uuid = Math.random()*1000;
+
 const images = {
     '1': require('../img/shopping1.jpg'),
     '2': require('../img/shopping2.jpg'),
@@ -76,6 +78,8 @@ export function getProfile(profileId, getData) {
         console.error(error);
     });
 }
+
+
 
 export function randomProfile() {
     var random = Math.floor((Math.random() * profile.length));
