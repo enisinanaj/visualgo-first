@@ -12,48 +12,54 @@ import {
     TouchableOpacity,
     Platform
 } from 'react-native';
-import Router from '../../navigation/Router';
-
-const {width, height} = Dimensions.get('window');
-import Colors from '../../constants/Colors';
-import ChatSearchBar from './chat-search-bar';
-import DefaultRow from './default-row';
-import NoOpModal from './NoOpModal';
 import {Feather, Ionicons, EvilIcons} from '@expo/vector-icons';
-import Login from '../Login';
 import {NavigationActions} from 'react-navigation';
 import {Font, AppLoading} from "expo";
 
-import {MenuIcons} from '../helpers/index';
+import Router from '../../navigation/Router';
 import DisabledStyle from '../../constants/DisabledStyle';
+import Colors from '../../constants/Colors';
+
+import ChatSearchBar from './chat-search-bar';
+import DefaultRow from './default-row';
+import NoOpModal from './NoOpModal';
+import Login from '../Login';
+
+import {MenuIcons} from '../helpers/index';
+import ApplicationConfig from '../helpers/appconfig';
+
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const {width, height} = Dimensions.get('window');
 
 export default class BlueMenu extends Component {
     constructor(props) {
         super(props);
 
-        console.log(JSON.stringify(props.tabNavigation));
-
-        const menus = [ 
-                {name: 'Report', icon: 'report', onPress: () => {this['report'].toggleState()}, disabled: true, id: 'report'},
-                {name: 'Visual Guideline', icon: 'album', onPress: () => {this.props.source.navigateTo('visualGuidelines')}, id: 'visual_guideline'},
-                {name: 'Wall', icon: 'bacheca', onPress: () => {}, id: 'wall'},
-                {name: 'Calendar', icon: 'calendar', onPress: () => {this['calendar'].toggleState()}, disabled: true, id: 'calendar'},
-                {name: 'Messages', icon: 'chat', onPress: () => {this['messages'].toggleState()}, disabled: true, id: 'messages'},
-                {name: 'To Do List', icon: 'notification', onPress: () => {}, id: 'to_do_list'},
-                {name: 'Anagrafiche', onPress: () => {this['anagrafiche'].toggleState()}, style: {marginTop: 40}, disabled: true, id: 'anagrafiche'},
-                {name: 'Gestisci Negozi, cluster e contatti', isSubtitle: true, disabled: true, id: 'anagrafiche', noOpLabel: 'Anagrafiche'},
-                {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}, style: {marginTop: 15}, id: 'logout'}];
-
         this.state = {
-            dataSource: ds.cloneWithRows(menus),
-            menus: menus,
-            isReady: false
+            isReady: false,
+            menus: []
         }
     }
 
     componentDidMount() {
         this.loadFonts();
+        this.loadNavigator();
+    }
+
+    updateMenus() {
+        var {tabNavigation} = this;
+        const menus = [ 
+            {name: 'Report', icon: 'report', onPress: () => {this['report'].toggleState()}, disabled: true, id: 'report'},
+            {name: 'Visual Guideline', icon: 'album', id: 'visual_guideline', onPress: () => tabNavigation.navigate('tabVisualGuidelines')},
+            {name: 'Wall', icon: 'bacheca', onPress: () => {}, id: 'wall'},
+            {name: 'Calendar', icon: 'calendar', onPress: () => {this['calendar'].toggleState()}, disabled: true, id: 'calendar'},
+            {name: 'Messages', icon: 'chat', onPress: () => {this['messages'].toggleState()}, disabled: true, id: 'messages'},
+            {name: 'To Do List', icon: 'notification', onPress: () => {}, id: 'to_do_list'},
+            {name: 'Anagrafiche', onPress: () => {this['anagrafiche'].toggleState()}, style: {marginTop: 40}, disabled: true, id: 'anagrafiche'},
+            {name: 'Gestisci Negozi, cluster e contatti', isSubtitle: true, disabled: true, id: 'anagrafiche', noOpLabel: 'Anagrafiche'},
+            {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}, style: {marginTop: 15}, id: 'logout'}];
+        
+        this.setState({menus: menus, dataSource: ds.cloneWithRows(menus)});
     }
 
     async loadFonts() {
@@ -62,6 +68,22 @@ export default class BlueMenu extends Component {
         });
 
         this.setState({ isReady: true });
+    }
+
+    async loadNavigator() {
+        var interval = {};
+
+        var $self = this;
+
+        function setNavigator() {
+            if (ApplicationConfig.getInstance().tabNavigaiton != undefined) {
+                $self.tabNavigation = ApplicationConfig.getInstance().tabNavigation;
+            }
+            clearInterval(interval);
+            $self.updateMenus();
+        }
+        
+        interval = await setInterval(setNavigator, 300);
     }
 
     logOut() {

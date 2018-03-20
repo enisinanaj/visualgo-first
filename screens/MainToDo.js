@@ -19,7 +19,8 @@ import Colors from '../constants/Colors';
 import Shadow from '../constants/Shadow';
 import {TaskAvatar} from '../constants/StyleSheetCommons';
 
-import AppSettings from './helpers/index'
+import AppSettings from './helpers/index';
+import ApplicationConfig from './helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
@@ -70,11 +71,11 @@ export default class MainToDo extends React.Component {
     }
 
     openContextualMenu(index) {
-        AppSettings.appIndex.removeSearchBar();
         this.contextualMenu.toggleState();
     }
 
     navigateToCollabView() {
+        ApplicationConfig.getInstance().index.hideSearchBar();
         this.props.navigator.push(Router.getRoute('collabView'), {navigator: this.props.navigator});
     }
 

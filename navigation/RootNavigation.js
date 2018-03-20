@@ -2,20 +2,36 @@ import React from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {StackNavigation,TabNavigation, TabNavigationItem} from '@expo/ex-navigation';
 import {Ionicons, FontAwesome} from '@expo/vector-icons';
+import Navigator from 'native-navigation';
 
 import Colors from '../constants/Colors';
 import {MenuIcons} from '../screens/helpers/index';
+import ApplicationConfig from '../screens/helpers/appconfig';
 
 export default class RootNavigation extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentLanding: 'landing'
+    };
+  }
+
+  componentDidMount() {
+    console.log(this.navigation.getNavigationContext().jumpToTab);
+    ApplicationConfig.getInstance().tabNavigation = this.navigation;
+  }
 
   render() {
     return (
       <TabNavigation
         style={styles.tabNvigation}
-        tabBarHeight={54}
-        initialTab="landing">
+        ref={(t) => this.navigation = t}
+        tabBarHeight={54} 
+        initialTab={this.state.currentLanding}>
         <TabNavigationItem
-          id="links" style={styles.tabNavigationItem}
+          id="tabVisualGuidelines" style={styles.tabNavigationItem}
           renderIcon={isSelected => this._renderIcon('album', isSelected)}>
           <StackNavigation initialRoute="visualGuidelines" />
         </TabNavigationItem>

@@ -34,8 +34,8 @@ import NoOpModal from './common/NoOpModal';
 import _ from 'lodash';
 import Shadow from '../constants/Shadow';
 import AppSettings, { getProfile } from './helpers/index';
+import ApplicationConfig from './helpers/appconfig';
 
-//1 is regular post, 2 is image
 const data = ['0', '1'];
 
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
@@ -87,6 +87,7 @@ export default class Landing extends Component {
                 filters[i].onPress = () => this._noOpPosts.toggleState();
             }
         }
+        ApplicationConfig.getInstance().tabNavigator = this.props.navigator;
     }
 
     async loadFonts(onLoaded) {
@@ -262,14 +263,14 @@ export default class Landing extends Component {
                     this.setState({isAnimatingSearchBar: true});
 
                     setTimeout(() => {
-                        AppSettings.appIndex.hideSearchBar();
+                        ApplicationConfig.getInstance().index.hideSearchBar();
                         this.setState({isAnimatingSearchBar: false})},
                     150); 
                 } 
             } else if (offset + this.content_height != l_height) { 
                 this.setState({isAnimatingSearchBar: true});
                 setTimeout(() => {
-                    AppSettings.appIndex.showSearchBar(); 
+                    ApplicationConfig.getInstance().index.showSearchBar(); 
                     this.setState({isAnimatingSearchBar: false})},
                 150);
             }

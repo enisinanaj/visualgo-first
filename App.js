@@ -29,7 +29,8 @@ import SearchBar from './screens/common/search-bar';
 import Login from './screens/Login';
 import StartScreen from './screens/StartScreen';
 
-import AppSettings, { AppConfig } from './screens/helpers';
+import AppSettings from './screens/helpers';
+import ApplicationConfig from './screens/helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
@@ -51,7 +52,7 @@ class AppContainer extends React.Component {
 
   componentDidMount() {
     this.loadFontsAsync();
-    //AppConfig.storeKeyValue('index', this);
+    ApplicationConfig.getInstance().index = this;
     AppSettings.appIndex = this;
   }
 

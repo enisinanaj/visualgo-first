@@ -1,6 +1,6 @@
 {
   "name": "VisualGo",
-  "version": "0.0.0",
+  "version": "0.3.4",
   "description": "VisualGo",
   "author": "AreaKappa for Warda",
   "scripts": {
@@ -22,6 +22,7 @@
     "expo": "^23.0.4",
     "lodash": "^4.17.2",
     "moment": "^2.17.1",
+    "native-navigation": "^0.2.1",
     "node-emoji": "1.3.1",
     "npm": "4.6.1",
     "react": "16.0.0",

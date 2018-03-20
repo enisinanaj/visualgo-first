@@ -31,6 +31,7 @@ import Shadow from '../constants/Shadow';
 import Router from '../navigation/Router';
 import DefaultRow from './common/default-row';
 import AppSettings, { getProfile } from './helpers/index';
+import ApplicationConfig from './helpers/appconfig';
 
 import _ from 'lodash';
 const {width, height} = Dimensions.get('window');
@@ -90,7 +91,8 @@ export default class CollabView extends Component {
     }
 
     goBack() {
-        AppSettings.appIndex.showSearchBar();
+        //AppSettings.appIndex.showSearchBar();
+        ApplicationConfig.getInstance().index.showSearchBar();
         this.props.navigator.pop();
     }
 
