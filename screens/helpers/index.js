@@ -58,18 +58,6 @@ export default settings = {
     baseApi: 'http://crpbddyxugpgmqhgx-mock.stoplight-proxy.io/v1'
 }
 
-export class AppConfig {
-    static params = {};
-
-    static storeKeyValue(key, value) {
-        this.params[key] = value;
-    }
-
-    static getValue(key) {
-        return this.params[key];
-    }
-}
-
 export function getProfile(profileId, getData) {
     return fetch(settings.baseApi + '/users?userId=' + profileId)
     .then((response) => response.json())

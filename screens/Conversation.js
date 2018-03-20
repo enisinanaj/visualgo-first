@@ -29,7 +29,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
-import AppSettings, {AppConfig} from './helpers/index';
+import AppSettings from './helpers/index';
+import ApplicationConfig from './helpers/appconfig';
 import Shadow from '../constants/Shadow';
 
 import {Font, AppLoading} from 'expo';
@@ -83,8 +84,8 @@ export default class Conversation extends Component {
     }
 
     _goBack() {
-        //AppConfig.getValue('index').showSearchBar();
-        AppSettings.appIndex.showSearchBar();
+        ApplicationConfig.getInstance().index.showSearchBar();
+        //AppSettings.appIndex.showSearchBar();
         this.props.navigator.pop();
     }
 

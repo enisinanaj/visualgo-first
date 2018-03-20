@@ -29,7 +29,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import Router from '../navigation/Router';
-import AppSettings, {AppConfig} from './helpers/index';
+import AppSettings from './helpers/index';
+import ApplicationConfig from './helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
@@ -92,8 +93,9 @@ export default class Chat extends Component {
   }
 
   _goToConvo = (messageId) => {
-    //AppConfig.getValue('index').removeSearchBar();
-    AppSettings.appIndex.removeSearchBar();
+    //AppSettings.appIndex.removeSearchBar();
+    ApplicationConfig.getInstance().index.hideSearchBar();
+    //ApplicationConfig.getInstance().index.removeSearchBar();
     this.props.navigator.push(Router.getRoute('conversation', {convTitle: 'Andy'}));
   }
   
