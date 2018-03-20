@@ -89,7 +89,7 @@ export default class MainToDo extends React.Component {
                     <Image style={TaskAvatar.profile} source={require('./img/dp2.jpg')}/>
                 </View>
                 <TouchableOpacity style={TaskAvatar.nameContainer} onPress={() => this.navigateToCollabView()}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                         <Text style={TaskAvatar.name}>Task #Theme</Text>
                         <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
                             @Ambiente

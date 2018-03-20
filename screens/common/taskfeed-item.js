@@ -80,7 +80,7 @@ export default class TaskFeedItem extends Component {
                         value={this.state.notificationsEnabled} onValueChange={(v) => this.setState({notificationsEnabled: v})}/>
                 </View>
                 <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flext-start'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
                             Tutti
                         </Text>
@@ -124,7 +124,7 @@ export default class TaskFeedItem extends Component {
                     <Image style={styles.profile} source={{uri: profile.media.url}}/>
                 </View>
                 <View style={styles.nameContainer}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                         <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
                         <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
                             {this.props.data.environment.name}
@@ -360,6 +360,6 @@ const styles = StyleSheet.create({
         height: 24, 
         marginLeft: 5, 
         marginBottom: 5,
-        onTintColor: Colors.main
+        
     }
 })

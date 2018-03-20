@@ -139,7 +139,7 @@ export default class TaskDetail extends Component {
                             <TouchableOpacity onPress={this.props.closeModal}>
                                 <EvilIcons name={"close"} size={22} color={Colors.main}/>
                             </TouchableOpacity>
-                            <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                                 <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
                                 <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
                                     {this.props.data.environment.name}
@@ -188,7 +188,7 @@ export default class TaskDetail extends Component {
                         value={this.state.notificationsEnabled} onValueChange={(v) => this.setState({notificationsEnabled: v})}/>
                 </View>
                 <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flext-start'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
                             All
                         </Text>
@@ -314,7 +314,7 @@ export default class TaskDetail extends Component {
                     <Image style={TaskAvatar.profile} source={require('../img/dp2.jpg')}/>
                 </View>
                 <View style={TaskAvatar.nameContainer}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                         <Text style={TaskAvatar.name}>Store ID</Text>
                     </View>
                     <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
@@ -696,7 +696,7 @@ export default class TaskDetail extends Component {
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
                 <TouchableOpacity onPress={() => this._getDocuments()} disabled={true} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16, marginTop: 10}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16, marginTop: 10}}>
                         <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
                             <Image style={styles.taskThumbnail} source={{uri: this.props.data.media[0].url}} />
                         </View>
@@ -844,7 +844,7 @@ const styles = StyleSheet.create({
         height: 24, 
         marginLeft: 5, 
         marginBottom: 5,
-        onTintColor: Colors.main
+        
     },
 
     viewAndroid:{

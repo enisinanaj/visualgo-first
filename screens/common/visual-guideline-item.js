@@ -74,7 +74,7 @@ export default class VisualGuidelineItem extends Component {
                     <Image style={TaskAvatar.profile} source={require('../img/dp2.jpg')}/>
                 </View>
                 <TouchableOpacity style={TaskAvatar.nameContainer} onPress={() => {this.goToAlbumDetail()}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flext-start', height: 16}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                         <Text style={TaskAvatar.name}>Guideline #Theme</Text>
                         <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
                             @Ambiente

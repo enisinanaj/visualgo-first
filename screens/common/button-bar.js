@@ -96,6 +96,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         textAlign: 'center',
         color: Colors.main,
-        fontFamily: 'roboto-Light'
+        fontFamily: 'roboto-light'
     }
 });

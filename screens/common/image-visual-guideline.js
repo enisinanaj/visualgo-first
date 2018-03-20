@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     imagesContainer: {
         height: 180,
         width: width,
-        positition: 'absolute',
+        position: 'absolute',
         top: -210,
         zIndex: 9999
     },
