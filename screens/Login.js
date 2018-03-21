@@ -34,7 +34,8 @@ import _ from 'lodash';
 import {NavigationActions} from 'react-navigation';
 
 import moment from 'moment';
-import locale from 'moment/locale/it'
+import locale from 'moment/locale/it';
+import {isIphoneX} from './helpers';
 
 const {width, height} = Dimensions.get('window');
 
@@ -168,7 +169,7 @@ export default class Login extends Component {
     return (
       <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
         {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
-        <Animated.View style={[Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height: 0}]}/>
+        <Animated.View style={[isIphoneX() ? styles.containerIOSX : Platform.OS === "ios" ? styles.containerIOS : styles.containerAndroid, {height: 0}]}/>
 
         <View style={{flexDirection: 'column', backgroundColor: Colors.white, height: height - 20}} resetScrollToCoords={{x: 0, y: 0}}>
             <DefaultRow renderChildren={() => this._renderHeader()} />
@@ -257,6 +258,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+
+  containerIOSX: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 60,
+    backgroundColor: Colors.main,
+    paddingTop: 40,
+    borderBottomColor: Colors.borderGray,
+    borderBottomWidth: 1,
   },
 
   containerIOS: {

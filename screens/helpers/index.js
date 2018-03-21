@@ -1,6 +1,11 @@
 /**
  * Created by ggoma on 12/17/16.
  */
+import{
+    Dimensions,
+    Platform
+} from 'react-native';
+
 const profile = [
     {
         source: require('../img/dp2.jpg'),
@@ -77,3 +82,13 @@ export function randomProfile() {
 export function getImage(index) {
     return images[index];
 }
+
+export const isIphoneX = () => {
+    let d = Dimensions.get('window');
+    const { height, width } = d;
+  
+    return (
+      Platform.OS === 'ios' &&
+      (height === 812)
+    );
+  }
