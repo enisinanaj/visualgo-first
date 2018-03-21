@@ -112,7 +112,7 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   welcomeLabel: {
-    fontSize: 48,
+    fontSize: 24,
     fontFamily: 'roboto',
     color: Colors.main,
     marginLeft: 40,
@@ -154,18 +154,15 @@ const styles = StyleSheet.create({
   },
 
   buttonStyleEmail: {
-      backgroundColor: Colors.main,
-      fontFamily: 'roboto'
+      backgroundColor: Colors.main
   },
 
   buttonStyleLinkedin: {
-    backgroundColor: '#2F77B0',
-    fontFamily: 'roboto'
+    backgroundColor: '#2F77B0'
   },
 
   buttonStyleGoogle: {
-    backgroundColor: '#4F86EC',
-    fontFamily: 'roboto'
+    backgroundColor: '#4F86EC'
   },
 
   buttonLoginEnabled: {

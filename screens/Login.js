@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   },
 
   textFieldContent: {
-    fontSize: 48,
+    fontSize: 24,
     flex: 1,
     marginLeft: 0,
     marginRight: 3,

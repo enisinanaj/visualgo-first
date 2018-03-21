@@ -153,7 +153,7 @@ export default class TaskFeedItem extends Component {
         const {buttons} = this.state;
         return buttons.map((button, i) => {
             return (
-                <TouchableOpacity onPress={() => {button.onPress()}} style={button.disabled ? DisabledStyle.disabled : {}}>
+                <TouchableOpacity key={i} onPress={() => {button.onPress()}} style={button.disabled ? DisabledStyle.disabled : {}}>
                     <Image source={button.iconImage} style={{width: 20, height: 16}} resizeMode={"center"} />
                     {button.disabled ?
                         <NoOpModal featureName={button.title} ref={(noOpModal) => this[button.id] = noOpModal} />    
