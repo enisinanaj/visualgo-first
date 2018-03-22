@@ -164,7 +164,7 @@ export default class CreatePost extends Component{
                     </Text>
                 </TouchableOpacity>
                 
-                <Text style={{color: Colors.main, fontFamily: 'roboto-rergular', fontSize: 14, marginRight: 30, height: 18}}>
+                <Text style={{color: Colors.main, fontFamily: 'roboto-regular', fontSize: 14, marginRight: 30, height: 18}}>
                     Post
                 </Text>
                 <TouchableOpacity onPress={() => this._noOpSurvey.toggleState()} style={DisabledStyle.disabled}>

@@ -272,7 +272,8 @@ export default class CreateTask extends Component {
                 onRequestClose={() => this.setState({tagListTastModal: false})}>
                 
                 <TagListTask clustersVisible={this.state.clustersVisible} storeVisible={this.state.storeVisible} 
-                    managerVisible={this.state.managerVisible} headTitle={this.state.headTitle} closeModal={(tags) => this.finishTagListTask(tags)} />
+                    managerVisible={this.state.managerVisible} headTitle={this.state.headTitle} 
+                    closeModal={(tags) => this.finishTagListTask(tags)} />
             </Modal>
         );
     }

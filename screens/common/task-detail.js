@@ -85,7 +85,8 @@ export default class TaskDetail extends Component {
             notificationsEnabled: false,
             isReady: false,
             showTaskComment: false,
-            messages: ds.cloneWithRows(messages)
+            messages: ds.cloneWithRows(messages),
+            newCommentOnFocus: false
         }
     }
 
@@ -622,7 +623,15 @@ export default class TaskDetail extends Component {
                                             onChangeText={(arg) => this.setState({newMessage: arg})}
                                             placeholder={'Scrivi un commento...'}
                                             value={this.state.newMessage}
-                                            underlineColorAndroid={'rgba(0,0,0,0)'} />
+                                            underlineColorAndroid={'rgba(0,0,0,0)'} onFocus={() => this.setState({newCommentOnFocus: true})}
+                                            onBlur={() => this.setState({newCommentOnFocus: false})}/>
+
+                                        {this.state.newCommentOnFocus?
+                                            <TouchableOpacity>
+
+                                            </TouchableOpacity>
+                                        : null}
+                                        
                                         <View style={{height: 26, width: 26, marginTop: 5, marginRight: 10}}>
                                             <Image
                                                 style={{flex: 1, width: undefined, height: undefined}}
@@ -725,7 +734,7 @@ export default class TaskDetail extends Component {
         return (
             <View style={styles.textAvatarContainer}>
                 <Image source={require('../img/me.png')} style={styles.profile}/>
-                <View style={flexDirection='column'}>
+                <View style={{flexDirection:'column'}}>
                     <Text style={styles.titleAvatar}>User Name</Text>
                     <Text style={styles.subtitleAvatar}>Date Hour</Text>
                 </View>

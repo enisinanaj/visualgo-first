@@ -155,17 +155,14 @@ const styles = StyleSheet.create({
 
   buttonStyleEmail: {
       backgroundColor: Colors.main,
-      fontFamily: 'roboto'
   },
 
   buttonStyleLinkedin: {
     backgroundColor: '#2F77B0',
-    fontFamily: 'roboto'
   },
 
   buttonStyleGoogle: {
     backgroundColor: '#4F86EC',
-    fontFamily: 'roboto'
   },
 
   buttonLoginEnabled: {

@@ -40,6 +40,8 @@ import {isIphoneX} from './helpers';
 const {width, height} = Dimensions.get('window');
 
 export default class Login extends Component {
+  _mounted = false;
+
   constructor(props) {
     super(props);
 
@@ -62,6 +64,7 @@ export default class Login extends Component {
   componentDidMount () {
     Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
     Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
+    this._mounted = true;
     this.loadFonts();
   }
 
@@ -88,9 +91,9 @@ export default class Login extends Component {
   }
 
   keyboardWillHide (e) {
-    this.setState({keyboardIsOpen: false});
-      if(this.componentDidMount) {
-          this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
+      if(this._mounted) {
+        this.setState({keyboardIsOpen: false});
+        this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
       }
   }
 

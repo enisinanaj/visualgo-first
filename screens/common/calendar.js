@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatusBar, View, TouchableOpacity, Text, Dimensions, StyleSheet} from 'react-native';
+import {StatusBar, View, Platform, TouchableOpacity, Text, Dimensions, StyleSheet} from 'react-native';
 import { Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
 import DefaultRow from '../common/default-row';

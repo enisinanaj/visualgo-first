@@ -8,8 +8,8 @@ import {EvilIcons} from '@expo/vector-icons';
 export default class DefaultRow extends Component {
 
     static propTypes = {
-        renderChildren: PropTypes.func.isRequired,
-        style: PropTypes.string,
+        renderChildren: PropTypes.func,
+        style: PropTypes.object,
         drawBorder: PropTypes.bool,
         usePadding: PropTypes.bool
     };

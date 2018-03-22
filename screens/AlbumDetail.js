@@ -117,7 +117,7 @@ export default class AlbumDetail extends React.Component {
                 <View style={styles.QuickViewContainer}>
                     <Text style={styles.QuickViewText}>Quick View</Text>
                 </View>
-                <ScrollView horizontal='true' style={styles.QuickViewContainer}>
+                <ScrollView horizontal={true} style={styles.QuickViewContainer}>
                     <View style={styles.imageViewContainer}>
                         <View >
                             <Image style={styles.imageStyle} source={{uri: 'http://www.spoleto7giorni.it/wp-content/uploads/2017/12/shopping-spoleto.jpg'}}></Image>

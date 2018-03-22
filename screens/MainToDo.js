@@ -118,7 +118,7 @@ export default class MainToDo extends React.Component {
         var arr = [0,1,2,3,4,5,6,7,8,9];
 
         return arr.map((obj, i) => {
-            return <View>
+            return <View key={i}>
                 <View style={[styles.SingleTaskContainer, Shadow.cardShadow]}>
                     {this.renderCardTitle()}
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', position: 'relative', top: 85}}>

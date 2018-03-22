@@ -44,6 +44,8 @@ const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, messa
                 {from: {name: 'Ivan', image: require('./img/cookiemonster.jpeg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
 
 export default class CollabView extends Component {
+    _mounted = false;
+    
     constructor(props) {
         super(props);
 
@@ -59,6 +61,7 @@ export default class CollabView extends Component {
         Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
         Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
         this.loadFonts();
+        this._mounted = true;
     }
     
     async loadFonts() {
@@ -83,7 +86,7 @@ export default class CollabView extends Component {
     }
 
     keyboardWillHide (e) {
-        if(this.componentDidMount) {
+        if(this._mounted) {
             this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
         }
 

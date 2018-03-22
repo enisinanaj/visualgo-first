@@ -137,7 +137,7 @@ export default class TagListTask extends Component {
   renderHeader() {
     return (
       <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-          borderBottomColor: Colors.gray, flexDirection: 'row',
+          borderBottomColor: Colors.borderGray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
             <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-light', color: Colors.main}}>Cancel</Text>
@@ -258,7 +258,7 @@ export default class TagListTask extends Component {
 
     return (
       <KeyboardAvoidingView style={{height: visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>
-        <StatusBar barStyle={'default'} animated={true}/>
+        <StatusBar barStyle={'light-content'} animated={true}/>
         { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
                         : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
                         : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}

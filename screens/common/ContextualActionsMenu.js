@@ -57,9 +57,8 @@ export default class ContextualActionsMenu extends Component {
         button.onPress = () => this[index].toggleState()
     }
 
-    return <DefaultRow style={{backgroundColor: 'transparent'}}
-        renderChildren={() => {
-            return !button.advanced ?
+    return <DefaultRow key={index} style={{backgroundColor: 'transparent'}}>
+            {!button.advanced ?
                 <TouchableOpacity style={[{flexDirection: 'row', justifyContent: 'flex-start'}, button.disabled ? DisabledStyle.disabled : {}]}
                     onPress={() => button.onPress()}>
                     <Image source={button.image} style={styles.menuIcon} resizeMode={"center"} />
@@ -69,7 +68,9 @@ export default class ContextualActionsMenu extends Component {
                     : null}
                 </TouchableOpacity>
                 :
-                button.renderContent()}} />
+                button.renderContent()}
+            </DefaultRow>
+              
   }
 
   render() {
@@ -85,7 +86,7 @@ export default class ContextualActionsMenu extends Component {
         <TouchableOpacity style={styles.container} onPress={() => {this.setState({modalVisible: false})}}>
             <View style={styles.actionsList}>
                 {this.props.buttons.map((b, i) => {
-                    return this.renderMenuElement(b)
+                    return this.renderMenuElement(b, i)
                 })}
             </View>
         </TouchableOpacity>

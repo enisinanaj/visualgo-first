@@ -139,9 +139,9 @@ export default class BlueMenu extends Component {
         </View>;
     }
 
-    renderMenuItem(data) {
+    renderMenuItem(data, key) {
         return (
-            <TouchableOpacity onPress={() => data.onPress != undefined ? data.onPress() : {}} 
+            <TouchableOpacity key={key} onPress={() => data.onPress != undefined ? data.onPress() : {}} 
                 style={[{flexDirection: 'row'}, data.style != undefined ? data.style : {marginTop: 5}]}>
                 {data.iconPosition == undefined || data.iconPosition == "left" ? this._renderIcon(data) : null}
                 <Text style={[data.isSubtitle ? styles.subtitle : styles.menuItemLarge, data.disabled ? styles.disabledMenu : {}]}>
@@ -157,7 +157,7 @@ export default class BlueMenu extends Component {
 
     _renderMenuItems() {
         return this.state.menus.map((menu, i) => {
-            return this.renderMenuItem(menu);
+            return this.renderMenuItem(menu, i);
         })
     }
 

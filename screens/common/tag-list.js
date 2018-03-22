@@ -6,6 +6,7 @@ import {
   Modal,
   StyleSheet,
   RefreshControl,
+  Platform,
   StatusBar,
   Keyboard,
   KeyboardAvoidingView,

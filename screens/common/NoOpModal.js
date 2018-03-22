@@ -82,7 +82,7 @@ export default class NoOpModal extends Component {
                 </Text>
               </View>
 
-              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'bottom', backgroundColor: 'transparent'}}>
+              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end', backgroundColor: 'transparent'}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 30}}>
                   <Text style={[styles.headText, {marginTop: 0, width: null}]}>Made with {nodeEmoji.get('heart_eyes')} by </Text>
                   <Image source={require("../../assets/images/WARDA2.png")} style={styles.imageStyle} />
