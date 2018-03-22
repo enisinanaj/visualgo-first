@@ -1,26 +1,58 @@
 import React from 'react';
-import { StyleSheet, video,ListView, ScrollView,FlatList, Platform, fontWeight, Image, backgroundColor, Text, fontFamily, fontSize, View, Button, TouchableHighlight, TextInput, TouchableOpacity, Alert,} from 'react-native';
-import {Ionicons} from '@expo/vector-icons';
-import { NavigatorIOS, WebView,} from 'react-native';
-import Entypo from '@expo/vector-icons/Entypo';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
+import { StyleSheet, video,ListView, ScrollView,
+        FlatList, Platform, fontWeight, Image, 
+        backgroundColor, Text, fontFamily, 
+        fontSize, View, Button, TouchableHighlight, 
+        TextInput, TouchableOpacity, Alert,} from 'react-native';
+import {Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
+import { NavigatorIOS, WebView} from 'react-native';
+
+import {Font, AppLoading} from 'expo';
+import Colors from '../constants/Colors';
 
 
 export default class AlbumDetail extends React.Component {
+
+    constructor() {
+        super();
+
+        this.state = {
+            isReady: false
+        };
+    }
+
+    componentDidMount() {
+        this.loadFonts();
+    }
+
+    async loadFonts() {
+        await Font.loadAsync({
+            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-light': require('../assets/fonts/Roboto-Light.ttf')
+        });
+
+        this.setState({isReady: true});
+    }
+
+    goBack() {
+        if (this.props.navigation) {
+            this.props.navigation.goBack();
+        }
+    }
+
     render() {
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        }
+
         return (
-
-    <ScrollView >
-                
-               <View style={styles.headerContainer}> 
+            <ScrollView style={{backgroundColor: Colors.white}} >
+                <View style={styles.headerContainer}> 
                     <View style={styles.headerContainer}>
-
-                        <View style={styles.guideLineView}>
-                        <TouchableOpacity>
+                        <TouchableOpacity style={styles.guideLineView} onPress={() => this.goBack()}>
                             <Ionicons name={"md-close"} size={20} color={"blue"}/>
-                            </TouchableOpacity>
-                        </View>
-
+                        </TouchableOpacity>
                         <View style={styles.guideLineView}>
                             <Text style={styles.textStyle}>Guideline #Theme</Text>
                         </View>
@@ -33,181 +65,156 @@ export default class AlbumDetail extends React.Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    
-                    
-
                 </View>
 
-             <View style={styles.userName}>
-             <Image style={styles.profilepic} 
-                    source={{uri: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'}}
-                    />
-                <View style={styles.UserNameView}>
-                    <Text style={styles.userNameTextStyle1}>Jane Smith</Text>
-                    <Text style={styles.userNameTextStyle2}>Date hour</Text>
-                </View>
-             </View>
-
-        <View style={styles.bigTextbox}>
-            <Text>The element is special relative to layout: everything inside is no longer using the flexbox layout but using text layout. This means that elements inside of are no longer rectangles, but wrap when they see the end of the line.
-
-            </Text>
-        </View>
-
-        <View style={styles.miniMenuView}>
-            <View style={styles.miniMenuSingle}>
-                <Text>Diviso con 10 Utenti   </Text>
-                <TouchableOpacity>
-                    <Ionicons  style={styles.forwardIcon} name={"ios-arrow-forward"} size={20} color={"blue"}/>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.miniMenuSingle}>
-                <Text>Add contributor          </Text>
-                <TouchableOpacity>
-                    <Ionicons  style={styles.forwardIcon} name={"ios-arrow-forward"} size={20} color={"blue"}/>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.miniMenuSingle}>
-                <Text>Upload Attachements</Text>
-                <View style={styles.UploadView}>
-                    <Text>(6) </Text>
-                   <View style={styles.UploadIcons}>
-                   <TouchableOpacity>
-                        <Ionicons  style={styles.forwardIcon} name={"ios-attach"} size={25} color={"blue"}/>
-                    </TouchableOpacity>
+                <View style={styles.userName}>
+                    <Image style={styles.profilepic} 
+                            source={{uri: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'}}
+                            />
+                    <View style={styles.UserNameView}>
+                        <Text style={styles.userNameTextStyle1}>Jane Smith</Text>
+                        <Text style={styles.userNameTextStyle2}>Date hour</Text>
                     </View>
-                    <View style={styles.UploadIcons}>
-                    <TouchableOpacity>
-                        <Ionicons  style={styles.forwardIcon} name={"ios-arrow-forward"} size={20} color={"blue"}/>
+                </View>
+
+                <View style={styles.bigTextbox}>
+                    <Text>The element is special relative to layout: everything inside is no longer using the flexbox layout but using text layout. This means that elements inside of are no longer rectangles, but wrap when they see the end of the line.
+                    </Text>
+                </View>
+
+                <View style={styles.miniMenuView}>
+                    <View style={styles.miniMenuSingle}>
+                        <Text>Diviso con 10 Utenti   </Text>
+                        <TouchableOpacity>
+                            <Ionicons  style={styles.forwardIcon} name={"ios-arrow-forward"} size={20} color={"blue"}/>
                         </TouchableOpacity>
                     </View>
+                    <View style={styles.miniMenuSingle}>
+                        <Text>Add contributor          </Text>
+                        <TouchableOpacity>
+                            <Ionicons  style={styles.forwardIcon} name={"ios-arrow-forward"} size={20} color={"blue"}/>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.miniMenuSingle}>
+                        <Text>Upload Attachements</Text>
+                        <View style={styles.UploadView}>
+                            <Text>(6) </Text>
+                        <View style={styles.UploadIcons}>
+                        <TouchableOpacity>
+                                <Ionicons  style={styles.forwardIcon} name={"ios-attach"} size={25} color={"blue"}/>
+                            </TouchableOpacity>
+                            </View>
+                            <View style={styles.UploadIcons}>
+                            <TouchableOpacity>
+                                <Ionicons  style={styles.forwardIcon} name={"ios-arrow-forward"} size={20} color={"blue"}/>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
                 </View>
-                
-            </View>
-
-        </View>
-
-    
-    
-    <View>
-        <View style={styles.QuickViewContainer}>
-            <Text style={styles.QuickViewText}>Quick View</Text>
-        </View>
-        <ScrollView horizontal='true' style={styles.QuickViewContainer}>
-        
-
-            <View style={styles.imageViewContainer}>
-
-                    <View >
-                        <Image style={styles.imageStyle} source={{uri: 'http://www.spoleto7giorni.it/wp-content/uploads/2017/12/shopping-spoleto.jpg'}}></Image>
-                    </View>
-                    <View >
-                        <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                  
-                    </View>
-                    <View >
-                        <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                  
-                    </View>
-                    <View >
-                        <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                  
-                    </View>
-
+            <View>
+                <View style={styles.QuickViewContainer}>
+                    <Text style={styles.QuickViewText}>Quick View</Text>
+                </View>
+                <ScrollView horizontal='true' style={styles.QuickViewContainer}>
+                    <View style={styles.imageViewContainer}>
+                        <View >
+                            <Image style={styles.imageStyle} source={{uri: 'http://www.spoleto7giorni.it/wp-content/uploads/2017/12/shopping-spoleto.jpg'}}></Image>
+                        </View>
+                        <View >
+                            <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
                     
-            </View>
-
-
-        </ScrollView>
-    </View>
-        
-        <View style={styles.miniMenuView}>
-        <Text style={styles.QuickViewText}>All Files</Text>
-
-            <View style={styles.menuThumbNailContainer}>
-                
-                
-                <View style={styles.UploadView}>
-                    <Image style={styles.menuThumbNail} 
-                    source={{uri: 'http://www.iconhot.com/icon/png/file-icons-vs-2/256/png-36.png'}}
-                    />
-                    <Text  style={styles.Textbox}>Nome File.pff</Text>
-                </View>
-                <TouchableOpacity>
-                    <Ionicons name={"md-close"} size={20} color={"blue"}/>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.menuThumbNailContainer}>
-                
-                <View style={styles.UploadView}>
-                    <Image style={styles.menuThumbNail} 
-                    source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-                    />
-                    <Text  style={styles.Textbox}>Nome File.altro</Text>
-                </View>
-                <TouchableOpacity>
-                    <Ionicons name={"md-close"} size={20} color={"blue"}/>
-                </TouchableOpacity>
-                
-            </View>
-            <View style={styles.menuThumbNailContainer}>
-                
-                    <View style={styles.UploadView}>
-                        <Image style={styles.menuThumbNail} 
-                        source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-                        />
-                        <Text style={styles.Textbox}>Nome File.jpg</Text>
+                        </View>
+                        <View >
+                            <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
+                    
+                        </View>
+                        <View >
+                            <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
+                    
+                        </View> 
                     </View>
-                    <TouchableOpacity>
-                        <Ionicons name={"md-close"} size={20} color={"blue"}/>
-                    </TouchableOpacity>
-                
+                </ScrollView>
             </View>
-            <View style={styles.menuThumbNailContainer}>
-                
-                <View style={styles.UploadView}>
-                    <Image style={styles.menuThumbNail} 
-                    source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-                    />
-                    <Text  style={styles.Textbox} >Nome File.altro</Text>
+                <View style={styles.miniMenuView}>
+                <Text style={styles.QuickViewText}>All Files</Text>
+                    <View style={styles.menuThumbNailContainer}>
+                        <View style={styles.UploadView}>
+                            <Image style={styles.menuThumbNail} 
+                            source={{uri: 'http://www.iconhot.com/icon/png/file-icons-vs-2/256/png-36.png'}}
+                            />
+                            <Text  style={styles.Textbox}>Nome File.pff</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Ionicons name={"md-close"} size={20} color={"blue"}/>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.menuThumbNailContainer}>
+                        
+                        <View style={styles.UploadView}>
+                            <Image style={styles.menuThumbNail} 
+                            source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+                            />
+                            <Text  style={styles.Textbox}>Nome File.altro</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Ionicons name={"md-close"} size={20} color={"blue"}/>
+                        </TouchableOpacity>
+                        
+                    </View>
+                    <View style={styles.menuThumbNailContainer}>
+                        
+                            <View style={styles.UploadView}>
+                                <Image style={styles.menuThumbNail} 
+                                source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+                                />
+                                <Text style={styles.Textbox}>Nome File.jpg</Text>
+                            </View>
+                            <TouchableOpacity>
+                                <Ionicons name={"md-close"} size={20} color={"blue"}/>
+                            </TouchableOpacity>
+                        
+                    </View>
+                    <View style={styles.menuThumbNailContainer}>
+                        
+                        <View style={styles.UploadView}>
+                            <Image style={styles.menuThumbNail} 
+                            source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+                            />
+                            <Text  style={styles.Textbox} >Nome File.altro</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Ionicons name={"md-close"} size={20} color={"blue"}/>
+                        </TouchableOpacity>
+                        
+                    </View>
                 </View>
-                <TouchableOpacity>
-                    <Ionicons name={"md-close"} size={20} color={"blue"}/>
-                </TouchableOpacity>
-                
-            </View>
-        </View>
-        <View style={{ height: 300 }}>
+                <View style={{ height: 300 }}>
 
-            <WebView
-                    style={ styles.WebViewContainer }
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    source={{uri: 'https://www.youtube.com/embed/gnKzljwIMdM'}}
-            />
-
-        </View>
-        <View>
-            <Image style={styles.bigImageContainer} source={{uri: 'http://www.urdesignmag.com/wordpress/wp-content/uploads/2015/01/3-gilles-boissier-designed-a-moncler-boutique-dedicated-entirely-to-men.jpg'}}/>
-        </View>
-
-        <View style={styles.miniMenuView}>
-            <View style={styles.miniMenuSingle}>
-                <TouchableOpacity>
-                <Text style={{color: 'blue'}}>Archiva Album</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.miniMenuSingle}>
-                <TouchableOpacity>
-                <Text style={{color: 'red'}}>Elimina Album</Text>
-                </TouchableOpacity>
-            </View>
-       
-        </View>
-
-        
-</ScrollView>
+                    <WebView
+                            style={ styles.WebViewContainer }
+                            javaScriptEnabled={true}
+                            domStorageEnabled={true}
+                            source={{uri: 'https://www.youtube.com/embed/gnKzljwIMdM'}}
+                    />
+                </View>
+                <View>
+                    <Image style={styles.bigImageContainer} source={{uri: 'http://www.urdesignmag.com/wordpress/wp-content/uploads/2015/01/3-gilles-boissier-designed-a-moncler-boutique-dedicated-entirely-to-men.jpg'}}/>
+                </View>
+                <View style={styles.miniMenuView}>
+                    <View style={styles.miniMenuSingle}>
+                        <TouchableOpacity>
+                        <Text style={{color: 'blue'}}>Archiva Album</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.miniMenuSingle}>
+                        <TouchableOpacity>
+                        <Text style={{color: 'red'}}>Elimina Album</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>                
+        </ScrollView>
 
 
 

@@ -31,6 +31,9 @@ import StartScreen from './screens/StartScreen';
 
 import AppSettings, {isIphoneX} from './screens/helpers';
 import ApplicationConfig from './screens/helpers/appconfig';
+import TaskDetail from './screens/common/task-detail';
+import AlbumDetail from './screens/AlbumDetail';
+import CollabView from './screens/CollabView';
 
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
@@ -252,9 +255,12 @@ class AppContainer extends React.Component {
 }
 
 const MainAppNavigation = StackNavigator({
-  StartScreen: { screen: StartScreen },
-  Login: { screen: Login },
-  Index: { screen: AppContainer}
+  StartScreen: {screen: StartScreen},
+  Login: {screen: Login },
+  Index: {screen: AppContainer},
+  TaskSummary: {screen: TaskDetail},
+  AlbumSummary: {screen: AlbumDetail},
+  CollabView: {screen: CollabView}
 },
 {
   initialRouteName: 'StartScreen',
@@ -277,7 +283,7 @@ const MainAppNavigation = StackNavigator({
   }
 });
 
-export default () => <MainAppNavigation />;
+export default () => <MainAppNavigation ref={r => ApplicationConfig.getInstance().mainAppNavigation = r}/>;
 
 const drawerStyles = {
   drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
