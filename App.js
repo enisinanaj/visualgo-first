@@ -29,7 +29,7 @@ import SearchBar from './screens/common/search-bar';
 import Login from './screens/Login';
 import StartScreen from './screens/StartScreen';
 
-import AppSettings from './screens/helpers';
+import AppSettings, {isIphoneX} from './screens/helpers';
 import ApplicationConfig from './screens/helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
@@ -207,8 +207,8 @@ class AppContainer extends React.Component {
             type="static"
             ref={(ref) => this._drawer = ref}
             content={<BlueMenu navigation={this.props.navigation}/>}
-            openDrawerOffset={50}
-            styles={drawerStyles}
+            openDrawerOffset={50} 
+            styles={isIphoneX() ? drawerStylesX : Platform.OS === "ios" ? drawerStyles : drawerStyles}
             tweenEasing={"easeInOutBack"}
             tweenDuration={DRAWER_ANIMATION_DURATION}
             acceptTap={true}
@@ -282,6 +282,11 @@ export default () => <MainAppNavigation />;
 const drawerStyles = {
   drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
   main: {paddingLeft: 0},
+}
+
+const drawerStylesX = {
+  drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
+  main: {paddingLeft: 0, paddingTop: 20},
 }
 
 const styles = StyleSheet.create({

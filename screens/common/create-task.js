@@ -39,6 +39,7 @@ import moment from 'moment';
 import locale from 'moment/locale/it'
 import DisabledStyle from '../../constants/DisabledStyle';
 import Shadow from '../../constants/Shadow';
+import { isIphoneX } from '../helpers';
 
 export default class CreateTask extends Component {
     constructor() {
@@ -644,6 +645,9 @@ export default class CreateTask extends Component {
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
+                { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                                : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, top: 0, left: 0}}></View>
+                                : <View style={{backgroundColor: Colors.main, top: 0, left: 0}}></View>}
                 {this.renderHeader()}
                 <ScrollView>
                     {this.renderCommentSwitchRow()}

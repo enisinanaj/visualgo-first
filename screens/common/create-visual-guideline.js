@@ -36,6 +36,7 @@ import TaskDescription from './task-description';
 import moment from 'moment';
 import locale from 'moment/locale/it';
 import Shadow from '../../constants/Shadow';
+import { isIphoneX } from '../helpers';
 
 export default class CreateVisualGuideline extends Component {
     constructor() {
@@ -551,7 +552,9 @@ export default class CreateVisualGuideline extends Component {
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
-                {Platform.OS === 'ios' ? <View style={{height: 20, backgroundColor: Colors.main}}></View> : null}
+                {isIphoneX() ? <View style={{height: 40, backgroundColor: Colors.main}}></View> 
+                    : Platform.OS === 'ios' ? <View style={{height: 20, backgroundColor: Colors.main}}></View> 
+                    : null}
                 {this.renderHeader()}
                 <ScrollView>
                     {this.renderCommentSwitchRow()}

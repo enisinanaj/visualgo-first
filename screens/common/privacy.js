@@ -16,6 +16,7 @@ import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
 import {EvilIcons, Entypo} from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { isIphoneX } from '../helpers';
 
 var tagsToShow = [
   {title: 'Public', subtitle: 'All your VisualGo connections', selected: false, arrowVisible: false }, 
@@ -36,7 +37,7 @@ export default class PostPrivacy extends Component {
 
   renderHeader() {
     return (
-      <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
+      <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
           borderBottomColor: Colors.gray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={this.props.closeModal}>
@@ -98,7 +99,10 @@ export default class PostPrivacy extends Component {
   render() {
     return (
       <View style={{height: this.state.visibleHeight}}>
-        <StatusBar barStyle={'default'} animated={true}/>
+        <StatusBar barStyle={'light-content'} animated={true}/>
+        { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                        : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, top: 0, left: 0}}></View>
+                        : <View style={{backgroundColor: Colors.main, top: 0, left: 0}}></View>}
         {this.renderHeader()}
         <ListView
           style={styles.listView}

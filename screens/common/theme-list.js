@@ -24,6 +24,7 @@ import ImageBrowser from '../ImageBrowser';
 import SingleImage from './single-image';
 import {EvilIcons, Ionicons} from '@expo/vector-icons';
 import {Font, AppLoading} from 'expo';
+import { isIphoneX } from '../helpers';
 
 import _ from 'lodash';
 import Shadow from '../../constants/Shadow';
@@ -127,7 +128,7 @@ export default class ThemeList extends Component {
 
   renderHeader() {
     return (
-      <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth: StyleSheet.hairlineWidth,
+      <View style={{backgroundColor: '#FFF', borderBottomWidth: StyleSheet.hairlineWidth,
           borderBottomColor: Colors.borderGray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
@@ -217,7 +218,10 @@ export default class ThemeList extends Component {
 
     return (
       <KeyboardAvoidingView style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>
-        <StatusBar barStyle={'default'} animated={true}/>
+        <StatusBar barStyle={'light-content'} animated={true}/>
+        { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
+                        : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                        : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
         {this.renderHeader()}
         <ExtendedStatus onStateChange={(v) => this.setState({creatingNew: v})}
           onDone={(value, photos) => this.setState({photos: photos, themeDescription: value})} />

@@ -9,6 +9,7 @@ import {AppLoading, Font} from 'expo';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import _ from 'lodash';
+import { isIphoneX } from '../helpers';
 
 LocaleConfig.locales['it'] = {
   monthNames: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
@@ -50,7 +51,7 @@ export default class CalendarView extends Component {
 
     renderHeader() {
         return (
-          <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
+          <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
               borderBottomColor: Colors.gray, flexDirection: 'row',
               justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
               <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
@@ -128,7 +129,10 @@ export default class CalendarView extends Component {
         }
 
         return <View style={{height: height, flex: 1, flexDirection: 'column'}}>
-                <StatusBar barStyle={'default'} animated={true}/>
+                <StatusBar barStyle={'light-content'} animated={true}/>
+                { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
+                                : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                                : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
                 {this.renderHeader()}
                 <CalendarList
                     // Initially visible month. Default = Date()
