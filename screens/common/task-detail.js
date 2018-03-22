@@ -122,11 +122,15 @@ export default class TaskDetail extends Component {
 
     }
 
-    post() {
-        this.props.closeModal({reload: true})
+    goBack() {
+        if (this.props.navigation) {
+            this.props.navigation.goBack();
+        }
     }
 
     renderHeader() {
+        var {data} = this.props.navigation.state.params;
+
         return (
             <View style={{flexDirection: 'row', height: 48, alignItems: 'center', paddingLeft: 0,
                     borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
@@ -136,13 +140,13 @@ export default class TaskDetail extends Component {
                                     source={{uri:'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}} />
                     <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between'}}>
                         <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 4, paddingTop: 5}}>
-                            <TouchableOpacity onPress={this.props.closeModal}>
+                            <TouchableOpacity onPress={() => this.goBack()}>
                                 <EvilIcons name={"close"} size={22} color={Colors.main}/>
                             </TouchableOpacity>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
-                                <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
-                                <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
-                                    {this.props.data.environment.name}
+                                <Text style={styles.name}>Task {data.theme.name}</Text>
+                                <Text style={[styles.environment, {color: data.environment.color}]}>
+                                    {data.environment.name}
                                 </Text>
                             </View>
                         </View>
@@ -691,6 +695,8 @@ export default class TaskDetail extends Component {
     }
 
     renderUploadAttach() {
+        var {data} = this.props.navigation.state.params;
+
         return (
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
@@ -698,11 +704,11 @@ export default class TaskDetail extends Component {
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16, marginTop: 10}}>
                         <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
-                            <Image style={styles.taskThumbnail} source={{uri: this.props.data.media[0].url}} />
+                            <Image style={styles.taskThumbnail} source={{uri: data.media[0].url}} />
                         </View>
-                        <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
-                        <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
-                            {this.props.data.environment.name}
+                        <Text style={styles.name}>Task {data.theme.name}</Text>
+                        <Text style={[styles.environment, {color: data.environment.color}]}>
+                            {data.environment.name}
                         </Text>
                     </View>
                     <View style={{flexDirection:'row', justifyContent:'flex-end'}}>
@@ -754,7 +760,7 @@ export default class TaskDetail extends Component {
             )
         } else {
             return (
-                <View style={{height: this.state.visibleHeight}}>
+                <View style={{height: this.state.visibleHeight, backgroundColor: Colors.white}}>
                     <StatusBar barStyle={'light-content'} animated={true}/>
                     <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
                     {this.renderHeader()}

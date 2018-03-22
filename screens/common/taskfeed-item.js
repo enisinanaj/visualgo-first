@@ -1,6 +1,3 @@
-/**
- * Created by ggoma on 12/17/16.
- */
 import React, {Component} from 'react';
 import {
     View,
@@ -45,7 +42,6 @@ export default class TaskFeedItem extends Component {
         };
 
         this.state = {
-            //profile: getProfile(this.props.data.creator),
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: [{title: 'Comment', iconImage: require("../../assets/images/icons/comment.png"), 
                         onPress: () => {}}, 
@@ -123,7 +119,7 @@ export default class TaskFeedItem extends Component {
                 <View style={[styles.avatarPhotoContainer, Shadow.filterShadow]}>
                     <Image style={styles.profile} source={{uri: profile.media.url}}/>
                 </View>
-                <View style={styles.nameContainer}>
+                <TouchableOpacity onPress={() => {this.openTaksDetail()}} style={styles.nameContainer}> 
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                         <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
                         <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
@@ -131,7 +127,7 @@ export default class TaskFeedItem extends Component {
                         </Text>
                     </View>
                     <Text style={styles.time}>50% - {time}</Text>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.contextualMenu.toggleState()} style={{position: 'absolute', right: 0, top: -10}}>
                     <Ionicons name="ios-more-outline" color={Colors.main} size={30} />
                 </TouchableOpacity>
@@ -173,7 +169,8 @@ export default class TaskFeedItem extends Component {
     }
 
     openTaksDetail() {
-        this.setState({taskModal: true});
+        var {data} = this.props;
+        ApplicationConfig.getInstance().index.props.navigation.navigate("TaskSummary", {data});
     }
 
     renderTaskModal(data) {
@@ -195,22 +192,20 @@ export default class TaskFeedItem extends Component {
         const {data} = this.props;
         if(data.media != undefined && data.media.length > 0) {
             return (
-                <TouchableOpacity onPress={() => {this.openTaksDetail()}}> 
-                    <View style={[styles.container, Shadow.cardShadow]}>
-                        <View>
-                            {this.renderAvatar()}
-                            <View style={{margin: 0, padding: 0, marginTop: 9}}>
-                                {this.renderContent()}
-                            </View>
-                            {this.renderLikesAndComments()}
-                            <View style={styles.buttonContainer}>
-                                {this.renderLikeBar()}
-                            </View>
+                <View style={[styles.container, Shadow.cardShadow]}>
+                    <View>
+                        {this.renderAvatar()}
+                        <View style={{margin: 0, padding: 0, marginTop: 9}}>
+                            {this.renderContent()}
                         </View>
-                        {this.renderTaskModal(data)}
-                        <ContextualActionsMenu ref={e => this.contextualMenu = e} buttons={this.state.contextualMenuActions} />
+                        {this.renderLikesAndComments()}
+                        <View style={styles.buttonContainer}>
+                            {this.renderLikeBar()}
+                        </View>
                     </View>
-                </TouchableOpacity>
+                    {this.renderTaskModal(data)}
+                    <ContextualActionsMenu ref={e => this.contextualMenu = e} buttons={this.state.contextualMenuActions} />
+                </View>
             )
         }
 

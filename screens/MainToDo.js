@@ -75,8 +75,9 @@ export default class MainToDo extends React.Component {
     }
 
     navigateToCollabView() {
-        ApplicationConfig.getInstance().index.hideSearchBar();
-        this.props.navigator.push(Router.getRoute('collabView'), {navigator: this.props.navigator});
+        //ApplicationConfig.getInstance().index.hideSearchBar();
+        //this.props.navigator.push(Router.getRoute('collabView'), {navigator: this.props.navigator});
+        ApplicationConfig.getInstance().index.props.navigation.navigate("CollabView");
     }
 
     renderCardTitle() {

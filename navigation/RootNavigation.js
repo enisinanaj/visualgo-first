@@ -13,7 +13,8 @@ export default class RootNavigation extends React.Component {
     super(props);
 
     this.state = {
-      currentLanding: 'landing'
+      currentLanding: 'landing',
+      isRady: false
     };
   }
 

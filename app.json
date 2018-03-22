@@ -1,8 +1,16 @@
 {
   "expo": {
     "sdkVersion": "23.0.0",
-    "ios": {
+    "name": "Warda", 
+    "icon": "./assets/images/warda.png", 
+    "version": "1.1.3", 
+    "slug": "your-app-slug", 
+    "ios": { 
+      "bundleIdentifier": "com.areakappa.warda",
       "usesIcloudStorage": true
+    }, 
+    "android": { 
+      "package": "com.areakappa.visualgo" 
     }
   }
 }

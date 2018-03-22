@@ -122,7 +122,8 @@ export default class VisualGuidelineItem extends Component {
     }
 
     goToAlbumDetail() {
-        this.props.navigator.push(Router.getRoute('albumDetail', {albumId: '1'}));
+        ApplicationConfig.getInstance().index.props.navigation.navigate("AlbumSummary");
+        //this.props.navigator.push(Router.getRoute('albumDetail', {albumId: '1'}));
     }
 
     render() {

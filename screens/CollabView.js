@@ -43,7 +43,6 @@ const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, messa
                 {from: {name: 'Andy', image: require('./img/bob.png')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo Lorem Dolo', read: true, date: new Date()},
                 {from: {name: 'Ivan', image: require('./img/cookiemonster.jpeg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
 
-@withNavigation
 export default class CollabView extends Component {
     constructor(props) {
         super(props);
@@ -91,9 +90,9 @@ export default class CollabView extends Component {
     }
 
     goBack() {
-        //AppSettings.appIndex.showSearchBar();
-        ApplicationConfig.getInstance().index.showSearchBar();
-        this.props.navigator.pop();
+        if (this.props.navigation) {
+            this.props.navigation.goBack();
+        }
     }
 
     _renderRow(data) {
@@ -228,8 +227,8 @@ export default class CollabView extends Component {
         return (
             <View style={[{flex: 1}, styles.container]}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
-                {Platform.os === 'ios' ? 
-                    <View style={{height: 20, top: 0, left: 0, backgroundColor: Colors.main}}></View> 
+                {Platform.OS === 'ios' ? 
+                    <View style={{height: 20, backgroundColor: Colors.main, width: width}}></View> 
                 : null}
                 {this.renderHeader()}
                 <View style={{flex: 1, paddingBottom: 45}}>
