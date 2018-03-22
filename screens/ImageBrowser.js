@@ -7,11 +7,13 @@ import {
   FlatList,
   Dimensions,
   Button,
-  StatusBar
+  StatusBar,
+  Platform
 } from 'react-native';
 import Colors from '../constants/Colors';
 import { FileSystem } from 'expo';
 import ImageTile from './common/ImageTile';
+import { isIphoneX } from './helpers';
 const { width } = Dimensions.get('window')
 
 export default class ImageBrowser extends React.Component {
@@ -108,17 +110,22 @@ export default class ImageBrowser extends React.Component {
     let headerText = "Camera Roll"; //selectedCount + ' Selected';
     //if (selectedCount === this.props.max) headerText = headerText + ' (Max)';
     return (
-      <View style={styles.header}>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <Button
-          title="Cancel"
-          onPress={() => this.props.callback(Promise.resolve([]))}
-        />
-        <Text style={{fontSize: 20, fontWeight: '800'}}>{headerText}</Text>
-        <Button
-          title="Done"
-          onPress={() => this.prepareCallback()}
-        />
+      <View>
+        <StatusBar barStyle={'light-content'} animated={true} />
+        { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
+                        : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                        : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
+        <View style={styles.header}>
+          <Button
+            title="Cancel"
+            onPress={() => this.props.callback(Promise.resolve([]))}
+          />
+          <Text style={{fontSize: 20, fontWeight: '800'}}>{headerText}</Text>
+          <Button
+            title="Done"
+            onPress={() => this.prepareCallback()}
+          />
+        </View>
       </View>
     )
   }
@@ -164,13 +171,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 40,
     width: width,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    marginTop: 20,
     backgroundColor: Colors.lightGray
   },
 })

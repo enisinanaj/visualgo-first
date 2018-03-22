@@ -12,13 +12,15 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableOpacity,
-  ListView } from 'react-native';
+  ListView,
+  Platform } from 'react-native';
 
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import NoOpModal from '../common/NoOpModal';
 import Colors from '../../constants/Colors';
 import {EvilIcons, Ionicons} from '@expo/vector-icons';
+import { isIphoneX } from '../helpers';
 
 import {Font, AppLoading} from 'expo';
 
@@ -136,7 +138,7 @@ export default class TagListTask extends Component {
     return (
       <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
           borderBottomColor: Colors.gray, flexDirection: 'row',
-          justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 30}}>
+          justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
             <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-light', color: Colors.main}}>Cancel</Text>
           </TouchableOpacity>
@@ -257,6 +259,9 @@ export default class TagListTask extends Component {
     return (
       <KeyboardAvoidingView style={{height: visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>
         <StatusBar barStyle={'default'} animated={true}/>
+        { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
+                        : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                        : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
         {this.renderHeader()}
         <DefaultRow renderChildren={() => this.renderFilters()} usePadding={false} />
         <ListView

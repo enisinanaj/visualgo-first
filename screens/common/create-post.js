@@ -37,6 +37,7 @@ import ImagePost from './image-post';
 import ImageScreen from '../imageScreen';
 import NoOpModal from './NoOpModal';
 import DisabledStyle from '../../constants/DisabledStyle';
+import { isIphoneX } from '../helpers';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -372,6 +373,9 @@ export default class CreatePost extends Component{
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
+                { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                        : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, top: 0, left: 0}}></View>
+                        : <View style={{backgroundColor: Colors.main, top: 0, left: 0}}></View>}
                 {this.renderHeader()}
                 <ScrollView>
                     {this.renderCommentSwitchRow()}

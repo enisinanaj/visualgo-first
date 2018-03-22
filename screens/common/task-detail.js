@@ -49,6 +49,7 @@ import Shadow from '../../constants/Shadow';
 import {TaskAvatar} from '../../constants/StyleSheetCommons';
 import nodeEmoji from 'node-emoji';
 import DefaultRow from './default-row';
+import { isIphoneX } from '../helpers';
 
 export default class TaskDetail extends Component {
     constructor(props) {
@@ -762,7 +763,10 @@ export default class TaskDetail extends Component {
             return (
                 <View style={{height: this.state.visibleHeight, backgroundColor: Colors.white}}>
                     <StatusBar barStyle={'light-content'} animated={true}/>
-                    <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                    { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
+                        : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                        : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
+                    
                     {this.renderHeader()}
                     <ScrollView>
                         {this.renderFilters()}

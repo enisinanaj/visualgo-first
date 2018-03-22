@@ -18,6 +18,7 @@ import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
 import {EvilIcons} from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { isIphoneX } from '../helpers';
 
 const {width, height} = Dimensions.get('window');
 
@@ -68,7 +69,7 @@ export default class TaskDescription extends Component {
 
   renderHeader() {
     return (
-      <View style={{backgroundColor: '#FFF', paddingTop: 36, borderBottomWidth:StyleSheet.hairlineWidth,
+      <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
           borderBottomColor: Colors.gray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={this.props.closeModal}>
@@ -103,7 +104,10 @@ export default class TaskDescription extends Component {
     
     return (
       <View style={{height: visibleHeight}}>
-        <StatusBar barStyle={'default'} animated={true}/>
+        <StatusBar barStyle={'light-content'} animated={true}/>
+        { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
+                        : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                        : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
         {this.renderHeader()}
         {this.state.description.length > 0 ?
           <TouchableOpacity onPress={() => this.setState({description: ''})} style={styles.clearField}>
