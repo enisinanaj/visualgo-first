@@ -309,7 +309,7 @@ export default class Conversation extends Component {
                         </View>
                     :null}
 
-                    <View style={[messageBoxStyle.newMessageAreaContainer, this.state.showThemes ? {} : {}]}>
+                    <View style={[messageBoxStyle.newMessageAreaContainer, this.state.showThemes ? {} : {}, this.state.k_visible ? {marginBottom: 20} : {marginBottom: 0}]}>
                         <View style={messageBoxStyle.attachmentBackground}>
                             <EvilIcons name={"chevron-right"} size={30} color={Colors.white} style={messageBoxStyle.attachmentButton}/>
                         </View>
