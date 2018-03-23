@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, FlatList, Platform, fontWeight, 
     Image, backgroundColor, Text, fontFamily, fontSize, View, 
     Button, TouchableHighlight, TextInput, TouchableOpacity, 
-    Alert, ScrollView, Dimensions} from 'react-native';
+    Alert, ScrollView, Dimensions, Modal} from 'react-native';
 
 import {Ionicons, Entypo} from '@expo/vector-icons';
 import {Font, AppLoading} from 'expo';
@@ -21,6 +21,7 @@ import {TaskAvatar} from '../constants/StyleSheetCommons';
 
 import AppSettings from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
+import CreateTask from './common/create-task';
 
 const {width, height} = Dimensions.get('window');
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
@@ -35,6 +36,7 @@ export default class MainToDo extends React.Component {
         super(props);
 
         this.state = {
+            newTaskModal: false,
             isReady: false,
             contextualMenuActions: [{title: 'Approva 1 file', image: MenuIcons.THUMB_UP, onPress: () => {}}, 
                                     {title: 'Rigetta 1 file', image: MenuIcons.THUMB_DOWN, onPress: () => {}}, 
@@ -109,7 +111,9 @@ export default class MainToDo extends React.Component {
         return (
             <View style={styles.subContainer}>
                 <Text style={styles.Today}>Today</Text>
-                <Text style={styles.taskButton}>+ NewTask</Text>
+                <TouchableOpacity onPress={() => this.openNewTaskModal()}>
+                    <Text style={styles.taskButton}>+ NewTask</Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -156,6 +160,26 @@ export default class MainToDo extends React.Component {
         });
     }
 
+    openNewTaskModal() {
+        //newTaskModal
+        this.setState({newTaskModal: true});
+    }
+
+    newTaskHandler() {
+        this.setState({newTaskModal: false});
+    }
+
+    renderNewTaskModal() {
+        return <Modal
+            animationType={"slide"}
+            transparent={false}
+            visible={this.state.newTaskModal}
+            onRequestClose={() => this.setState({newTaskModal: false})}>
+            <CreateTask closeModal={(obj) => this.newTaskHandler(obj)} 
+                handleTypeChange={() => {}}/>
+        </Modal>
+    }
+
     render() {
 
         if (!this.state.isReady) {
@@ -174,6 +198,7 @@ export default class MainToDo extends React.Component {
                 {this.renderSectionTitle()}
                 {this.renderElements()}
                 <ContextualActionsMenu ref={e => this.contextualMenu = e} buttons={this.state.contextualMenuActions} />
+                {this.renderNewTaskModal()}
             </ScrollView>
         );
     }

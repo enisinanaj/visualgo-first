@@ -118,6 +118,8 @@ export default class CreateVisualGuideline extends Component {
     }
 
     renderHeader() {
+
+        var isPubblicaEnabled = this.selectedTheme.themeName != undefined && this.environment.environmentName != undefined;
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: 16, 
                 borderBottomWidth: StyleSheet.hairlineWidth,
@@ -131,10 +133,9 @@ export default class CreateVisualGuideline extends Component {
                 <View>
                     <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Guideline Album</Text>
                 </View>
-                <TouchableOpacity onPress={() => this.post()}>
-                    <Text style={{color: this.state.taskDescription != '' ? 
-                            Colors.main : Colors.gray, 
-                        fontFamily: 'roboto-light', fontSize: 16}}></Text>
+                <TouchableOpacity onPress={() => this.post()} disabled={!isPubblicaEnabled}>
+                    <Text style={{color: isPubblicaEnabled ? Colors.main : Colors.gray, 
+                        fontFamily: 'roboto-light', fontSize: 16}}>Pubblica</Text>
                 </TouchableOpacity>
             </View>
         )
