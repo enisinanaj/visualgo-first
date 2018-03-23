@@ -119,7 +119,7 @@ export default class CreateVisualGuideline extends Component {
 
     renderHeader() {
 
-        var isPubblicaEnabled = this.selectedTheme.themeName != undefined && this.environment.environmentName != undefined;
+        var isPubblicaEnabled = this.state.selectedTheme.themeName != undefined && this.state.environment.environmentName != undefined;
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: 16, 
                 borderBottomWidth: StyleSheet.hairlineWidth,
@@ -240,6 +240,8 @@ export default class CreateVisualGuideline extends Component {
 
     renderTheme() {
         var {selectedTheme} = this.state;
+
+        console.log("selected themes: " + JSON.stringify(selectedTheme));
 
         if (selectedTheme.themeName != undefined) {
             var img = {uri: selectedTheme.photo.url};

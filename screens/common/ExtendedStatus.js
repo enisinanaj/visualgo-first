@@ -96,6 +96,8 @@ export default class ExtendedStatus extends Component {
         if (v.indexOf('#') < 0) {
           v = '# ' + v;
         }
+
+        console.log("this thing here wasnt done");
     
         this.setState({textValue: v});
         this.onDone();
@@ -129,6 +131,8 @@ export default class ExtendedStatus extends Component {
            || this.state.textValue == '#' || this.state.textValue == '# ') {
             return null;
         }
+
+        console.log("edit theme: " + this.state.textValues);
 
         this.props.onDone(this.state.textValue, this.state.photos);
     }
