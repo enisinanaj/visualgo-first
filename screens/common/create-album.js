@@ -103,6 +103,10 @@ export default class NewAlbum extends Component {
               <TouchableOpacity onPress={() => {this.props.closeModal({})}}>
                 <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Cancel</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => {this.props.closeModal({})}}>
+                <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Pubblica</Text>
+              </TouchableOpacity>
           </View>
         );
     }

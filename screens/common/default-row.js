@@ -10,7 +10,7 @@ export default class DefaultRow extends Component {
     static propTypes = {
         renderChildren: PropTypes.func,
         style: PropTypes.object,
-        drawBorder: PropTypes.bool,
+        noborder: PropTypes.bool,
         usePadding: PropTypes.bool
     };
 

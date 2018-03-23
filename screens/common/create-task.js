@@ -117,6 +117,8 @@ export default class CreateTask extends Component {
     }
 
     renderHeader() {
+        var isPublishEnabled = this.state.environment.environmentName != undefined && this.state.selectedTheme.themeName != undefined;
+
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, 
                 borderBottomWidth: StyleSheet.hairlineWidth,
@@ -131,10 +133,8 @@ export default class CreateTask extends Component {
                 <View>
                     <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Task</Text>
                 </View>
-                <TouchableOpacity onPress={() => this.post()}>
-                    <Text style={{color: this.state.taskDescription != '' ? 
-                            Colors.main : Colors.gray, 
-                        fontFamily: 'roboto-light', fontSize: 16}}>Pubblica</Text>
+                <TouchableOpacity onPress={() => this.post()} disabled={isPublishEnabled ? false : true}>
+                    <Text style={{fontFamily: 'roboto-light', fontSize: 16, color: isPublishEnabled ? Colors.main : Colors.gray}}>Pubblica</Text>
                 </TouchableOpacity>
             </View>
         )
