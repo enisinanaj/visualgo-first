@@ -86,7 +86,7 @@ export default class SearchBar extends Component {
         const {height} = this.state;
 
         return (
-            <View style={[styles.container, {height: null, zIndex: 999}]}>
+            <View style={[Platform.OS === "android" ? styles.containerAndroid : styles.container, {height: null, zIndex: 999}]}>
                 { this.state.hiddenBar ? null :
                 <View style={[styles.searchBarOuterContainer, {height: 48}]} ref='realSearchBar'>
                     <TouchableOpacity style={styles.icon} onPress={this.props.openMenu}>
@@ -136,9 +136,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 64,
+        height: 24,
         backgroundColor: Colors.main,
-        paddingTop: 24,
+        paddingTop: 4,
         borderBottomColor: Colors.borderGray,
         borderBottomWidth: 1,
     },

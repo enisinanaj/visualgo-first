@@ -158,23 +158,46 @@ class AppContainer extends React.Component {
   }
 
   hideSearchBar(direction) {
-    Animated.parallel([
-      Animated.timing(
-        this.state.searchBarHeight, {
-          toValue: 20,
-          duration: 200,
-        }
-      ),
-      Animated.timing(
-        this.state.innerViewHeight,
-        {
-          toValue: height - 20,
-          duration: 200,
-        }
-      )
-    ]).start();
 
-    this.removeSearchBar();
+    if(Platform.OS === "android"){
+      Animated.parallel([
+        Animated.timing(
+          this.state.searchBarHeight, {
+            toValue: 24,
+            duration: 200,
+          }
+        ),
+        Animated.timing(
+          this.state.innerViewHeight,
+          {
+            toValue: height - 24,
+            duration: 200,
+          }
+        )
+      ]).start();
+  
+      this.removeSearchBar();
+    }else{
+      Animated.parallel([
+        Animated.timing(
+          this.state.searchBarHeight, {
+            toValue: 20,
+            duration: 200,
+          }
+        ),
+        Animated.timing(
+          this.state.innerViewHeight,
+          {
+            toValue: height - 20,
+            duration: 200,
+          }
+        )
+      ]).start();
+  
+      this.removeSearchBar();
+    }
+
+
   }
 
   removeSearchBar() {
