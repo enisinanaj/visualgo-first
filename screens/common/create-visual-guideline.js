@@ -631,7 +631,7 @@ export default class CreateVisualGuideline extends Component {
         return (
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
-                {isIphoneX() ? <View style={{height: 40, backgroundColor: Colors.main}}></View> 
+                {isIphoneX() ? <View style={{height: 44, backgroundColor: Colors.main}}></View> 
                     : Platform.OS === 'ios' ? <View style={{height: 20, backgroundColor: Colors.main}}></View> 
                     : null}
                 {this.renderHeader()}

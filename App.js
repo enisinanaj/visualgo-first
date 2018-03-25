@@ -294,7 +294,7 @@ const drawerStyles = {
 
 const drawerStylesX = {
   drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
-  main: {paddingLeft: 0, paddingTop: 20},
+  main: {paddingLeft: 0, paddingTop: 22},
 }
 
 const styles = StyleSheet.create({
