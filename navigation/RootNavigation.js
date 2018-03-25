@@ -4,7 +4,7 @@ import {StackNavigation,TabNavigation, TabNavigationItem} from '@expo/ex-navigat
 import {Ionicons, FontAwesome} from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
-import {MenuIcons} from '../screens/helpers/index';
+import {MenuIcons, isIphoneX} from '../screens/helpers/index';
 import ApplicationConfig from '../screens/helpers/appconfig';
 
 export default class RootNavigation extends React.Component {
@@ -14,13 +14,17 @@ export default class RootNavigation extends React.Component {
 
     this.state = {
       currentLanding: 'landing',
-      isRady: false
+      isRady: false,
+      tabNavHeight: 54,
+      iconMartginTop: -10
     };
   }
 
   componentDidMount() {
     console.log(this.navigation.getNavigationContext().jumpToTab);
     ApplicationConfig.getInstance().tabNavigation = this.navigation;
+    { isIphoneX() ? this.setState({tabNavHeight: 88, iconMartginTop: -44}) 
+    : this.setState({tabNavHeight: 54, iconMartginTop: -10}) }
   }
 
   render() {
@@ -28,34 +32,34 @@ export default class RootNavigation extends React.Component {
       <TabNavigation
         style={styles.tabNvigation}
         ref={(t) => this.navigation = t}
-        tabBarHeight={54} 
+        tabBarHeight={this.state.tabNavHeight} 
         initialTab={this.state.currentLanding}>
         <TabNavigationItem
-          id="tabVisualGuidelines" style={styles.tabNavigationItem}
+          id="tabVisualGuidelines" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
           renderIcon={isSelected => this._renderIcon('album', isSelected)}>
           <StackNavigation initialRoute="visualGuidelines" />
         </TabNavigationItem>
 
         <TabNavigationItem
-          id="landing" style={styles.tabNavigationItem}
+          id="landing" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
           renderIcon={isSelected => this._renderIcon('bacheca', isSelected)}>
           <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
 
         <TabNavigationItem
-          id="mainCalendar" style={styles.tabNavigationItem}
+          id="mainCalendar" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
           renderIcon={isSelected => this._renderIcon('calendar', isSelected)}>
           <StackNavigation initialRoute="mainCalendar" />
         </TabNavigationItem>
 
         <TabNavigationItem
-            id="chat" style={styles.tabNavigationItem}
+            id="chat" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
             renderIcon={isSelected => this._renderIcon('chat', isSelected)}>
           <StackNavigation initialRoute="chat" />
         </TabNavigationItem>
         
         <TabNavigationItem
-            id="mainTodo" style={styles.tabNavigationItem}
+            id="mainTodo" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
             renderIcon={isSelected => this._renderIcon('notification', isSelected)}>
           <StackNavigation initialRoute="mainTodo" />
         </TabNavigationItem>
@@ -92,7 +96,7 @@ export default class RootNavigation extends React.Component {
         </View>;
     } else {
       return (
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center', marginTop: this.state.iconMartginTop}}>
           <View style={{height: 26, width: 26}}>
             <Image
               style={{flex: 1, width: undefined, height: undefined}}
