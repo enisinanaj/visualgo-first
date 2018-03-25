@@ -16,15 +16,15 @@ export default class RootNavigation extends React.Component {
       currentLanding: 'landing',
       isRady: false,
       tabNavHeight: 54,
-      iconMartginTop: -10
+      iconMarginTop: -10
     };
   }
 
   componentDidMount() {
     console.log(this.navigation.getNavigationContext().jumpToTab);
     ApplicationConfig.getInstance().tabNavigation = this.navigation;
-    { isIphoneX() ? this.setState({tabNavHeight: 88, iconMartginTop: -44}) 
-    : this.setState({tabNavHeight: 54, iconMartginTop: -10}) }
+    { isIphoneX() ? this.setState({tabNavHeight: 88, iconMarginTop: -44}) 
+    : this.setState({tabNavHeight: 54, iconMarginTop: -10}) }
   }
 
   render() {
@@ -35,31 +35,31 @@ export default class RootNavigation extends React.Component {
         tabBarHeight={this.state.tabNavHeight} 
         initialTab={this.state.currentLanding}>
         <TabNavigationItem
-          id="tabVisualGuidelines" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
+          id="tabVisualGuidelines" style={[styles.tabNavigationItem, {marginTop: this.state.iconMarginTop}]}
           renderIcon={isSelected => this._renderIcon('album', isSelected)}>
           <StackNavigation initialRoute="visualGuidelines" />
         </TabNavigationItem>
 
         <TabNavigationItem
-          id="landing" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
+          id="landing" style={[styles.tabNavigationItem, {marginTop: this.state.iconMarginTop}]}
           renderIcon={isSelected => this._renderIcon('bacheca', isSelected)}>
           <StackNavigation initialRoute="landing" />
         </TabNavigationItem>
 
         <TabNavigationItem
-          id="mainCalendar" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
+          id="mainCalendar" style={[styles.tabNavigationItem, {marginTop: this.state.iconMarginTop}]}
           renderIcon={isSelected => this._renderIcon('calendar', isSelected)}>
           <StackNavigation initialRoute="mainCalendar" />
         </TabNavigationItem>
 
         <TabNavigationItem
-            id="chat" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
+            id="chat" style={[styles.tabNavigationItem, {marginTop: this.state.iconMarginTop}]}
             renderIcon={isSelected => this._renderIcon('chat', isSelected)}>
           <StackNavigation initialRoute="chat" />
         </TabNavigationItem>
         
         <TabNavigationItem
-            id="mainTodo" style={[styles.tabNavigationItem, {marginTop: this.state.iconMartginTop}]}
+            id="mainTodo" style={[styles.tabNavigationItem, {marginTop: this.state.iconMarginTop}]}
             renderIcon={isSelected => this._renderIcon('notification', isSelected)}>
           <StackNavigation initialRoute="mainTodo" />
         </TabNavigationItem>
@@ -96,7 +96,7 @@ export default class RootNavigation extends React.Component {
         </View>;
     } else {
       return (
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center', marginTop: this.state.iconMartginTop}}>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center', marginTop: this.state.iconMarginTop}}>
           <View style={{height: 26, width: 26}}>
             <Image
               style={{flex: 1, width: undefined, height: undefined}}

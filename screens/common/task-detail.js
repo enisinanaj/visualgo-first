@@ -772,7 +772,7 @@ export default class TaskDetail extends Component {
             return (
                 <View style={{height: this.state.visibleHeight, backgroundColor: Colors.white}}>
                     <StatusBar barStyle={'light-content'} animated={true}/>
-                    { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 40, top: 0, left: 0}}></View>
+                    { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 44, top: 0, left: 0}}></View>
                         : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
                         : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
                     

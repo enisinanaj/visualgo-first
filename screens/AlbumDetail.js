@@ -11,6 +11,7 @@ import { NavigatorIOS, WebView} from 'react-native';
 import {Font, AppLoading} from 'expo';
 import Colors from '../constants/Colors';
 import DefaultRow from './common/default-row';
+import { isIphoneX } from './helpers';
 
 var {width, height} = Dimensions.get("window");
 
@@ -20,12 +21,14 @@ export default class AlbumDetail extends React.Component {
         super();
 
         this.state = {
-            isReady: false
+            isReady: false,
+            visibleHeight: height
         };
     }
 
     componentDidMount() {
         this.loadFonts();
+
     }
 
     async loadFonts() {
@@ -51,12 +54,12 @@ export default class AlbumDetail extends React.Component {
             return <AppLoading />;
         }
 
-        return (
-            <View>
-                <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>
-                {Platform.OS === 'ios' ? 
-                    <View style={{width: width, height: 20, backgroundColor: Colors.main}}></View>
-                : null}
+        return ( 
+            <View style={{height: this.state.visibleHeight}}>
+                <StatusBar barStyle={'light-content'} animated={true}/>
+                { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 44, top: 0, left: 0}}></View>
+                                : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
+                                : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
                 <View style={{flexDirection: 'row', height: 48, alignItems: 'center', paddingLeft: 0,
                         borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
                     <View style={{flex:1}}>
@@ -260,7 +263,7 @@ export default class AlbumDetail extends React.Component {
                         </DefaultRow>
 
                         <DefaultRow>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 34}}>
                                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                                     <View style={{flexDirection: 'column', justifyContent: 'center'}}>
                                         <Text style={[styles.rowTextStyle, {color: '#E64E17', textAlignVertical: 'center', height: 'auto'}]}>
