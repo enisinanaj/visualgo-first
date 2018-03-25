@@ -9,3 +9,12 @@ export default ApplicationConfig = (() => {
       }
     }
 })();
+
+export const AWS_OPTIONS = {
+  keyPrefix: "uploads/",
+  bucket: "visualgotest-hosting-mobilehub-922920593",
+  region: "us-east-1",
+  accessKey: "AKIAJJ2F7PIGCSVS72UQ",
+  secretKey: "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",
+  successActionStatus: 201
+}

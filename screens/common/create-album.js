@@ -24,9 +24,12 @@ import DefaultRow from './default-row';
 import NoOpModal from './NoOpModal';
 
 import ImageBrowser from '../ImageBrowser';
+import CreateVisualGuideline from '../common/create-visual-guideline';
+
 import Colors from '../../constants/Colors';
 import DisabledStyle from '../../constants/DisabledStyle';
 import Shadow from '../../constants/Shadow';
+import ApplicationConfig from '../helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -36,12 +39,17 @@ export default class NewAlbum extends Component {
     constructor(props) {
         super(props);
 
+        this.closeThis = this.props.closeModal;
+
         this.state = {
             isReady: false,
             hasCameraPermission: null,
             type: Camera.Constants.Type.back,
             cameraOpen: false,
-            imageBrowserOpen: false
+            imageBrowserOpen: false,
+            photos: [],
+            files: [],
+            visualGuidelineModal: false
         }
     }
 
@@ -70,7 +78,8 @@ export default class NewAlbum extends Component {
           this.setState({
             imageBrowserOpen: false,
             photos
-          })
+          });
+          this.setState({visualGuidelineModal: true});
         }).catch((e) => console.log(e))
     }
 
@@ -87,12 +96,37 @@ export default class NewAlbum extends Component {
         );
     }
 
-    _getDocuments() {
+    async _getDocuments() {
         try {
-            DocumentPicker.getDocumentAsync({});
+            let files = await DocumentPicker.getDocumentAsync({});
+            this.setState({files: files});
+            this.setState({visualGuidelineModal: true});
         } catch (e) {
-            
+            console.error(e);
         }
+    }
+
+    finishAlbum() {
+        this.setState({visualGuidelineModal: true});
+    }
+
+    pushAlbum(album) {
+        this.setState({visualGuidelineModal: false});
+        this.closeThis({})
+    }
+
+    allGuidelineData() {
+        return (
+            <Modal
+                animationType={"fade"}
+                transparent={false}
+                visible={this.state.visualGuidelineModal}
+                onRequestClose={() => this.setState({visualGuidelineModal: false})}>
+                
+                <CreateVisualGuideline closeModal={(album) => this.pushAlbum(album)} theme={this.props.theme} environment={this.props.environment}
+                    files={this.state.photos} onBackClosure={true}/>
+            </Modal>
+        );
     }
 
     renderHeader() {
@@ -100,13 +134,15 @@ export default class NewAlbum extends Component {
           <View style={{backgroundColor: '#FFF', paddingTop: 16, borderBottomWidth:StyleSheet.hairlineWidth,
               borderBottomColor: Colors.borderGray, flexDirection: 'row',
               justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
-              <TouchableOpacity onPress={() => {this.props.closeModal({})}}>
+              <TouchableOpacity onPress={() => {this.closeThis({})}}>
                 <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Cancel</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => {this.props.closeModal({})}}>
+            {false ? 
+              <TouchableOpacity onPress={() => {this.finishAlbum()}}>
                 <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Pubblica</Text>
               </TouchableOpacity>
+            : null}
           </View>
         );
     }
@@ -147,7 +183,8 @@ export default class NewAlbum extends Component {
         };
     
         let image = await ImagePicker.launchCameraAsync(options);
-        this.setState({pictureTaken: image});
+        this.setState({pictureTaken: image, files: [image]});
+        this.setState({visualGuidelineModal: true});
     };
 
     async _getDocuments() { 
@@ -201,12 +238,13 @@ export default class NewAlbum extends Component {
                 </View>
                 <View style={[styles.optionsMenu, Shadow.cardShadow]}>
                     <DefaultRow style={{backgroundColor: 'transparent', padding: 12}}>
-                        <TouchableOpacity onPress={() => this.props.closeModal({})} style={{flex: 1}}>
+                        <TouchableOpacity onPress={() => this.closeThis({})} style={{flex: 1}}>
                             <Text style={[styles.menuElement, {textAlign: 'center', color: Colors.main}]}>Cancel</Text>
                         </TouchableOpacity>
                     </DefaultRow>
                 </View>
                 {this._renderImagePickerModal()}
+                {this.allGuidelineData()}
             </View>
         );
     }

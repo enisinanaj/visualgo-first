@@ -36,6 +36,7 @@ import {NavigationActions} from 'react-navigation';
 import moment from 'moment';
 import locale from 'moment/locale/it';
 import {isIphoneX} from './helpers';
+import AppConfiguration from './helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 
@@ -115,13 +116,12 @@ export default class Login extends Component {
 
   emailChanged(email) {
     if(email != ''){
-      this.state.emailTyped = true;
+      this.setState({emailTyped: true, email: email});
     }else{
-      this.state.emailTyped = false;
+      this.setState({emailTyped: false});
     }
 
     if(this.state.passTyped && this.state.emailTyped){
-      this.state.canLogin = true;
       this.setState({canLogin: true});
     }else{
       this.setState({canLogin: false});
@@ -130,7 +130,7 @@ export default class Login extends Component {
 
   passwordChanged(pass) {
     if(pass != ''){
-      this.setState({passTyped: true});
+      this.setState({passTyped: true, pass: pass});
     }else{
       this.setState({passTyped: false});
     }
@@ -142,14 +142,44 @@ export default class Login extends Component {
     }
   }
 
-  LogIn(){
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-          NavigationActions.push({routeName: 'Index'})
-      ]
-    });
-    this.props.navigation.dispatch(resetAction);
+  async LogIn(){
+    var endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/login?username=' + this.state.email + '&password=' + this.state.pass;
+    endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/login?username=eni&password=eni';
+    let loginSuccessful = false;
+    try {
+      let response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      let responseJson = await response.json();
+      if (responseJson != "Error::null") {
+        try {
+          AppConfiguration.getInstance().me = JSON.parse(responseJson);
+          loginSuccessful = true;  
+        } catch (e) {
+          console.log(e);
+          loginSuccessful = false;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (loginSuccessful) {
+      const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.push({routeName: 'Index'})
+        ]
+      });
+      this.props.navigation.dispatch(resetAction);
+    } else {
+      //TODO: show error
+    }
   }
 
   showPassword(){
@@ -197,7 +227,7 @@ export default class Login extends Component {
               </View>
             : null}
 
-            <Text style={styles.grayText}>Enter your e-mail address </Text>
+            <Text style={styles.grayText}>Enter your e-mail address</Text>
 
             <View style={[styles.textField, emailFieldFocused ? {borderBottomColor: Colors.main} : {}]}>
               <TextInput ref={component => this._emailInput = component} placeholderTextColor={Colors.main} placeholder={'Email'} 

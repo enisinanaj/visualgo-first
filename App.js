@@ -34,6 +34,7 @@ import ApplicationConfig from './screens/helpers/appconfig';
 import TaskDetail from './screens/common/task-detail';
 import AlbumDetail from './screens/AlbumDetail';
 import CollabView from './screens/CollabView';
+import CreateAlbum from './screens/common/create-visual-guideline';
 
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
@@ -260,7 +261,8 @@ const MainAppNavigation = StackNavigator({
   Index: {screen: AppContainer},
   TaskSummary: {screen: TaskDetail},
   AlbumSummary: {screen: AlbumDetail},
-  CollabView: {screen: CollabView}
+  CollabView: {screen: CollabView},
+  CreateVisualGuideline: {screen: CreateAlbum}
 },
 {
   initialRouteName: 'StartScreen',

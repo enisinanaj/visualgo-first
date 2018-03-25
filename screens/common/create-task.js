@@ -17,16 +17,11 @@ import {
     DefaultRow
 } from 'react-native';
 
-const {width, height} = Dimensions.get('window');
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-const backgroundColorsArray = ['#6923b6', '#7c71de', 
-                               '#f7d6f0', '#0e3efb', '#d8b96a',
-                               '#c32ebd', '#e488f1', '#3f075d',
-                               '#198ab8', '#70d384'];
 
 import {Font, AppLoading} from 'expo';
-import Colors from '../../constants/Colors';
 import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
+import Colors from '../../constants/Colors';
+
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
@@ -35,11 +30,20 @@ import NoOpModal from './NoOpModal';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
 import TaskDescription from './task-description';
+
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import DisabledStyle from '../../constants/DisabledStyle';
 import Shadow from '../../constants/Shadow';
 import { isIphoneX } from '../helpers';
+import ApplicationConfig from '../helpers/appconfig';
+
+const {width, height} = Dimensions.get('window');
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const backgroundColorsArray = ['#6923b6', '#7c71de', 
+                               '#f7d6f0', '#0e3efb', '#d8b96a',
+                               '#c32ebd', '#e488f1', '#3f075d',
+                               '#198ab8', '#70d384'];
 
 export default class CreateTask extends Component {
     constructor() {

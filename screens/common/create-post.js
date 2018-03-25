@@ -113,7 +113,7 @@ export default class CreatePost extends Component{
                 </View>
                 <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' ? false : true}>
                     <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontSize: 16, fontFamily: 'roboto-light'}}
-                        >Post
+                        >Pubblica
                     </Text>
                 </TouchableOpacity>
             </View>

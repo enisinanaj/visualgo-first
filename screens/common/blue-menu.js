@@ -169,8 +169,8 @@ export default class BlueMenu extends Component {
         return (
             <View style={styles.drawer}>
                 <Image source={require('../img/dp1.jpg')} style={styles.selectableDisplayPicture} />
-                <Text style={styles.accountName}>Daniela Contessa</Text>
-                <Text style={styles.accountEmail}>daniela.contessa@warda.it</Text>
+                <Text style={styles.accountName}>{ApplicationConfig.getInstance().me.name} {ApplicationConfig.getInstance().me.surname}</Text>
+                <Text style={styles.accountEmail}>{ApplicationConfig.getInstance().me.email}</Text>
 
                 <View style={{flex: 1, flexDirection: 'column', marginTop: 40, justifyContent: 'flex-start'}}>
                     {this._renderMenuItems()}

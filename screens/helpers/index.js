@@ -1,6 +1,3 @@
-/**
- * Created by ggoma on 12/17/16.
- */
 import{
     Dimensions,
     Platform
@@ -72,8 +69,6 @@ export function getProfile(profileId, getData) {
     });
 }
 
-
-
 export function randomProfile() {
     var random = Math.floor((Math.random() * profile.length));
     return profile[random];
@@ -91,4 +86,17 @@ export const isIphoneX = () => {
       Platform.OS === 'ios' &&
       (height === 812)
     );
-  }
+}
+
+export function getFileName(file) {
+    var filename = file.uri != null ? file.uri : file.file;
+    filename = filename.substring(filename.lastIndexOf('/') + 1, filename.indexOf('?'));
+
+    return filename;
+}
+
+export function getFileExtension(file) {
+    const filename = getFileName(file);
+
+    return filename.substring(filename.lastIndexOf('.') + 1);
+}

@@ -19,3 +19,5 @@ yarn-error.log*
 package-lock\.json
 ios/Pods/
 ios/Podfile.lock
+.android/*
+.Genymobile/*

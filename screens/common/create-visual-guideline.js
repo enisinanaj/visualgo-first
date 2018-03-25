@@ -13,9 +13,28 @@ import {
     ListView,
     Platform,
     Modal,
-    ScrollView,
-    DefaultRow
+    ScrollView
 } from 'react-native';
+
+
+import {Font, AppLoading} from 'expo';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
+import moment from 'moment';
+import locale from 'moment/locale/it';
+import {RNS3} from 'react-native-aws3';
+import * as Progress from 'react-native-progress';
+
+import Colors from '../../constants/Colors';
+import ThemeList from './theme-list';
+import DefaultRow from './default-row';
+import EnvironmentsList from './environments-list';
+import CalendarView from './calendar';
+import PostPrivacy from './privacy';
+import TagListTask from './tag-list-task';
+import TaskDescription from './task-description';
+import Shadow from '../../constants/Shadow';
+import { isIphoneX, getFileName, getFileExtension } from '../helpers';
+import {AWS_OPTIONS} from '../helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -24,23 +43,18 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
 
-import {Font, AppLoading} from 'expo';
-import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
-import ThemeList from './theme-list';
-import EnvironmentsList from './environments-list';
-import CalendarView from './calendar';
-import PostPrivacy from './privacy';
-import TagListTask from './tag-list-task';
-import TaskDescription from './task-description';
-import moment from 'moment';
-import locale from 'moment/locale/it';
-import Shadow from '../../constants/Shadow';
-import { isIphoneX } from '../helpers';
-
+                               
 export default class CreateVisualGuideline extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        let selectedTheme = this.props.theme || {};
+        let environment = this.props.environment || {};
+        let isNestedView = this.props.nestedView || false;
+        let onBackClosure = this.props.onBackClosure || undefined;
+
+        let files = this.props.files || [];
+
         this.state = {
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
@@ -53,7 +67,6 @@ export default class CreateVisualGuideline extends Component {
             addPhotoSelected: true,
             addVideoSelected: false,
             add360Selected: false,
-            selectedTheme: {},
             allEnvironments: [],
             allNotify: [],
             allShared: [],
@@ -72,10 +85,14 @@ export default class CreateVisualGuideline extends Component {
             commentsEnabled: false,
             notificationsEnabled: false,
             isReady: false,
-            environment: {},
+            selectedTheme: selectedTheme,
+            environment: environment,
             sharedClicked: false,
             notifyClicked: false,
-            contributorsClicked: false
+            contributorsClicked: false,
+            files: files,
+            onBackClosure: onBackClosure,
+            fileprogress: []
         }
     }
 
@@ -84,6 +101,7 @@ export default class CreateVisualGuideline extends Component {
         Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
 
         this.loadFonts();
+        this.uploadFiles();
     }
 
     async loadFonts() {
@@ -117,21 +135,48 @@ export default class CreateVisualGuideline extends Component {
         this.props.closeModal({reload: true})
     }
 
-    renderHeader() {
+    async uploadFiles() {
+        
+        await this.state.files.map((file, i) => {
+            const fileObj = {
+                // `uri` can also be a file system path (i.e. file://)
+                uri: file.uri != null ? file.uri : file.file,
+                name: file.md5 + '.' + getFileExtension(file),
+                type: "image/" + getFileExtension(file)
+            }
+            console.log("uploading file" + JSON.stringify(fileObj) + getFileExtension(file));
+            RNS3.put(fileObj, AWS_OPTIONS)
+            .progress((e) => {
+                let progress = this.state.fileprogress;
+                progress[i] = e.percent;
+                this.setState({fileprogress: progress});
+            })
+            .then(response => {
+                if (response.status !== 201)
+                throw new Error("Failed to upload image to S3");
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+            
+        })
+    }
 
-        var isPubblicaEnabled = this.state.selectedTheme.themeName != undefined && this.state.environment.environmentName != undefined;
+    renderHeader() {
+        var isPubblicaEnabled = this.state.selectedTheme.themeName != undefined && this.state.environment.environmentName != undefined
+            && this.state.fileprogress.filter((f, i) => f < 1).length == 0;
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: 16, 
                 borderBottomWidth: StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.gray, flexDirection: 'row',
-                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                justifyContent: 'space-between', alignItems: 'center', padding: 16, height: 48}}>
                 <TouchableOpacity onPress={this.props.closeModal}>
-                    <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>
-                        <EvilIcons name={"close"} size={22} color={Colors.main}/>
-                    </Text>
+                    {this.state.onBackClosure ? 
+                        <EvilIcons name={"chevron-left"} size={28} color={Colors.main} style={{marginLeft: - 10, marginTop: 4}}/>    
+                    :   <EvilIcons name={"close"} size={22} color={Colors.main}/>}
                 </TouchableOpacity>
                 <View>
-                    <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Guideline Album</Text>
+                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Guideline Album</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.post()} disabled={!isPubblicaEnabled}>
                     <Text style={{color: isPubblicaEnabled ? Colors.main : Colors.gray, 
@@ -428,7 +473,7 @@ export default class CreateVisualGuideline extends Component {
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5, paddingTop: 4}}>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5}}>
                                         {o.innerName}
                                     </Text>
                                 : null}
@@ -480,7 +525,7 @@ export default class CreateVisualGuideline extends Component {
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5, paddingTop: 4}}>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5}}>
                                         {o.innerName}
                                     </Text>
                                 : null}
@@ -532,7 +577,7 @@ export default class CreateVisualGuideline extends Component {
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5, paddingTop: 4}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5}}>{o.innerName}</Text>
                                 : null}
                             </View>
                         </View>
@@ -545,6 +590,37 @@ export default class CreateVisualGuideline extends Component {
 
     prepareTaskAdminsModal() {
         this.setState({clustersVisible: false, storeVisible: false, managerVisible: true, headTitle: 'Managers', tagListTastModal: true});
+    }
+
+    renderFileRows() {
+        //<Progress.CircleSnail size={22} animated={true} progress={this.state.fileprogress[i]} color={Colors.main} thickness={2} hidesWhenStopped={true} />
+        return this.state.files.map((file, i) => {
+            return <DefaultRow key={i} style={{height: 55, padding: 16, paddingLeft: 11}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        {getFileExtension(file) == 'PNG' || getFileExtension(file) == 'JPG' ? 
+                            <Image source={{uri: file.uri != null ? file.uri : file.file}} style={{height: 40, width: 40, borderRadius: 3, marginLeft: 5}} resizeMode={'cover'} />
+                            : null}
+                        <Text style={[styles.rowTextStyle, {flex: 1, paddingTop: 10, marginLeft: 5}]}>{getFileName(file)}</Text>
+                    </View>
+                    {this.state.fileprogress[i] < 1 ?
+                        <Progress.Circle size={22} animated={true} progress={this.state.fileprogress[i]} color={Colors.main} thickness={2} style={{position: 'absolute', right: 10, marginTop: 10}}/>
+                    :null}
+                </View>
+                <View style={{position: 'absolute', bottom: 0, }}>
+                    <Progress.Bar width={width} animated={true} progress={this.state.fileprogress[i]} color={Colors.main} borderRadius={0} borderWidth={0} height={2} />
+                </View>
+            </DefaultRow>
+        })
+    }
+
+    renderFilesList() {
+        return <View>
+            <DefaultRow style={{backgroundColor: '#F2F2F2', padding: 20}}>
+                <Text style={[styles.sectionTitle, {fontSize: 12}]}>All Files</Text>
+            </DefaultRow>
+            {this.renderFileRows()}
+        </View>
     }
 
     render() {
@@ -570,6 +646,7 @@ export default class CreateVisualGuideline extends Component {
                     {this.renderShareWith()}
                     {this.renderAddContributor()}
                     {this.renderUploadAttach()}
+                    {this.renderFilesList()}
                 </ScrollView>
                 {this.renderThemeModal()}
                 {this.renderEnvironmentsModal()}
@@ -659,5 +736,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingLeft: 5,
         paddingTop: 0
+    },
+
+    sectionTitle: {
+        fontSize: 14,
+        fontFamily: 'roboto-bold',
+        color: '#999999'
     }
 });
