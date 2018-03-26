@@ -24,29 +24,8 @@ import { isIphoneX } from '../helpers';
 
 import _ from 'lodash';
 
-const clusters = [
-  {title: 'Flagship', subtitle: '28 Negozi', selected: false }, 
-  {title: 'Mall', subtitle: '28 Negozi', selected: false },
-  {title: 'Fashion', subtitle: '47 Negozi', selected: false },
-  {title: 'Luxury', subtitle: '20 Negozi', selected: false },
-  {title: 'Popular', subtitle: '52 Negozi', selected: false },
-  {title: 'Outlet', subtitle: '24 Negozi', selected: false },
-  {title: 'Travel', subtitle: '24 Negozi', selected: false }];
-
-const stores = [
-  {title: 'Flagship', subtitle: '28 Negozi', selected: false }, 
-  {title: 'Mall', subtitle: '28 Negozi', selected: false },
-  {title: 'Fashion', subtitle: '47 Negozi', selected: false }];
-
-const managers = [
-  {title: 'Roseanne Font', subtitle: 'Milan Store', img: require('../img/dp1.jpg'), selected: false }, 
-  {title: 'Denis Mcgraw', subtitle: 'Rome Store', img: require('../img/elmo.jpg'), selected: false },
-  {title: 'Love Guerette', subtitle: 'Paris Store', img: require('../img/dp2.jpg'), selected: false },
-  {title: 'Marget Divers', subtitle: 'London Store', img: require('../img/dp3.jpg'), selected: false },
-  {title: 'Moriah Fewell', subtitle: 'Shanghai Store', img: require('../img/me.png'), selected: false }];
-
-var tagsToShow = clusters;
 var currentCategory = "clusters";
+var tagsToShow = {};
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const {width, height} = Dimensions.get('window');
@@ -59,7 +38,13 @@ export default class TagList extends Component {
       tagSource: ds.cloneWithRows(tagsToShow),
       selectedTags: [],
       isReady: false,
-      visibleHeight: height
+      visibleHeight: height,
+      managers: [],
+      stores: [],
+      clusters: [],
+      userResponse: [],
+      storeResponse: [],
+      clusterResponse: []
     };
 
     this._onScroll = this._onScroll.bind(this);
@@ -69,8 +54,11 @@ export default class TagList extends Component {
   componentDidMount() {
     Keyboard.addListener('keyboardWillShow', this.keyboardWillShow.bind(this));
     Keyboard.addListener('keyboardWillHide', this.keyboardWillHide.bind(this));
-
+    
     this.loadFonts();
+    this.getClusters();
+    this.getStores();
+    this.getUsers();
   }
 
   async loadFonts() {
@@ -148,21 +136,21 @@ export default class TagList extends Component {
   }
 
   filterForClusters() {
-    this.setState({tagSource: ds.cloneWithRows(clusters)});
+    this.setState({tagSource: ds.cloneWithRows(this.state.clusters)});
     currentCategory = 'clusters';
-    tagsToShow = clusters;
+    tagsToShow = this.state.clusters;
   }
 
   filterForManagers() {
-    this.setState({tagSource: ds.cloneWithRows(managers)});
+    this.setState({tagSource: ds.cloneWithRows(this.state.managers)});
     currentCategory = 'managers';
-    tagsToShow = managers;
+    tagsToShow = this.state.managers;
   }
 
   filterForStores() {
-    this.setState({tagSource: ds.cloneWithRows(stores)});
+    this.setState({tagSource: ds.cloneWithRows(this.state.stores)});
     currentCategory = 'stores';
-    tagsToShow = stores;
+    tagsToShow = this.state.stores;
   }
 
   toggleRow(rowData) {
@@ -235,6 +223,107 @@ export default class TagList extends Component {
         renderRow={(data) => this._renderSelectedTagElement(data)}
       />;
     return result;
+  }
+
+  async getUsers(){
+    var endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/users';
+    let isResponseEmpty = true;
+    try {
+      let response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      let responseJson = await response.json();
+      if (responseJson != "Error::null") {
+        try {
+          this.setState({userResponse: JSON.parse(responseJson)});
+          var managersList = [];
+          this.state.userResponse.map((el, i) => {
+            let obj = {title: el.name + ' ' + el.surname, subtitle: el.username, img: require('../img/me.png'), selected: false};  
+            managersList.push(obj);
+          })
+          this.setState({managers: managersList});
+          isResponseEmpty = false;  
+        } catch (e) {
+          console.log(e);
+          isResponseEmpty = true;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getClusters(){
+    var endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/clusters/getclusters';
+    let isResponseEmpty = true;
+    try {
+      let response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      let responseJson = await response.json();
+      if (responseJson != "Error::null") {
+        try {
+          this.setState({clusterResponse: JSON.parse(responseJson)});
+          var clustersList = [];
+          this.state.clusterResponse.map((el, i) => {
+            let obj = {title: el.name, subtitle: el.description, selected: false};  
+            clustersList.push(obj);
+          })
+          this.setState({clusters: clustersList});
+          tagsToShow = this.state.clusters;
+          this.setState({tagSource: ds.cloneWithRows(tagsToShow)});
+          isResponseEmpty = false;  
+        } catch (e) {
+          console.log(e);
+          isResponseEmpty = true;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getStores(){
+    var endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/stores/getstores';
+    let isResponseEmpty = true;
+    try {
+      let response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      let responseJson = await response.json();
+      if (responseJson != "Error::null") {
+        try {
+          this.setState({storeResponse: JSON.parse(responseJson)});
+          var storesList = [];
+          this.state.storeResponse.map((el, i) => {
+            let obj = {title: el.name, subtitle: el.description, selected: false};  
+            storesList.push(obj);
+          })
+          this.setState({stores: storesList});
+          isResponseEmpty = false;  
+        } catch (e) {
+          console.log(e);
+          isResponseEmpty = true;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {

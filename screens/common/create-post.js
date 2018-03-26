@@ -37,7 +37,10 @@ import ImagePost from './image-post';
 import ImageScreen from '../imageScreen';
 import NoOpModal from './NoOpModal';
 import DisabledStyle from '../../constants/DisabledStyle';
-import { isIphoneX } from '../helpers';
+import { isIphoneX, getFileExtension } from '../helpers';
+import {AWS_OPTIONS} from '../helpers/appconfig';
+import {RNS3} from 'react-native-aws3';
+import * as Progress from 'react-native-progress';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -55,7 +58,9 @@ export default class CreatePost extends Component{
             text: '',
             postBackgroundColor: '#fff',
             allowComments: false,
-            isReady: false
+            isReady: false,
+            fileprogress: [],
+            files: []
         }
     }
 
@@ -92,7 +97,7 @@ export default class CreatePost extends Component{
     }
 
     post() {
-        this.props.closeModal({reload: true})
+        this.uploadFiles();
     }
 
     renderHeader() {
@@ -256,7 +261,8 @@ export default class CreatePost extends Component{
 
           this.setState({
             imageBrowserOpen: false,
-            photos: newPhotos
+            photos: newPhotos,
+            files: photos
           })
         }).catch((e) => console.log(e))
     }
@@ -363,6 +369,34 @@ export default class CreatePost extends Component{
                     removeSinglePhotoCallack={() => this.resetImages([])}
                     removeSingleVisibile={true}/>
             </View>
+    }
+
+    async uploadFiles() {
+        await this.state.files.map((file, i) => {
+            const fileObj = {
+                // `uri` can also be a file system path (i.e. file://)
+                uri: file.uri != null ? file.uri : file.file,
+                name: file.md5 + '.' + getFileExtension(file),
+                type: "image/" + getFileExtension(file)
+            }
+            console.log("uploading file" + JSON.stringify(fileObj) + getFileExtension(file));
+            RNS3.put(fileObj, AWS_OPTIONS)
+            .progress((e) => {
+                let progress = this.state.fileprogress;
+                progress[i] = e.percent;
+                this.setState({fileprogress: progress});
+            })
+            .then(response => {
+                if (response.status !== 201) {
+                    throw new Error("Failed to upload image to S3");
+                }
+                this.props.closeModal({reload: true});
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+            
+        })
     }
 
     render() {
