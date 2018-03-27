@@ -46,11 +46,14 @@ export default class BlueMenu extends Component {
         this.loadNavigator();
     }
 
+    navigateTo(tab) {
+        //ApplicationConfig.getInstance().index.closeMenu(() => this.tabNavigator.navigate(tab));
+    }
+
     updateMenus() {
-        var {tabNavigation} = this;
         const menus = [ 
             {name: 'Report', icon: 'report', onPress: () => {this['report'].toggleState()}, disabled: true, id: 'report'},
-            {name: 'Visual Guideline', icon: 'album', id: 'visual_guideline', onPress: () => tabNavigation.navigate('tabVisualGuidelines')},
+            {name: 'Visual Guideline', icon: 'album', id: 'visual_guideline', onPress: () => this.navigateTo('tabVisualGuidelines')},
             {name: 'Wall', icon: 'bacheca', onPress: () => {}, id: 'wall'},
             {name: 'Calendar', icon: 'calendar', onPress: () => {this['calendar'].toggleState()}, disabled: true, id: 'calendar'},
             {name: 'Messages', icon: 'chat', onPress: () => {this['messages'].toggleState()}, disabled: true, id: 'messages'},
@@ -71,19 +74,19 @@ export default class BlueMenu extends Component {
     }
 
     async loadNavigator() {
-        var interval = {};
-
         var $self = this;
+        $self.interval = {};
 
         function setNavigator() {
-            if (ApplicationConfig.getInstance().tabNavigaiton != undefined) {
-                $self.tabNavigation = ApplicationConfig.getInstance().tabNavigation;
+            if (ApplicationConfig.getInstance().tabNavigator != undefined) {
+                $self.tabNavigator = ApplicationConfig.getInstance().tabNavigator;
+                clearInterval($self.interval);
+                $self.interval = undefined;
+                $self.updateMenus();
             }
-            clearInterval(interval);
-            $self.updateMenus();
         }
         
-        interval = await setInterval(setNavigator, 300);
+        $self.interval = await setInterval(setNavigator, 300);
     }
 
     logOut() {

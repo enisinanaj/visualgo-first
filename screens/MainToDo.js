@@ -39,10 +39,10 @@ export default class MainToDo extends React.Component {
             newTaskModal: false,
             isReady: false,
             contextualMenuActions: [{title: 'Approva 1 file', image: MenuIcons.THUMB_UP, onPress: () => {}}, 
-                                    {title: 'Rigetta 1 file', image: MenuIcons.THUMB_DOWN, onPress: () => {}}, 
-                                    {title: 'Alert', image: MenuIcons.ALERT, onPress: () => {}},
-                                    {title: 'Commenta task', image: MenuIcons.COMMENT, onPress: () => {}},
-                                    {title: 'Cronologia Notifiche Store per singolo task', featureName: 'Cronologia Notifiche', image: MenuIcons.HISTORY, disabled: true, onPress: () => {}}]
+                {title: 'Rigetta 1 file', image: MenuIcons.THUMB_DOWN, onPress: () => {}}, 
+                {title: 'Alert', image: MenuIcons.ALERT, onPress: () => {}},
+                {title: 'Commenta task', image: MenuIcons.COMMENT, onPress: () => {}},
+                {title: 'Cronologia Notifiche Store per singolo task', featureName: 'Cronologia Notifiche', image: MenuIcons.HISTORY, disabled: true, onPress: () => {}}]
         }
     }
 
@@ -77,8 +77,6 @@ export default class MainToDo extends React.Component {
     }
 
     navigateToCollabView() {
-        //ApplicationConfig.getInstance().index.hideSearchBar();
-        //this.props.navigator.push(Router.getRoute('collabView'), {navigator: this.props.navigator});
         ApplicationConfig.getInstance().index.props.navigation.navigate("CollabView");
     }
 

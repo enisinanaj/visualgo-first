@@ -87,6 +87,7 @@ export default class Landing extends Component {
                 filters[i].onPress = () => this._noOpPosts.toggleState();
             }
         }
+
         ApplicationConfig.getInstance().tabNavigator = this.props.navigator;
     }
 

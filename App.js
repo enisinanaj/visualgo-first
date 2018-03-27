@@ -35,6 +35,7 @@ import TaskDetail from './screens/common/task-detail';
 import AlbumDetail from './screens/AlbumDetail';
 import CollabView from './screens/CollabView';
 import CreateAlbum from './screens/common/create-visual-guideline';
+import CustomTabs from './CustomTabs';
 
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
@@ -134,7 +135,7 @@ class AppContainer extends React.Component {
     }
   };
 
-  closeMenu() {
+  closeMenu(c) {
     this.setState({menuIsOpen: false});
     Animated.parallel([
       Animated.timing(
@@ -159,6 +160,10 @@ class AppContainer extends React.Component {
         }
       )
     ]).start();
+
+    if (c != undefined) {
+      c();
+    }
   }
 
   hideSearchBar(direction) {
@@ -230,7 +235,7 @@ class AppContainer extends React.Component {
                     height: this.state.innerViewHeight,
                     shadowColor: 'transparent',
                     shadowOffset: {height: 0}}}>
-                  <NavigationProvider router={Router}>
+                  <NavigationProvider router={Router} >
                     <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
                   </NavigationProvider>
                 </Animated.View>
@@ -285,7 +290,8 @@ const MainAppNavigation = StackNavigator({
   }
 });
 
-export default () => <MainAppNavigation ref={r => ApplicationConfig.getInstance().mainAppNavigation = r}/>;
+//export default () => <MainAppNavigation ref={r => ApplicationConfig.getInstance().mainAppNavigation = r}/>;
+export default CustomTabs;
 
 const drawerStyles = {
   drawer: { shadowColor: Colors.main, shadowOpacity: 0.8, shadowRadius: 3},
