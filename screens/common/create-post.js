@@ -41,6 +41,7 @@ import { isIphoneX, getFileExtension } from '../helpers';
 import {AWS_OPTIONS} from '../helpers/appconfig';
 import {RNS3} from 'react-native-aws3';
 import * as Progress from 'react-native-progress';
+import ApplicationConfig from '../helpers/appconfig';
 
 export default class CreatePost extends Component{
     constructor() {
@@ -60,7 +61,8 @@ export default class CreatePost extends Component{
             allowComments: false,
             isReady: false,
             fileprogress: [],
-            files: []
+            files: [],
+            filesUploaded: false
         }
     }
 
@@ -97,7 +99,40 @@ export default class CreatePost extends Component{
     }
 
     post() {
-        this.uploadFiles();
+        if (!this.state.filesUploaded) {
+            this.uploadFiles();
+        } else {
+            console.log("files: " + JSON.stringify(this.state.files));
+            console.log("tags: " + JSON.stringify(this.state.allTags));
+
+            let filesToPost = [];
+            this.state.files.map((f, i) => {
+                let tmp = {
+                    id: f.md5 + getFileExtension(f),
+                    type: 'image/' + getFileExtension(f)
+                };
+            });
+
+            fetch('https://mywebsite.com/endpoint/', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    postvg: {
+                      message: this.state.text,
+                      backgroundmediaurl: this.state.postBackgroundColor,
+                      idauthor: ApplicationConfig.getInstance().me.id,
+                      ispublic: true,
+                      mediaurl: [],
+                      store: [],
+                      user: []
+                    }
+                })
+            })
+            .then(() => this.props.closeModal({refresh: true}))
+        }
     }
 
     renderHeader() {
@@ -390,13 +425,20 @@ export default class CreatePost extends Component{
                 if (response.status !== 201) {
                     throw new Error("Failed to upload image to S3");
                 }
-                this.props.closeModal({reload: true});
+                
+                if (i == this.state.files.length - 1) {
+                    //siamo arrivati a fine upload files
+                    this.setState({filesUploaded: true});
+                    this.post();
+                }
+
+                //TODO: non si chiude qua il modal
+                //this.props.closeModal({reload: true});               
             })
             .catch(function(error) {
                 console.log(error);
             });
-            
-        })
+        });
     }
 
     render() {
