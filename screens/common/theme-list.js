@@ -29,6 +29,8 @@ import { isIphoneX } from '../helpers';
 import _ from 'lodash';
 import Shadow from '../../constants/Shadow';
 import ExtendedStatus from './ExtendedStatus';
+import {AWS_OPTIONS} from '../helpers/appconfig';
+import {RNS3} from 'react-native-aws3';
 
 const {width, height} = Dimensions.get('window');
 
@@ -60,7 +62,8 @@ export default class ThemeList extends Component {
       imageBrowserOpen: false,
       photos: [],
       themeDescription: '',
-      visibleHeight: height
+      visibleHeight: height,
+      backgroundUploaded: false
     };
 
     this._onScroll = this._onScroll.bind(this);
@@ -196,6 +199,51 @@ export default class ThemeList extends Component {
     return <DefaultRow arguments={data} renderChildren={() => this.renderThemeRow(data)} noborder={true} />
   }
 
+  async uploadBackground() {
+    RNS3.put(this.state.photos[0], AWS_OPTIONS)
+    .then(response => {
+        if (response.status !== 201) {
+            throw new Error("Failed to upload image to S3");
+        }
+
+        this.setState({backgroundUploaded: true});
+        this.pushTheme();
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+  }
+
+  pushTheme() {
+    console.log("pushing theme onto the server");
+
+    if (!this.state.backgroundUploaded) {
+      console.log("uploading background");
+      this.uploadBackground();
+    } else if (this.state.backgroundUploaded) {
+      console.log("uploading theme");
+
+      fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/themes/createtheme', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          theme: {
+            name: this.state.themeDescription,
+            description: "",
+            mediaurl: this.state.photos[0].name
+          }
+        })
+      })
+      .then((response) => {this.props.closeModal({themeName: this.state.themeDescription, photo: this.state.photos[0], id: response})})
+      .catch(e => {
+          console.error("error: " + e);
+      })
+    }
+  }
+
   renderSaveBar() {
     if (this.state.photos.length == 0 || this.state.themeDescription == '' 
       || this.state.themeDescription == '#' || this.state.themeDescription == '# ') {
@@ -204,7 +252,7 @@ export default class ThemeList extends Component {
 
     return (
       <View style={[styles.bottomBar]}>
-          <TouchableOpacity onPress={() => {this.props.closeModal({themeName: this.state.themeDescription, photo: this.state.photos[0]})}}>
+          <TouchableOpacity onPress={() => {this.pushTheme()}}>
               <Text style={styles.saveButton}>Save and Select</Text>
           </TouchableOpacity>
       </View>

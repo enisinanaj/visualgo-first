@@ -25,6 +25,7 @@ import SingleImage from './single-image';
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
 import {EvilIcons, Ionicons, FontAwesome} from '@expo/vector-icons';
+import {getFileExtension} from '../helpers';
 
 import _ from 'lodash';
 
@@ -63,7 +64,9 @@ export default class ExtendedStatus extends Component {
     
           let newPhotos = [];
           photos.forEach(element => {
-              newPhotos.push({url: element.uri != null ? element.uri : element.file});
+              newPhotos.push({url: element.uri != null ? element.uri : element.file, md5: element.md5, 
+                name: element.md5 + '.' + getFileExtension(element),
+                type: "image/" + getFileExtension(element)});
           });
     
           this.setState({
@@ -96,8 +99,6 @@ export default class ExtendedStatus extends Component {
         if (v.indexOf('#') < 0) {
           v = '# ' + v;
         }
-
-        console.log("this thing here wasnt done");
     
         this.setState({textValue: v});
         this.onDone();

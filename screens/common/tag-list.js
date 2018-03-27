@@ -126,7 +126,7 @@ export default class TagList extends Component {
   }
 
   renderFilters() {
-    filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Manager'}, 
+    filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Manager', onType: () => {}},
       {title: 'Clusters', selected: true, active: true, onSelected: () => this.filterForClusters(), headTitle: 'Clusters'},
       {title: 'Store', selected: false, active: true, onSelected: () => this.filterForStores(), headTitle: 'Stores'},
       {title: 'Manager', selected: false, active: true, onSelected: () => this.filterForManagers(), headTitle: 'Managers'}];
@@ -156,7 +156,7 @@ export default class TagList extends Component {
   toggleRow(rowData) {
     rowData.selected = !rowData.selected;
 
-    if(rowData.selected) {
+    if (rowData.selected) {
       rowData.category = currentCategory;
       this.state.selectedTags.push(rowData);
     } else {
@@ -243,7 +243,7 @@ export default class TagList extends Component {
           this.setState({userResponse: JSON.parse(responseJson)});
           var managersList = [];
           this.state.userResponse.map((el, i) => {
-            let obj = {title: el.name + ' ' + el.surname, subtitle: el.username, img: require('../img/me.png'), selected: false};  
+            let obj = {title: el.name + ' ' + el.surname, subtitle: el.username, img: require('../img/me.png'), selected: false, id: el.id};  
             managersList.push(obj);
           })
           this.setState({managers: managersList});
@@ -276,7 +276,7 @@ export default class TagList extends Component {
           this.setState({clusterResponse: JSON.parse(responseJson)});
           var clustersList = [];
           this.state.clusterResponse.map((el, i) => {
-            let obj = {title: el.name, subtitle: el.description, selected: false};  
+            let obj = {title: el.name, subtitle: el.description, selected: false, id: el.id};  
             clustersList.push(obj);
           })
           this.setState({clusters: clustersList});
@@ -311,7 +311,7 @@ export default class TagList extends Component {
           this.setState({storeResponse: JSON.parse(responseJson)});
           var storesList = [];
           this.state.storeResponse.map((el, i) => {
-            let obj = {title: el.name, subtitle: el.description, selected: false};  
+            let obj = {title: el.name, subtitle: el.description, selected: false, id: el.id};  
             storesList.push(obj);
           })
           this.setState({stores: storesList});

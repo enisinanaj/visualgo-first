@@ -28,17 +28,17 @@ export default class NewsFeedItem extends Component {
     constructor(props) {
         super(props);
 
+        let {data} = this.props;
 
         this.state = {
-            //profile: getProfile(this.props.data.creator),
-            time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
+            time: moment(data.created).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: ['Comment', 'Stats'],
             icons: ['comment', 'ios-podium-outline'],
             iconTypes: ["evilicon"],
             iconColors: [Colors.main, Colors.yellow],
             likes: 0,
             isReady: false,
-            comments: this.props.data.comments == undefined ? 0 : this.props.data.comments.length
+            comments: data.comments == undefined ? 0 : data.comments.length
         };
     }
 
@@ -77,17 +77,19 @@ export default class NewsFeedItem extends Component {
     renderAvatar() {
         const {time} = this.state;
         let profile = {};
+        let {data} = this.props;
+
         try {
-             profile = this.props.data.profile[0];
+             profile = data.profile;
         } catch(e) {
             return null;
         }
 
         return (
             <View style={styles.avatarContainer}>
-                <Image style={styles.profile} source={{uri: profile.media.url}}/>
+                <Image style={styles.profile} source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + profile.mediaurl}}/>
                 <View style={styles.nameContainer}>
-                    <Text style={styles.name}>{profile.name}</Text>
+                    <Text style={styles.name}>{profile.name} {profile.surname}</Text>
                     <Text style={styles.time}>{time}</Text>
                 </View>
                 <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
@@ -122,16 +124,16 @@ export default class NewsFeedItem extends Component {
 
     renderContent() {
         const {data} = this.props;
-        if(data.media != undefined && data.media.length > 0) {
+        if(data.medias != undefined && data.medias.length > 0) {
             return (
-                <ImagePost imageCount={data.media.length} images={data.media} style={styles.imageStyle} textContent={this.props.data.content}
-                    onPress={() => {}}/>
+                <ImagePost imageCount={data.medias.length} images={data.medias} style={styles.imageStyle} textContent={data.message}
+                    onPress={() => {}} useBasePath={true}/>
             )
         }
 
         return (
             <View style={styles.content}>
-                <Text style={{fontFamily: 'roboto-light'}}>{this.props.data.content}</Text>
+                <Text style={{fontFamily: 'roboto-light'}}>{data.message}</Text>
             </View>
         )
     }

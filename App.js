@@ -15,7 +15,7 @@ import {
   StackNavigation,
 } from '@expo/ex-navigation';
 import {Ionicons, FontAwesome} from '@expo/vector-icons';
-import {StackNavigator} from 'react-navigation';
+import {StackNavigator, createStackNavigator} from 'react-navigation';
 
 import { AppLoading, Asset, Font } from 'expo';
 
@@ -255,7 +255,7 @@ class AppContainer extends React.Component {
   }
 }
 
-const MainAppNavigation = StackNavigator({
+const MainAppNavigation = createStackNavigator({
   StartScreen: {screen: StartScreen},
   Login: {screen: Login },
   Index: {screen: AppContainer},

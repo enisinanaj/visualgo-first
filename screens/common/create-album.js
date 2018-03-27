@@ -112,7 +112,9 @@ export default class NewAlbum extends Component {
 
     pushAlbum(album) {
         this.setState({visualGuidelineModal: false});
-        this.closeThis({})
+        setTimeout(() => {
+            this.closeThis({});
+        }, 100);
     }
 
     allGuidelineData() {
@@ -124,7 +126,7 @@ export default class NewAlbum extends Component {
                 onRequestClose={() => this.setState({visualGuidelineModal: false})}>
                 
                 <CreateVisualGuideline closeModal={(album) => this.pushAlbum(album)} theme={this.props.theme} environment={this.props.environment}
-                    files={this.state.photos} onBackClosure={true}/>
+                    files={this.state.photos} onBackClosure={true} owner={this.props.owner}/>
             </Modal>
         );
     }

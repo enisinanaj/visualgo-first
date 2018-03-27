@@ -406,7 +406,7 @@ export default class CreateTask extends Component {
                 visible={this.state.albumModal}
                 onRequestClose={() => this.setState({albumModal: false})}>
                 
-                <NewAlbum closeModal={(album) => this.createAlbum(album)} theme={this.state.selectedTheme} environment={this.state.environment} />
+                <NewAlbum closeModal={(album) => this.createAlbum(album)} theme={this.state.selectedTheme} environment={this.state.environment} owner={this}/>
             </Modal>
         );
     }

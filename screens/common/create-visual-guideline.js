@@ -136,15 +136,12 @@ export default class CreateVisualGuideline extends Component {
     }
 
     async uploadFiles() {
-        
         await this.state.files.map((file, i) => {
             const fileObj = {
-                // `uri` can also be a file system path (i.e. file://)
                 uri: file.uri != null ? file.uri : file.file,
                 name: file.md5 + '.' + getFileExtension(file),
                 type: "image/" + getFileExtension(file)
             }
-            console.log("uploading file" + JSON.stringify(fileObj) + getFileExtension(file));
             RNS3.put(fileObj, AWS_OPTIONS)
             .progress((e) => {
                 let progress = this.state.fileprogress;
@@ -158,7 +155,6 @@ export default class CreateVisualGuideline extends Component {
             .catch(function(error) {
                 console.log(error);
             });
-            
         })
     }
 

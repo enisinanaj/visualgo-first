@@ -62,7 +62,8 @@ export default class CreatePost extends Component{
             isReady: false,
             fileprogress: [],
             files: [],
-            filesUploaded: false
+            filesUploaded: false,
+            publishDisabled: false
         }
     }
 
@@ -102,18 +103,19 @@ export default class CreatePost extends Component{
         if (!this.state.filesUploaded) {
             this.uploadFiles();
         } else {
-            console.log("files: " + JSON.stringify(this.state.files));
-            console.log("tags: " + JSON.stringify(this.state.allTags));
+            this.setState({publishDisabled: true});
 
             let filesToPost = [];
             this.state.files.map((f, i) => {
                 let tmp = {
-                    id: f.md5 + getFileExtension(f),
+                    id: f.md5 + '.' + getFileExtension(f),
                     type: 'image/' + getFileExtension(f)
                 };
+                
+                filesToPost.push(tmp);
             });
 
-            fetch('https://mywebsite.com/endpoint/', {
+            fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/postmanage', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -124,14 +126,20 @@ export default class CreatePost extends Component{
                       message: this.state.text,
                       backgroundmediaurl: this.state.postBackgroundColor,
                       idauthor: ApplicationConfig.getInstance().me.id,
-                      ispublic: true,
-                      mediaurl: [],
-                      store: [],
-                      user: []
+                      ispublic: 1,
+                      mediaurl: filesToPost,
+                      store: this.state.allTags.filter(v => {return v.category === 'stores'}),
+                      user: this.state.allTags.filter(v => {return v.category === 'managers'})
                     }
                 })
             })
-            .then(() => this.props.closeModal({refresh: true}))
+            .then((response) => {
+                console.debug("Create post result: " + JSON.stringify(response));
+                this.props.closeModal({reload: true})
+            })
+            .catch(e => {
+                console.error("error: " + e);
+            })
         }
     }
 
@@ -151,7 +159,7 @@ export default class CreatePost extends Component{
                 <View style={{paddingLeft: 20}}>
                     <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Post</Text>
                 </View>
-                <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' ? false : true}>
+                <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' || this.state.publishDisabled ? false : true}>
                     <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontSize: 16, fontFamily: 'roboto-light'}}
                         >Pubblica
                     </Text>
@@ -173,24 +181,24 @@ export default class CreatePost extends Component{
     }
 
     renderCommentSwitchRow() {
-            return (
-                <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
-                    borderBottomColor: Colors.borderGray, flexDirection: 'row',
-                    justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
-                    <View style={styles.viewAndroid}>
-                        <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginTop: 6}}>
-                            Commenti 
-                        </Text>
-                        <Switch color={Colors.main} style={styles.switchAndroid} value={this.state.allowComments} 
-                            onValueChange={(v) => this.setState({allowComments: v}) }/>
-                    </View>
-                    <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
-                        <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginRight: 5}}>
-                            Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
-                        </Text>
-                    </TouchableOpacity>
+        return (
+            <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
+                borderBottomColor: Colors.borderGray, flexDirection: 'row',
+                justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
+                <View style={styles.viewAndroid}>
+                    <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginTop: 6}}>
+                        Commenti 
+                    </Text>
+                    <Switch color={Colors.main} style={styles.switchAndroid} value={this.state.allowComments} 
+                        onValueChange={(v) => this.setState({allowComments: v}) }/>
                 </View>
-            )
+                <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
+                    <Text style={{color: Colors.black, fontFamily: 'roboto-light', fontSize: 14, marginRight: 5}}>
+                        Tutti <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 10}} />
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     renderPostType() {

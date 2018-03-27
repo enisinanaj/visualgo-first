@@ -60,8 +60,8 @@ export default settings = {
     baseApi: 'http://crpbddyxugpgmqhgx-mock.stoplight-proxy.io/v1'
 }
 
-export function getProfile(profileId, getData) {
-    return fetch(settings.baseApi + '/users?userId=' + profileId)
+export async function getProfile(profileId, getData) {
+    return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/users/id/?iduser=' + profileId)
     .then((response) => response.json())
     .then((responseJson) => getData(responseJson))
     .catch((error) => {

@@ -53,6 +53,15 @@ export default class ImagePost extends Component {
     renderImages() {
         const {imageCount, images} = this.props;
 
+        if (this.props.useBasePath) {
+            images.map((o,i) => {
+                if (!o.hasPath) {
+                    o.hasPath = true;
+                    o.url = 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + o.url;
+                }
+            });
+        }
+
         switch(imageCount) {
             //1 image
             case 1:

@@ -178,6 +178,27 @@ export default class EnvironmentList extends Component {
     return <DefaultRow arguments={data} renderChildren={() => this.renderEnvironmentRow(data)} noborder={true}/>
   }
 
+  async pushEnvironment() {
+    await fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/environments/createenvironment', {
+          method: 'POST',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            environment: {
+              environment: this.state.environment,
+              description: "",
+              mediaurl: this.state.background
+            }
+          })
+      })
+      .then((response) => {this.props.closeModal({environmentName: this.state.environment, background: this.state.background, id: response})})
+      .catch(e => {
+          console.error("error: " + e);
+      })
+  }
+
   renderSaveBar() {
     if (this.state.background == undefined || this.state.environment == '' 
       || this.state.environment == '@' || this.state.environment == '@ ') {
@@ -186,7 +207,7 @@ export default class EnvironmentList extends Component {
 
     return (
       <View style={[styles.bottomBar]}>
-        <TouchableOpacity onPress={() => {this.props.closeModal({environmentName: this.state.environment, background: this.state.background})}}>
+        <TouchableOpacity onPress={() => {this.pushEnvironment()}}>
             <Text style={styles.saveButton}>Save and Select</Text>
         </TouchableOpacity>
       </View>

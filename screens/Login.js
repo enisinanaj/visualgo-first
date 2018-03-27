@@ -144,7 +144,7 @@ export default class Login extends Component {
 
   async LogIn(){
     var endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/login?username=' + this.state.email + '&password=' + this.state.pass;
-    endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/login?username=eni&password=eni';
+    //endpoint = 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/login?username=eni&password=eni';
     let loginSuccessful = false;
     try {
       let response = await fetch(endpoint, {

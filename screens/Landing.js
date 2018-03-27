@@ -13,6 +13,7 @@ import {
     ListView,
     StyleSheet,
     TouchableOpacity,
+    ActivityIndicator,
     Button
 } from 'react-native';
 
@@ -36,8 +37,6 @@ import Shadow from '../constants/Shadow';
 import AppSettings, { getProfile } from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 
-const data = ['0', '1'];
-
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
     {title: 'Survey', active: true, disabled: true}, 
     {title: 'Post', active: true, disabled: true}, 
@@ -47,6 +46,8 @@ const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
+    data = [];
+    
     constructor(props) {
         super(props);
 
@@ -57,16 +58,13 @@ export default class Landing extends Component {
             loading: false,
             opacity: new Animated.Value(1),
             header_height: new Animated.Value(96),
-            dataSource: ds.cloneWithRows(data),
-            take: 20,
-            skip: 0,
             isReady: false,
-            isAnimatingSearchBar: false
+            isAnimatingSearchBar: false,
+            pageindex: 0,
+            posts: []
         };
 
         filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
-
-        this._loadPosts();
 
         this.offsetY = 0;
         this.offsetX = new Animated.Value(0);
@@ -87,7 +85,9 @@ export default class Landing extends Component {
                 filters[i].onPress = () => this._noOpPosts.toggleState();
             }
         }
+
         ApplicationConfig.getInstance().tabNavigator = this.props.navigator;
+        setTimeout(() => this.loadMore(), 300);
     }
 
     async loadFonts(onLoaded) {
@@ -109,83 +109,61 @@ export default class Landing extends Component {
     } 
 
     _clearPosts() {
-        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
+        this.setState({posts: []});
+        this.data = [];
     }
 
-    _loadPosts(query) {
+    async _loadPosts(query) {
 
         var addQuery = query != undefined ? '&q=' + query : '';
+        var length = 0;
 
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                responseJson.forEach(element => {
-                    getProfile(element.creator, (responseJson) => {
-                        element.profile = responseJson;
-                        data.push(element);
-                        this.setState({dataSource: ds.cloneWithRows(data)});
+
+        console.log("loading posts..." + 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=1&pageindex=' + this.state.pageindex + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
+
+        try {
+            let result = await fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=1&pageindex=' + this.state.pageindex + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
+            let responseJson = await result.json();
+            responseJson = JSON.parse(responseJson);
+            responseJson.forEach(element => {
+                getProfile(element.idauthor, (responseJson) => {
+                    element.profile = JSON.parse(responseJson);
+                    this.data.push(element);
+
+                    this.setState({posts: this.data.sort((a,b) => {return a.created < b.created ? -1 : 1})})
+                });
+            });
+
+            length = responseJson.length;
+
+            this.data.map((o,i) => {
+                if (o.idcommentPost != undefined && o.idcommentPost != null) {
+                    this.data.map((parent,i) => {
+                        if (parent.id == o.idcommentPost) {
+                            if (parent.comments == undefined) {
+                                parent.comments = [];
+                            }
+
+                            parent.comments.push(o);
+                        }
                     });
-                });
-            })
-            .catch((error) => {
-                console.error(error);
+
+                    this.data[i] = undefined;
+                }
             });
-    }
 
-    _clearTasks() {
-        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
-    }
+            console.debug("setting page index: " + (++length));
+            this.setState({pageindex: this.state.posts.length, refreshing: false});
 
-    _loadTasks(query) {
-        var addQuery = query != undefined ? '&q=' + query : '';
-
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                responseJson.forEach(element => {
-                    data.push(element);
-                });
-
-                this.setState({dataSource: ds.cloneWithRows(data)});
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     _onRefresh() {
-        this.setState({refreshing: true});
-        setTimeout(() => {
-            this.setState({refreshing: false});
-        }, 1500)
-    }
-
-    _renderRow(data) {
-        if (data == '0') {
-            return <View style={styles.filterBarContainer}>
-                    <FilterBar data={filters} headTitle={"My Wall"} />
-                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
-                    <NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
-                </View>;
-        } else if (data == '1') {
-            return (
-                <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
-                    <OnYourMind onFocus={() => this.setState({modalPost: true})}/>
-                    <ButtonBar ref='buttonBar' buttons={[
-                        {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
-                        {title: 'Post', onPress: () => this.setState({modalPost: true})},
-                        {title: 'Survey', onPress: () => this._noOpSurvey.toggleState(), noOp: true}]}/>
-                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
-                </View>
-            )
-        }
-
-        return (
-            <View>
-                <TaskFeedItem data={data}/>
-                <NewsFeedItem data={data}/>
-            </View>
-        )
+        this.setState({refreshing: true, pageindex: 0});
+        this._clearPosts();
+        this._loadPosts();
     }
 
     newPostHandler(obj) {
@@ -199,8 +177,8 @@ export default class Landing extends Component {
 
     newTaskHandler(obj) {
         if (obj != undefined && obj.reload) {
-            this._clearTasks();
-            this._loadTasks();
+            this._clearPosts()
+            this._loadPosts();
         }
 
         this.setState({modalTask: false});
@@ -245,7 +223,6 @@ export default class Landing extends Component {
 
     loadMore() {
         this.setState({
-            skip: this.state.skip + this.state.keep,
             loading: true
         });
         
@@ -291,25 +268,51 @@ export default class Landing extends Component {
         }
     }
 
+    renderFiltersAndNewPost() {
+        return (
+            <View>
+                <View style={styles.filterBarContainer}>
+                    <FilterBar data={filters} headTitle={"My Wall"} />
+                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
+                    <NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
+                </View>
+                <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
+                    <OnYourMind onFocus={() => this.setState({modalPost: true})}/>
+                    <ButtonBar ref='buttonBar' buttons={[
+                        {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
+                        {title: 'Post', onPress: () => this.setState({modalPost: true})},
+                        {title: 'Survey', onPress: () => this._noOpSurvey.toggleState(), noOp: true}]}/>
+                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
+                </View>
+            </View>);
+    }
+
+    renderElements() {
+        return this.state.posts.map((o,i) => {
+            return (<View key={i}>
+                <NewsFeedItem data={o}/>
+            </View>);
+        })
+    }
+
     render() {
         if (!this.state.isReady) {
             return <AppLoading />
         }
-
+        
         return (
             <View ref='view' style={styles.container}>
-                <ListView
+                <ScrollView style={{flex: 1}}
+                    onScroll={this._onScroll}
+                    style={styles.listView}
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.refreshing}
                             onRefresh={this._onRefresh.bind(this)}
-                        />
-                    }
-                    style={styles.listView}
-                    onScroll={this._onScroll}
-                    dataSource={this.state.dataSource}
-                    renderRow={(data) => this._renderRow(data)}
-                />
+                        />}>
+                    {this.renderFiltersAndNewPost()}
+                    {this.renderElements()}
+                </ScrollView>
                 {this.renderModal()}
             </View>
         )
