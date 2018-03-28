@@ -30,8 +30,6 @@ export default class NewsFeedItem extends Component {
 
         let {data} = this.props;
 
-        console.log(data.created);
-
         this.state = {
             time: data.created, //moment(new Date(data.created)).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: ['Comment', 'Stats'],
@@ -79,8 +77,6 @@ export default class NewsFeedItem extends Component {
     renderAvatar() {
         const {time} = this.state;
         let {data} = this.props;
-        console.log("data.id: "+ data.id);
-        console.log("data: "+ new Date(data.created));
         let profile = {};
 
         try {
