@@ -115,15 +115,16 @@ export default class Landing extends Component {
     _loadPosts(query) {
 
         var addQuery = query != undefined ? '&q=' + query : '';
-
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
+        
+		//settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
+        return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.skip + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
             .then((response) => response.json())
             .then((responseJson) => {
                 responseJson.forEach(element => {
-                    getProfile(element.creator, (responseJson) => {
+                    getProfile(element.idauthor, (responseJson) => {
                         element.profile = responseJson;
                         data.push(element);
-                        this.setState({dataSource: ds.cloneWithRows(data)});
+                        this.setState({dataSource: ds.cloneWithRows(data), skip: ++this.state.skip});
                     });
                 });
             })
@@ -146,7 +147,7 @@ export default class Landing extends Component {
                     data.push(element);
                 });
 
-                this.setState({dataSource: ds.cloneWithRows(data)});
+                this.setState({dataSource: ds.cloneWithRows(data), refreshing: false});
             })
             .catch((error) => {
                 console.error(error);
