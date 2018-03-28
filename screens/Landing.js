@@ -140,7 +140,6 @@ export default class Landing extends Component {
         return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
             .then((response) => {return response.json()})
             .then((response) => {
-                console.log(response);
                 var array = JSON.parse(response);
                 var sorted = array.sort((a,b) => b.created - a.created);
                 return sorted;
@@ -151,6 +150,7 @@ export default class Landing extends Component {
                         this.setState({offset: this.state.offset + 1});
                         getProfile(element.idauthor, (responseJson) => {
                             element.profile = responseJson;
+                            element.isPost = true;
                             data.push(element);
                             this.setState({dataSource: ds.cloneWithRows(data)});
                         });
@@ -182,13 +182,14 @@ export default class Landing extends Component {
             .then((responseJson) => {
                 responseJson.forEach(element => {
                     if (element.idcommentPost == null) {
-                        console.log("task element: " + JSON.stringify(element.post.idauthor));
+                        var el = {...element, ...element.post};
+                        el.isTask = true;
                         this.setState({offset: this.state.offset + 1});
-                        /*getProfile(element.post.idauthor, (responseJson) => {
-                            element.profile = responseJson;
-                            data.push(element.post);
+                        getProfile(el.idauthor, (responseJson) => {
+                            el.profile = responseJson;
+                            data.push(el);
                             this.setState({dataSource: ds.cloneWithRows(data)});
-                        });*/
+                        });
                     }
                 });
 
@@ -228,8 +229,8 @@ export default class Landing extends Component {
 
         return (
             <View>
-                <TaskFeedItem data={data}/>
-                <NewsFeedItem data={data}/>
+                {data.isTask ? <TaskFeedItem data={data}/> : null}
+                {data.isPost ? <NewsFeedItem data={data}/> : null}
             </View>
         )
     }

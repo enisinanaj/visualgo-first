@@ -32,14 +32,16 @@ export default class TaskFeedItem extends Component {
     constructor(props) {
         super(props);
 
-        this.props.data.theme = {
+        /*this.props.data.theme = {
             name: '#Theme'
         };
 
         this.props.data.environment = {
             name: '@Ambiente',
             color: '#FC9D9D'
-        };
+        };*/
+
+        console.log("data: " + JSON.stringify(this.props));
 
         this.state = {
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
@@ -56,6 +58,19 @@ export default class TaskFeedItem extends Component {
                                     {title: 'Archivia Task', image: MenuIcons.ARCHIVE_TASK, disabled: true, onPress: () => {}},
                                     {advanced: true, renderContent: () => this.renderAdvancedMenuContent(), onPress: () => {}}]
         };
+    }
+
+    componentWillMount() {
+        this.loadEnvironment();
+        this.loadTheme();
+    }
+
+    loadEnvironment() {
+
+    }
+
+    loadTheme() {
+        
     }
 
     renderAdvancedMenuContent() {
@@ -114,7 +129,7 @@ export default class TaskFeedItem extends Component {
         return (
             <View style={[styles.avatarContainer]}>
                 <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
-                    <Image style={styles.taskThumbnail} source={{uri: this.props.data.media[0].url}} />
+                    <Image style={styles.taskThumbnail} source={{uri: this.props.data.medias[0].url}} />
                 </View>
                 <View style={[styles.avatarPhotoContainer, Shadow.filterShadow]}>
                     <Image style={styles.profile} source={{uri: profile.media.url}}/>
@@ -142,7 +157,7 @@ export default class TaskFeedItem extends Component {
             return
         }
 
-        return null 
+        return null;
     }
 
     renderLikeBar() {
@@ -190,7 +205,7 @@ export default class TaskFeedItem extends Component {
           return <AppLoading />;
         }
         const {data} = this.props;
-        if(data.media != undefined && data.media.length > 0) {
+        if(data.medias != undefined && data.medias.length > 0) {
             return (
                 <View style={[styles.container, Shadow.cardShadow]}>
                     <View>

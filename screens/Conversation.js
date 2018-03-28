@@ -72,15 +72,6 @@ export default class Conversation extends Component {
             isReady: false
         }
 
-
-
-        
-
-
-        
-
-        
-
     }
 
     _goBack() {
@@ -170,8 +161,6 @@ export default class Conversation extends Component {
     }
 
     _renderHeader() {
-
-
         return (
             <View style={styles.headerView}>
                 <EvilIcons name={"chevron-left"} size={30} color={Colors.main} onPress={() => this._goBack()} style={{width: 22}}/>
@@ -200,13 +189,9 @@ export default class Conversation extends Component {
     }
 
     _renderPubNubRow(data){
-
-        //console.log(data);
-
         if (data.publisher != uuid) {
             return (
                 <View style={styles.fromBubble}>
-                    
                     <View style={styles.messageBubble}>
                         <Text>{data.message}</Text>
                     </View>
