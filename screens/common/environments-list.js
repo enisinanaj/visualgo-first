@@ -201,11 +201,6 @@ export default class EnvironmentList extends Component {
   }
 
   renderSaveBar() {
-    if (this.state.background == undefined || this.state.background == '' 
-      || this.state.environment == '' || this.state.environment.trim() == '@') {
-        return null;
-    }
-
     return (
       <View style={[styles.bottomBar]}>
         <TouchableOpacity onPress={() => {this.pushEnvironment()}}>
