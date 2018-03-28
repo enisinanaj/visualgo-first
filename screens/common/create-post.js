@@ -100,7 +100,7 @@ export default class CreatePost extends Component{
     }
 
     post() {
-        if (!this.state.filesUploaded) {
+        if (!this.state.filesUploaded && this.state.photos.length > 0) {
             this.uploadFiles();
         } else {
             this.setState({publishDisabled: true});
