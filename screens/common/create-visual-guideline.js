@@ -132,7 +132,34 @@ export default class CreateVisualGuideline extends Component {
     }
 
     post() {
-        this.props.closeModal({reload: true});
+        let tempBody = JSON.stringify({
+            albumvg: {
+                iduserr: ApplicationConfig.getInstance().me.id,
+                idenviroment: this.state.environment.id,
+                idtheme: this.state.selectedTheme.id,
+                message: this.state.text,
+                backgroundmediaurl: '',
+                mediaurl: ''
+            }
+        });
+
+        console.log('Body: ' + tempBody);
+
+        fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/createalbum', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: tempBody
+        })
+        .then((response) => {
+            console.debug("Create album result: " + JSON.stringify(response));
+            this.props.closeModal({reload: true})
+        })
+        .catch(e => {
+            console.error("error: " + e);
+        })
     }
 
     async uploadFiles() {
@@ -282,7 +309,7 @@ export default class CreateVisualGuideline extends Component {
     renderTheme() {
         var {selectedTheme} = this.state;
 
-        console.log("selected themes: " + JSON.stringify(selectedTheme));
+        // console.log("selected themes: " + JSON.stringify(selectedTheme));
 
         if (selectedTheme.themeName != undefined) {
             var img = {uri: selectedTheme.photo.url};
