@@ -86,7 +86,7 @@ export default class EnvironmentList extends Component {
   }
 
   keyboardWillShow (e) {
-    console.log("keyboard will showm");
+    console.log("keyboard will show");
     this.setState({keyboardIsOpen: true});
     let newSize = height - e.endCoordinates.height;
     this.setState({visibleHeight: newSize, k_visible: true})
@@ -200,8 +200,8 @@ export default class EnvironmentList extends Component {
   }
 
   renderSaveBar() {
-    if (this.state.background == undefined || this.state.environment == '' 
-      || this.state.environment == '@' || this.state.environment == '@ ') {
+    if (this.state.background == undefined || this.state.background == '' 
+      || this.state.environment == '' || this.state.environment.trim() == '@') {
         return null;
     }
 
@@ -215,7 +215,13 @@ export default class EnvironmentList extends Component {
   }
 
   onNewDone(text, backgroundColor) {
-    this.setState({background: backgroundColor, environment: text});
+    if (text != this.state.environment) {
+      this.setState({environment: text});
+    }
+
+    if (backgroundColor != this.state.background) {
+      this.setState({background: backgroundColor});
+    }
   }
 
   render() {
@@ -247,7 +253,10 @@ export default class EnvironmentList extends Component {
             </View>
           : null}
         </ScrollView>
-        {this.renderSaveBar()}
+        { (this.state.background == undefined || this.state.background == '' 
+          || this.state.environment == '' || this.state.environment.trim() == '@') ?
+            null : this.renderSaveBar()
+        }
       </KeyboardAvoidingView>
     );
   }
