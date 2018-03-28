@@ -13,7 +13,6 @@ import {
     ListView,
     StyleSheet,
     TouchableOpacity,
-    ActivityIndicator,
     Button
 } from 'react-native';
 
@@ -37,6 +36,8 @@ import Shadow from '../constants/Shadow';
 import AppSettings, { getProfile } from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 
+const data = ['0', '1'];
+
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
     {title: 'Survey', active: true, disabled: true}, 
     {title: 'Post', active: true, disabled: true}, 
@@ -46,8 +47,6 @@ const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
-    data = [];
-    
     constructor(props) {
         super(props);
 
@@ -58,13 +57,17 @@ export default class Landing extends Component {
             loading: false,
             opacity: new Animated.Value(1),
             header_height: new Animated.Value(96),
+            dataSource: ds.cloneWithRows(data),
+            take: 20,
+            skip: 0,
+            offset: 0,
             isReady: false,
-            isAnimatingSearchBar: false,
-            pageindex: 0,
-            posts: []
+            isAnimatingSearchBar: false
         };
 
         filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
+
+        this._loadPosts();
 
         this.offsetY = 0;
         this.offsetX = new Animated.Value(0);
@@ -85,9 +88,7 @@ export default class Landing extends Component {
                 filters[i].onPress = () => this._noOpPosts.toggleState();
             }
         }
-
         ApplicationConfig.getInstance().tabNavigator = this.props.navigator;
-        setTimeout(() => this.loadMore(), 300);
     }
 
     async loadFonts(onLoaded) {
@@ -109,59 +110,99 @@ export default class Landing extends Component {
     } 
 
     _clearPosts() {
-        this.setState({posts: []});
-        this.data = [];
+        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
     }
 
-    async _loadPosts(query) {
+    _loadPosts(query) {
 
         var addQuery = query != undefined ? '&q=' + query : '';
-        var length = 0;
+        
+		//settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
+        return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
+            .then((response) => {return response.json()})
+            .then((response) => {
+                var array = JSON.parse(response);
+                var sorted = array.sort((a,b) => b.created - a.created);
 
+                console.log(sorted);
+                return sorted;
+            })
+            .then((responseJson) => {
+                responseJson.forEach(element => {
+                    if (element.idcommentPost == null) {
+                        
+                        this.setState({offset: this.state.offset + 1});
+                        console.log("offset: " + this.state.offset);
 
-        console.log("loading posts..." + 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.pageindex + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
-
-        try {
-            let result = await fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=1&pageindex=' + this.state.pageindex + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
-            let responseJson = await result.json();
-            responseJson = JSON.parse(responseJson);
-            responseJson.forEach(element => {
-                getProfile(element.idauthor, (responseJson) => {
-                    element.profile = JSON.parse(responseJson);
-                    this.data.push(element);
-                    this.setState({posts: this.data})
+                        getProfile(element.idauthor, (responseJson) => {
+                            element.profile = responseJson;
+                            data.push(element);
+                            this.setState({dataSource: ds.cloneWithRows(data)});
+                        });
+                    }
                 });
+
+                return responseJson;
+            })
+            .catch((error) => {
+                console.error(error);
             });
+    }
 
-            length = responseJson.length;
+    _clearTasks() {
+        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
+    }
 
-            this.data.map((o,i) => {
-                if (o.idcommentPost != undefined && o.idcommentPost != null) {
-                    this.data.map((parent,i) => {
-                        if (parent.id == o.idcommentPost) {
-                            if (parent.comments == undefined) {
-                                parent.comments = [];
-                            }
+    _loadTasks(query) {
+        var addQuery = query != undefined ? '&q=' + query : '';
 
-                            parent.comments.push(o);
-                        }
-                    });
+        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                responseJson.forEach(element => {
+                    data.push(element);
+                });
 
-                    this.data[i] = undefined;
-                }
+                this.setState({dataSource: ds.cloneWithRows(data), refreshing: false});
+            })
+            .catch((error) => {
+                console.error(error);
             });
-
-            this.setState({pageindex: this.state.posts.length, refreshing: false});
-
-        } catch(error) {
-            console.error(error);
-        }
     }
 
     _onRefresh() {
-        this.setState({refreshing: true, pageindex: 0});
-        this._clearPosts();
-        this._loadPosts();
+        this.setState({refreshing: true});
+        setTimeout(() => {
+            this.setState({refreshing: false});
+        }, 1500)
+    }
+
+    _renderRow(data) {
+        if (data == '0') {
+            return <View style={styles.filterBarContainer}>
+                    <FilterBar data={filters} headTitle={"My Wall"} />
+                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
+                    <NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
+                </View>;
+        } else if (data == '1') {
+            return (
+                <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
+                    <OnYourMind onFocus={() => this.setState({modalPost: true})}/>
+                    <ButtonBar ref='buttonBar' buttons={[
+                        {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
+                        {title: 'Post', onPress: () => this.setState({modalPost: true})},
+                        {title: 'Survey', onPress: () => this._noOpSurvey.toggleState(), noOp: true}]}/>
+                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
+                </View>
+            )
+        }
+
+        return (
+            <View>
+                <TaskFeedItem data={data}/>
+                <NewsFeedItem data={data}/>
+            </View>
+        )
     }
 
     newPostHandler(obj) {
@@ -175,8 +216,8 @@ export default class Landing extends Component {
 
     newTaskHandler(obj) {
         if (obj != undefined && obj.reload) {
-            this._clearPosts()
-            this._loadPosts();
+            this._clearTasks();
+            this._loadTasks();
         }
 
         this.setState({modalTask: false});
@@ -221,6 +262,7 @@ export default class Landing extends Component {
 
     loadMore() {
         this.setState({
+            skip: this.state.skip + this.state.keep,
             loading: true
         });
         
@@ -266,51 +308,25 @@ export default class Landing extends Component {
         }
     }
 
-    renderFiltersAndNewPost() {
-        return (
-            <View>
-                <View style={styles.filterBarContainer}>
-                    <FilterBar data={filters} headTitle={"My Wall"} />
-                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
-                    <NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
-                </View>
-                <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
-                    <OnYourMind onFocus={() => this.setState({modalPost: true})}/>
-                    <ButtonBar ref='buttonBar' buttons={[
-                        {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
-                        {title: 'Post', onPress: () => this.setState({modalPost: true})},
-                        {title: 'Survey', onPress: () => this._noOpSurvey.toggleState(), noOp: true}]}/>
-                    <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
-                </View>
-            </View>);
-    }
-
-    renderElements() {
-        return this.state.posts.map((o,i) => {
-            return (<View key={i}>
-                <NewsFeedItem data={o}/>
-            </View>);
-        })
-    }
-
     render() {
         if (!this.state.isReady) {
             return <AppLoading />
         }
-        
+
         return (
             <View ref='view' style={styles.container}>
-                <ScrollView style={{flex: 1}}
-                    onScroll={this._onScroll}
-                    style={styles.listView}
+                <ListView
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.refreshing}
                             onRefresh={this._onRefresh.bind(this)}
-                        />}>
-                    {this.renderFiltersAndNewPost()}
-                    {this.renderElements()}
-                </ScrollView>
+                        />
+                    }
+                    style={styles.listView}
+                    onScroll={this._onScroll}
+                    dataSource={this.state.dataSource}
+                    renderRow={(data) => this._renderRow(data)}
+                />
                 {this.renderModal()}
             </View>
         )

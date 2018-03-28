@@ -132,7 +132,7 @@ export default class CreateVisualGuideline extends Component {
     }
 
     post() {
-        this.props.closeModal({reload: true})
+        this.props.closeModal({reload: true});
     }
 
     async uploadFiles() {
