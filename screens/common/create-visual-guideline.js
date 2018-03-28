@@ -135,7 +135,7 @@ export default class CreateVisualGuideline extends Component {
         let tempBody = JSON.stringify({
             albumvg: {
                 iduserr: ApplicationConfig.getInstance().me.id,
-                idenviroment: this.state.idenviroment.id,
+                idenviroment: this.state.environment.id,
                 idtheme: this.state.selectedTheme.id,
                 message: this.state.text,
                 backgroundmediaurl: '',
