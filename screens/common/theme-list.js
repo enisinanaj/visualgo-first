@@ -237,7 +237,8 @@ export default class ThemeList extends Component {
           }
         })
       })
-      .then((response) => {this.props.closeModal({themeName: this.state.themeDescription, photo: this.state.photos[0], id: response})})
+      .then((response) => response.json())
+      .then((response) => {console.log("theme id: " + response); this.props.closeModal({themeName: this.state.themeDescription, photo: this.state.photos[0], id: response})})
       .catch(e => {
           console.error("error: " + e);
       })
