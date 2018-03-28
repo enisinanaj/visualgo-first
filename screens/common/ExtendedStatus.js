@@ -99,10 +99,19 @@ export default class ExtendedStatus extends Component {
         if (v.indexOf('#') < 0) {
           v = '# ' + v;
         }
-    
-        this.setState({textValue: v});
+
+        if (this.state.textValue != v) {
+            this.setState({textValue: v});
+        }
+
         this.onDone();
+    } 
+
+    cleanAll() {
+        this.setState({textValue: '# ', photos: []});
+        this.editThemeName(this.state.textValue);
     }
+
 
     getMenu() {
         return (<View style={{backgroundColor: '#FFF', borderBottomWidth: StyleSheet.hairlineWidth,
@@ -128,20 +137,18 @@ export default class ExtendedStatus extends Component {
     }
 
     onDone() {
-        if (this.state.photos.length == 0 || this.state.themeDescription == '' 
-           || this.state.textValue == '#' || this.state.textValue == '# ') {
-            return null;
-        }
+        var textValue = this.state.textValue;
+        var photos = this.state.photos;
 
-        console.log("edit theme: " + this.state.textValues);
-
-        this.props.onDone(this.state.textValue, this.state.photos);
+        this.props.onDone(textValue, photos);
     }
 
     render() {
         if (!this.state.isReady) {
             return <AppLoading />
         }
+
+        this.editThemeName(this.state.textValue);
 
         if (!this.state.creatingNew) {
             return (
@@ -174,7 +181,8 @@ export default class ExtendedStatus extends Component {
                             color: 'transparent', width: width - 70, zIndex: 15}}
                         placeholder={"New #Theme Name"} placeholderTextColor={Colors.white}
                         underlineColorAndroid={'rgba(0,0,0,0)'}
-                        value={this.state.textValue} onChangeText={(v) => this.editThemeName(v)} />
+                        onChangeText={(textValue) => this.setState({textValue})}
+                        value={this.state.textValue} />
                         <Text style={{zIndex: 14, color: Colors.white, position: 'absolute', marginLeft: 20, 
                             position: 'absolute', backgroundColor: 'transparent', fontFamily: 'roboto-bold',
                             textShadowColor: 'rgba(0, 0, 0, 0.75)',
@@ -182,7 +190,7 @@ export default class ExtendedStatus extends Component {
                             textShadowRadius: 10,
                             top: 102, width: width - 70,height: 30, fontSize: 20, marginTop: 10, marginBottom: 10,
                             textAlign: 'center'}}>{this.state.textValue}</Text> 
-                        <TouchableOpacity onPress={() => this.setState({textValue: '', photos: []})}
+                        <TouchableOpacity onPress={() => this.cleanAll()}
                         style={[{backgroundColor: Colors.white, height: 36, width: 36, borderRadius: 18, position: 'absolute',
                                 top: 105, right: 20},
                         Shadow.filterShadow]}>
@@ -197,8 +205,9 @@ export default class ExtendedStatus extends Component {
                                         color: Colors.main, width: width - 60, zIndex: 15}}
                             placeholder={"New #Theme Name"} placeholderTextColor={Colors.gray}
                             underlineColorAndroid={'rgba(0,0,0,0)'}
-                            value={this.state.textValue} onChangeText={(v) => this.editThemeName(v)} />
-                        <TouchableOpacity onPress={() => this.setState({textValue: ''})}>
+                            onChangeText={(textValue) => this.setState({textValue})}
+                            value={this.state.textValue} />
+                        <TouchableOpacity onPress={() => this.cleanAll()}>
                             <EvilIcons name={"close"} size={22} color={Colors.main}
                                 style={{marginRight: 16, marginTop: 16, marginBottom: 10, zIndex: 17}}/>
                         </TouchableOpacity>
