@@ -117,7 +117,41 @@ export default class CreateTask extends Component {
     }
 
     post() {
-        this.props.closeModal({reload: true})
+        //https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/createtask
+        //https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks
+        //this.
+        this.setState({publishDisabled: true});
+        console.log("this.state.start: " + this.state.start);
+        console.log("this.state.due: " + this.state.due);
+
+        //todo: new upload album files
+
+        fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/createtask', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                taskvg: {
+                    idauthor: ApplicationConfig.getInstance().me.id,
+                    idalbum: this.state.album.id,
+                    startdate: this.state.start,
+                    duedate: this.state.due,
+                    message: this.state.taskDescription,
+                    store: [],
+                    user: []        
+                }
+            })
+        })
+        .then((response) => {
+            console.debug("Create task result: " + JSON.stringify(response));
+            this.props.closeModal({reload: true})
+        })
+        .catch(e => {
+            console.error("error: " + e);
+        })
+        this.props.closeModal({reload: true});
     }
 
     renderHeader() {
@@ -331,7 +365,6 @@ export default class CreateTask extends Component {
     renderSelectedTag(data){
         return (
             <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
-            
         );
     }
 

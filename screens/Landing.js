@@ -36,13 +36,13 @@ import Shadow from '../constants/Shadow';
 import AppSettings, { getProfile } from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 
-const data = ['0', '1'];
+var data = ['0', '1'];
 
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
     {title: 'Survey', active: true, disabled: true}, 
-    {title: 'Post', active: true, disabled: true}, 
-    {title: 'Task', selected: true, active: true},
-    {title: '#San Valentino', active: true, selected: true}];
+    {title: 'Post', active: true, selected: true}, 
+    {title: 'Task', selected: false, active: true},
+    {title: '#San Valentino', active: true, selected: false}];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -62,12 +62,17 @@ export default class Landing extends Component {
             skip: 0,
             offset: 0,
             isReady: false,
-            isAnimatingSearchBar: false
+            isAnimatingSearchBar: false,
+            selectType: 'posts'
         };
 
         filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
 
-        this._loadPosts();
+        if (true) {
+            this._loadPosts();
+        } else {
+            this._loadTasks();
+        }
 
         this.offsetY = 0;
         this.offsetX = new Animated.Value(0);
@@ -85,7 +90,22 @@ export default class Landing extends Component {
             }
 
             if (filters[i].title == 'Post') {
-                filters[i].onPress = () => this._noOpPosts.toggleState();
+                console.log("changingType to posts");
+                filters[i].onPress = () => {
+                    this.setState({selectType: 'posts'});
+                    this._clearPosts();
+                    this._clearTasks();
+                    this.loadMore();
+                }
+            }
+
+            if (filters[i].title == 'Task') {
+                filters[i].onPress = () => {
+                    this.setState({selectType: 'tasks'});
+                    this._clearPosts();
+                    this._clearTasks();
+                    this.loadMore();
+                }
             }
         }
         ApplicationConfig.getInstance().tabNavigator = this.props.navigator;
@@ -110,14 +130,13 @@ export default class Landing extends Component {
     } 
 
     _clearPosts() {
-        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
+        data = ['0', '1'];
+        this.setState({offset: 0});
+        this.setState({dataSource: ds.cloneWithRows(data)});
     }
 
     _loadPosts(query) {
-
         var addQuery = query != undefined ? '&q=' + query : '';
-        
-		//settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
         return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
             .then((response) => {return response.json()})
             .then((response) => {
@@ -135,7 +154,6 @@ export default class Landing extends Component {
                 let promises = []
                 responseJson.forEach(element => {
                     if (element.idcommentPost == null) {
-                        
                         this.setState({offset: this.state.offset + 1});
                         console.log("offset: " + this.state.offset);
 
@@ -166,20 +184,34 @@ export default class Landing extends Component {
     }
 
     _clearTasks() {
-        this.setState({dataSource: ds.cloneWithRows(['0', '1'])});
+        data = ['0', '1'];
+        this.setState({offset: 0});
+        this.setState({dataSource: ds.cloneWithRows(data)});
     }
 
     _loadTasks(query) {
         var addQuery = query != undefined ? '&q=' + query : '';
-
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
-            .then((response) => response.json())
+        return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks?elementsno=100&fromindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
+            .then((response) => {return response.json()})
+            .then((response) => {
+                var array = JSON.parse(response);
+                var sorted = array.sort((a,b) => b.created - a.created);
+                return sorted;
+            })
             .then((responseJson) => {
                 responseJson.forEach(element => {
-                    data.push(element);
+                    if (element.idcommentPost == null) {
+                        console.log("task element: " + JSON.stringify(element.post.idauthor));
+                        this.setState({offset: this.state.offset + 1});
+                        /*getProfile(element.post.idauthor, (responseJson) => {
+                            element.profile = responseJson;
+                            data.push(element.post);
+                            this.setState({dataSource: ds.cloneWithRows(data)});
+                        });*/
+                    }
                 });
 
-                this.setState({dataSource: ds.cloneWithRows(data), refreshing: false});
+                return responseJson;
             })
             .catch((error) => {
                 console.error(error);
@@ -193,12 +225,12 @@ export default class Landing extends Component {
         }, 1500)
     }
 
-    _renderRow(data, sectionID, rowID, highlightRow) {
+    _renderRow(data) {
+        //<NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
                     <FilterBar data={filters} headTitle={"My Wall"} />
                     <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
-                    <NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
                 </View>;
         } else if (data == '1') {
             return (
@@ -223,7 +255,9 @@ export default class Landing extends Component {
 
     newPostHandler(obj) {
         if (obj != undefined && obj.reload) {
+            this.setState({selectType: "tasks"});
             this._clearPosts();
+            this._clearTasks();
             this._loadPosts();
         }
 
@@ -232,6 +266,8 @@ export default class Landing extends Component {
 
     newTaskHandler(obj) {
         if (obj != undefined && obj.reload) {
+            this.setState({selectType: "tasks"});
+            this._clearPosts();
             this._clearTasks();
             this._loadTasks();
         }
@@ -278,11 +314,16 @@ export default class Landing extends Component {
 
     loadMore() {
         this.setState({
-            skip: this.state.skip + this.state.keep,
             loading: true
         });
+
+        console.debug("selectType: " + this.state.selectType);
         
-        this._loadPosts();
+        if (this.state.selectType == 'posts') {
+            this._loadPosts();
+        } else if (this.state.selectType == 'tasks') {
+            this._loadTasks();
+        }
     }
 
     _onScroll(event) {
