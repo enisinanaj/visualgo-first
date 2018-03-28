@@ -140,22 +140,40 @@ export default class Landing extends Component {
         return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
             .then((response) => {return response.json()})
             .then((response) => {
-                var array = JSON.parse(response);
-                var sorted = array.sort((a,b) => b.created - a.created);
-                return sorted;
+                try {
+                    var array = JSON.parse(response)
+                } catch (e) {
+                    return Promise.reject(e)
+                }
+                
+                var sorted = array.sort( (a,b) => (a.created > b.created) ? -1 : ((a.created < b.created) ? 1 : 0) )    
+
+                return Promise.resolve(sorted);
             })
             .then((responseJson) => {
+                let promises = []
                 responseJson.forEach(element => {
                     if (element.idcommentPost == null) {
                         this.setState({offset: this.state.offset + 1});
-                        getProfile(element.idauthor, (responseJson) => {
-                            element.profile = responseJson;
-                            element.isPost = true;
-                            data.push(element);
-                            this.setState({dataSource: ds.cloneWithRows(data)});
-                        });
+                        console.log("offset: " + this.state.offset);
+
+                        promises.push(new Promise((resolve, reject) => {
+                            getProfile(element.idauthor, (responseJson) => {
+                                element.profile = responseJson
+                                resolve(element)
+                            });
+                        }))
                     }
                 });
+
+                if(promises.length) {
+                    Promise.all(promises)
+                    .then(response => {
+                        data = data.concat(response)
+                        this.setState({dataSource: ds.cloneWithRows(data)})
+                    })
+                    .catch(error => console.log(error))
+                }
 
                 return responseJson;
             })
@@ -207,8 +225,7 @@ export default class Landing extends Component {
         }, 1500)
     }
 
-    _renderRow(data) {
-        //<NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
+    _renderRow(data, sectionID, rowID, highlightRow) {
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
                     <FilterBar data={filters} headTitle={"My Wall"} />
