@@ -31,7 +31,7 @@ export default class NewsFeedItem extends Component {
         let {data} = this.props;
 
         this.state = {
-            time: moment(data.created).locale("it").format("D MMMM [alle ore] hh:mm"),
+            time: moment.utc(data.created).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: ['Comment', 'Stats'],
             icons: ['comment', 'ios-podium-outline'],
             iconTypes: ["evilicon"],
