@@ -169,9 +169,8 @@ export default class Landing extends Component {
                 if(promises.length) {
                     Promise.all(promises)
                     .then(response => {
-                        data.concat(response)
-                        this.setState({dataSource: ds.cloneWithRows(response)})
-                        console.log("Is it this one?", response.map(a=>a.created))
+                        data = data.concat(response)
+                        this.setState({dataSource: ds.cloneWithRows(data)})
                     })
                     .catch(error => console.log(error))
                 }
@@ -225,8 +224,7 @@ export default class Landing extends Component {
         }, 1500)
     }
 
-    _renderRow(data) {
-        //<NoOpModal featureName={"Post"} ref={(noOpModal) => this._noOpPosts = noOpModal} />
+    _renderRow(data, sectionID, rowID, highlightRow) {
         if (data == '0') {
             return <View style={styles.filterBarContainer}>
                     <FilterBar data={filters} headTitle={"My Wall"} />
