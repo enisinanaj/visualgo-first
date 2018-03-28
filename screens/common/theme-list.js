@@ -246,11 +246,6 @@ export default class ThemeList extends Component {
   }
 
   renderSaveBar() {
-    if (this.state.photos.length == 0 || this.state.themeDescription == '' 
-      || this.state.themeDescription == '#' || this.state.themeDescription == '# ') {
-        return null;
-    }
-
     return (
       <View style={[styles.bottomBar]}>
           <TouchableOpacity onPress={() => {this.pushTheme()}}>
@@ -258,6 +253,16 @@ export default class ThemeList extends Component {
           </TouchableOpacity>
       </View>
     )
+  }
+
+  onNewDone(value, photos) {
+    if (value != this.state.themeDescription) {
+      this.setState({themeDescription: value});
+    }
+
+    if (photos != this.state.photos) {
+      this.setState({photos: photos});
+    }
   }
 
   render() {
@@ -273,7 +278,7 @@ export default class ThemeList extends Component {
                         : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
         {this.renderHeader()}
         <ExtendedStatus onStateChange={(v) => this.setState({creatingNew: v})}
-          onDone={(value, photos) => this.setState({photos: photos, themeDescription: value})} />
+          onDone={(value, photos) => {this.onNewDone(value, photos)}} />
         <ScrollView>
           {!this.state.creatingNew ?  
             this.renderFilters() : null}
@@ -284,7 +289,10 @@ export default class ThemeList extends Component {
             renderRow={(data) => this._renderRow(data)}
           /> : null}
         </ScrollView>
-        {this.renderSaveBar()}
+        { (this.state.photos.length == 0 || this.state.themeDescription == '' 
+        || this.state.themeDescription.trim() == '#') ?
+            null : this.renderSaveBar()
+        }
       </KeyboardAvoidingView>
     );
   }
