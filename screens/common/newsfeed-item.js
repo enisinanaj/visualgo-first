@@ -26,12 +26,13 @@ const {width, height} = Dimensions.get('window');
 
 export default class NewsFeedItem extends Component {
     constructor(props) {
-        super(props);
+        super(props)
+        moment.locale("it")
 
-        let {data} = this.props;
+        let {data} = this.props
 
         this.state = {
-            time: data.created, //moment(new Date(data.created)).locale("it").format("D MMMM [alle ore] hh:mm"),
+            time: moment(new Date(data.created)).format("D MMMM [alle ore] HH:mm"),
             buttons: ['Comment', 'Stats'],
             icons: ['comment', 'ios-podium-outline'],
             iconTypes: ["evilicon"],
