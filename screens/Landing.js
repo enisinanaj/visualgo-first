@@ -119,7 +119,7 @@ export default class Landing extends Component {
         var length = 0;
 
 
-        console.log("loading posts..." + 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=1&pageindex=' + this.state.pageindex + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
+        console.log("loading posts..." + 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.pageindex + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
 
         try {
             let result = await fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=1&pageindex=' + this.state.pageindex + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
@@ -129,8 +129,7 @@ export default class Landing extends Component {
                 getProfile(element.idauthor, (responseJson) => {
                     element.profile = JSON.parse(responseJson);
                     this.data.push(element);
-
-                    this.setState({posts: this.data.sort((a,b) => {return a.created < b.created ? -1 : 1})})
+                    this.setState({posts: this.data})
                 });
             });
 
@@ -152,7 +151,6 @@ export default class Landing extends Component {
                 }
             });
 
-            console.debug("setting page index: " + (++length));
             this.setState({pageindex: this.state.posts.length, refreshing: false});
 
         } catch(error) {
