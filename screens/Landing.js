@@ -158,10 +158,12 @@ export default class Landing extends Component {
                         console.log("offset: " + this.state.offset);
 
                         promises.push(new Promise((resolve, reject) => {
+                            console.log("new promise added " + this.state.offset)
                             getProfile(element.idauthor, (responseJson) => {
                                 element.profile = responseJson
+                                console.log("profile loaded while executing post promise " + this.state.offset)
                                 resolve(element)
-                            });
+                            })
                         }))
                     }
                 });
@@ -172,6 +174,7 @@ export default class Landing extends Component {
                         data = data.concat(response)
                         this.setState({dataSource: ds.cloneWithRows(data)})
                     })
+                    .finally(test => console.log("Finally rendered all posts", test))
                     .catch(error => console.log(error))
                 }
 
