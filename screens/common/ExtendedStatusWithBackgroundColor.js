@@ -72,8 +72,10 @@ export default class ExtendedStatus extends Component {
         if (v.indexOf('@') < 0) {
           v = '@ ' + v;
         }
-    
-        this.setState({textValue: v});
+        
+        if (this.state.textValue != v) {
+            this.setState({textValue: v});
+        }
         this.onDone();
     }
 
@@ -112,13 +114,14 @@ export default class ExtendedStatus extends Component {
         this.props.onStateChange(newState);
     }
 
+    cleanAll() {
+        this.setState({textValue: '@ ', postBackgroundColor: ''});
+        this.editThemeName(this.state.textValue);
+    }
+
     onDone() {
         var textValue = this.state.textValue;
         var postBackgroundColor = this.state.postBackgroundColor;
-        if (postBackgroundColor == '' || textValue == '' 
-           || textValue == '@' || textValue == '@ ') {
-            return null;
-        }
 
         this.props.onDone(textValue, postBackgroundColor);
     }
@@ -127,6 +130,8 @@ export default class ExtendedStatus extends Component {
         if (!this.state.isReady) {
             return <AppLoading />
         }
+
+        this.editThemeName(this.state.textValue);
 
         if (!this.state.creatingNew) {
             return (
@@ -158,7 +163,8 @@ export default class ExtendedStatus extends Component {
                                 color: 'transparent', width: width - 70, zIndex: 15}}
                             placeholder={"New @Environment Name"} placeholderTextColor={Colors.white}
                             underlineColorAndroid={'rgba(0,0,0,0)'}
-                            value={this.state.textValue} onChangeText={(v) => this.editThemeName(v)} />
+                            onChangeText={(textValue) => this.setState({textValue})}
+                            value={this.state.textValue} />
                         <Text style={{zIndex: 14, color: Colors.white, position: 'absolute', marginLeft: 20, 
                             position: 'absolute', backgroundColor: 'transparent', fontFamily: 'roboto-bold',
                             textShadowColor: 'rgba(0, 0, 0, 0.40)',
@@ -166,7 +172,7 @@ export default class ExtendedStatus extends Component {
                             textShadowRadius: 10,
                             top: 102, width: width - 70,height: 30, fontSize: 20, marginTop: 10, marginBottom: 10,
                             textAlign: 'center'}}>{this.state.textValue}</Text> 
-                        <TouchableOpacity onPress={() => this.setState({textValue: '', postBackgroundColor: ''})}
+                        <TouchableOpacity onPress={() => this.cleanAll()}
                             style={[{backgroundColor: Colors.white, height: 36, width: 36, borderRadius: 18, position: 'absolute',
                                 top: 105, right: 20},
                             Shadow.filterShadow]}>
@@ -181,8 +187,9 @@ export default class ExtendedStatus extends Component {
                                         color: Colors.main, width: width - 60, zIndex: 15}}
                             placeholder={"New @Environment Name"} placeholderTextColor={Colors.gray}
                             underlineColorAndroid={'rgba(0,0,0,0)'}
-                            value={this.state.textValue} onChangeText={(v) => this.editThemeName(v)} />
-                        <TouchableOpacity onPress={() => this.setState({textValue: ''})}>
+                            onChangeText={(textValue) => this.setState({textValue})}
+                            value={this.state.textValue} />
+                        <TouchableOpacity onPress={() => this.cleanAll()}>
                             <EvilIcons name={"close"} size={22} color={Colors.main}
                                 style={{marginRight: 16, marginTop: 16, marginBottom: 10, zIndex: 17}}/>
                         </TouchableOpacity>
