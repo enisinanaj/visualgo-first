@@ -158,7 +158,6 @@ export default class Landing extends Component {
 
                         promises.push(new Promise((resolve, reject) => {
                             getProfile(element.idauthor, (responseJson) => {
-                                console.log("profile is: " + JSON.stringify(responseJson));
                                 element.profile = responseJson;
                                 element.isPost = true;
                                 resolve(element);

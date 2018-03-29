@@ -32,19 +32,6 @@ export default class TaskFeedItem extends Component {
     constructor(props) {
         super(props);
 
-        /*this.props.data.theme = {
-            name: '#Theme'
-        };
-
-        this.props.data.environment = {
-            name: '@Ambiente',
-            color: '#FC9D9D'
-        };*/
-
-        
-
-        console.log("data: " + JSON.stringify(this.props));
-
         this.state = {
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
             buttons: [{title: 'Comment', iconImage: require("../../assets/images/icons/comment.png"), 
@@ -67,6 +54,8 @@ export default class TaskFeedItem extends Component {
     }
 
     loadAlbum() {
+        console.log("album id" + this.props.data.idalbum);
+
         fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum" + this.props.data.idalbum, {
 
         })
