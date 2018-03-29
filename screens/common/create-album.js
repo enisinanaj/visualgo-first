@@ -41,6 +41,9 @@ export default class NewAlbum extends Component {
 
         this.closeThis = this.props.closeModal;
 
+        console.log("env: " + JSON.stringify(this.props.environment));
+        console.log("theme: " + JSON.stringify(this.props.theme));
+
         this.state = {
             isReady: false,
             hasCameraPermission: null,

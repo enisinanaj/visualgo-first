@@ -268,11 +268,6 @@ export default class CollabView extends Component {
                     </View>
                     <View style={[{backgroundColor: Colors.main, height: 54, width: 54, borderRadius: 27, position: 'absolute', bottom: 30, right: 20, justifyContent: 'center'}, Shadow.filterShadow]}>
                         <Image source={require('../assets/images/icons/thumb-left.png')}  style={{width: 15, height: 15}}/>
-                        <CircleMenu
-                            bgColor="#E74C3C"
-                            items={this.items}
-                            onPress={this.onPress}
-                        />
                     </View>
                 </View>
                 {this.renderCommentBar()}

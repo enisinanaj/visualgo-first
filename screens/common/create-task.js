@@ -64,6 +64,7 @@ export default class CreateTask extends Component {
             selectedTheme: {},
             environment: {},
             album: undefined,
+            albumRequired: false,
             allTags: [],
             countPhoto: 1,
             countVideo: 0,
@@ -79,7 +80,8 @@ export default class CreateTask extends Component {
             commentsEnabled: false,
             notificationsEnabled: false,
             isReady: false,
-            albumModal: false
+            albumModal: false,
+            alreadyPublished: false
         }
     }
 
@@ -118,10 +120,7 @@ export default class CreateTask extends Component {
     }
 
     post() {
-        //https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/createtask
-        //https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks
-        //this.
-        this.setState({publishDisabled: true});
+        this.setState({alreadyPublished: true});
 
         var postBody = JSON.stringify({
             taskvg: {
@@ -153,12 +152,19 @@ export default class CreateTask extends Component {
         .catch(e => {
             console.error("error: " + e);
         })
-        this.props.closeModal({reload: true});
+        this.props.closeModal({reload: true, alreadyPublished: false});
+    }
+
+    isPublishable() {
+        var result = !this.state.alreadyPublished && this.state.album != undefined;
+
+        console.log("is publish enabled: " + result);
+        console.log("is publish enabled: " + JSON.stringify(this.state.album));
+
+        return result;
     }
 
     renderHeader() {
-        var isPublishEnabled = this.state.environment.environmentName != undefined && this.state.selectedTheme.themeName != undefined;
-
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, 
                 borderBottomWidth: StyleSheet.hairlineWidth,
@@ -173,8 +179,8 @@ export default class CreateTask extends Component {
                 <View>
                     <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Task</Text>
                 </View>
-                <TouchableOpacity onPress={() => this.post()} disabled={isPublishEnabled ? false : true}>
-                    <Text style={{fontFamily: 'roboto-light', fontSize: 16, color: isPublishEnabled ? Colors.main : Colors.gray}}>Pubblica</Text>
+                <TouchableOpacity onPress={() => this.post()} disabled={!this.isPublishable()}>
+                    <Text style={{fontFamily: 'roboto-light', fontSize: 16, color: this.isPublishable() ? Colors.main : Colors.gray}}>Pubblica</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -372,6 +378,7 @@ export default class CreateTask extends Component {
 
     onThemeSelected(themes) {
         this.setState({selectedTheme: themes, themeModal: false});
+        this.lookupForAlbum();
     }
 
     finishTagListTask(tags) {
@@ -411,8 +418,33 @@ export default class CreateTask extends Component {
         )
     }
 
+    async lookupForAlbum() {
+        let {selectedTheme, environment} = this.state;
+        console.log("came here: " + selectedTheme.id + " - " + environment.id);
+        if (selectedTheme.id > 0 && environment.id > 0) {
+            await fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=" + environment.id + "&idtheme=" + selectedTheme.id + "&idalbum=0")
+            .then((response) => {return response.json()})
+            .then((responseJson) => {
+                console.log("result" + JSON.stringify(responseJson));
+                if (responseJson == "") {
+                    console.log("found nothing");
+                    this.setState({albumRequired: true});
+                    return;
+                }
+
+                console.log("found something");
+                var parsedResponse = JSON.parse(responseJson);
+                this.setState({album: {album: parsedResponse.taskout.id}});
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        }
+    }
+
     finishEnvironments(environment) {
         this.setState({environment: environment, environmentModal: false});
+        this.lookupForAlbum();
     }
 
     renderEnvironmentsModal() {
@@ -429,7 +461,6 @@ export default class CreateTask extends Component {
     }
 
     createAlbum(album) {
-        console.log("album saved: " + album.album);
         this.setState({album: album.album, albumModal: false});
     }
 
@@ -447,13 +478,13 @@ export default class CreateTask extends Component {
     }
 
     renderVisualGuideline() {
-        var {environment, selectedTheme} = this.state;
+        var {environment, selectedTheme, album} = this.state;
         var isDisabled = environment.environmentName == undefined || selectedTheme.themeName == undefined;
 
         return (
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => this.setState({albumModal: true})} 
+                <TouchableOpacity onPress={() => album == undefined ? this.setState({albumModal: true}) : {}} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} 
                     disabled={isDisabled}>
                     <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}, {marginTop: 4}]}>

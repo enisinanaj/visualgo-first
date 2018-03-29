@@ -34,17 +34,7 @@ import {RNS3} from 'react-native-aws3';
 
 const {width, height} = Dimensions.get('window');
 
-const themes = [
-  {title: '# SanValentino', img: {url: 'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}, id: 1},
-  {title: '# SaldiFebbraio', img: {url: 'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}, id: 2},
-  {title: '# Sale', img: {url: 'http://retaildesignblog.net/wp-content/uploads/2015/12/Guy-Laroche-Store-by-Square-Design-Interiors-Athens-Greece-02.jpg'}, id: 3},
-  {title: '# NewCollection', img: {url: 'https://media.timeout.com/images/103399489/image.jpg'}, id: 4},
-  {title: '# FlowersTheme', img: {url: 'https://i1.wp.com/businessingambia.com/wp-content/uploads/2016/06/Clothing-store.jpg?resize=678%2C381'}, id: 5},
-  {title: '# SanValentino', img: {url: 'https://media.timeout.com/images/103399489/image.jpg'}, id: 6},
-  {title: '# SaldiFebbraio', img: {url: 'https://amp.businessinsider.com/images/55a6caf42acae716008b7018-750-562.jpg'}, id: 7},
-  {title: '# Sale', img: {url: 'http://retaildesignblog.net/wp-content/uploads/2012/11/VILA-Clothes-shop-by-Riis-Retail-Copenhagen.jpg'}, id: 8},
-  {title: '# NewCollection', img: {url: 'https://media.timeout.com/images/103399489/image.jpg'}, id: 9}];
-
+var themes = [];
 var themesToShow = themes;
 var currentCategory = "themes";
 
@@ -84,7 +74,33 @@ export default class ThemeList extends Component {
       'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf'
     });
 
+    this.loadThemes();
     this.setState({isReady: true});
+  }
+
+  async loadThemes() {
+    await fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getthemes")
+    .then((response) => {return response.json()})
+    .then((responseJson) => {
+        if (responseJson == "") {
+            return;
+        }
+
+        var ths = [];
+        //{title: '# NewCollection', img: {url: 'https://media.timeout.com/images/103399489/image.jpg'}, id: 9}];
+
+        var parsedResponse = JSON.parse(responseJson);
+        parsedResponse.forEach(it => {
+          ths.push({
+            title: it.tagName, img: {url: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + it.mediaUrl}, ...it
+          })
+        });
+        this.setState({themeSource: ds.cloneWithRows(ths)});
+        themes = ths;
+    })
+    .catch((error) => {
+        console.error(error);
+    });
   }
 
   componentWillUnmount() {
@@ -142,7 +158,8 @@ export default class ThemeList extends Component {
   }
 
   renderFilters() {
-    var filters = [{type: 'search', searchPlaceHolder: 'Search Themes', fixedOpen: true, autoFocus: false}];
+    var filters = [{type: 'search', searchPlaceHolder: 'Search Themes', fixedOpen: true, autoFocus: false,
+      onType: (v) => this.setState({themeSource: ds.cloneWithRows(themes.filter(it => it.title.toLowerCase().indexOf(v.toLowerCase()) >= 0))})}];
     return (<View style={styles.filterBarContainer}>
         <FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"} />
       </View>);
@@ -165,7 +182,7 @@ export default class ThemeList extends Component {
     }
 
     this.setState({themeSource: ds.cloneWithRows(themesToShow)});
-    this.props.closeModal({themeName: rowData.title, photo: rowData.img});
+    this.props.closeModal({themeName: rowData.title, photo: rowData.img, id: rowData.id});
   }
 
   renderSelectableComponent(data) {

@@ -31,18 +31,8 @@ import _ from 'lodash';
 
 const {width, height} = Dimensions.get('window');
 
-const environment = [
-  {title: '@Front Door', color: Colors.borderGray, id: 1},
-  {title: '@Main window', color: Colors.chat_bg, id: 2},
-  {title: '@Cash Desk', color: Colors.chat_line, id: 3},
-  {title: '@Main window 2 Floor', color: Colors.gray, id: 4},
-  {title: '@Entrance', color: Colors.liked, id: 5},
-  {title: '@Entrance 2 Floor', color: Colors.main, id: 6},
-  {title: '@Cash Desk 2 Floor', color: Colors.black, id: 7},
-  {title: '@Windows', color: Colors.oldMain, id: 8},
-  {title: '@2 Floor', color: Colors.main, id: 9}];
-
-var environmentsToShow = environment;
+var environments = [];
+var environmentsToShow = environments;
 var currentCategory = "environment";
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -77,7 +67,33 @@ export default class EnvironmentList extends Component {
       "roboto-bold": "../../assets/fonts/Roboto-Bold.ttf"
     });
 
+    this.loadEnvironments();
     this.setState({isReady: true});
+  }
+
+  async loadEnvironments() {
+    await fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getenvironments")
+    .then((response) => {return response.json()})
+    .then((responseJson) => {
+        if (responseJson == "") {
+            return;
+        }
+
+        var envs = [];
+        //{title: '@Front Door', color: Colors.borderGray, id: 1},
+
+        var parsedResponse = JSON.parse(responseJson);
+        parsedResponse.forEach(it => {
+          envs.push({
+            title: it.tagName, color: it.mediaUrl, ...it
+          });
+        });
+        this.setState({environmentSource: ds.cloneWithRows(envs)});
+        environments = envs;
+    })
+    .catch((error) => {
+        console.error(error);
+    });
   }
 
   componentWillUnmount() {
@@ -139,7 +155,8 @@ export default class EnvironmentList extends Component {
   }
 
   renderFilters() {
-    var filters = [{type: 'search', searchPlaceHolder: 'Search Environments', fixedOpen: true, autoFocus: false}];
+    var filters = [{type: 'search', searchPlaceHolder: 'Search Environments', fixedOpen: true, autoFocus: false, 
+      onType: (v) => this.setState({environmentSource: ds.cloneWithRows(environments.filter(it => it.title.toLowerCase().indexOf(v.toLowerCase()) >= 0))})}];
     return <View style={styles.filterBarContainer}>
       <FilterBar data={filters} customStyle={{height: 100}} headTitle={"or Pick One"}/>
     </View>
@@ -164,7 +181,7 @@ export default class EnvironmentList extends Component {
   renderEnvironmentRow(data) {
     return (
       <View style={styles.rowContainer}>
-        <TouchableOpacity onPress={() => this.props.closeModal({environmentName: data.title, background: data.color})} 
+        <TouchableOpacity onPress={() => this.props.closeModal({environmentName: data.title, background: data.color, id: data.id})} 
             style={styles.rowContainer}>
           {this.renderSelectableComponent(data)}
           <View style={styles.textInRow}>

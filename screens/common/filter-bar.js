@@ -74,6 +74,10 @@ export default class FitlerBar extends Component {
             }
         }
 
+        if (searchButton != undefined && searchButton.onType != undefined) {
+            this.searchButton.onType(q);
+        }
+
         var lastPadding = filters.filter(it => it == 'last-padding');
         if (lastPadding == undefined || lastPadding == null) {
             filters.push('last-padding');
