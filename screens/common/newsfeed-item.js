@@ -145,8 +145,9 @@ export default class NewsFeedItem extends Component {
 
         var {data} = this.props;
 
+        //{backgroundColor: data.backgroundMediaUrl}
         return (
-            <View style={[styles.container, Shadow.cardShadow, {backgroundColor: data.backgroundMediaUrl}]}>
+            <View style={[styles.container, Shadow.cardShadow]}>
                 <View>
                     {this.renderAvatar()}
                     {this.renderContent()}

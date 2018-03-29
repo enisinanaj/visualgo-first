@@ -56,9 +56,36 @@ export default class TaskFeedItem extends Component {
     loadAlbum() {
         console.log("album id" + this.props.data.idalbum);
 
-        fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum" + this.props.data.idalbum, {
-
+        fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum=" + this.props.data.idalbum)
+        .then((response) => {return response.json()})
+        .then((response) => {
+            var array = JSON.parse(response);
+            var sorted = array.sort((a,b) => b.created - a.created);
+            return sorted;
         })
+        .then((responseJson) => {
+            responseJson.forEach(element => {
+                if (element.idcommentPost == null) {
+                    var el = {...element, ...element.post};
+                    el.isTask = true;
+                    this.setState({offset: this.state.offset + 1});
+                    getProfile(el.idauthor, (responseJson) => {
+                        el.profile = responseJson;
+                        data.push(el);
+                        this.setState({dataSource: ds.cloneWithRows(data)});
+                    });
+                }
+            });
+
+            return responseJson;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+    loadThemeById() {
+        fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum=" + this.props.data.idalbum)
         .then((response) => {return response.json()})
         .then((response) => {
             var array = JSON.parse(response);

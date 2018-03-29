@@ -22,6 +22,7 @@ import {TaskAvatar} from '../constants/StyleSheetCommons';
 import AppSettings from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 import CreateTask from './common/create-task';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const {width, height} = Dimensions.get('window');
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
@@ -82,6 +83,12 @@ export default class MainToDo extends React.Component {
         ApplicationConfig.getInstance().index.props.navigation.navigate("CollabView");
     }
 
+    navigateToTaskSummary() {
+        //ApplicationConfig.getInstance().index.hideSearchBar();
+        //this.props.navigator.push(Router.getRoute('collabView'), {navigator: this.props.navigator});
+        ApplicationConfig.getInstance().index.props.navigation.navigate("TaskSummary");
+    }
+
     renderCardTitle() {
         return (
             <View style={[TaskAvatar.avatarContainer]}>
@@ -91,7 +98,7 @@ export default class MainToDo extends React.Component {
                 <View style={[TaskAvatar.avatarPhotoContainer, Shadow.filterShadow]}>
                     <Image style={TaskAvatar.profile} source={require('./img/dp2.jpg')}/>
                 </View>
-                <TouchableOpacity style={TaskAvatar.nameContainer} onPress={() => this.navigateToCollabView()}>
+                <TouchableOpacity style={TaskAvatar.nameContainer} onPress={() => this.navigateToTaskSummary()}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                         <Text style={TaskAvatar.name}>Task #Theme</Text>
                         <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
@@ -121,30 +128,47 @@ export default class MainToDo extends React.Component {
     renderElements() {
         var arr = [0,1,2,3,4,5,6,7,8,9];
 
+        //https://static.highsnobiety.com/wp-content/uploads/2017/08/28095937/fake-yeezy-store-china-01-320x213.jpg
+
         return arr.map((obj, i) => {
             return <View key={i}>
                 <View style={[styles.SingleTaskContainer, Shadow.cardShadow]}>
                     {this.renderCardTitle()}
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', position: 'relative', top: 85}}>
-                        <Image source={require("../assets/images/icons/comment_filled_main.png")} 
-                            style={{height: 12, width: 13, resizeMode: 'center'}} />
-                    </View>
                 </View>
                 <View>
                     <ScrollView style={styles.TaskMediaContainer} showsHorizontalScrollIndicator={false}
                         horizontal={true}>
-                        <View style={[styles.TaskMedia, Shadow.smallCardShadow]}>
-                            <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>
-                        </View>
-                        <View style={[styles.TaskMedia, Shadow.smallCardShadow]}>
-                            <Entypo name={"video-camera"} size={30} style={styles.TaskMediaIcon}/>            
-                        </View>
-                        <View style={[styles.TaskMedia, Shadow.smallCardShadow]}>
-                            <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>                                        
-                        </View>
-                        <View style={[styles.TaskMedia, Shadow.smallCardShadow]}>
-                            <Entypo name={"video-camera"} size={30} style={styles.TaskMediaIcon}/>            
-                        </View>
+                        <TouchableOpacity onePress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
+                            <Image source={{uri: 'http://www.programmatic-rtb.com/wp-content/uploads/2017/10/store.png'}}
+                                style={{height:65,
+                                    width:65,
+                                    borderRadius:10}} />
+                            <View style={[styles.statusIcon]}>
+                                    <FontAwesome name={"circle"} color={"green"} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
+                            </View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', position: 'relative', top: 85}}>
+                                <Image source={require("../assets/images/icons/comment_filled_main.png")} 
+                                    style={{height: 12, width: 13, resizeMode: 'center'}} />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onePress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
+                            <Image source={{uri: 'http://www.programmatic-rtb.com/wp-content/uploads/2017/10/store.png'}}
+                                style={{height:65,
+                                    width:65,
+                                    borderRadius:10}} />
+                            <View style={[styles.statusIcon]}>
+                                    <FontAwesome name={"circle"} color={Colors.main} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onePress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
+                            <Image source={{uri: 'http://www.programmatic-rtb.com/wp-content/uploads/2017/10/store.png'}}
+                                style={{height:65,
+                                    width:65,
+                                    borderRadius:10}} />
+                            <View style={[styles.statusIcon]}>
+                                    <FontAwesome name={"circle"} color={"red"} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
+                            </View>
+                        </TouchableOpacity>
                         <View style={[styles.TaskMedia, Shadow.smallCardShadow]}>
                             <Entypo name={"image-inverted"} size={30} style={styles.TaskMediaIcon}/>                                        
                         </View>
@@ -189,7 +213,6 @@ export default class MainToDo extends React.Component {
 
         return (
             <ScrollView style={styles.mainContainer}>
-
                 <View style={styles.filterBarContainer}>
                     <FilterBar data={filters} headTitle={"To Do List"} />
                     <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
@@ -268,7 +291,6 @@ const styles = StyleSheet.create({
         height:65,
         width:65,
         borderRadius:10,
-        padding:5,
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'center'
@@ -277,6 +299,19 @@ const styles = StyleSheet.create({
     TaskMediaIcon: {
         color:'#9E9E9E',
         opacity:0.5,
+        margin:5
+    },
+
+    statusIcon: {
+        position: 'absolute', 
+        alignContent:'center', 
+        justifyContent: 'center', 
+        top: 45,
+        left: 45, 
+        backgroundColor: Colors.white, 
+        borderRadius: 7, 
+        width: 14, 
+        height: 14
     }
 }
 );
