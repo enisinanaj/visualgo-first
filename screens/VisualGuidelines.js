@@ -120,13 +120,10 @@ export default class VisualGuidelines extends Component {
                 return array
             })
             .then((responseJson) => {
-                responseJson.forEach(element => {          
-                    console.log('Element: ' + String(element));
-                    // getProfile(element.creator, (responseJson) => {
-                    //     element.profile = responseJson;
-                    //     data.push(element);
-                    //     this.setState({dataSource: ds.cloneWithRows(data)});
-                    // });
+                // console.log('Element: ' + JSON.stringify(responseJson));
+                responseJson.forEach(element => {
+                    data.push(element);
+                    this.setState({dataSource: ds.cloneWithRows(data)});
                 });
                 return responseJson;
             })
