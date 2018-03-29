@@ -132,14 +132,24 @@ export default class CreateVisualGuideline extends Component {
     }
 
     post() {
+        let filesToPost = [];
+        this.state.files.map((f, i) => {
+            let tmp = {
+                id: f.md5 + '.' + getFileExtension(f),
+                type: 'image/' + getFileExtension(f)
+            };
+            
+            filesToPost.push(tmp);
+        });
+
         let tempBody = JSON.stringify({
             albumvg: {
                 iduserr: ApplicationConfig.getInstance().me.id,
                 idenviroment: this.state.environment.id,
                 idtheme: this.state.selectedTheme.id,
-                message: this.state.text,
+                message: this.state.taskDescription,
                 backgroundmediaurl: '',
-                mediaurl: ''
+                mediaurl: filesToPost
             }
         });
 
