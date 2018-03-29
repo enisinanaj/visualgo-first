@@ -110,20 +110,25 @@ export default class VisualGuidelines extends Component {
         this.setState({dataSource: ds.cloneWithRows(['0'])});
     }
 
+
     _loadAlbums(query) {
 
-        var addQuery = query != undefined ? '&q=' + query : '';
-
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
-            .then((response) => response.json())
+        return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbums')
+            .then((response) => {return response.json()})
+            .then((response) => {
+                var array = JSON.parse(response);
+                return array
+            })
             .then((responseJson) => {
-                responseJson.forEach(element => {
-                    getProfile(element.creator, (responseJson) => {
-                        element.profile = responseJson;
-                        data.push(element);
-                        this.setState({dataSource: ds.cloneWithRows(data)});
-                    });
+                responseJson.forEach(element => {          
+                    console.log('Element: ' + String(element));
+                    // getProfile(element.creator, (responseJson) => {
+                    //     element.profile = responseJson;
+                    //     data.push(element);
+                    //     this.setState({dataSource: ds.cloneWithRows(data)});
+                    // });
                 });
+                return responseJson;
             })
             .catch((error) => {
                 console.error(error);
