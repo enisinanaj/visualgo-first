@@ -114,17 +114,11 @@ export default class VisualGuidelineItem extends Component {
     }
 
     renderContent() {
-        console.log('rendering row content..');
         const {data} = this.props;
-        console.log(data);
-        if (data){
-            if (data.media != null){
-                if(data.media != undefined && data.media.length > 0) {
-                    return (
-                        <ImageVisualGuideline imageCount={data.media.length} images={data.media}/>
-                    )
-                }
-            }
+        if(data.media != undefined && data.media.length > 0) {
+            return (
+                <ImageVisualGuideline imageCount={data.media.length} images={data.media}/>
+            )
         }
     }
 
