@@ -143,8 +143,10 @@ export default class NewsFeedItem extends Component {
           return <AppLoading />;
         }
 
+        var {data} = this.props;
+
         return (
-            <View style={[styles.container, Shadow.cardShadow]}>
+            <View style={[styles.container, Shadow.cardShadow, {backgroundColor: data.backgroundMediaUrl}]}>
                 <View>
                     {this.renderAvatar()}
                     {this.renderContent()}
