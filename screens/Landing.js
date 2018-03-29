@@ -194,23 +194,41 @@ export default class Landing extends Component {
         return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks?elementsno=100&fromindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
             .then((response) => {return response.json()})
             .then((response) => {
-                var array = JSON.parse(response);
-                var sorted = array.sort((a,b) => b.created - a.created);
-                return sorted;
+                try {
+                    var array = JSON.parse(response)
+                } catch (e) {
+                    return Promise.reject(e)
+                }
+                
+                var sorted = array.sort( (a,b) => (a.created > b.created) ? -1 : ((a.created < b.created) ? 1 : 0) )    
+
+                return Promise.resolve(sorted);
             })
             .then((responseJson) => {
+                let promises = []
                 responseJson.forEach(element => {
                     if (element.idcommentPost == null) {
-                        var el = {...element, ...element.post};
-                        el.isTask = true;
                         this.setState({offset: this.state.offset + 1});
-                        getProfile(el.idauthor, (responseJson) => {
-                            el.profile = responseJson;
-                            data.push(el);
-                            this.setState({dataSource: ds.cloneWithRows(data)});
-                        });
+
+                        promises.push(new Promise((resolve, reject) => {
+                            getProfile(element.post.idauthor, (responseJson) => {
+                                element.profile = responseJson;
+                                element.isTask = true;
+                                resolve(element);
+                            })
+                        }))
                     }
                 });
+
+                if(promises.length) {
+                    Promise.all(promises)
+                    .then(response => {
+                        data = data.concat(response)
+                        this.setState({dataSource: ds.cloneWithRows(data)})
+                    })
+                    .finally(test => console.log("Finally rendered all tasks", test))
+                    .catch(error => console.log(error))
+                }
 
                 return responseJson;
             })
@@ -258,21 +276,19 @@ export default class Landing extends Component {
             this.setState({selectType: "tasks"});
             this._clearPosts();
             this._clearTasks();
-            this._loadPosts();
+
+            if (this.state.selectType == 'posts') {
+                this._loadPosts();
+            } else if (this.state.selectType == 'tasks') { 
+                this._loadTasks();
+            }
         }
 
-        this.setState({modalPost: false});
+        this.setState({modalPost: false, modalTask: false});
     }
 
     newTaskHandler(obj) {
-        if (obj != undefined && obj.reload) {
-            this.setState({selectType: "tasks"});
-            this._clearPosts();
-            this._clearTasks();
-            this._loadTasks();
-        }
-
-        this.setState({modalTask: false});
+        this.newPostHandler(obj);
     }
 
     _handleTypeChange(t) {

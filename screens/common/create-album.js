@@ -113,7 +113,7 @@ export default class NewAlbum extends Component {
     pushAlbum(album) {
         this.setState({visualGuidelineModal: false});
         setTimeout(() => {
-            this.closeThis({});
+            this.closeThis({album: album});
         }, 100);
     }
 

@@ -63,6 +63,7 @@ export default class CreateTask extends Component {
             add360Selected: false,
             selectedTheme: {},
             environment: {},
+            album: undefined,
             allTags: [],
             countPhoto: 1,
             countVideo: 0,
@@ -121,10 +122,20 @@ export default class CreateTask extends Component {
         //https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks
         //this.
         this.setState({publishDisabled: true});
-        console.log("this.state.start: " + this.state.start);
-        console.log("this.state.due: " + this.state.due);
 
-        //todo: new upload album files
+        var postBody = JSON.stringify({
+            taskvg: {
+                idauthor: ApplicationConfig.getInstance().me.id,
+                idalbum: this.state.album.album,
+                startdate: this.state.start ? this.state.start : "0",
+                duedate: this.state.due ? this.state.due : "0",
+                message: this.state.taskDescription,
+                store: [],
+                user: [...this.state.allTags.filter((el) => {el.category == 'manager'})]        
+            }
+        });
+
+        console.debug("Post task body: " + postBody);
 
         fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/createtask', {
             method: 'POST',
@@ -132,21 +143,12 @@ export default class CreateTask extends Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                taskvg: {
-                    idauthor: ApplicationConfig.getInstance().me.id,
-                    idalbum: this.state.album.id,
-                    startdate: this.state.start,
-                    duedate: this.state.due,
-                    message: this.state.taskDescription,
-                    store: [],
-                    user: []        
-                }
-            })
+            body: postBody
         })
+        .then((response) => response.json())
         .then((response) => {
             console.debug("Create task result: " + JSON.stringify(response));
-            this.props.closeModal({reload: true})
+            this.props.closeModal({reload: true, taskId: response})
         })
         .catch(e => {
             console.error("error: " + e);
@@ -165,7 +167,7 @@ export default class CreateTask extends Component {
                 {Platform.OS === 'ios' ? 
                     <View style={{position: 'absolute', top: 0, height: 20, width: width, backgroundColor: Colors.main}} />
                 : null}
-                <TouchableOpacity onPress={this.props.closeModal}>
+                <TouchableOpacity onPress={() => this.props.closeModal({reload: true})}>
                     <EvilIcons name={"close"} size={22} color={Colors.main}/>
                 </TouchableOpacity>
                 <View>
@@ -410,7 +412,6 @@ export default class CreateTask extends Component {
     }
 
     finishEnvironments(environment) {
-        console.log("selected environement: " + JSON.stringify(environment));
         this.setState({environment: environment, environmentModal: false});
     }
 
@@ -428,7 +429,8 @@ export default class CreateTask extends Component {
     }
 
     createAlbum(album) {
-        this.setState({album: album, albumModal: false});
+        console.log("album saved: " + album.album);
+        this.setState({album: album.album, albumModal: false});
     }
 
     renderAlbumModal() {

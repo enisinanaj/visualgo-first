@@ -115,23 +115,27 @@ export default class CreatePost extends Component{
                 filesToPost.push(tmp);
             });
 
+            var createPostBody = JSON.stringify({
+                postvg: {
+                  message: this.state.text,
+                  backgroundmediaurl: this.state.postBackgroundColor,
+                  idauthor: ApplicationConfig.getInstance().me.id,
+                  ispublic: 1,
+                  mediaurl: filesToPost,
+                  store: this.state.allTags.filter(v => {return v.category === 'stores'}),
+                  user: this.state.allTags.filter(v => {return v.category === 'managers'})
+                }
+            });
+
+            console.log("sending post: " + createPostBody);
+
             fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/postmanage', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    postvg: {
-                      message: this.state.text,
-                      backgroundmediaurl: this.state.postBackgroundColor,
-                      idauthor: ApplicationConfig.getInstance().me.id,
-                      ispublic: 1,
-                      mediaurl: filesToPost,
-                      store: this.state.allTags.filter(v => {return v.category === 'stores'}),
-                      user: this.state.allTags.filter(v => {return v.category === 'managers'})
-                    }
-                })
+                body: createPostBody
             })
             .then((response) => {
                 console.debug("Create post result: " + JSON.stringify(response));

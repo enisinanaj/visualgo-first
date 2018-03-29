@@ -32,6 +32,7 @@ export default class VisualGuidelineItem extends Component {
     constructor(props) {
         super(props);
 
+        console.log(this.props.data);
 
         this.state = {
             time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),

@@ -247,7 +247,7 @@ export default class TagList extends Component {
             managersList.push(obj);
           })
           this.setState({managers: managersList});
-          isResponseEmpty = false;  
+          isResponseEmpty = false;
         } catch (e) {
           console.log(e);
           isResponseEmpty = true;

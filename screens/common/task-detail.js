@@ -139,16 +139,16 @@ export default class TaskDetail extends Component {
                 <View style={{flex:1}}>
                     <Image style={{flex: 1, height: 48, width: width, 
                                     position:'absolute', resizeMode: 'center', top: -12, left: 0, opacity: 0.1}} 
-                                    source={{uri:'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}} />
+                                    source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + data.album.post.medias[0].url}} />
                     <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between'}}>
                         <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 4, paddingTop: 5}}>
                             <TouchableOpacity onPress={() => this.goBack()}>
                                 <EvilIcons name={"close"} size={22} color={Colors.main}/>
                             </TouchableOpacity>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
-                                <Text style={styles.name}>Task {data.theme.name}</Text>
-                                <Text style={[styles.environment, {color: data.environment.color}]}>
-                                    {data.environment.name}
+                                <Text style={styles.name}>Task {data.theme.tagName}</Text>
+                                <Text style={[styles.environment, {color: data.environment.mediaUrl}]}>
+                                    {data.environment.tagName}
                                 </Text>
                             </View>
                         </View>
@@ -257,12 +257,14 @@ export default class TaskDetail extends Component {
     }
 
     renderText() {
+        const {data} = this.props.navigation.state.params;
+        
         return (
             <View style={{padding: 16, paddingBottom: 0}}>
                 {this.renderTextAvatar()}
                 <Text style={{height: 'auto', fontFamily: 'roboto-light', fontSize: 16, textAlign: 'left', paddingBottom: 5, marginBottom: 5}}
                     numberOfLines = {6}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    {data.name}
                 </Text>
             </View>
         )
@@ -311,6 +313,7 @@ export default class TaskDetail extends Component {
     }
 
     renderCardTitle() {
+        const {data} = this.props.navigation.state.params;
         return (
             <View style={[TaskAvatar.avatarContainer]}>
                 <View style={[TaskAvatar.taskThumbnailContainer, Shadow.filterShadow]}>
@@ -323,7 +326,7 @@ export default class TaskDetail extends Component {
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
                         <Text style={TaskAvatar.name}>Store ID</Text>
                     </View>
-                    <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
+                    <Text style={TaskAvatar.time}>Time</Text>
                 </View>
                 <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
             </View>
@@ -714,11 +717,11 @@ export default class TaskDetail extends Component {
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16, marginTop: 10}}>
                         <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
-                            <Image style={styles.taskThumbnail} source={{uri: data.media[0].url}} />
+                            <Image style={styles.taskThumbnail} source={{uri: data.album.post.medias[0].url}} />
                         </View>
-                        <Text style={styles.name}>Task {data.theme.name}</Text>
-                        <Text style={[styles.environment, {color: data.environment.color}]}>
-                            {data.environment.name}
+                        <Text style={styles.name}>{data.theme.tagName}</Text>
+                        <Text style={[styles.environment, {color: data.environment.mediaUrl}]}>
+                            {data.environment.tagName}
                         </Text>
                     </View>
                     <View style={{flexDirection:'row', justifyContent:'flex-end'}}>
@@ -731,12 +734,17 @@ export default class TaskDetail extends Component {
     }
 
     renderTextAvatar() {
+        const {data} = this.props.navigation.state.params;
+        console.log("data: " + JSON.parse(data.profile));
+        const profile = JSON.parse(data.profile);
+        moment.locale("it");
+
         return (
             <View style={styles.textAvatarContainer}>
                 <Image source={require('../img/me.png')} style={styles.profile}/>
                 <View style={{flexDirection:'column'}}>
-                    <Text style={styles.titleAvatar}>User Name</Text>
-                    <Text style={styles.subtitleAvatar}>Date Hour</Text>
+                    <Text style={styles.titleAvatar}>{profile.name} {profile.surname}</Text>
+                    <Text style={styles.subtitleAvatar}>{moment(new Date(data.created)).format("D MMMM [alle ore] HH:mm")}</Text>
                 </View>
             </View>
         )

@@ -86,7 +86,10 @@ export default class MainToDo extends React.Component {
     navigateToTaskSummary() {
         //ApplicationConfig.getInstance().index.hideSearchBar();
         //this.props.navigator.push(Router.getRoute('collabView'), {navigator: this.props.navigator});
-        ApplicationConfig.getInstance().index.props.navigation.navigate("TaskSummary");
+        ApplicationConfig.getInstance().index.props.navigation.navigate("TaskSummary", {
+            theme: {name: ''},
+            environment: {}
+        });
     }
 
     renderCardTitle() {
@@ -138,7 +141,7 @@ export default class MainToDo extends React.Component {
                 <View>
                     <ScrollView style={styles.TaskMediaContainer} showsHorizontalScrollIndicator={false}
                         horizontal={true}>
-                        <TouchableOpacity onePress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
+                        <TouchableOpacity onPress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
                             <Image source={{uri: 'http://www.programmatic-rtb.com/wp-content/uploads/2017/10/store.png'}}
                                 style={{height:65,
                                     width:65,
@@ -146,12 +149,8 @@ export default class MainToDo extends React.Component {
                             <View style={[styles.statusIcon]}>
                                     <FontAwesome name={"circle"} color={"green"} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
                             </View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', position: 'relative', top: 85}}>
-                                <Image source={require("../assets/images/icons/comment_filled_main.png")} 
-                                    style={{height: 12, width: 13, resizeMode: 'center'}} />
-                            </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onePress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
+                        <TouchableOpacity onPress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
                             <Image source={{uri: 'http://www.programmatic-rtb.com/wp-content/uploads/2017/10/store.png'}}
                                 style={{height:65,
                                     width:65,
@@ -160,7 +159,7 @@ export default class MainToDo extends React.Component {
                                     <FontAwesome name={"circle"} color={Colors.main} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onePress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
+                        <TouchableOpacity onPress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
                             <Image source={{uri: 'http://www.programmatic-rtb.com/wp-content/uploads/2017/10/store.png'}}
                                 style={{height:65,
                                     width:65,

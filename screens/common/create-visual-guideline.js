@@ -163,9 +163,10 @@ export default class CreateVisualGuideline extends Component {
             },
             body: tempBody
         })
+        .then((response) => response.json())
         .then((response) => {
             console.debug("Create album result: " + JSON.stringify(response));
-            this.props.closeModal({reload: true})
+            this.props.closeModal({reload: true, album: response})
         })
         .catch(e => {
             console.error("error: " + e);

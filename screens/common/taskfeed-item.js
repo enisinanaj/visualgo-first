@@ -31,9 +31,12 @@ const {width, height} = Dimensions.get('window');
 export default class TaskFeedItem extends Component {
     constructor(props) {
         super(props);
+        moment.locale("it");
+
+        var {data} = this.props;
 
         this.state = {
-            time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
+            time: moment(new Date(data.created)).format("D MMMM [alle ore] HH:mm"),
             buttons: [{title: 'Comment', iconImage: require("../../assets/images/icons/comment.png"), 
                         onPress: () => {}}, 
                       {title: 'Stats', id: 'statsButton', iconImage: require("../../assets/images/icons/stats-outlined.png"), 
@@ -49,64 +52,12 @@ export default class TaskFeedItem extends Component {
         };
     }
 
-    componentWillMount() {
-        this.loadAlbum();
-    }
-
-    loadAlbum() {
-        console.log("album id" + this.props.data.idalbum);
-
-        fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum=" + this.props.data.idalbum)
+    async loadAlbum() {
+        await fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum=" + this.props.data.idalbum)
         .then((response) => {return response.json()})
-        .then((response) => {
-            var array = JSON.parse(response);
-            var sorted = array.sort((a,b) => b.created - a.created);
-            return sorted;
-        })
         .then((responseJson) => {
-            responseJson.forEach(element => {
-                if (element.idcommentPost == null) {
-                    var el = {...element, ...element.post};
-                    el.isTask = true;
-                    this.setState({offset: this.state.offset + 1});
-                    getProfile(el.idauthor, (responseJson) => {
-                        el.profile = responseJson;
-                        data.push(el);
-                        this.setState({dataSource: ds.cloneWithRows(data)});
-                    });
-                }
-            });
-
-            return responseJson;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-    }
-
-    loadThemeById() {
-        fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum=" + this.props.data.idalbum)
-        .then((response) => {return response.json()})
-        .then((response) => {
-            var array = JSON.parse(response);
-            var sorted = array.sort((a,b) => b.created - a.created);
-            return sorted;
-        })
-        .then((responseJson) => {
-            responseJson.forEach(element => {
-                if (element.idcommentPost == null) {
-                    var el = {...element, ...element.post};
-                    el.isTask = true;
-                    this.setState({offset: this.state.offset + 1});
-                    getProfile(el.idauthor, (responseJson) => {
-                        el.profile = responseJson;
-                        data.push(el);
-                        this.setState({dataSource: ds.cloneWithRows(data)});
-                    });
-                }
-            });
-
-            return responseJson;
+            var parsedResponse = JSON.parse(responseJson);
+            this.setState({album: parsedResponse.taskout, environment: parsedResponse.environment, theme: parsedResponse.theme});
         })
         .catch((error) => {
             console.error(error);
@@ -154,14 +105,17 @@ export default class TaskFeedItem extends Component {
             'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
         });
 
+        this.loadAlbum();
         this.setState({ isReady: true });
     }
 
     renderAvatar() {
-        const {time} = this.state;
+        const {time, album} = this.state;
+        let {data} = this.props;
         let profile = {};
+
         try {
-             profile = this.props.data.profile[0];
+            profile = JSON.parse(data.profile);
         } catch(e) {
             return null;
         }
@@ -169,16 +123,16 @@ export default class TaskFeedItem extends Component {
         return (
             <View style={[styles.avatarContainer]}>
                 <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
-                    <Image style={styles.taskThumbnail} source={{uri: this.props.data.medias[0].url}} />
+                    <Image style={styles.taskThumbnail} source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + album.post.medias[0].url}} />
                 </View>
                 <View style={[styles.avatarPhotoContainer, Shadow.filterShadow]}>
-                    <Image style={styles.profile} source={{uri: profile.mediaurl}}/>
+                    <Image style={styles.profile} source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + profile.mediaurl}}/>
                 </View>
                 <TouchableOpacity onPress={() => {this.openTaksDetail()}} style={styles.nameContainer}> 
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
-                        <Text style={styles.name}>Task {this.props.data.theme.name}</Text>
-                        <Text style={[styles.environment, {color: this.props.data.environment.color}]}>
-                            {this.props.data.environment.name}
+                        <Text style={styles.name}>{data.name} {this.state.theme.tagName}</Text>
+                        <Text style={[styles.environment, {color: this.state.environment.mediaUrl}]}>
+                            {this.state.environment.tagName}
                         </Text>
                     </View>
                     <Text style={styles.time}>50% - {time}</Text>
@@ -216,15 +170,19 @@ export default class TaskFeedItem extends Component {
 
     renderContent() {
         const {data} = this.props;
-        if(data.media != undefined && data.media.length > 0) {
+        const {album} = this.state;
+        if(album != undefined && album.post.medias != undefined && album.post.medias.length > 0) {
             return (
-                <Image source={{ uri: data.media[0].url}} style={{height: 180, width: null, resizeMode: 'center'}} />
+                <Image source={{ uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + album.post.medias[0].url}} style={{height: 180, width: null, resizeMode: 'center'}} />
             )
         }
     }
 
     openTaksDetail() {
         var {data} = this.props;
+        data.theme = this.state.theme;
+        data.environment = this.state.environment;
+        data.album = this.state.album;
         ApplicationConfig.getInstance().index.props.navigation.navigate("TaskSummary", {data});
     }
 
@@ -245,7 +203,9 @@ export default class TaskFeedItem extends Component {
           return <AppLoading />;
         }
         const {data} = this.props;
-        if(data.medias != undefined && data.medias.length > 0) {
+        const {album} = this.state;
+
+        if(album != undefined && album.post.medias != undefined && album.post.medias.length > 0) {
             return (
                 <View style={[styles.container, Shadow.cardShadow]}>
                     <View>

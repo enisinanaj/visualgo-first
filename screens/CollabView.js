@@ -45,6 +45,29 @@ const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, messa
 
 export default class CollabView extends Component {
     _mounted = false;
+
+    items = [
+        {
+          name: 'md-home',
+          color: '#298CFF'
+        },
+        {
+          name: 'md-search',
+          color: '#30A400'
+        },
+        {
+          name: 'md-time',
+          color: '#FF4B32'
+        },
+        {
+          name: 'md-settings',
+          color: '#8A39FF'
+        },
+        {
+          name: 'md-navigate',
+          color: '#FF6A00'
+        }
+      ];
     
     constructor(props) {
         super(props);
@@ -234,12 +257,23 @@ export default class CollabView extends Component {
                     <View style={{height: 20, backgroundColor: Colors.main, width: width}}></View> 
                 : null}
                 {this.renderHeader()}
-                <View style={{flex: 1, paddingBottom: 45}}>
+                <View style={{flex: 1, paddingBottom: 55}}>
                     <ScrollView pagingEnabled={true} indicatorStyle={'default'} horizontal={true} showsHorizontalScrollIndicator={false}>
                         <Image source={{uri: 'https://media.timeout.com/images/103399489/image.jpg'}} style={{height: null, width: width}} resizeMode={'cover'}/>
                         <Image source={{uri: 'https://amp.businessinsider.com/images/55a6caf42acae716008b7018-750-562.jpg'}} style={{height: null, width: width}} resizeMode={'cover'}/>
                         <Image source={{uri: 'http://retaildesignblog.net/wp-content/uploads/2012/11/VILA-Clothes-shop-by-Riis-Retail-Copenhagen.jpg'}} style={{height: null, width: width}} resizeMode={'cover'}/>
                     </ScrollView>
+                    <View style={[{backgroundColor: Colors.white, height: 34, width: 34, borderRadius: 17, position: 'absolute', bottom: 100, left: 20, justifyContent: 'center'}, Shadow.filterShadow]}>
+                        <Entypo name={"dots-three-vertical"} color={Colors.main} size={20} style={{backgroundColor: 'transparent', marginLeft: 6}} />
+                    </View>
+                    <View style={[{backgroundColor: Colors.main, height: 54, width: 54, borderRadius: 27, position: 'absolute', bottom: 30, right: 20, justifyContent: 'center'}, Shadow.filterShadow]}>
+                        <Image source={require('../assets/images/icons/thumb-left.png')}  style={{width: 15, height: 15}}/>
+                        <CircleMenu
+                            bgColor="#E74C3C"
+                            items={this.items}
+                            onPress={this.onPress}
+                        />
+                    </View>
                 </View>
                 {this.renderCommentBar()}
             </View>
