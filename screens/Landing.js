@@ -155,14 +155,13 @@ export default class Landing extends Component {
                 responseJson.forEach(element => {
                     if (element.idcommentPost == null) {
                         this.setState({offset: this.state.offset + 1});
-                        console.log("offset: " + this.state.offset);
 
                         promises.push(new Promise((resolve, reject) => {
-                            console.log("new promise added " + this.state.offset)
                             getProfile(element.idauthor, (responseJson) => {
-                                element.profile = responseJson
-                                console.log("profile loaded while executing post promise " + this.state.offset)
-                                resolve(element)
+                                console.log("profile is: " + JSON.stringify(responseJson));
+                                element.profile = responseJson;
+                                element.isPost = true;
+                                resolve(element);
                             })
                         }))
                     }

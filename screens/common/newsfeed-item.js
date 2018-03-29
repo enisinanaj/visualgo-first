@@ -81,13 +81,12 @@ export default class NewsFeedItem extends Component {
         let profile = {};
 
         try {
-             profile = data.profile;
+            profile = JSON.parse(data.profile);
         } catch(e) {
             return null;
         }
-
-        return (
-            <View style={styles.avatarContainer}>
+        
+        return (<View style={styles.avatarContainer}>
                 <Image style={styles.profile} source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + profile.mediaurl}}/>
                 <View style={styles.nameContainer}>
                     <Text style={styles.name}>{profile.name} {profile.surname}</Text>

@@ -41,6 +41,8 @@ export default class TaskFeedItem extends Component {
             color: '#FC9D9D'
         };*/
 
+        
+
         console.log("data: " + JSON.stringify(this.props));
 
         this.state = {
@@ -61,16 +63,38 @@ export default class TaskFeedItem extends Component {
     }
 
     componentWillMount() {
-        this.loadEnvironment();
-        this.loadTheme();
+        this.loadAlbum();
     }
 
-    loadEnvironment() {
+    loadAlbum() {
+        fetch("https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbum?idenvironment=0&idtheme=0&idalbum" + this.props.data.idalbum, {
 
-    }
+        })
+        .then((response) => {return response.json()})
+        .then((response) => {
+            var array = JSON.parse(response);
+            var sorted = array.sort((a,b) => b.created - a.created);
+            return sorted;
+        })
+        .then((responseJson) => {
+            responseJson.forEach(element => {
+                if (element.idcommentPost == null) {
+                    var el = {...element, ...element.post};
+                    el.isTask = true;
+                    this.setState({offset: this.state.offset + 1});
+                    getProfile(el.idauthor, (responseJson) => {
+                        el.profile = responseJson;
+                        data.push(el);
+                        this.setState({dataSource: ds.cloneWithRows(data)});
+                    });
+                }
+            });
 
-    loadTheme() {
-        
+            return responseJson;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
     }
 
     renderAdvancedMenuContent() {
@@ -132,7 +156,7 @@ export default class TaskFeedItem extends Component {
                     <Image style={styles.taskThumbnail} source={{uri: this.props.data.medias[0].url}} />
                 </View>
                 <View style={[styles.avatarPhotoContainer, Shadow.filterShadow]}>
-                    <Image style={styles.profile} source={{uri: profile.media.url}}/>
+                    <Image style={styles.profile} source={{uri: profile.mediaurl}}/>
                 </View>
                 <TouchableOpacity onPress={() => {this.openTaksDetail()}} style={styles.nameContainer}> 
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
