@@ -60,7 +60,7 @@ export default class TaskFeedItem extends Component {
             var parsedResponse = JSON.parse(responseJson);
 
             if (parsedResponse.taskout.post.medias.length == 0) {
-                console.error("task album has no media! size: " + parsedResponse.taskout.post.medias.length);
+                //console.error("task album has no media! size: " + parsedResponse.taskout.post.medias.length);
             }
 
             console.debug("loading task album: " + responseJson);
