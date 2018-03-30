@@ -157,6 +157,7 @@ export default class Landing extends Component {
             })
             .then((responseJson) => {
                 let promises = []
+                console.log('Number of posts: ' + responseJson.length)
                 responseJson.forEach(element => {
                     if (element.idcommentPost == null) {
                         this.setState({offset: this.state.offset + 1});
@@ -214,6 +215,7 @@ export default class Landing extends Component {
             })
             .then((responseJson) => {
                 let promises = []
+                console.log('Number of tasks: ' + responseJson.length)
                 responseJson.forEach(element => {
                     if (element.idcommentPost == null) {
                         this.setState({offset: this.state.offset + 1});
@@ -280,17 +282,20 @@ export default class Landing extends Component {
     }
 
     newPostHandler(obj) {
+        console.log('new 1')
         if (obj != undefined && obj.reload) {
-            this.setState({selectType: "tasks"}, () => {
+            // this.setState({selectType: "tasks"}, () => {
                 this._clearPosts();
                 this._clearTasks();
-            });
+            // });
         }
 
         this.setState({modalPost: false, modalTask: false});
     }
 
     newTaskHandler(obj) {
+        console.log('new 2')
+
         this.newPostHandler(obj);
     }
 
