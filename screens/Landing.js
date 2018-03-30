@@ -71,7 +71,7 @@ export default class Landing extends Component {
         if (true) {
             this._loadPosts();
         } else {
-            this._loadTasks();
+                this._loadTasks();
         }
 
         this.offsetY = 0;
@@ -131,8 +131,11 @@ export default class Landing extends Component {
 
     _clearPosts() {
         data = ['0', '1'];
-        this.setState({offset: 0});
-        this.setState({dataSource: ds.cloneWithRows(data)});
+        this.setState({dataSource: ds.cloneWithRows(data), offset: 0}, () => {
+            if (this.state.selectType == 'posts') {
+                this._loadPosts();
+            }
+        });
     }
 
     _loadPosts(query) {
@@ -185,8 +188,11 @@ export default class Landing extends Component {
 
     _clearTasks() {
         data = ['0', '1'];
-        this.setState({offset: 0});
-        this.setState({dataSource: ds.cloneWithRows(data)});
+        this.setState({dataSource: ds.cloneWithRows(data), offset: 0}, () => {
+            if (this.state.selectType == 'tasks') { 
+                this._loadTasks();
+            }
+        });
     }
 
     _loadTasks(query) {
@@ -276,12 +282,6 @@ export default class Landing extends Component {
             this.setState({selectType: "tasks"});
             this._clearPosts();
             this._clearTasks();
-
-            if (this.state.selectType == 'posts') {
-                this._loadPosts();
-            } else if (this.state.selectType == 'tasks') { 
-                this._loadTasks();
-            }
         }
 
         this.setState({modalPost: false, modalTask: false});
