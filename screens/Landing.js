@@ -37,6 +37,7 @@ import AppSettings, { getProfile } from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 
 var data = ['0', '1'];
+var dataTasks = ['0', '1'];
 
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
     {title: 'Survey', active: true, disabled: true}, 
@@ -58,6 +59,7 @@ export default class Landing extends Component {
             opacity: new Animated.Value(1),
             header_height: new Animated.Value(96),
             dataSource: ds.cloneWithRows(data),
+            dataSourceTasks: ds.cloneWithRows(dataTasks),
             take: 20,
             skip: 0,
             offset: 0,
@@ -71,7 +73,7 @@ export default class Landing extends Component {
         if (true) {
             this._loadPosts();
         } else {
-                this._loadTasks();
+            this._loadTasks();
         }
 
         this.offsetY = 0;
@@ -187,8 +189,8 @@ export default class Landing extends Component {
     }
 
     _clearTasks() {
-        data = ['0', '1'];
-        this.setState({dataSource: ds.cloneWithRows(data), offset: 0}, () => {
+        dataTasks = ['0', '1'];
+        this.setState({dataSourceTasks: ds.cloneWithRows(dataTasks), offset: 0}, () => {
             if (this.state.selectType == 'tasks') { 
                 this._loadTasks();
             }
@@ -229,8 +231,8 @@ export default class Landing extends Component {
                 if(promises.length) {
                     Promise.all(promises)
                     .then(response => {
-                        data = data.concat(response)
-                        this.setState({dataSource: ds.cloneWithRows(data)})
+                        dataTasks = dataTasks.concat(response)
+                        this.setState({dataSourceTasks: ds.cloneWithRows(dataTasks)})
                     })
                     .finally(test => console.log("Finally rendered all tasks", test))
                     .catch(error => console.log(error))
@@ -279,9 +281,10 @@ export default class Landing extends Component {
 
     newPostHandler(obj) {
         if (obj != undefined && obj.reload) {
-            this.setState({selectType: "tasks"});
-            this._clearPosts();
-            this._clearTasks();
+            this.setState({selectType: "tasks"}, () => {
+                this._clearPosts();
+                this._clearTasks();
+            });
         }
 
         this.setState({modalPost: false, modalTask: false});
@@ -388,18 +391,35 @@ export default class Landing extends Component {
 
         return (
             <View ref='view' style={styles.container}>
-                <ListView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh.bind(this)}
-                        />
-                    }
-                    style={styles.listView}
-                    onScroll={this._onScroll}
-                    dataSource={this.state.dataSource}
-                    renderRow={(data) => this._renderRow(data)}
-                />
+                {this.state.selectType == 'posts' ?
+                    <ListView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                            />
+                        }
+                        style={styles.listView}
+                        onScroll={this._onScroll}
+                        dataSource={this.state.dataSource}
+                        renderRow={(data) => this._renderRow(data)}
+                    />
+                : null}
+
+                {this.state.selectType == 'tasks' ?
+                    <ListView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                            />
+                        }
+                        style={styles.listView}
+                        onScroll={this._onScroll}
+                        dataSource={this.state.dataSourceTasks}
+                        renderRow={(data) => this._renderRow(data)}
+                    />
+                : null}
                 {this.renderModal()}
             </View>
         )
