@@ -377,8 +377,8 @@ export default class CreateTask extends Component {
     }
 
     onThemeSelected(themes) {
-        this.setState({selectedTheme: themes, themeModal: false});
-        this.lookupForAlbum();
+        this.setState({selectedTheme: themes, themeModal: false}, this.lookupForAlbum);
+        //this.lookupForAlbum();
     }
 
     finishTagListTask(tags) {
@@ -443,8 +443,8 @@ export default class CreateTask extends Component {
     }
 
     finishEnvironments(environment) {
-        this.setState({environment: environment, environmentModal: false});
-        this.lookupForAlbum();
+        this.setState({environment: environment, environmentModal: false}, this.lookupForAlbum);
+        //this.lookupForAlbum();
     }
 
     renderEnvironmentsModal() {
