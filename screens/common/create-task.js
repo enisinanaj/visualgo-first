@@ -122,6 +122,13 @@ export default class CreateTask extends Component {
     post() {
         this.setState({alreadyPublished: true});
 
+        var userIDs =[];
+        this.state.allTags.forEach(element => {
+            if (element.category == 'managers'){
+                userIDs.push({id: element.id});
+            }
+        });
+
         var postBody = JSON.stringify({
             taskvg: {
                 idauthor: ApplicationConfig.getInstance().me.id,
@@ -130,7 +137,7 @@ export default class CreateTask extends Component {
                 duedate: this.state.due ? this.state.due : "0",
                 message: this.state.taskDescription,
                 store: [],
-                user: [...this.state.allTags.filter((el) => {el.category == 'manager'})]        
+                user: userIDs       
             }
         });
 
