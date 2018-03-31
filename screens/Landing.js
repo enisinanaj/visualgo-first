@@ -41,8 +41,8 @@ var dataTasks = ['0', '1'];
 
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
     {title: 'Survey', active: true, disabled: true}, 
-    {title: 'Post', active: true, selected: true}, 
-    {title: 'Task', selected: false, active: true},
+    {title: 'Post', active: true, selected: false}, 
+    {title: 'Task', selected: true, active: true},
     {title: '#San Valentino', active: true, selected: false}];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -65,12 +65,12 @@ export default class Landing extends Component {
             offset: 0,
             isReady: false,
             isAnimatingSearchBar: false,
-            selectType: 'posts'
+            selectType: 'tasks'
         };
 
         filters[0].onType = (query) => {this._clearPosts(); this._loadPosts(query);};
 
-        if (true) {
+        if (false) {
             this._loadPosts();
         } else {
             this._loadTasks();

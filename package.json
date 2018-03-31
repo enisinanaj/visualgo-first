@@ -33,6 +33,7 @@
     "react-native-calendars": "^1.17.0",
     "react-native-drawer": "^2.5.0",
     "react-native-progress": "^3.4.0",
+    "react-native-radial-menu": "^1.1.0",
     "react-native-svg": "^6.0.1-rc.1",
     "react-navigation": "^1.0.0"
   },
