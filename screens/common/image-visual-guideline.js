@@ -26,6 +26,7 @@ import Router from '../../navigation/Router';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
+import { AWS_OPTIONS } from '../helpers/appconfig';
 
 export default class ImageVisualGuideline extends Component {
     constructor(props) {
@@ -52,27 +53,21 @@ export default class ImageVisualGuideline extends Component {
         this.setState({isReady: true});
     }
 
+    renderMedias() {
+        var {images} = this.props;
+
+        return images.map((i, index) => {
+            return <Image source={{uri: AWS_OPTIONS.bucketAddress + i.url}} style={styles.img} resizeMode={"cover"}/>
+        });
+    }
+
     renderImages() {
         const {imageCount, images} = this.props;
 
         return(
             <View>
                 <ScrollView style={styles.imagesContainer} horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
-                        <Image style={styles.img} source={{uri: 'http://www.thesimplesociety.com/wordpress/wp-content/uploads/happy_shop_window_12AW_01.jpg'}} resizeMode={"cover"}/>
-                    </View>
-                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
-                        <Image style={styles.img} source={{uri: 'https://image.slidesharecdn.com/learn-the-best-way-to-be-romantic-with-text-the-romance-back-1414463779183-141027213645-conversion-gate01/95/text-the-romance-back-download-pdf-1-638.jpg?cb=1414445823'}} resizeMode={"cover"}/>
-                    </View>
-                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
-                        <Image style={styles.img} source={{uri: 'http://www.oltrefrontieraprogetti.it/en/wp-content/uploads/2015/05/shop_window_ferragamo_autumn_winter_2014.jpg'}} resizeMode={"cover"}/>
-                    </View>
-                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
-                        <Image style={styles.img} source={{uri: 'http://thebwd.com/wp-content/uploads/2013/12/best-window-displays_armani-exchange_2013_christmas_shop-studios_01-960x579.jpg'}} resizeMode={"cover"}/>
-                    </View>
-                    <View style={[styles.imageContainer, Shadow.filterShadow]}>
-                        <Image style={styles.img} source={{uri: 'http://www.oltrefrontieraprogetti.it/en/wp-content/uploads/2015/05/shop_windows_autumn_winter_la_perla_2014.jpg'}} resizeMode={"cover"}/>
-                    </View>
+                    {this.renderMedias()}
                 </ScrollView>
             </View>
                 

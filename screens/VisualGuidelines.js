@@ -114,16 +114,45 @@ export default class VisualGuidelines extends Component {
 
         var addQuery = query != undefined ? '&q=' + query : '';
 
-        return fetch(settings.baseApi + '/posts?keep=' + this.state.keep + '&take=' + this.state.take + addQuery)
+        return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/getalbums')
             .then((response) => response.json())
             .then((responseJson) => {
+                console.debug("albums response: " + responseJson);
+                try {
+                    var array = JSON.parse(responseJson)
+                } catch (e) {
+                    return Promise.reject(e)
+                }
+                
+                var sorted = array.sort( (a,b) => (a.created > b.created) ? -1 : ((a.created < b.created) ? 1 : 0) )    
+
+                return Promise.resolve(sorted);
+            })
+            .then((responseJson) => {
+                let promises = []
+                console.log('Number of tasks: ' + responseJson.length)
                 responseJson.forEach(element => {
-                    getProfile(element.creator, (responseJson) => {
-                        element.profile = responseJson;
-                        data.push(element);
-                        this.setState({dataSource: ds.cloneWithRows(data)});
-                    });
+                    if (element.idcommentPost == null) {
+                        this.setState({offset: this.state.offset + 1});
+
+                        promises.push(new Promise((resolve, reject) => {
+                            getProfile(element.taskout.post.idauthor, (responseJson) => {
+                                element.profile = JSON.parse(responseJson);
+                                resolve(element);
+                            })
+                        }))
+                    }
                 });
+
+                if(promises.length) {
+                    Promise.all(promises)
+                    .then(response => {
+                        data = data.concat(response)
+                        this.setState({dataSource: ds.cloneWithRows(data)})
+                    })
+                    .finally(test => console.log("Finally rendered all tasks", test))
+                    .catch(error => console.log(error))
+                }
             })
             .catch((error) => {
                 console.error(error);
@@ -150,7 +179,7 @@ export default class VisualGuidelines extends Component {
                 </View>;
         }
 
-        if (data.media.length > 0) {
+        if (data.theme.mediaUrl != undefined) {
             return <VisualGuidelineItem data={data} {...this.props}/>
         }
 

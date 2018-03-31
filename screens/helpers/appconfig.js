@@ -16,5 +16,6 @@ export const AWS_OPTIONS = {
   region: "us-east-1",
   accessKey: "AKIAJJ2F7PIGCSVS72UQ",
   secretKey: "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",
-  successActionStatus: 201
+  successActionStatus: 201,
+  bucketAddress: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/'
 }

@@ -25,6 +25,7 @@ import Button from './button';
 import NoOpModal from './NoOpModal';
 import ContextualActionsMenu from './ContextualActionsMenu';
 import Router from '../../navigation/Router';
+import { AWS_OPTIONS } from '../helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 
@@ -32,10 +33,10 @@ export default class VisualGuidelineItem extends Component {
     constructor(props) {
         super(props);
 
-        console.log(this.props.data);
+        moment.locale("it");
 
         this.state = {
-            time: moment(this.props.data.timestamp).locale("it").format("D MMMM [alle ore] hh:mm"),
+            time: moment(this.props.data.taskout.created).format("D MMMM [alle ore] HH:mm"),
             buttons: ['Comment'],
             icons: ['comment'],
             iconTypes: ["evilicon"],
@@ -66,22 +67,24 @@ export default class VisualGuidelineItem extends Component {
     }
 
     renderAvatar() {
+        const {data} = this.props;
+
         return (
             <View style={[TaskAvatar.avatarContainer]}>
                 <View style={[TaskAvatar.taskThumbnailContainer, Shadow.filterShadow]}>
-                    <Image style={TaskAvatar.taskThumbnail} source={{uri: 'https://media.timeout.com/images/103399489/image.jpg'}} />
+                    <Image style={TaskAvatar.taskThumbnail} source={{uri: AWS_OPTIONS.bucketAddress + data.theme.mediaUrl}} />
                 </View>
                 <View style={[TaskAvatar.avatarPhotoContainer, Shadow.filterShadow]}>
                     <Image style={TaskAvatar.profile} source={require('../img/dp2.jpg')}/>
                 </View>
                 <TouchableOpacity style={TaskAvatar.nameContainer} onPress={() => {this.goToAlbumDetail()}}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
-                        <Text style={TaskAvatar.name}>Guideline #Theme</Text>
-                        <Text style={[TaskAvatar.environment, {color: '#3FD1EB'}]}>
-                            @Ambiente
+                        <Text style={TaskAvatar.name}>{data.taskout.post.message} {data.theme.tagName}</Text>
+                        <Text style={[TaskAvatar.environment, {color: data.environment.mediaUrl}]}>
+                            {data.environment.tagName}
                         </Text>
                     </View>
-                    <Text style={TaskAvatar.time}>User made the action - Date Hour</Text>
+                    <Text style={TaskAvatar.time}>{data.profile.name} {data.profile.surname} - {this.state.time}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{position: 'absolute', right: 0, top: -10}} onPress={() => this.contextualMenu.toggleState()}>
                     <Ionicons name="ios-more-outline" color={Colors.main} size={30} />
@@ -95,7 +98,7 @@ export default class VisualGuidelineItem extends Component {
         const {time} = this.state;
         let profile = {};
         try {
-             profile = this.props.data.profile[0];
+             profile = this.props.data.profile;
         } catch(e) {
             return null;
         }
@@ -115,9 +118,9 @@ export default class VisualGuidelineItem extends Component {
 
     renderContent() {
         const {data} = this.props;
-        if(data.media != undefined && data.media.length > 0) {
+        if(data.taskout.post.medias != undefined && data.taskout.post.medias.length > 0) {
             return (
-                <ImageVisualGuideline imageCount={data.media.length} images={data.media}/>
+                <ImageVisualGuideline imageCount={data.taskout.post.medias.length} images={data.taskout.post.medias}/>
             )
         }
     }
