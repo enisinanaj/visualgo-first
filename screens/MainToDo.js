@@ -146,8 +146,8 @@ export default class MainToDo extends React.Component {
                                 style={{height:65,
                                     width:65,
                                     borderRadius:10}} />
-                            <View style={[styles.statusIcon]}>
-                                    <FontAwesome name={"circle"} color={"green"} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
+                            <View style={[styles.statusIcon, Shadow.smallCardShadow]}>
+                                <View style={[{backgroundColor: 'green'}, styles.innerStatusIcon]}></View>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
@@ -155,8 +155,8 @@ export default class MainToDo extends React.Component {
                                 style={{height:65,
                                     width:65,
                                     borderRadius:10}} />
-                            <View style={[styles.statusIcon]}>
-                                    <FontAwesome name={"circle"} color={Colors.main} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
+                            <View style={[styles.statusIcon, Shadow.smallCardShadow]}>
+                                <View style={[{backgroundColor: Colors.main}, styles.innerStatusIcon]}></View>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.navigateToCollabView()} style={[styles.TaskMedia, Shadow.smallCardShadow]}>
@@ -164,8 +164,8 @@ export default class MainToDo extends React.Component {
                                 style={{height:65,
                                     width:65,
                                     borderRadius:10}} />
-                            <View style={[styles.statusIcon]}>
-                                    <FontAwesome name={"circle"} color={"red"} size={10} style={{marginLeft: 2.7, marginTop: 0, backgroundColor: 'transparent'}} />
+                            <View style={[styles.statusIcon, Shadow.smallCardShadow]}>
+                                <View style={[{backgroundColor: 'red'}, styles.innerStatusIcon]}></View>
                             </View>
                         </TouchableOpacity>
                         <View style={[styles.TaskMedia, Shadow.smallCardShadow]}>
@@ -311,6 +311,13 @@ const styles = StyleSheet.create({
         borderRadius: 7, 
         width: 14, 
         height: 14
+    },
+
+    innerStatusIcon: {
+        borderRadius: 4.5, 
+        width: 9,
+        height: 9,
+        marginLeft: 2.5
     }
 }
 );

@@ -10,13 +10,15 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
+    TouchableHighlight,
     StatusBar,
     StyleSheet,
     Switch,
     ListView,
     Platform,
     Modal,
-    ScrollView
+    ScrollView,
+    KeyboardAvoidingView
 } from 'react-native';
 
 
@@ -27,7 +29,7 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
 
-import {Ionicons, SimpleLineIcons, EvilIcons, Octicons} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, EvilIcons, Octicons, Entypo} from '@expo/vector-icons';
 import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
 import TagList from './tag-list';
@@ -36,16 +38,46 @@ import ImageBrowser from '../ImageBrowser';
 import ImagePost from './image-post';
 import ImageScreen from '../imageScreen';
 import NoOpModal from './NoOpModal';
+import DefaultRow from './default-row';
 import DisabledStyle from '../../constants/DisabledStyle';
 import { isIphoneX, getFileExtension } from '../helpers';
 import {AWS_OPTIONS} from '../helpers/appconfig';
 import {RNS3} from 'react-native-aws3';
 import * as Progress from 'react-native-progress';
 import ApplicationConfig from '../helpers/appconfig';
+import Shadow from '../../constants/Shadow';
+
+const messages = [{from: {name: 'John', image: require('../img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
+                {from: {name: 'Andy', image: require('../img/bob.png')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo', read: true, date: new Date()},
+                {from: {name: 'Ivan', image: require('../img/cookiemonster.jpeg')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo Lorem', read: false, date: new Date()},
+                {from: {name: 'John', image: require('../img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
+                {from: {name: 'Andy', image: require('../img/bob.png')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo Lorem Dolo', read: true, date: new Date()},
+                {from: {name: 'Ivan', image: require('../img/cookiemonster.jpeg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()}];
 
 export default class CreatePost extends Component{
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        var {post} = this.props.navigation != undefined ? this.props.navigation.state.params : {};
+        console.log("Post summary got: " + JSON.stringify(post));
+
+        var images = [];
+        var postBackgroundColor = '#fff';
+        var text = '';
+        var isViewMode = false;
+        var canEdit = true;
+        var id;
+
+        if (post != undefined && post != null) {
+            isViewMode = true;
+            images = post.medias != undefined && post.medias;
+            postBackgroundColor = post.backgroundMediaUrl != undefined && post.backgroundMediaUrl;
+            text = post.message;
+            //canEdit = ApplicationConfig.getInstance().me.id == post.idauthor;
+            canEdit = false;
+            id = post.id;
+        }
+
         this.state = {
             visibleHeight: Dimensions.get('window').height,
             k_visible: false,
@@ -54,16 +86,22 @@ export default class CreatePost extends Component{
             privacyModal: false,
             allTags: [],
             imageBrowserOpen: false,
-            photos: [],
+            photos: images,
             imagesListModal: false,
-            text: '',
-            postBackgroundColor: '#fff',
+            text: text,
+            postBackgroundColor: postBackgroundColor,
             allowComments: false,
             isReady: false,
             fileprogress: [],
             files: [],
             filesUploaded: false,
-            publishDisabled: false
+            publishDisabled: false,
+            isViewMode: isViewMode,
+            canEdit: canEdit,
+            showTaskComment: false,
+            messages: ds.cloneWithRows(messages),
+            newCommentOnFocus: false,
+            id: id
         }
     }
 
@@ -123,11 +161,12 @@ export default class CreatePost extends Component{
                   ispublic: 1,
                   mediaurl: filesToPost,
                   store: this.state.allTags.filter(v => {return v.category === 'stores'}),
-                  user: this.state.allTags.filter(v => {return v.category === 'managers'})
+                  user: this.state.allTags.filter(v => {return v.category === 'managers'}),
+                  id: this.state.id != undefined ? this.state.id : null
                 }
             });
 
-            console.log("sending post: " + createPostBody);
+            console.debug("sending post: " + createPostBody);
 
             fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/postmanage', {
                 method: 'POST',
@@ -151,23 +190,33 @@ export default class CreatePost extends Component{
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.borderGray, flexDirection: 'row',
-                justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingLeft: 0, paddingBottom: this.state.isViewMode ? 10 : 16}}>
                 {Platform.OS === 'ios' ? 
                     <View style={{position: 'absolute', top: 0, height: 20, width: width, backgroundColor: Colors.main}} />
                 : null}
-                <TouchableOpacity onPress={this.props.closeModal}>
+                { !this.state.isViewMode ?
+                    <TouchableOpacity onPress={this.props.closeModal}>
+                        <Text>
+                            <EvilIcons name={"close"} size={22} color={Colors.main}/>
+                        </Text>
+                    </TouchableOpacity>
+                : <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                     <Text>
-                        <EvilIcons name={"close"} size={22} color={Colors.main}/>
+                        <EvilIcons name={"chevron-left"} size={28} color={Colors.main}/>
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> }
                 <View style={{paddingLeft: 20}}>
-                    <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Post</Text>
+                    {this.state.isViewMode ?
+                        <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold', paddingTop: 0}}>Post</Text>
+                    :   <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Post</Text>}
                 </View>
-                <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' || this.state.publishDisabled ? false : true}>
-                    <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontSize: 16, fontFamily: 'roboto-light'}}
-                        >Pubblica
-                    </Text>
-                </TouchableOpacity>
+                {this.state.canEdit ?
+                    <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' || this.state.publishDisabled ? false : true}>
+                        <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontSize: 16, fontFamily: 'roboto-light'}}
+                            >{this.state.isViewMode ? 'Update' : 'Pubblica' }
+                        </Text>
+                    </TouchableOpacity>
+                : <View></View>}
             </View>
         )
     }
@@ -185,6 +234,10 @@ export default class CreatePost extends Component{
     }
 
     renderCommentSwitchRow() {
+        if (this.state.isViewMode && !this.state.canEdit) {
+            return null;
+        }
+
         return (
             <View style={{backgroundColor: '#FFF', borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.borderGray, flexDirection: 'row',
@@ -206,6 +259,10 @@ export default class CreatePost extends Component{
     }
 
     renderPostType() {
+        if (this.state.isViewMode) {
+            return null;
+        }
+        
         return (
             <View style={{backgroundColor: Colors.borderGray, borderBottomWidth:StyleSheet.hairlineWidth,
                 borderBottomColor: Colors.borderGray, flexDirection: 'row',
@@ -231,7 +288,8 @@ export default class CreatePost extends Component{
 
     renderText() {
         return (
-            <View style={{flex: 1, padding: 16, backgroundColor: this.state.postBackgroundColor}}>
+            <View style={{flex: 1, padding: 16, backgroundColor: this.state.postBackgroundColor, justifyContent: 'center'}}>
+                {this.state.canEdit ?
                 <TextInput autoFocus={true} style={{height: Platform.OS === 'ios' ? 50 : 30, fontSize: 22, textAlign: 'center', textAlignVertical: 'center', 
                     fontFamily: 'roboto-light'}}
                     underlineColorAndroid={'rgba(0,0,0,0)'} 
@@ -239,18 +297,131 @@ export default class CreatePost extends Component{
                     placeholder={"What's on your mind?"}
                     onChangeText={(text) => this.setState({text})}
                     value={this.state.text}/>
+                : 
+                <Text style={{height: Platform.OS === 'ios' ? 50 : 30, fontSize: 22, marginTop: 20, textAlign: 'center', textAlignVertical: 'center', 
+                    fontFamily: 'roboto-light', alignContent: 'center'}}>
+                    {this.state.text}
+                </Text>}
             </View>
         )
+    }
+
+    _renderCommentRow(data) {
+        return <DefaultRow style={{padding: 0}} arguments={data} noborder={true}>
+            {this.renderMessageRow(data)}
+        </DefaultRow>
+    }
+
+    renderMessageRow(data) {
+        return (
+            <View style={styles.rowContainer}>
+                <TouchableOpacity style={styles.rowContainer}>
+                    <Image source={data.from.image} style={styles.selectableDisplayPicture} />
+                    <View style={styles.textInRow}>
+                        <Text style={[styles.rowTitle, !data.read ? styles.unreadMessage : {}]}>{data.from.name}
+                            <Text style={styles.rowSubTitle}> {data.message}</Text>
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </View>);
+    }
+
+    renderPostComments() {
+        if (!this.state.isViewMode) {
+            return null;
+        }
+
+        var {height, visibleHeight} = this.state;
+
+        if (this.state.showTaskComment) {
+            return (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    onRequestClose={() => {}}>
+                    <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
+                        <TouchableHighlight
+                        style={styles.taskCommentVisibleContainer}
+                        onPress={() => {
+                            this.setState({showTaskComment: false});
+                        }}>
+                        <View style={[styles.commentContainer, Shadow.cardShadow]}>
+                            <View style={[styles.rowCommentContainer, Shadow.filterShadow]}>
+                                <View>
+                                    <Text></Text>
+                                </View>
+                                <View>
+                                    <Entypo name={"chevron-thin-down"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
+                                </View>
+                                <View>
+                                    <Text style={[styles.taskTextStyle]}>Task Comment</Text>
+                                </View>
+                            </View>
+                            <ListView
+                                style={styles.commentListView}
+                                onScroll={this._onScroll}
+                                dataSource={this.state.messages}
+                                renderRow={(data) => this._renderCommentRow(data)}
+                                enableEmptySections={true}/>
+                            <View style={[styles.newMessageAreaContainer, Shadow.filterShadow]}>
+                                <View style={styles.textBoxContainer}>
+                                    <TextInput style={styles.textArea} ref='newMessageTextInput'
+                                        onChangeText={(arg) => this.setState({newMessage: arg})}
+                                        placeholder={'Scrivi un commento...'}
+                                        value={this.state.newMessage}
+                                        underlineColorAndroid={'rgba(0,0,0,0)'} onFocus={() => this.setState({newCommentOnFocus: true})}
+                                        onBlur={() => this.setState({newCommentOnFocus: false})}/>
+
+                                    {this.state.newCommentOnFocus?
+                                        <TouchableOpacity>
+
+                                        </TouchableOpacity>
+                                    : null}
+                                    
+                                    <View style={{height: 26, width: 26, marginTop: 5, marginRight: 10}}>
+                                        <Image
+                                            style={{flex: 1, width: undefined, height: undefined}}
+                                            source={require('../../assets/images/icons/camera.png')}
+                                            resizeMode="contain"/>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                        </TouchableHighlight>
+                    </KeyboardAvoidingView>
+                </Modal>
+            )    
+        } else {
+            return (
+                <TouchableOpacity onPress={() => {this.setState({showTaskComment: true})}} >
+                    <View style={[styles.taskCommentContainer, Shadow.cardShadow]}>
+                        <View>
+                            <Text></Text>
+                        </View>
+                        <View>
+                            <Entypo name={"chevron-thin-up"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
+                        </View>
+                        <View>
+                            <Text style={[styles.taskTextStyle, {backgroundColor: 'transparent'}]}>Post Comments</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
     }
 
     renderColorBox(data) {
         return (
             <TouchableOpacity style={[styles.backgroundColorsItem, {backgroundColor: data}]} 
-                onPress={() => {this.setState({postBackgroundColor: data})}} />
+            onPress={() => {this.setState({postBackgroundColor: data})}} />
         );
     }
-
+    
     renderBackgroundColors() {
+        if (this.state.isViewMode && !this.state.canEdit) {
+            return null;
+        }
+
         return (
             <View style={{height: 40, justifyContent: 'center',
                         borderTopWidth: StyleSheet.hairlineWidth,
@@ -328,6 +499,10 @@ export default class CreatePost extends Component{
     }
 
     renderMenu() {
+        if (this.state.isViewMode && !this.state.canEdit) {
+            return null;
+        }
+
         const objs =
             [
                 {
@@ -398,7 +573,7 @@ export default class CreatePost extends Component{
                 transparent={false}
                 visible={this.state.imagesListModal}
                 onRequestClose={(images) => this.resetImages(images)}>
-                <ImageScreen images={this.state.photos} onClose={(images) => this.resetImages(images)} />
+                <ImageScreen images={this.state.photos} onClose={(images) => this.resetImages(images)} canEdit={this.state.canEdit}/>
             </Modal>
         );
     }
@@ -459,7 +634,7 @@ export default class CreatePost extends Component{
         }
 
         return (
-            <View style={{height: this.state.visibleHeight}}>
+            <View style={{height: this.state.visibleHeight, backgroundColor: Colors.white}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
                 { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 22, top: 0, left: 0}}></View>
                         : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, top: 0, left: 0}}></View>
@@ -475,6 +650,7 @@ export default class CreatePost extends Component{
                         {this.renderMenu()}
                     </View>
                 </ScrollView>
+                {this.renderPostComments()}
                 {this.renderTaggingModal()}
                 {this.renderPrivacyModal()}
                 {this._renderImagePickerModal()}
@@ -534,5 +710,154 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         paddingLeft: 4,
         paddingTop: 5
+    },
+
+    taskCommentContainer:{
+        paddingRight: 5,
+        height: 40,
+        backgroundColor: Colors.main,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    taskTextStyle: {
+        padding: 13,
+        margin: 0,
+        textAlign: 'center',
+        fontSize: 14,
+        fontFamily: 'roboto-regular',
+        color: '#FFFFFF',
+        backgroundColor: 'transparent'
+    },
+    
+    taskCommentVisibleContainer: {
+        marginTop: 65, 
+        backgroundColor: 'rgba(256,256,256, 0.84)', 
+        flex: 1,
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        height: height, 
+        width: width
+    },
+
+    commentContainer: {
+        padding: 5,
+        bottom: 0,
+        position: 'absolute',
+        height: 375, 
+        backgroundColor: '#FFFFFF', 
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        width: width
+    },
+
+    rowCommentContainer: {
+        paddingRight: 5,
+        top: 0,
+        position: 'absolute',
+        height: 40, 
+        backgroundColor: Colors.main, 
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        width: width,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    rowContainer: {
+        paddingTop: 5,
+        flex: 1,
+        flexDirection: 'row'
+    },
+
+    selectableDisplayPicture: {
+        width: 41,
+        height: 41,
+        borderRadius: 20.5
+    },
+
+    textInRow: {
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 0,
+        flex: 1,
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        borderRadius: 10,
+        padding: 5
+    },
+
+    rowTitle: {
+        paddingLeft: 5,
+        fontFamily: 'roboto-regular',
+        fontSize: 12,
+        paddingTop: 1,
+        backgroundColor: 'transparent'
+    },
+
+    newMessageAreaContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 60,
+        marginLeft: -5,
+        marginBottom: -5,
+        backgroundColor: '#FFFFFF',
+        width: width
+    },
+
+    rowSubTitle: {
+        fontFamily: 'roboto-regular',
+        color: '#9A9A9A',
+        fontSize: 12,
+        paddingLeft: 5,
+        paddingTop: 5,
+        paddingBottom: 4,
+        backgroundColor: 'transparent',
+        width: width - 120
+    },
+    
+    messageDate: {
+        paddingTop: 17
+    },
+
+    commentListView: {
+        backgroundColor: Colors.white,
+        flexDirection: 'column',
+        bottom: 0,
+        marginTop: 40,
+        paddingBottom: 10
+    },
+
+    textBoxContainer: {
+        width: width - 115,
+        borderRadius: 23,
+        borderWidth: 1,
+        borderColor: Colors.main,
+        backgroundColor: Colors.white,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 40,
+        marginRight: 10,
+        marginTop: 10,
+        marginLeft: 10
+    },
+
+    textArea: {
+        backgroundColor: 'transparent',
+        color: Colors.black,
+        width: width - 120 - 22,
+        height: 40,
+        paddingLeft: 15,
+        paddingRight: 15,
+    },
+
+    cameraEmoticon: {
+        marginTop: 9,
+        marginRight: 0,
+        backgroundColor: 'transparent'
     }
 });

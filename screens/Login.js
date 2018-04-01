@@ -159,6 +159,7 @@ export default class Login extends Component {
       if (responseJson != "Error::null") {
         try {
           AppConfiguration.getInstance().me = JSON.parse(responseJson);
+          console.log("user is HVM: " + AppConfiguration.getInstance().isHVM());
           loginSuccessful = true;  
         } catch (e) {
           console.log(e);

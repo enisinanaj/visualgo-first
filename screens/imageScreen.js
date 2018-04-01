@@ -27,8 +27,15 @@ export default class ImageScreen extends Component {
     constructor(props) {
         super(props);
 
+        var canEdit = true;
+
+        if (!this.props.canEdit) {
+            canEdit = this.props.canEdit;
+        }
+
         this.state = {
-            images: this.props.images
+            images: this.props.images,
+            canEdit: canEdit
         };
     }
 
@@ -58,11 +65,13 @@ export default class ImageScreen extends Component {
                         style={styles.imageStyle}
                         source={{uri: o.url}}
                     />
-                    <View style={[styles.removeIconStyle, Shadow.filterShadow]}>
-                        <TouchableOpacity onPress={() => this._removeImage(o) }>
-                            <EvilIcons name={"close"} size={22} color={Colors.main} style={{backgroundColor: 'transparent'}} />
-                        </TouchableOpacity>
-                    </View>
+                    {this.state.canEdit ?
+                        <View style={[styles.removeIconStyle, Shadow.filterShadow]}>
+                            <TouchableOpacity onPress={() => this._removeImage(o) }>
+                                <EvilIcons name={"close"} size={22} color={Colors.main} style={{backgroundColor: 'transparent'}} />
+                            </TouchableOpacity>
+                        </View>
+                    : null}
                 </View>
             )
         })
@@ -74,7 +83,9 @@ export default class ImageScreen extends Component {
               borderBottomColor: Colors.gray, flexDirection: 'row',
               justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
               <View style={{width: 30}}></View>
-              <Text style={{fontSize: 16, color: 'black', fontWeight: '600', alignContent: 'center', alignSelf: 'center'}}>Edit</Text>
+              {this.state.canEdit ?
+                <Text style={{fontSize: 16, color: 'black', fontWeight: '600', alignContent: 'center', alignSelf: 'center'}}>Edit</Text>
+              : null}
               <TouchableOpacity onPress={() => this.props.onClose(this.state.images)}>
                 <Text style={{color: Colors.main, fontWeight: '700', fontSize: 18}}>Done</Text>
               </TouchableOpacity>

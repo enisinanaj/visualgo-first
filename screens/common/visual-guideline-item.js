@@ -127,7 +127,6 @@ export default class VisualGuidelineItem extends Component {
 
     goToAlbumDetail() {
         ApplicationConfig.getInstance().index.props.navigation.navigate("AlbumSummary");
-        //this.props.navigator.push(Router.getRoute('albumDetail', {albumId: '1'}));
     }
 
     render() {
@@ -155,8 +154,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginTop: 10,
         borderRadius: 20,
-        marginLeft: 5,
-        marginRight: 5,
+        marginLeft: 10,
+        marginRight: 10,
         padding: 19
     },
 

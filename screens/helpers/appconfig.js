@@ -7,6 +7,18 @@ export default ApplicationConfig = (() => {
         }
         return instance;
       }
+
+      isHVM() {
+        if (ApplicationConfig.getInstance().me != undefined) {
+          return ApplicationConfig.getInstance().me.role === 1;
+        }
+      }
+
+      isSM() {
+        if (ApplicationConfig.getInstance().me != undefined) {
+          return ApplicationConfig.getInstance().me.role === 0;
+        }
+      }
     }
 })();
 

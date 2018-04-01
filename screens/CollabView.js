@@ -24,6 +24,7 @@ import Drawer from 'react-native-drawer'
 import {Font, AppLoading} from 'expo';
 import {EvilIcons, Entypo} from '@expo/vector-icons';
 import { withNavigation } from '@expo/ex-navigation';
+import RadialMenu from 'react-native-radial-menu';
 
 import Colors from '../constants/Colors';
 import CommentBar from '../constants/commentBar';
@@ -34,6 +35,8 @@ import AppSettings, { getProfile } from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 
 import _ from 'lodash';
+import Feather from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
@@ -257,17 +260,34 @@ export default class CollabView extends Component {
                     <View style={{height: 20, backgroundColor: Colors.main, width: width}}></View> 
                 : null}
                 {this.renderHeader()}
-                <View style={{flex: 1, paddingBottom: 55}}>
+                <View style={{flex: 1, paddingBottom: 90}}>
                     <ScrollView pagingEnabled={true} indicatorStyle={'default'} horizontal={true} showsHorizontalScrollIndicator={false}>
                         <Image source={{uri: 'https://media.timeout.com/images/103399489/image.jpg'}} style={{height: null, width: width}} resizeMode={'cover'}/>
                         <Image source={{uri: 'https://amp.businessinsider.com/images/55a6caf42acae716008b7018-750-562.jpg'}} style={{height: null, width: width}} resizeMode={'cover'}/>
                         <Image source={{uri: 'http://retaildesignblog.net/wp-content/uploads/2012/11/VILA-Clothes-shop-by-Riis-Retail-Copenhagen.jpg'}} style={{height: null, width: width}} resizeMode={'cover'}/>
                     </ScrollView>
                     <View style={[{backgroundColor: Colors.white, height: 34, width: 34, borderRadius: 17, position: 'absolute', bottom: 100, left: 20, justifyContent: 'center'}, Shadow.filterShadow]}>
-                        <Entypo name={"dots-three-vertical"} color={Colors.main} size={20} style={{backgroundColor: 'transparent', marginLeft: 6}} />
+                        <Entypo name={"dots-three-vertical"} color={Colors.main} size={20} style={{backgroundColor: 'transparent', marginLeft: 7}} />
                     </View>
-                    <View style={[{backgroundColor: Colors.main, height: 54, width: 54, borderRadius: 27, position: 'absolute', bottom: 30, right: 20, justifyContent: 'center'}, Shadow.filterShadow]}>
-                        <Image source={require('../assets/images/icons/thumb-left.png')}  style={{width: 15, height: 15}}/>
+                    <View style={[{backgroundColor: Colors.white, height: 34, width: 34, borderRadius: 17, position: 'absolute', bottom: 100, left: 64, justifyContent: 'center'}, Shadow.filterShadow]}>
+                        <Image source={require('../assets/images/icons/share-icon.png')}  style={{width: 14, height: 18, backgroundColor: 'transparent', marginLeft: 10}}/>
+                    </View>
+                    <View style={{position: 'absolute', right: 30, bottom: 60}}>
+                        <RadialMenu spreadAngle={180} startAngle={270} menuRadius={70}>
+                            <View style={[styles.mainPinMenuButton, Shadow.filterShadow]}>
+                                <Image source={require('../assets/images/icons/thumb-left.png')}  style={{width: 22, height: 22, marginTop: 15}}/>
+                            </View>
+                            <View style={[styles.pinMenu, Shadow.filterShadow]}>
+                                <Feather name={"thumbs-down"} size={22} color={Colors.main} style={{width: 22, height: 22, backgroundColor: 'transparent', marginTop: 15}} />
+                            </View>
+                            <View style={[styles.pinMenu, Shadow.filterShadow]}>
+                                <Feather name={"download"} size={23} color={Colors.main} style={{width: 23, height: 23, backgroundColor: 'transparent', marginTop: 15}}/>
+                            </View>
+                            <View style={[styles.pinMenu, Shadow.filterShadow]}
+                                onSelect={(it) => console.log("up")}>
+                                <Feather name={"thumbs-up"} size={22} color={Colors.main} style={{width: 22, height: 22, backgroundColor: 'transparent', marginTop: 15}} />
+                            </View>
+                        </RadialMenu>
                     </View>
                 </View>
                 {this.renderCommentBar()}
@@ -280,6 +300,24 @@ export default class CollabView extends Component {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
+    },
+
+    mainPinMenuButton: {
+        backgroundColor: Colors.main, 
+        height: 54, 
+        width: 54,
+        borderRadius: 27,
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+
+    pinMenu: {
+        backgroundColor: Colors.white, 
+        height: 52, 
+        width: 52, 
+        borderRadius: 26, 
+        justifyContent: 'center', 
+        flexDirection: 'row'
     },
 
     name: {

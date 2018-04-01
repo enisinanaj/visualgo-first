@@ -25,6 +25,7 @@ import TaskDetail from './task-detail';
 import Button from './button';
 import NoOpModal from './NoOpModal';
 import ContextualActionsMenu from './ContextualActionsMenu';
+import ApplicationConfig, {AWS_OPTIONS} from '../helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 
@@ -130,10 +131,10 @@ export default class TaskFeedItem extends Component {
         return (
             <View style={[styles.avatarContainer]}>
                 <View style={[styles.taskThumbnailContainer, Shadow.filterShadow]}>
-                    <Image style={styles.taskThumbnail} source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + album.post.medias[0].url}} />
+                    <Image style={styles.taskThumbnail} source={{uri: AWS_OPTIONS.bucketAddress + album.post.medias[0].url}} />
                 </View>
                 <View style={[styles.avatarPhotoContainer, Shadow.filterShadow]}>
-                    <Image style={styles.profile} source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + profile.mediaurl}}/>
+                    <Image style={styles.profile} source={{uri: AWS_OPTIONS.bucketAddress + profile.mediaurl}}/>
                 </View>
                 <TouchableOpacity onPress={() => {this.openTaksDetail()}} style={styles.nameContainer}> 
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16}}>
@@ -180,7 +181,7 @@ export default class TaskFeedItem extends Component {
         const {album} = this.state;
         if(album != undefined && album.post.medias != undefined && album.post.medias.length > 0) {
             return (
-                <Image source={{ uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + album.post.medias[0].url}} style={{height: 180, width: null, resizeMode: 'center'}} />
+                <Image source={{ uri: AWS_OPTIONS.bucketAddress + album.post.medias[0].url}} style={{height: 180, width: null, resizeMode: 'center'}} />
             )
         }
     }

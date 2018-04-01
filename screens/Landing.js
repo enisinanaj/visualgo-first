@@ -261,13 +261,19 @@ export default class Landing extends Component {
                     <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurveyInFilter = noOpModal} />
                 </View>;
         } else if (data == '1') {
+            let buttons = [
+                {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
+                {title: 'Post', onPress: () => this.setState({modalPost: true})},
+                {title: 'Survey', onPress: () => this._noOpSurvey.toggleState(), noOp: true}];
+
+            if (ApplicationConfig.getInstance().isSM()) {
+                buttons.splice(0, 1);
+            }
+
             return (
                 <View style={[styles.onYourMindContainer, Shadow.cardShadow]}>
                     <OnYourMind onFocus={() => this.setState({modalPost: true})}/>
-                    <ButtonBar ref='buttonBar' buttons={[
-                        {title: 'Task', onPress: () => this.setState({modalTask: true})}, 
-                        {title: 'Post', onPress: () => this.setState({modalPost: true})},
-                        {title: 'Survey', onPress: () => this._noOpSurvey.toggleState(), noOp: true}]}/>
+                    <ButtonBar ref='buttonBar' buttons={buttons}/>
                     <NoOpModal featureName={"Survey"} ref={(noOpModal) => this._noOpSurvey = noOpModal} />
                 </View>
             )

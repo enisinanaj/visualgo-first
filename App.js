@@ -35,6 +35,7 @@ import TaskDetail from './screens/common/task-detail';
 import AlbumDetail from './screens/AlbumDetail';
 import CollabView from './screens/CollabView';
 import CreateAlbum from './screens/common/create-visual-guideline';
+import CreatePost from './screens/common/create-post';
 
 const {width, height} = Dimensions.get('window');
 const DRAWER_ANIMATION_DURATION = 750;
@@ -260,6 +261,7 @@ const MainAppNavigation = StackNavigator({
   Login: {screen: Login },
   Index: {screen: AppContainer},
   TaskSummary: {screen: TaskDetail},
+  PostSummary: {screen: CreatePost},
   AlbumSummary: {screen: AlbumDetail},
   CollabView: {screen: CollabView},
   CreateVisualGuideline: {screen: CreateAlbum}

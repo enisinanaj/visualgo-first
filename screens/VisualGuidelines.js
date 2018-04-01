@@ -43,8 +43,6 @@ export default class VisualGuidelines extends Component {
         super(props);
 
         this.state = {
-            modalPost: false,
-            modalTask: false,
             refreshing: false,
             loading: false,
             opacity: new Animated.Value(1),
@@ -106,7 +104,7 @@ export default class VisualGuidelines extends Component {
         }); 
     } 
 
-    _clearPosts() {
+    _clearAlbums() {
         this.setState({dataSource: ds.cloneWithRows(['0'])});
     }
 
@@ -148,7 +146,7 @@ export default class VisualGuidelines extends Component {
                     Promise.all(promises)
                     .then(response => {
                         data = data.concat(response)
-                        this.setState({dataSource: ds.cloneWithRows(data)})
+                        this.setState({dataSource: ds.cloneWithRows(data), refreshing: false});
                     })
                     .finally(test => console.log("Finally rendered all tasks", test))
                     .catch(error => console.log(error))
@@ -162,7 +160,8 @@ export default class VisualGuidelines extends Component {
     _onRefresh() {
         this.setState({refreshing: true});
         setTimeout(() => {
-            this.setState({refreshing: false});
+            this._clearAlbums();
+            this._loadAlbums();
         }, 1500)
     }
 
@@ -219,10 +218,10 @@ export default class VisualGuidelines extends Component {
             }
         }
 
-        this.offsetY = offset;
-        if(offset + this.content_height + 100 >= l_height) {
-            this.loadMore();
-        }
+        // this.offsetY = offset;
+        // if(offset + this.content_height + 100 >= l_height) {
+        //     this.loadMore();
+        // }
     }
 
     getStyle() {

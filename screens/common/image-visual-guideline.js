@@ -57,7 +57,9 @@ export default class ImageVisualGuideline extends Component {
         var {images} = this.props;
 
         return images.map((i, index) => {
-            return <Image key={index} source={{uri: AWS_OPTIONS.bucketAddress + i.url}} style={styles.img} resizeMode={"cover"}/>
+            return (<View key={index} style={[styles.imageContainer, Shadow.filterShadow]}> 
+                    <Image source={{uri: AWS_OPTIONS.bucketAddress + i.url}} style={styles.img} resizeMode={"cover"}/>
+                </View>);
         });
     }
 

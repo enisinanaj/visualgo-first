@@ -8,19 +8,21 @@ import {
     Image,
     StyleSheet,
     Dimensions,
+    TouchableOpacity
 } from 'react-native';
 
 import {AppLoading, Font} from 'expo';
-
-import Colors from '../../constants/Colors';
 import {Ionicons} from '@expo/vector-icons';
-import {getProfile} from '../helpers';
 import moment from 'moment';
 import locale from 'moment/locale/it'
-import ImagePost from './image-post';
 
+import Colors from '../../constants/Colors';
+import {getProfile} from '../helpers';
+import ImagePost from './image-post';
 import Button from './button';
 import Shadow from '../../constants/Shadow';
+import ApplicationConfig from '../helpers/appconfig';
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -75,6 +77,10 @@ export default class NewsFeedItem extends Component {
         }
     }
 
+    openPostSummary(post) {
+        ApplicationConfig.getInstance().index.props.navigation.navigate("PostSummary", {post});
+    }
+
     renderAvatar() {
         const {time} = this.state;
         let {data} = this.props;
@@ -88,10 +94,10 @@ export default class NewsFeedItem extends Component {
         
         return (<View style={styles.avatarContainer}>
                 <Image style={styles.profile} source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + profile.mediaurl}}/>
-                <View style={styles.nameContainer}>
+                <TouchableOpacity style={styles.nameContainer} onPress={() => this.openPostSummary(data)}>
                     <Text style={styles.name}>{profile.name} {profile.surname}</Text>
                     <Text style={styles.time}>{time}</Text>
-                </View>
+                </TouchableOpacity>
                 <Ionicons name="ios-more-outline" color={Colors.main} size={30} style={{position: 'absolute', right: 0, top: -10}} />
             </View>
         )
