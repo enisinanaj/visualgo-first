@@ -339,8 +339,8 @@ export default class CreatePost extends Component{
                     animationType="slide"
                     transparent={true}
                     onRequestClose={() => {}}>
-                    <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>
-                        <TouchableHighlight
+                    <KeyboardAvoidingView style={{flex: 1, height: visibleHeight, backgroundColor: 'transparent'}} behavior={"padding"}>
+                        <TouchableOpacity
                         style={styles.taskCommentVisibleContainer}
                         onPress={() => {
                             this.setState({showTaskComment: false});
@@ -354,7 +354,7 @@ export default class CreatePost extends Component{
                                     <Entypo name={"chevron-thin-down"} color={"#FFFFFF"} size={16} style={{marginTop: 14, marginLeft: 110}} />
                                 </View>
                                 <View>
-                                    <Text style={[styles.taskTextStyle]}>Task Comment</Text>
+                                    <Text style={[styles.taskTextStyle]}>Post Comments</Text>
                                 </View>
                             </View>
                             <ListView
@@ -387,7 +387,7 @@ export default class CreatePost extends Component{
                                 </View>
                             </View>
                         </View>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     </KeyboardAvoidingView>
                 </Modal>
             )    
@@ -734,7 +734,7 @@ const styles = StyleSheet.create({
     
     taskCommentVisibleContainer: {
         marginTop: 65, 
-        backgroundColor: 'rgba(256,256,256, 0.84)', 
+        backgroundColor: 'rgba(256,256,256, 0.84)',
         flex: 1,
         flexDirection: 'row', 
         justifyContent: 'center', 

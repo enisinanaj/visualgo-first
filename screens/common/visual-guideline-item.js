@@ -126,7 +126,8 @@ export default class VisualGuidelineItem extends Component {
     }
 
     goToAlbumDetail() {
-        ApplicationConfig.getInstance().index.props.navigation.navigate("AlbumSummary");
+        const {data} = this.props;
+        ApplicationConfig.getInstance().index.props.navigation.navigate("AlbumSummary", {data});
     }
 
     render() {

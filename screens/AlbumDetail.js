@@ -7,22 +7,31 @@ import { StyleSheet, video,ListView, ScrollView,
         TextInput, TouchableOpacity, Alert,} from 'react-native';
 import {Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
 import { NavigatorIOS, WebView} from 'react-native';
+import moment from 'moment';
 
 import {Font, AppLoading} from 'expo';
 import Colors from '../constants/Colors';
 import DefaultRow from './common/default-row';
 import { isIphoneX } from './helpers';
+import { AWS_OPTIONS } from './helpers/appconfig';
 
 var {width, height} = Dimensions.get("window");
 
 export default class AlbumDetail extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        moment.locale("it");
+
+        var {data} = this.props.navigation != undefined ? this.props.navigation.state.params : {};
+
+        console.debug("AlbumSummary data: " + JSON.stringify(data));
 
         this.state = {
             isReady: false,
-            visibleHeight: height
+            visibleHeight: height,
+            data: data,
+            albumTime: moment(new Date(data.taskout.post.created)).format("D MMMM [alle ore] HH:mm")
         };
     }
 
@@ -54,6 +63,7 @@ export default class AlbumDetail extends React.Component {
             return <AppLoading />;
         }
 
+        const {environment, theme, profile, taskout} = this.state.data;
         return ( 
             <View style={{height: this.state.visibleHeight}}>
                 <StatusBar barStyle={'light-content'} animated={true}/>
@@ -65,15 +75,15 @@ export default class AlbumDetail extends React.Component {
                     <View style={{flex:1}}>
                         <Image style={{flex: 1, height: 48, width: width, 
                                         position:'absolute', resizeMode: 'center', top: -12, left: 0, opacity: 0.1}} 
-                                        source={{uri:'https://images.fastcompany.net/image/upload/w_1280,f_auto,q_auto,fl_lossy/fc/3067979-poster-p-1-clothes-shopping-sucks-reformations-new-store-totally-reimagines-the.jpg'}} />
+                                        source={{uri: AWS_OPTIONS.bucketAddress + theme.mediaUrl}} />
                         <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between', width: width}}>
                             <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 4, paddingTop: 5}}>
                                 <TouchableOpacity onPress={() => this.goBack()}>
                                     <EvilIcons name={"close"} size={22} color={Colors.main}/>
                                 </TouchableOpacity>
                                 <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16, marginLeft: 5}}>
-                                    <Text style={styles.name}>Guideline #Theme</Text>
-                                    <Text style={[styles.environment, {color: '#FC9D9D'}]}> @Ambiente</Text>
+                                    <Text style={styles.name}>{taskout.post.message} {theme.tagName}</Text>
+                                    <Text style={[styles.environment, {color: environment.mediaUrl}]}> {environment.tagName}</Text>
                                 </View>
                             </View>
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingTop: 5, marginRight: 20}}>
@@ -88,14 +98,14 @@ export default class AlbumDetail extends React.Component {
                                 source={{uri: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'}}
                                 />
                         <View style={styles.UserNameView}>
-                            <Text style={styles.userNameTextStyle1}>Jane Smith</Text>
-                            <Text style={styles.userNameTextStyle2}>Date hour</Text>
+                            <Text style={styles.userNameTextStyle1}>{profile.name} {profile.surname}</Text>
+                            <Text style={styles.userNameTextStyle2}>{this.state.albumTime}</Text>
                         </View>
                     </View>
 
                     <View style={styles.bigTextbox}>
                         <Text style={styles.bigTextFontStyle}>
-                            The element is special relative to layout: everything inside is no longer using the flexbox layout but using text layout. This means that elements inside of are no longer rectangles, but wrap when they see the end of the line.
+                            {taskout.post.message}
                         </Text>
                     </View>
 
@@ -146,20 +156,17 @@ export default class AlbumDetail extends React.Component {
                         </View>
                         <ScrollView horizontal={true} style={styles.QuickViewContainer}>
                             <View style={styles.imageViewContainer}>
-                                <View >
+                                <View>
                                     <Image style={styles.imageStyle} source={{uri: 'http://www.spoleto7giorni.it/wp-content/uploads/2017/12/shopping-spoleto.jpg'}}></Image>
                                 </View>
                                 <View >
                                     <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                            
                                 </View>
                                 <View >
                                     <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                            
                                 </View>
                                 <View >
                                     <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                            
                                 </View> 
                             </View>
                         </ScrollView>

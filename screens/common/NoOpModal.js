@@ -58,7 +58,7 @@ export default class NoOpModal extends Component {
       }
 
       return <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={this.state.modalVisible}
         onRequestClose={() => {

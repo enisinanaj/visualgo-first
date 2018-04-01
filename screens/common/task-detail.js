@@ -44,6 +44,7 @@ import {TaskAvatar} from '../../constants/StyleSheetCommons';
 import nodeEmoji from 'node-emoji';
 import DefaultRow from './default-row';
 import { isIphoneX } from '../helpers';
+import { AWS_OPTIONS } from '../helpers/appconfig';
 
 const messages = [{from: {name: 'John', image: require('../img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},
                 {from: {name: 'Andy', image: require('../img/bob.png')}, message: 'Lorem Ipsum Dolo Lorem Ipsum Dolo', read: true, date: new Date()},
@@ -140,7 +141,7 @@ export default class TaskDetail extends Component {
                 <View style={{flex:1}}>
                     <Image style={{flex: 1, height: 48, width: width, 
                                     position:'absolute', resizeMode: 'center', top: -12, left: 0, opacity: 0.1}} 
-                                    source={{uri: 'https://s3.amazonaws.com/visualgotest-hosting-mobilehub-922920593/uploads/' + data.album.post.medias[0].url}} />
+                                    source={{uri: AWS_OPTIONS.bucketAddress + data.album.post.medias[0].url}} />
                     <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between'}}>
                         <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 4, paddingTop: 5}}>
                             <TouchableOpacity onPress={() => this.goBack()}>
