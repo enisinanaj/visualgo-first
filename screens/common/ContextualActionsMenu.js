@@ -79,7 +79,7 @@ export default class ContextualActionsMenu extends Component {
       }
 
       return <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={this.state.modalVisible}
         onRequestClose={() => {this.setState({modalVisible: false})}}>

@@ -73,8 +73,7 @@ export default class CreatePost extends Component{
             images = post.medias != undefined && post.medias;
             postBackgroundColor = post.backgroundMediaUrl != undefined && post.backgroundMediaUrl;
             text = post.message;
-            //canEdit = ApplicationConfig.getInstance().me.id == post.idauthor;
-            canEdit = false;
+            canEdit = ApplicationConfig.getInstance().me.id == post.idauthor
             id = post.id;
         }
 

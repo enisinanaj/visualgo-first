@@ -129,6 +129,7 @@ export default class ImageBrowser extends React.Component {
       </View>
     )
   }
+  
   renderImageTile = ({item, index}) => {
     let selected = this.state.selected[index] ? true : false
     return(
@@ -140,6 +141,7 @@ export default class ImageBrowser extends React.Component {
       />
     )
   }
+
   renderImages() {
     return(
       <FlatList

@@ -7,30 +7,49 @@ import {
   Image,
   TouchableHighlight,
   TouchableOpacity,
+  Modal
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { ImagePicker } from 'expo';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {MaterialCommunityIcons, EvilIcons, FontAwesome, Ionicons} from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window')
 
 export default class ImageTile extends React.PureComponent {
 
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      cameraModal: false
+    }
+  }
+
   async openCamera(callback) {
 
     let options = {
-      allowsEditing: true,
+      allowsEditing: false,
       quality: 1,
-      base64: true
+      base64: true,
+      exif: true
     };
 
     let image = await ImagePicker.launchCameraAsync(options);
     callback(image);
   };
+
+  renderCameraModal() {
+    var {selectImage} = this.props;
+
+    return (<Modal
+        animationType={"fade"}
+        transparent={false}
+        visible={this.state.cameraModal}
+        onRequestClose={() => this.setState({cameraModal: false})}>
+        {this.openCamera(selectImage)}
+      </Modal>)
+  }
 
   render() {
     let { item, index, selected, selectImage } = this.props;
@@ -38,10 +57,11 @@ export default class ImageTile extends React.PureComponent {
 
     if (item == 'camera') {
       return (
-        <TouchableOpacity onPress={() => this.openCamera(selectImage)}>
+        <TouchableOpacity onPress={() => this.setState({cameraModal: true})}>
           <View style={styles.cameraSelection}>
             <FontAwesome name="camera" size={50} color={"#AAAAAA"} />
           </View>
+          {this.renderCameraModal()}
         </TouchableOpacity>
       );
     }

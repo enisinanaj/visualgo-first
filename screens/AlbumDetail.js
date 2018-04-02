@@ -13,7 +13,9 @@ import {Font, AppLoading} from 'expo';
 import Colors from '../constants/Colors';
 import DefaultRow from './common/default-row';
 import { isIphoneX } from './helpers';
+import ImageVisualGuideline from './common/image-visual-guideline';
 import { AWS_OPTIONS } from './helpers/appconfig';
+import Shadow from '../constants/Shadow';
 
 var {width, height} = Dimensions.get("window");
 
@@ -58,6 +60,193 @@ export default class AlbumDetail extends React.Component {
         }
     }
 
+    renderAlbumBody() {
+        const {environment, theme, profile, taskout} = this.state.data;
+
+        return (<View>
+            <View style={styles.userName}>
+                <Image style={styles.profilepic} 
+                        source={{uri: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'}}
+                        />
+                <View style={styles.UserNameView}>
+                    <Text style={styles.userNameTextStyle1}>{profile.name} {profile.surname}</Text>
+                    <Text style={styles.userNameTextStyle2}>{this.state.albumTime}</Text>
+                </View>
+            </View>
+
+            <View style={styles.bigTextbox}>
+                <Text style={styles.bigTextFontStyle}>
+                    {taskout.post.message}
+                </Text>
+            </View>
+
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity 
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={[styles.rowTextStyle, {color: Colors.black}, {marginTop: 4}]}>
+                        Condiviso con 10 utenti
+                    </Text>
+                    <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} />
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity 
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={[styles.rowTextStyle, {color: Colors.black}, {marginTop: 4}]}>
+                        Add contributor
+                    </Text>
+                    <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} />
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
+                borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
+                <TouchableOpacity 
+                    style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={[styles.rowTextStyle, {color: Colors.black}, {marginTop: 4}]}>
+                        Upload Attachements
+                    </Text>
+                    <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
+                        <Text style={{fontFamily: 'roboto-regular', fontSize: 16, marginTop: 3}}>(6) </Text>
+                        <Ionicons  style={styles.forwardIcon} name={"ios-attach"} size={25} color={Colors.main}/>
+                        <EvilIcons name={"chevron-right"} color={Colors.main} size={32} />
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </View>);
+    }
+
+    renderImages() {
+        return(
+            <View style={{backgroundColor: 'transparent'}}>
+                <ScrollView style={horizontalImages.imagesContainer} horizontal={true} showsHorizontalScrollIndicator={false}>
+                    {this.renderMedias()}
+                </ScrollView>
+            </View>
+                
+        );
+    }
+
+    renderMedias() {
+        const {data} = this.state;
+        
+        if(data.taskout.post.medias != undefined && data.taskout.post.medias.length > 0) {
+            return data.taskout.post.medias.map((i, index) => {
+                return (<View key={index} style={[horizontalImages.imageContainer, Shadow.filterShadow]}> 
+                        <Image source={{uri: AWS_OPTIONS.bucketAddress + i.url}} style={horizontalImages.img} resizeMode={"cover"}/>
+                    </View>);
+            });
+        }
+
+        return null;
+    }
+
+    renderQuickViewSection() {
+        return (<View>
+            <View style={styles.QuickViewContainer}>
+                <Text style={styles.QuickViewText}>Quick View</Text>
+            </View>
+            {this.renderImages()}
+        </View>);
+    }
+
+    renderAllFilesGroup() {
+        const {data} = this.state;
+        
+        if(data.taskout.post.medias == undefined || data.taskout.post.medias.length == 0) {
+            return null;
+        }
+
+        return (<View>
+            <View style={styles.QuickViewContainer}>
+                <Text style={styles.QuickViewText}>All Files</Text>
+            </View>
+
+            {
+                data.taskout.post.medias.map((i, index) => {
+                    return (<DefaultRow>
+                        <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                                <Image style={styles.menuThumbNail} 
+                                    source={{uri: AWS_OPTIONS.bucketAddress + i.url}}/>
+                                <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                                    <Text style={[styles.rowTextStyle, {color: Colors.black, textAlignVertical: 'center', height: 'auto'}]}>
+                                        Image
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'column', width: 30, marginRight: 0, justifyContent: 'center'}}>
+                                <EvilIcons name={"close"} color={Colors.main} size={24} />
+                            </View>
+                        </TouchableOpacity>
+                    </DefaultRow>)
+                })
+            }
+        </View>)
+    }
+
+    renderHeader() {
+        const {environment, theme, profile, taskout} = this.state.data;
+
+        return (<View style={{flexDirection: 'row', height: 48, alignItems: 'center', paddingLeft: 0,
+                borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
+            <View style={{flex:1}}>
+                <Image style={{flex: 1, height: 48, width: width, 
+                                position:'absolute', resizeMode: 'center', top: -12, left: 0, opacity: 0.1}} 
+                                source={{uri: AWS_OPTIONS.bucketAddress + theme.mediaUrl}} />
+                <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between', width: width}}>
+                    <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 4, paddingTop: 5}}>
+                        <TouchableOpacity onPress={() => this.goBack()}>
+                            <EvilIcons name={"close"} size={22} color={Colors.main}/>
+                        </TouchableOpacity>
+                        <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16, marginLeft: 5}}>
+                            <Text style={styles.name}>{taskout.post.message} {theme.tagName}</Text>
+                            <Text style={[styles.name, {color: environment.mediaUrl}]}> {environment.tagName}</Text>
+                        </View>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingTop: 5, marginRight: 20}}>
+                        <Text style={[styles.name, {fontFamily: 'roboto-bold', color: Colors.main, fontSize: 16 }]}>Add +</Text>
+                    </View>
+                </View>
+            </View>
+        </View>)
+    }
+
+    renderActions() {
+        return (<View>
+            <DefaultRow>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                            <Text style={[styles.rowTextStyle, {color: Colors.main, textAlignVertical: 'center', height: 'auto'}]}>
+                                Archivia Album
+                            </Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </DefaultRow>
+
+            <DefaultRow>
+                <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 34}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                            <Text style={[styles.rowTextStyle, {color: '#E64E17', textAlignVertical: 'center', height: 'auto'}]}>
+                                Elimina Album
+                            </Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </DefaultRow>
+        </View>);
+    }
+
     render() {
         if (!this.state.isReady) {
             return <AppLoading />;
@@ -70,182 +259,16 @@ export default class AlbumDetail extends React.Component {
                 { isIphoneX() ? <View style={{backgroundColor: Colors.main, height: 44, top: 0, left: 0}}></View>
                                 : Platform.OS === 'ios' ? <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>
                                 : <View style={{backgroundColor: Colors.main, height: 20, top: 0, left: 0}}></View>}
-                <View style={{flexDirection: 'row', height: 48, alignItems: 'center', paddingLeft: 0,
-                        borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray}}>
-                    <View style={{flex:1}}>
-                        <Image style={{flex: 1, height: 48, width: width, 
-                                        position:'absolute', resizeMode: 'center', top: -12, left: 0, opacity: 0.1}} 
-                                        source={{uri: AWS_OPTIONS.bucketAddress + theme.mediaUrl}} />
-                        <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'space-between', width: width}}>
-                            <View style={{flexDirection: 'row', paddingLeft: 10, paddingRight: 4, paddingTop: 5}}>
-                                <TouchableOpacity onPress={() => this.goBack()}>
-                                    <EvilIcons name={"close"} size={22} color={Colors.main}/>
-                                </TouchableOpacity>
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 16, marginLeft: 5}}>
-                                    <Text style={styles.name}>{taskout.post.message} {theme.tagName}</Text>
-                                    <Text style={[styles.environment, {color: environment.mediaUrl}]}> {environment.tagName}</Text>
-                                </View>
-                            </View>
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingTop: 5, marginRight: 20}}>
-                                <Text style={[styles.name, {fontFamily: 'roboto-bold', color: Colors.main, fontSize: 16 }]}>Add +</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+                
+                {this.renderHeader()}
+
                 <ScrollView style={{backgroundColor: Colors.white, paddingBottom: 80}} >
-                    <View style={styles.userName}>
-                        <Image style={styles.profilepic} 
-                                source={{uri: 'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg'}}
-                                />
-                        <View style={styles.UserNameView}>
-                            <Text style={styles.userNameTextStyle1}>{profile.name} {profile.surname}</Text>
-                            <Text style={styles.userNameTextStyle2}>{this.state.albumTime}</Text>
-                        </View>
-                    </View>
+                    {this.renderAlbumBody()}
 
-                    <View style={styles.bigTextbox}>
-                        <Text style={styles.bigTextFontStyle}>
-                            {taskout.post.message}
-                        </Text>
-                    </View>
+                    {this.renderQuickViewSection()}
+                    {this.renderAllFilesGroup()}
 
-                    <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
-                        borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                        <TouchableOpacity 
-                            style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={[styles.rowTextStyle, {color: Colors.black}, {marginTop: 4}]}>
-                                Condiviso con 10 utenti
-                            </Text>
-                            <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
-                                <EvilIcons name={"chevron-right"} color={Colors.main} size={32} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
-                        borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                        <TouchableOpacity 
-                            style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={[styles.rowTextStyle, {color: Colors.black}, {marginTop: 4}]}>
-                                Add contributor
-                            </Text>
-                            <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
-                                <EvilIcons name={"chevron-right"} color={Colors.main} size={32} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
-                        borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                        <TouchableOpacity 
-                            style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={[styles.rowTextStyle, {color: Colors.black}, {marginTop: 4}]}>
-                                Upload Attachements
-                            </Text>
-                            <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
-                                <Text style={{fontFamily: 'roboto-regular', fontSize: 16, marginTop: 3}}>(6) </Text>
-                                <Ionicons  style={styles.forwardIcon} name={"ios-attach"} size={25} color={Colors.main}/>
-                                <EvilIcons name={"chevron-right"} color={Colors.main} size={32} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View>
-                        <View style={styles.QuickViewContainer}>
-                            <Text style={styles.QuickViewText}>Quick View</Text>
-                        </View>
-                        <ScrollView horizontal={true} style={styles.QuickViewContainer}>
-                            <View style={styles.imageViewContainer}>
-                                <View>
-                                    <Image style={styles.imageStyle} source={{uri: 'http://www.spoleto7giorni.it/wp-content/uploads/2017/12/shopping-spoleto.jpg'}}></Image>
-                                </View>
-                                <View >
-                                    <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                                </View>
-                                <View >
-                                    <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                                </View>
-                                <View >
-                                    <Image style={styles.imageStyle} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRBeBZe06UHmZ5381MpAWPDcFXms7dyA04KTevlNvIhCXxV3zV'}}></Image>
-                                </View> 
-                            </View>
-                        </ScrollView>
-                    </View>
-
-                    <View>
-                        <View style={styles.QuickViewContainer}>
-                            <Text style={styles.QuickViewText}>All Files</Text>
-                        </View>
-
-                        <DefaultRow>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <Image style={styles.menuThumbNail} 
-                                        source={{uri: 'http://www.iconhot.com/icon/png/file-icons-vs-2/256/png-36.png'}}/>
-                                    <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                        <Text style={[styles.rowTextStyle, {color: Colors.black, textAlignVertical: 'center', height: 'auto'}]}>
-                                            Nome File.pdf
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={{flexDirection: 'column', width: 30, marginRight: 0, justifyContent: 'center'}}>
-                                    <EvilIcons name={"close"} color={Colors.main} size={24} />
-                                </View>
-                            </TouchableOpacity>
-                        </DefaultRow>
-
-                        <DefaultRow>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <Image style={styles.menuThumbNail} 
-                                        source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}/>
-                                    <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                        <Text style={[styles.rowTextStyle, {color: Colors.black, textAlignVertical: 'center', height: 'auto'}]}>
-                                            Nome File.pdf
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={{flexDirection: 'column', width: 30, marginRight: 0, justifyContent: 'center'}}>
-                                    <EvilIcons name={"close"} color={Colors.main} size={24} />
-                                </View>
-                            </TouchableOpacity>
-                        </DefaultRow>
-
-                        <DefaultRow>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <Image style={styles.menuThumbNail} 
-                                        source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}/>
-                                    <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                        <Text style={[styles.rowTextStyle, {color: Colors.black, textAlignVertical: 'center', height: 'auto'}]}>
-                                            Nome File.pdf
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={{flexDirection: 'column', width: 30, marginRight: 0, justifyContent: 'center'}}>
-                                    <EvilIcons name={"close"} color={Colors.main} size={24} />
-                                </View>
-                            </TouchableOpacity>
-                        </DefaultRow>
-
-                        <DefaultRow style={{margin: 0}} noborder={true}>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <Image style={styles.menuThumbNail} 
-                                        source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}/>
-                                    <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                        <Text style={[styles.rowTextStyle, {color: Colors.black, textAlignVertical: 'center', height: 'auto'}]}>
-                                            Nome File.pdf
-                                        </Text>
-                                    </View>
-                                </View>
-                                <View style={{flexDirection: 'column', width: 30, marginRight: 0, justifyContent: 'center'}}>
-                                    <EvilIcons name={"close"} color={Colors.main} size={24} />
-                                </View>
-                            </TouchableOpacity>
-                        </DefaultRow>
-                    </View>
-                    <View style={{ height: 300 }}>
+                    {/* <View style={{ height: 300 }}>
                         <WebView
                                 style={ styles.WebViewContainer }
                                 javaScriptEnabled={true}
@@ -255,37 +278,45 @@ export default class AlbumDetail extends React.Component {
                     </View>
                     <View>
                         <Image style={styles.bigImageContainer} source={{uri: 'http://www.urdesignmag.com/wordpress/wp-content/uploads/2015/01/3-gilles-boissier-designed-a-moncler-boutique-dedicated-entirely-to-men.jpg'}}/>
-                    </View>
-                    <View>
-                        <DefaultRow>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                        <Text style={[styles.rowTextStyle, {color: Colors.main, textAlignVertical: 'center', height: 'auto'}]}>
-                                            Archivia Album
-                                        </Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        </DefaultRow>
-
-                        <DefaultRow>
-                            <TouchableOpacity style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 34}}>
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-                                        <Text style={[styles.rowTextStyle, {color: '#E64E17', textAlignVertical: 'center', height: 'auto'}]}>
-                                            Elimina Album
-                                        </Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        </DefaultRow>
-                    </View>
+                    </View> */}
+                    
+                    {this.renderActions()}
                 </ScrollView>
             </View>
         );
     }
 }
+
+const horizontalImages = StyleSheet.create({
+    imagesContainer: {
+        height: 180,
+        width: width,
+        zIndex: 9999,
+        backgroundColor:'#F2F4F4',
+    },
+    imageContainer: {
+        width: 110,
+        height: 170,
+        marginRight: 4,
+        marginLeft: 4,
+        borderRadius: 10
+    },
+    img: {
+        flex: 1,
+        width: 110,
+        height: 170,
+        borderRadius: 10
+    },
+    textContainer: {
+        padding: 16,
+        paddingTop: 0,
+        paddingBottom: 8
+    },
+    textContent: {
+        fontFamily: 'roboto-light',
+        fontSize: 14
+    }
+});
 
 
 const styles = StyleSheet.create({

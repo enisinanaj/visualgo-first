@@ -159,7 +159,7 @@ export default class CreateTask extends Component {
         .catch(e => {
             console.error("error: " + e);
         })
-        this.props.closeModal({reload: true, alreadyPublished: false});
+        //this.props.closeModal({reload: true, alreadyPublished: false});
     }
 
     isPublishable() {

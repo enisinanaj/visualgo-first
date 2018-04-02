@@ -79,9 +79,9 @@ export default class VisualGuidelines extends Component {
                 animationType={"slide"}
                 transparent={false}
                 visible={this.state.visualGuidelineModal}
-                onRequestClose={() => this.setState({visualGuidelineModal: false})}>
+                onRequestClose={() => this.finishNewVisualGuideline()}>
                 
-                <CreateVisualGuideline closeModal={() => this.setState({visualGuidelineModal: false})}  />
+                <CreateVisualGuideline closeModal={() => this.finishNewVisualGuideline()}  />
             </Modal>
         );
     }
@@ -105,6 +105,7 @@ export default class VisualGuidelines extends Component {
     } 
 
     _clearAlbums() {
+        data = ['0'];
         this.setState({dataSource: ds.cloneWithRows(['0'])});
     }
 
@@ -155,6 +156,10 @@ export default class VisualGuidelines extends Component {
             .catch((error) => {
                 console.error(error);
             });
+    }
+
+    finishNewVisualGuideline() {
+        this.setState({visualGuidelineModal: false}, this._onRefresh);
     }
 
     _onRefresh() {

@@ -248,8 +248,11 @@ export default class TagListTask extends Component {
           this.setState({userResponse: JSON.parse(responseJson)});
           var managersList = [];
           this.state.userResponse.map((el, i) => {
-            let obj = {title: el.name + ' ' + el.surname, subtitle: el.username, img: require('../img/me.png'), selected: false, id: el.id};  
-            managersList.push(obj);
+            console.log("element for tagging: " + JSON.stringify(el));
+            if (el.role == 0) {
+              let obj = {title: el.name + ' ' + el.surname, subtitle: el.username, img: require('../img/me.png'), selected: false, id: el.id};  
+              managersList.push(obj);
+            }
           })
           this.setState({managers: managersList});
           tagsToShow = this.state.managers;

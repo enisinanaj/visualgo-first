@@ -33,7 +33,7 @@ import NoOpModal from './common/NoOpModal';
 
 import _ from 'lodash';
 import Shadow from '../constants/Shadow';
-import AppSettings, { getProfile } from './helpers/index';
+import AppSettings, { getProfile, makeCancelable } from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 
 var data = ['0', '1'];
@@ -48,6 +48,9 @@ const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Landing extends Component {
+    cancelablePostPromise;
+    cancelableTaskPromise;
+
     constructor(props) {
         super(props);
 
@@ -95,18 +98,14 @@ export default class Landing extends Component {
                 console.log("changingType to posts");
                 filters[i].onPress = () => {
                     this.setState({selectType: 'posts'});
-                    this._clearPosts();
-                    this._clearTasks();
-                    this.loadMore();
+                    this.resetDatasource({reload: true});
                 }
             }
 
             if (filters[i].title == 'Task') {
                 filters[i].onPress = () => {
                     this.setState({selectType: 'tasks'});
-                    this._clearPosts();
-                    this._clearTasks();
-                    this.loadMore();
+                    this.resetDatasource({reload: true});
                 }
             }
         }
@@ -133,6 +132,11 @@ export default class Landing extends Component {
 
     _clearPosts() {
         data = ['0', '1'];
+
+        if (this.cancelablePostPromise) {
+            this.setState({loading: false}, () => this.cancelablePostPromise.cancel());
+        }
+
         this.setState({dataSource: ds.cloneWithRows(data), offset: 0}, () => {
             if (this.state.selectType == 'posts') {
                 this._loadPosts();
@@ -142,55 +146,79 @@ export default class Landing extends Component {
 
     _loadPosts(query) {
         var addQuery = query != undefined ? '&q=' + query : '';
-        return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
-            .then((response) => {return response.json()})
-            .then((response) => {
-                try {
-                    var array = JSON.parse(response)
-                } catch (e) {
-                    return Promise.reject(e)
+
+        this.cancelablePostPromise = makeCancelable(
+            new Promise(r => {
+                if (this.state.loading) {
+                    console.log("already loading...");
+                    return Promise.reject("already loading...")
                 }
-                
-                var sorted = array.sort( (a,b) => (a.created > b.created) ? -1 : ((a.created < b.created) ? 1 : 0) )    
 
-                return Promise.resolve(sorted);
-            })
-            .then((responseJson) => {
-                let promises = []
-                console.log('Number of posts: ' + responseJson.length)
-                responseJson.forEach(element => {
-                    if (element.idcommentPost == null) {
-                        this.setState({offset: this.state.offset + 1});
-
-                        promises.push(new Promise((resolve, reject) => {
-                            getProfile(element.idauthor, (responseJson) => {
-                                element.profile = responseJson;
-                                element.isPost = true;
-                                resolve(element);
-                            })
-                        }))
+                this.setState({loading: true});
+                fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/posts/getposts?pagesize=100&pageindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
+                .then((response) => {return response.json()})
+                .then((response) => {
+                    try {
+                        var array = JSON.parse(response)
+                    } catch (e) {
+                        return Promise.reject(e)
                     }
+                    
+                    var sorted = array.sort( (a,b) => (a.created > b.created) ? -1 : ((a.created < b.created) ? 1 : 0) )    
+
+                    return Promise.resolve(sorted);
+                })
+                .then((responseJson) => {
+                    let promises = []
+                    console.log('Number of posts: ' + responseJson.length)
+                    responseJson.forEach(element => {
+                        if (element.idcommentPost == null) {
+                            this.setState({offset: this.state.offset + 1});
+
+                            promises.push(new Promise((resolve, reject) => {
+                                getProfile(element.idauthor, (responseJson) => {
+                                    element.profile = responseJson;
+                                    element.isPost = true;
+                                    resolve(element);
+                                })
+                            }))
+                        }
+                    });
+
+                    if(promises.length) {
+                        Promise.all(promises)
+                        .then(response => {
+                            data = data.concat(response)
+                            this.setState({dataSource: ds.cloneWithRows(data)})
+                        })
+                        .finally(test => {
+                            console.log("Finally rendered all posts", test);
+                            this.setState({loading: false});
+                        })
+                        .catch(error => console.log(error))
+                    }
+
+                    return responseJson;
+                })
+                .catch((error) => {
+                    console.error(error);
                 });
-
-                if(promises.length) {
-                    Promise.all(promises)
-                    .then(response => {
-                        data = data.concat(response)
-                        this.setState({dataSource: ds.cloneWithRows(data)})
-                    })
-                    .finally(test => console.log("Finally rendered all posts", test))
-                    .catch(error => console.log(error))
-                }
-
-                return responseJson;
             })
-            .catch((error) => {
-                console.error(error);
-            });
+          );
+          
+          this.cancelablePostPromise
+            .promise
+            .then(() => console.log('resolved'))
+            .catch((reason) => console.log('isCanceled', reason.isCanceled));
     }
 
     _clearTasks() {
         dataTasks = ['0', '1'];
+
+        if (this.cancelableTaskPromise) {
+            this.setState({loading: false}, () => this.cancelableTaskPromise.cancel());
+        }
+
         this.setState({dataSourceTasks: ds.cloneWithRows(dataTasks), offset: 0}, () => {
             if (this.state.selectType == 'tasks') { 
                 this._loadTasks();
@@ -200,51 +228,72 @@ export default class Landing extends Component {
 
     _loadTasks(query) {
         var addQuery = query != undefined ? '&q=' + query : '';
-        return fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks?elementsno=100&fromindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
-            .then((response) => {return response.json()})
-            .then((response) => {
-                try {
-                    var array = JSON.parse(response)
-                } catch (e) {
-                    return Promise.reject(e)
+        console.debug("loading tasks from: " + 'https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks?elementsno=100&fromindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery);
+
+        this.cancelableTaskPromise = makeCancelable(
+            new Promise(r => {
+                if (this.state.loading) {
+                    console.log("already loading...");
+                    return Promise.reject("already loading...")
                 }
-                
-                var sorted = array.sort( (a,b) => (a.created > b.created) ? -1 : ((a.created < b.created) ? 1 : 0) )    
 
-                return Promise.resolve(sorted);
-            })
-            .then((responseJson) => {
-                let promises = []
-                console.log('Number of tasks: ' + responseJson.length)
-                responseJson.forEach(element => {
-                    if (element.idcommentPost == null) {
-                        this.setState({offset: this.state.offset + 1});
+                this.setState({laoding: true});
 
-                        promises.push(new Promise((resolve, reject) => {
-                            getProfile(element.post.idauthor, (responseJson) => {
-                                element.profile = responseJson;
-                                element.isTask = true;
-                                resolve(element);
-                            })
-                        }))
+                fetch('https://o1voetkqb3.execute-api.eu-central-1.amazonaws.com/dev/gettasks?elementsno=100&fromindex=' + this.state.offset + '&iduser=' + ApplicationConfig.getInstance().me.id + addQuery)
+                .then((response) => {return response.json()})
+                .then((response) => {
+                    try {
+                        var array = JSON.parse(response)
+                    } catch (e) {
+                        return Promise.reject(e)
                     }
+                    
+                    var sorted = array.sort( (a,b) => (a.created > b.created) ? -1 : ((a.created < b.created) ? 1 : 0) )    
+
+                    return Promise.resolve(sorted);
+                })
+                .then((responseJson) => {
+                    let promises = []
+                    console.log('Number of tasks: ' + responseJson.length)
+                    responseJson.forEach(element => {
+                        if (element.idcommentPost == null) {
+                            this.setState({offset: this.state.offset + 1});
+
+                            promises.push(new Promise((resolve, reject) => {
+                                getProfile(element.post.idauthor, (responseJson) => {
+                                    element.profile = responseJson;
+                                    element.isTask = true;
+                                    resolve(element);
+                                })
+                            }))
+                        }
+                    });
+
+                    if(promises.length) {
+                        Promise.all(promises)
+                        .then(response => {
+                            dataTasks = dataTasks.concat(response)
+                            this.setState({dataSourceTasks: ds.cloneWithRows(dataTasks)})
+                        })
+                        .finally(test => {
+                            console.log("Finally rendered all tasks", test);
+                            this.setState({loading: false});
+                        })
+                        .catch(error => console.log(error))
+                    }
+
+                    return responseJson;
+                })
+                .catch((error) => {
+                    console.error(error);
                 });
-
-                if(promises.length) {
-                    Promise.all(promises)
-                    .then(response => {
-                        dataTasks = dataTasks.concat(response)
-                        this.setState({dataSourceTasks: ds.cloneWithRows(dataTasks)})
-                    })
-                    .finally(test => console.log("Finally rendered all tasks", test))
-                    .catch(error => console.log(error))
-                }
-
-                return responseJson;
             })
-            .catch((error) => {
-                console.error(error);
-            });
+        );
+
+        this.cancelableTaskPromise
+            .promise
+            .then(() => console.log('resolved'))
+            .catch((reason) => console.log('isCanceled', reason.isCanceled));
     }
 
     _onRefresh() {
@@ -287,22 +336,12 @@ export default class Landing extends Component {
         )
     }
 
-    newPostHandler(obj) {
+    resetDatasource(obj) {
         console.log('new 1')
-        if (obj != undefined && obj.reload) {
-            // this.setState({selectType: "tasks"}, () => {
-                this._clearPosts();
-                this._clearTasks();
-            // });
-        }
+        this._clearPosts();
+        this._clearTasks();
 
         this.setState({modalPost: false, modalTask: false});
-    }
-
-    newTaskHandler(obj) {
-        console.log('new 2')
-
-        this.newPostHandler(obj);
     }
 
     _handleTypeChange(t) {
@@ -327,7 +366,7 @@ export default class Landing extends Component {
                     transparent={false}
                     visible={this.state.modalPost}
                     onRequestClose={() => this.setState({modalPost: false})}>
-                    <CreatePost closeModal={(obj) => this.newPostHandler(obj)} navigator={this.props.navigator} 
+                    <CreatePost closeModal={(obj) => this.resetDatasource(obj)} navigator={this.props.navigator} 
                         handleTypeChange={(t) => this._handleTypeChange(t)}/>
                 </Modal>
                 <Modal
@@ -335,7 +374,7 @@ export default class Landing extends Component {
                     transparent={false}
                     visible={this.state.modalTask}
                     onRequestClose={() => this.setState({modalTask: false})}>
-                    <CreateTask closeModal={(obj) => this.newTaskHandler(obj)} 
+                    <CreateTask closeModal={(obj) => this.resetDatasource(obj)} 
                         handleTypeChange={(t) => this._handleTypeChange(t)}/>
                 </Modal>
             </View>
@@ -343,10 +382,6 @@ export default class Landing extends Component {
     }
 
     loadMore() {
-        this.setState({
-            loading: true
-        });
-
         console.debug("selectType: " + this.state.selectType);
         
         if (this.state.selectType == 'posts') {
