@@ -137,11 +137,10 @@ export default class CreatePost extends Component{
     }
 
     post() {
+        this.setState({publishDisabled: true});
         if (!this.state.filesUploaded && this.state.photos.length > 0) {
             this.uploadFiles();
         } else {
-            this.setState({publishDisabled: true});
-
             let filesToPost = [];
             this.state.files.map((f, i) => {
                 let tmp = {
@@ -185,6 +184,12 @@ export default class CreatePost extends Component{
         }
     }
 
+    isPublishable() {
+        var result = (this.state.photos.length > 0 || this.state.text != '') && !this.state.publishDisabled;
+
+        return result;
+    }
+
     renderHeader() {
         return (
             <View style={{backgroundColor: '#FFF', paddingTop: Platform.OS === 'ios' ? 36 : 16, borderBottomWidth:StyleSheet.hairlineWidth,
@@ -210,8 +215,8 @@ export default class CreatePost extends Component{
                     :   <Text style={{fontSize: 14, color: 'black', fontFamily: 'roboto-bold'}}>New Post</Text>}
                 </View>
                 {this.state.canEdit ?
-                    <TouchableOpacity onPress={() => this.post()} disabled={this.state.photos.length > 0 || this.state.text != '' || this.state.publishDisabled ? false : true}>
-                        <Text style={{color: this.state.photos.length > 0 || this.state.text != '' ? Colors.main : Colors.gray, fontSize: 16, fontFamily: 'roboto-light'}}
+                    <TouchableOpacity onPress={() => this.post()} disabled={!this.isPublishable()}>
+                        <Text style={{color: this.isPublishable() ? Colors.main : Colors.gray, fontSize: 16, fontFamily: 'roboto-light'}}
                             >{this.state.isViewMode ? 'Update' : 'Pubblica' }
                         </Text>
                     </TouchableOpacity>
