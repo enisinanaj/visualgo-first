@@ -50,6 +50,7 @@ export default class CreateVisualGuideline extends Component {
 
         let selectedTheme = this.props.theme || {};
         let environment = this.props.environment || {};
+        let album = this.props.album.album || {};
         let isNestedView = this.props.nestedView || false;
         let onBackClosure = this.props.onBackClosure || undefined;
 
@@ -92,7 +93,8 @@ export default class CreateVisualGuideline extends Component {
             contributorsClicked: false,
             files: files,
             onBackClosure: onBackClosure,
-            fileprogress: []
+            fileprogress: [],
+            album: album
         }
     }
 
@@ -149,7 +151,8 @@ export default class CreateVisualGuideline extends Component {
                 idtheme: String(this.state.selectedTheme.id),
                 message: String(this.state.taskDescription),
                 backgroundmediaurl: '',
-                mediaurl: filesToPost
+                mediaurl: filesToPost,
+                id: this.state.album != undefined ? this.state.album : null
             }
         });
 

@@ -26,6 +26,7 @@ import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
 import NewAlbum from './create-album';
+import NewGuideline from './create-visual-guideline';
 import NoOpModal from './NoOpModal';
 import PostPrivacy from './privacy';
 import TagListTask from './tag-list-task';
@@ -81,7 +82,10 @@ export default class CreateTask extends Component {
             notificationsEnabled: false,
             isReady: false,
             albumModal: false,
-            alreadyPublished: false
+            alreadyPublished: false,
+            guidelineModal: false,
+            photos: [],
+            guideline: undefined,
         }
     }
 
@@ -436,6 +440,7 @@ export default class CreateTask extends Component {
                 if (responseJson == "") {
                     console.log("found nothing");
                     this.setState({albumRequired: true});
+                    this.setState({album: undefined});
                     return;
                 }
 
@@ -484,14 +489,33 @@ export default class CreateTask extends Component {
         );
     }
 
+    createVisualGuideline(album) {
+        this.setState({guidelineModal: false});
+    }
+
+    renderVisualGuidelineModal() {
+        console.log(this.state.album);
+        return (
+            <Modal
+                animationType={"slide"}
+                transparent={false}
+                visible={this.state.guidelineModal}
+                onRequestClose={() => this.setState({guidelineModal: false})}>
+                
+                <NewGuideline closeModal={(album) => this.createVisualGuideline(album)} theme={this.state.selectedTheme} environment={this.state.environment}
+                    album={this.state.album} files={this.state.photos} onBackClosure={true} owner={this}/>
+            </Modal>
+        );
+    }
+
     renderVisualGuideline() {
         var {environment, selectedTheme, album} = this.state;
         var isDisabled = environment.environmentName == undefined || selectedTheme.themeName == undefined;
-
+        
         return (
             <View style={{flexDirection: 'row', height: 44, alignItems: 'center', paddingLeft: 16,
                 borderTopColor: Colors.borderGray, borderTopWidth: StyleSheet.hairlineWidth}}>
-                <TouchableOpacity onPress={() => album == undefined ? this.setState({albumModal: true}) : {}} 
+                <TouchableOpacity onPress={() => album == undefined ? this.setState({albumModal: true}) : this.setState({guidelineModal: true})} 
                     style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} 
                     disabled={isDisabled}>
                     <Text style={[styles.rowTextStyle, isDisabled ? {color: Colors.grayText} : {color: Colors.black}, {marginTop: 4}]}>
@@ -503,6 +527,7 @@ export default class CreateTask extends Component {
                     </View>
                 </TouchableOpacity>
                 {this.renderAlbumModal()}
+                {this.renderVisualGuidelineModal()}
             </View>
         )
     }
@@ -633,7 +658,6 @@ export default class CreateTask extends Component {
 
         if (allTags.length > 0) {
             var clustersLength = allTags.filter((row) => row.category == 'clusters').length;
-            console.log(clustersLength);
             var clustersLabel = '';
 
             if (clustersLength > 1) {
@@ -646,7 +670,6 @@ export default class CreateTask extends Component {
             objs[0].innerName = clustersLabel;
 
             var managersLength = allTags.filter((row) => row.category == 'managers').length;
-            console.log(managersLength);
             var managersLabel = '';
 
             if (managersLength > 1) {
