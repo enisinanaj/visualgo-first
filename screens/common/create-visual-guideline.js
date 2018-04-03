@@ -16,7 +16,6 @@ import {
     ScrollView
 } from 'react-native';
 
-
 import {Font, AppLoading} from 'expo';
 import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
 import moment from 'moment';
@@ -177,9 +176,10 @@ export default class CreateVisualGuideline extends Component {
         await this.state.files.map((file, i) => {
             const fileObj = {
                 uri: file.uri != null ? file.uri : file.file,
-                name: file.md5 + '.' + getFileExtension(file),
+                name: file.md5 ? file.md5 + '.' + getFileExtension(file) : getFileName(file),
                 type: "image/" + getFileExtension(file)
             }
+
             RNS3.put(fileObj, AWS_OPTIONS)
             .progress((e) => {
                 let progress = this.state.fileprogress;
@@ -368,7 +368,6 @@ export default class CreateVisualGuideline extends Component {
     renderSelectedTag(data){
         return (
             <Text style={{color: Colors.main, paddingLeft: 8}}>{data.title}</Text>
-            
         );
     }
 
@@ -437,13 +436,13 @@ export default class CreateVisualGuideline extends Component {
         );
     }
 
-    _getDocuments() {
-        try {
-            Expo.DocumentPicker.getDocumentAsync({});
-        } catch (e) {
+    // _getDocuments() {
+    //     try {
+    //         Expo.DocumentPicker.getDocumentAsync({});
+    //     } catch (e) {
             
-        }
-    }
+    //     }
+    // }
 
     renderUploadAttach() {
 
@@ -635,7 +634,7 @@ export default class CreateVisualGuideline extends Component {
                         {getFileExtension(file) == 'PNG' || getFileExtension(file) == 'JPG' ? 
                             <Image source={{uri: file.uri != null ? file.uri : file.file}} style={{height: 40, width: 40, borderRadius: 3, marginLeft: 5}} resizeMode={'cover'} />
                             : null}
-                        <Text style={[styles.rowTextStyle, {flex: 1, paddingTop: 10, marginLeft: 5}]}>{getFileName(file)}</Text>
+                        <Text style={[styles.rowTextStyle, {flex: 1, paddingTop: 10, marginLeft: 5, marginRight: 50}]} numberOfLines={1} ellipsizeMode={"middle"}>{getFileName(file)}</Text>
                     </View>
                     {this.state.fileprogress[i] < 1 ?
                         <Progress.Circle size={22} animated={true} progress={this.state.fileprogress[i]} color={Colors.main} thickness={2} style={{position: 'absolute', right: 10, marginTop: 10}}/>

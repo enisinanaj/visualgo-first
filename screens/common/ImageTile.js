@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
-import { ImagePicker } from 'expo';
+import { ImagePicker, Camera, Permissions } from 'expo';
 import {MaterialCommunityIcons, EvilIcons, FontAwesome, Ionicons} from '@expo/vector-icons';
+import { openCamera, getFileExtension, getFileName } from '../helpers';
+import ApplicationConfig from '../helpers/appconfig'
 
 const { width } = Dimensions.get('window')
 
@@ -22,22 +24,15 @@ export default class ImageTile extends React.PureComponent {
     super(props);
 
     this.state = {
-      cameraModal: false
+      cameraModal: false,
+      hasCameraPermission: false
     }
   }
-
-  async openCamera(callback) {
-
-    let options = {
-      allowsEditing: false,
-      quality: 1,
-      base64: true,
-      exif: true
-    };
-
-    let image = await ImagePicker.launchCameraAsync(options);
-    callback(image);
-  };
+  
+  async componentWillMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasCameraPermission: status === 'granted' });
+  }
 
   renderCameraModal() {
     var {selectImage} = this.props;
@@ -47,9 +42,44 @@ export default class ImageTile extends React.PureComponent {
         transparent={false}
         visible={this.state.cameraModal}
         onRequestClose={() => this.setState({cameraModal: false})}>
-        {this.openCamera(selectImage)}
+        <View style={{ flex: 1 }}>
+          <Camera style={{ flex: 1 }} type={this.state.type} ref={c => this.camera = c}>
+            <TouchableOpacity onPress={() => {this.setState({cameraModal: false}); this.props.selectImage({cancelled: true});}} style={{backgroundColor: 'transparent', marginTop: 30, marginLeft: 10}}>
+                <Text style={{ fontSize: 22, marginBottom: 10, color: 'white' }}>Cancel</Text>
+            </TouchableOpacity>
+            <View style={{flex: 1, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'space-between', height: 70, width: width, position: 'absolute', bottom: 0}}>
+              <TouchableOpacity style={{marginLeft: 20, width: 60}}
+                onPress={() => {
+                  this.setState({
+                    type: this.state.type === Camera.Constants.Type.back
+                      ? Camera.Constants.Type.front
+                      : Camera.Constants.Type.back,
+                  });
+                }}>
+                <Ionicons name={"ios-reverse-camera-outline"} size={50} color={Colors.white} style={{marginTop: 5}}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={{width: 62, position: 'absolute', left: width/2 - 30}}
+                onPress={() => {this.snap()}}>
+                <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: '#fff', justifyContent: 'center'}}>
+                  <View style={{width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: '#000', backgroundColor: '#fff', marginLeft: 6}}></View>
+                </View>
+              </TouchableOpacity>
+              <View>
+              </View>
+            </View>
+          </Camera>
+        </View>
       </Modal>)
   }
+
+  snap = async () => {
+    if (this.camera) {
+      let photo = await this.camera.takePictureAsync();
+
+      this.props.selectImage(photo);
+      this.setState({cameraModal: false});
+    }
+  };
 
   render() {
     let { item, index, selected, selectImage } = this.props;

@@ -194,7 +194,7 @@ export default class CreatePost extends Component{
                     <View style={{position: 'absolute', top: 0, height: 20, width: width, backgroundColor: Colors.main}} />
                 : null}
                 { !this.state.isViewMode ?
-                    <TouchableOpacity onPress={this.props.closeModal}>
+                    <TouchableOpacity onPress={this.props.closeModal} style={{marginLeft: 10}}>
                         <Text>
                             <EvilIcons name={"close"} size={22} color={Colors.main}/>
                         </Text>

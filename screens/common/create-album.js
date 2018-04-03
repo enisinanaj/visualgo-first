@@ -48,11 +48,12 @@ export default class NewAlbum extends Component {
             isReady: false,
             hasCameraPermission: null,
             type: Camera.Constants.Type.back,
-            cameraOpen: false,
             imageBrowserOpen: false,
             photos: [],
             files: [],
-            visualGuidelineModal: false
+            visualGuidelineModal: false,
+            cameraModal: false,
+            hasCameraPermission: null
         }
     }
 
@@ -61,9 +62,55 @@ export default class NewAlbum extends Component {
         this.setState({ hasCameraPermission: status === 'granted' });
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.loadFonts()
+        const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        this.setState({ hasCameraPermission: status === 'granted' });
     }
+    
+    renderCameraModal() {    
+        return (<Modal
+            animationType={"fade"}
+            transparent={false}
+            visible={this.state.cameraModal}
+            onRequestClose={() => this.setState({cameraModal: false})}>
+            <View style={{ flex: 1 }}>
+              <Camera style={{ flex: 1 }} type={this.state.type} ref={c => this.camera = c}>
+                <TouchableOpacity onPress={() => this.setState({cameraModal: false})} style={{backgroundColor: 'transparent', marginTop: 30, marginLeft: 10}}>
+                    <Text style={{ fontSize: 22, marginBottom: 10, color: 'white' }}>Cancel</Text>
+                </TouchableOpacity>
+                <View style={{flex: 1, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'space-between', height: 70, width: width, position: 'absolute', bottom: 0}}>
+                  <TouchableOpacity style={{marginLeft: 20, width: 60}}
+                    onPress={() => {
+                      this.setState({
+                        type: this.state.type === Camera.Constants.Type.back
+                          ? Camera.Constants.Type.front
+                          : Camera.Constants.Type.back,
+                      });
+                    }}>
+                    <Ionicons name={"ios-reverse-camera-outline"} size={50} color={Colors.white} style={{marginTop: 5}}/>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{width: 62, position: 'absolute', left: width/2 - 30}}
+                    onPress={() => {this.snap()}}>
+                    <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: '#fff', justifyContent: 'center'}}>
+                      <View style={{width: 48, height: 48, borderRadius: 24, borderWidth: 2, borderColor: '#000', backgroundColor: '#fff', marginLeft: 6}}></View>
+                    </View>
+                  </TouchableOpacity>
+                  <View>
+                  </View>
+                </View>
+              </Camera>
+            </View>
+          </Modal>)
+    }
+    
+    snap = async () => {
+        if (this.camera) {
+          let photo = await this.camera.takePictureAsync();
+          console.log("photo here: " + JSON.stringify(photo));
+          this.setState({cameraModal: false, pictureTaken: photo, files: [photo], visualGuidelineModal: true});
+        }
+    };
 
     async loadFonts() {
         await Font.loadAsync({
@@ -77,7 +124,6 @@ export default class NewAlbum extends Component {
 
     imageBrowserCallback = (callback) => {
         callback.then((photos) => {
-          console.log(photos)
           this.setState({
             imageBrowserOpen: false,
             photos
@@ -129,7 +175,7 @@ export default class NewAlbum extends Component {
                 onRequestClose={() => this.setState({visualGuidelineModal: false})}>
                 
                 <CreateVisualGuideline closeModal={(album) => this.pushAlbum(album)} theme={this.props.theme} environment={this.props.environment}
-                    files={this.state.photos} onBackClosure={true} owner={this.props.owner}/>
+                    files={[...this.state.photos, ...this.state.files]} onBackClosure={true} owner={this.props.owner}/>
             </Modal>
         );
     }
@@ -180,26 +226,17 @@ export default class NewAlbum extends Component {
         )
     }
 
-    async openCamera() {
-        let options = {
-          allowsEditing: true,
-          quality: 1,
-          base64: true
-        };
+    // async openCamera() {
+    //     let options = {
+    //       allowsEditing: true,
+    //       quality: 1,
+    //       base64: true
+    //     };
     
-        let image = await ImagePicker.launchCameraAsync(options);
-        this.setState({pictureTaken: image, files: [image]});
-        this.setState({visualGuidelineModal: true});
-    };
-
-    async _getDocuments() { 
-        try { 
-            let doc = await Expo.DocumentPicker.getDocumentAsync({}); 
-            this.setState({docs: docs});
-        } catch (e) { 
-             
-        }
-    }
+    //     let image = await ImagePicker.launchCameraAsync(options);
+    //     this.setState({pictureTaken: image, files: [image]});
+    //     this.setState({visualGuidelineModal: true});
+    // };
 
     render() {
         if (!this.state.isReady) {
@@ -229,7 +266,7 @@ export default class NewAlbum extends Component {
                         </TouchableOpacity>
                     </DefaultRow>
                     <DefaultRow style={{backgroundColor: 'transparent', padding: 12}}>
-                        <TouchableOpacity onPress={() => this.openCamera()}  style={{flex: 1}}>
+                        <TouchableOpacity onPress={() => this.setState({cameraModal: true})}  style={{flex: 1}}>
                             <Text style={styles.menuElement}>Take Picture</Text>
                         </TouchableOpacity>
                     </DefaultRow>
@@ -250,6 +287,7 @@ export default class NewAlbum extends Component {
                 </View>
                 {this._renderImagePickerModal()}
                 {this.allGuidelineData()}
+                {this.renderCameraModal()}
             </View>
         );
     }

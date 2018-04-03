@@ -13,7 +13,7 @@ import {
 import Colors from '../constants/Colors';
 import { FileSystem } from 'expo';
 import ImageTile from './common/ImageTile';
-import { isIphoneX } from './helpers';
+import { isIphoneX, getFileName, getFileExtension } from './helpers';
 const { width } = Dimensions.get('window')
 
 export default class ImageBrowser extends React.Component {

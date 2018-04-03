@@ -3,6 +3,8 @@ import{
     Platform
 } from 'react-native';
 
+import {ImagePicker} from 'expo';
+
 const profile = [
     {
         source: require('../img/dp2.jpg'),
@@ -108,7 +110,9 @@ export const isIphoneX = () => {
 
 export function getFileName(file) {
     var filename = file.uri != null ? file.uri : file.file;
-    filename = filename.substring(filename.lastIndexOf('/') + 1, filename.indexOf('?'));
+    var lastIndex = filename.indexOf('?') == -1 ? filename.length : filename.indexOf('?');
+
+    filename = filename.substring(filename.lastIndexOf('/') + 1, lastIndex);
 
     return filename;
 }
@@ -116,5 +120,17 @@ export function getFileName(file) {
 export function getFileExtension(file) {
     const filename = getFileName(file);
 
-    return filename.substring(filename.lastIndexOf('.') + 1);
+    return filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
 }
+
+export async function openCamera(callback) {
+    let options = {
+        allowsEditing: false,
+        quality: 1,
+        base64: true,
+        exif: true
+    };
+
+    let image = await ImagePicker.launchCameraAsync(options);
+    callback(image);
+};

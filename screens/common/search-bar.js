@@ -21,6 +21,7 @@ import ImageBrowser from '../ImageBrowser';
 import Colors from '../../constants/Colors';
 import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
+import appconfig from '../helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
 
