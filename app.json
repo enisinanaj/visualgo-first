@@ -3,7 +3,7 @@
     "sdkVersion": "23.0.0",
     "name": "Visual Go", 
     "icon": "./assets/images/icon.png", 
-    "version": "1.7", 
+    "version": "1.8", 
     "slug": "VisualGo", 
     "ios": { 
       "bundleIdentifier": "com.areakappa.warda",
