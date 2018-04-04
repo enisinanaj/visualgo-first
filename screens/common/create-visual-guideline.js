@@ -49,9 +49,19 @@ export default class CreateVisualGuideline extends Component {
 
         let selectedTheme = this.props.theme || {};
         let environment = this.props.environment || {};
-        let album = this.props.album.album || {};
+        let album = this.props.album || undefined;
         let isNestedView = this.props.nestedView || false;
         let onBackClosure = this.props.onBackClosure || undefined;
+
+        var description = '';
+        try {
+            description = this.props.album.taskout.post.message || '';
+        } catch (e) {
+            // suffocate
+        }
+
+
+        console.log("album: " + JSON.stringify(this.props.album));
 
         let files = this.props.files || [];
 
@@ -81,7 +91,7 @@ export default class CreateVisualGuideline extends Component {
             managerVisible: false,
             assignTo: false,
             headTitle: 'Clusters',
-            taskDescription: '',
+            taskDescription: description || '',
             commentsEnabled: false,
             notificationsEnabled: false,
             isReady: false,
@@ -151,7 +161,7 @@ export default class CreateVisualGuideline extends Component {
                 message: String(this.state.taskDescription),
                 backgroundmediaurl: '',
                 mediaurl: filesToPost,
-                id: this.state.album != undefined ? this.state.album : null
+                id: this.state.album != undefined ? this.state.album.taskout.id : null
             }
         });
 

@@ -65,6 +65,7 @@ export default class CreateTask extends Component {
             selectedTheme: {},
             environment: {},
             album: undefined,
+            fullAlbum: undefined,
             albumRequired: false,
             allTags: [],
             countPhoto: 1,
@@ -438,15 +439,12 @@ export default class CreateTask extends Component {
             .then((responseJson) => {
                 console.log("result" + JSON.stringify(responseJson));
                 if (responseJson == "") {
-                    console.log("found nothing");
                     this.setState({albumRequired: true});
                     this.setState({album: undefined});
                     return;
                 }
-
-                console.log("found something");
                 var parsedResponse = JSON.parse(responseJson);
-                this.setState({album: {album: parsedResponse.taskout.id}});
+                this.setState({album: {album: parsedResponse.taskout.id}, fullAlbum: parsedResponse});
             })
             .catch((error) => {
                 console.error(error);
@@ -494,7 +492,6 @@ export default class CreateTask extends Component {
     }
 
     renderVisualGuidelineModal() {
-        console.log(this.state.album);
         return (
             <Modal
                 animationType={"slide"}
@@ -503,7 +500,7 @@ export default class CreateTask extends Component {
                 onRequestClose={() => this.setState({guidelineModal: false})}>
                 
                 <NewGuideline closeModal={(album) => this.createVisualGuideline(album)} theme={this.state.selectedTheme} environment={this.state.environment}
-                    album={this.state.album} files={this.state.photos} onBackClosure={true} owner={this}/>
+                    album={this.state.fullAlbum} files={this.state.photos} onBackClosure={true} owner={this}/>
             </Modal>
         );
     }
