@@ -27,7 +27,7 @@
     "npm": "4.6.1",
     "pubnub-react": "^1.2.0",
     "react": "16.0.0",
-    "react-native": "0.50.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-23.0.0.tar.gz",
     "react-native-actionsheet": "^2.3.0",
     "react-native-aws3": "0.0.8",
     "react-native-calendars": "^1.17.0",
