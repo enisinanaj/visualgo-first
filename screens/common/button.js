@@ -9,7 +9,7 @@ import {
     StyleSheet
 } from 'react-native';
 
-import {Font, AppLoading} from 'expo';
+//import {Font, AppLoading} from 'expo';
 
 import Colors from '../../constants/Colors';
 import {Ionicons, EvilIcons} from '@expo/vector-icons';
@@ -32,12 +32,12 @@ export default class Button extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        // });
 
         this.setState({isReady: true});
     }

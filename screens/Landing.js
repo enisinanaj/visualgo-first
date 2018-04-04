@@ -18,7 +18,7 @@ import {
 
 const {width, height} = Dimensions.get('window');
 
-import {Font, AppLoading} from 'expo';
+//import {Font, AppLoading} from 'expo';
 
 import Colors from '../constants/Colors';
 import SearchBar from './common/search-bar';
@@ -113,12 +113,12 @@ export default class Landing extends Component {
     }
 
     async loadFonts(onLoaded) {
-        await Font.loadAsync({
+        /*await Font.loadAsync({
             'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
             'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
             'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
             'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
-        });
+        });*/
 
         this.setState({isReady: true});
         onLoaded();
@@ -382,8 +382,6 @@ export default class Landing extends Component {
     }
 
     loadMore() {
-        console.debug("selectType: " + this.state.selectType);
-        
         if (this.state.selectType == 'posts') {
             this._loadPosts();
         } else if (this.state.selectType == 'tasks') {
@@ -431,9 +429,9 @@ export default class Landing extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
+        /*if (!this.state.isReady) {
             return <AppLoading />
-        }
+        }*/
 
         return (
             <View ref='view' style={styles.container}>

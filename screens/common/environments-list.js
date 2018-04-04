@@ -17,7 +17,7 @@ import {
   Dimensions,
   ScrollView } from 'react-native';
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 
 import DefaultRow from './default-row';
 import FilterBar from './filter-bar';
@@ -62,10 +62,10 @@ export default class EnvironmentList extends Component {
   }
 
   async loadFonts() {
-    await Font.loadAsync({
-      "roboto-light": "../../assets/fonts/Roboto-Light.ttf",
-      "roboto-bold": "../../assets/fonts/Roboto-Bold.ttf"
-    });
+    // await Font.loadAsync({
+    //   "roboto-light": "../../assets/fonts/Roboto-Light.ttf",
+    //   "roboto-bold": "../../assets/fonts/Roboto-Bold.ttf"
+    // });
 
     this.loadEnvironments();
     this.setState({isReady: true});
@@ -102,14 +102,12 @@ export default class EnvironmentList extends Component {
   }
 
   keyboardWillShow (e) {
-    console.log("keyboard will show");
     this.setState({keyboardIsOpen: true});
     let newSize = height - e.endCoordinates.height;
     this.setState({visibleHeight: newSize, k_visible: true})
   }
 
   keyboardWillHide (e) {
-    console.log("keyboard will hide");
     this.setState({keyboardIsOpen: false});
     if(this.componentDidMount) {
         this.setState({visibleHeight: Dimensions.get('window').height, k_visible: false})
@@ -238,9 +236,9 @@ export default class EnvironmentList extends Component {
   }
 
   render() {
-    if (!this.state.isReady) {
-      return <AppLoading />;
-    }
+    // if (!this.state.isReady) {
+    //   return <AppLoading />;
+    // }
 
     var {visibleHeight} = this.state;
 

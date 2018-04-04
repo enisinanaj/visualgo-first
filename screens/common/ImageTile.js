@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
-import { ImagePicker, Camera, Permissions } from 'expo';
+// import { ImagePicker, Camera, Permissions } from 'expo';
 import {MaterialCommunityIcons, EvilIcons, FontAwesome, Ionicons} from '@expo/vector-icons';
 import { openCamera, getFileExtension, getFileName } from '../helpers';
 import ApplicationConfig from '../helpers/appconfig'

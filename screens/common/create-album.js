@@ -15,7 +15,8 @@ import {
     Modal,
     ScrollView
 } from 'react-native';
-import {Font, AppLoading, Camera, Permissions, ImagePicker, DocumentPicker} from 'expo';
+//import {Camera, Permissions, ImagePicker} from 'expo';
+//import {Font, AppLoading, DocumentPicker} from 'expo';
 import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome, Entypo} from '@expo/vector-icons';
 import moment from 'moment';
 import locale from 'moment/locale/it'
@@ -58,14 +59,14 @@ export default class NewAlbum extends Component {
     }
 
     async componentWillMount() {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA);
-        this.setState({ hasCameraPermission: status === 'granted' });
+        // const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        // this.setState({ hasCameraPermission: status === 'granted' });
     }
 
     async componentDidMount() {
         this.loadFonts()
-        const { status } = await Permissions.askAsync(Permissions.CAMERA);
-        this.setState({ hasCameraPermission: status === 'granted' });
+        // const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        // this.setState({ hasCameraPermission: status === 'granted' });
     }
     
     renderCameraModal() {    
@@ -75,7 +76,7 @@ export default class NewAlbum extends Component {
             visible={this.state.cameraModal}
             onRequestClose={() => this.setState({cameraModal: false})}>
             <View style={{ flex: 1 }}>
-              <Camera style={{ flex: 1 }} type={this.state.type} ref={c => this.camera = c}>
+              {/* <Camera style={{ flex: 1 }} type={this.state.type} ref={c => this.camera = c}>
                 <TouchableOpacity onPress={() => this.setState({cameraModal: false})} style={{backgroundColor: 'transparent', marginTop: 30, marginLeft: 10}}>
                     <Text style={{ fontSize: 22, marginBottom: 10, color: 'white' }}>Cancel</Text>
                 </TouchableOpacity>
@@ -99,25 +100,25 @@ export default class NewAlbum extends Component {
                   <View>
                   </View>
                 </View>
-              </Camera>
+              </Camera> */}
             </View>
           </Modal>)
     }
     
     snap = async () => {
-        if (this.camera) {
-          let photo = await this.camera.takePictureAsync();
-          console.log("photo here: " + JSON.stringify(photo));
-          this.setState({cameraModal: false, pictureTaken: photo, files: [photo], visualGuidelineModal: true});
-        }
+        // if (this.camera) {
+        //   let photo = await this.camera.takePictureAsync();
+        //   console.log("photo here: " + JSON.stringify(photo));
+        //   this.setState({cameraModal: false, pictureTaken: photo, files: [photo], visualGuidelineModal: true});
+        // }
     };
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        // });
 
         this.setState({isReady: true});
     }
@@ -147,9 +148,9 @@ export default class NewAlbum extends Component {
 
     async _getDocuments() {
         try {
-            let files = await DocumentPicker.getDocumentAsync({});
-            this.setState({files: files});
-            this.setState({visualGuidelineModal: true});
+            // let files = await DocumentPicker.getDocumentAsync({});
+            // this.setState({files: files});
+            // this.setState({visualGuidelineModal: true});
         } catch (e) {
             console.error(e);
         }
@@ -239,9 +240,9 @@ export default class NewAlbum extends Component {
     // };
 
     render() {
-        if (!this.state.isReady) {
-            return <AppLoading />
-        }
+        // if (!this.state.isReady) {
+        //     return <AppLoading />
+        // }
         
         return (
             <View style={styles.container}>

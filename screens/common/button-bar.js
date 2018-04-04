@@ -10,7 +10,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import {Font, AppLoading} from 'expo';
+//import {Font, AppLoading} from 'expo';
 
 import {Ionicons} from '@expo/vector-icons'
 import Colors from '../../constants/Colors';
@@ -30,12 +30,12 @@ export default class ButtonBar extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        // });
 
         this.setState({isReady: true});
     }
@@ -55,9 +55,9 @@ export default class ButtonBar extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
-            return <AppLoading />
-        }
+        // if (!this.state.isReady) {
+        //     return <AppLoading />
+        // }
 
         return (
             <View ref='container'>
