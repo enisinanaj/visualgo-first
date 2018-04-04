@@ -16,7 +16,7 @@ import {
     ScrollView
 } from 'react-native';
 
-// import {Font, AppLoading} from 'expo';
+import {Font, AppLoading} from 'expo';
 import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
 import moment from 'moment';
 import locale from 'moment/locale/it';
@@ -116,11 +116,11 @@ export default class CreateVisualGuideline extends Component {
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf')
-        // });
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf')
+        });
 
         this.setState({isReady: true});
     }
@@ -670,9 +670,9 @@ export default class CreateVisualGuideline extends Component {
     }
 
     render() {
-        // if (!this.state.isReady) {
-        //     return <AppLoading />
-        // }
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
 
         return (
             <View style={{height: this.state.visibleHeight}}>

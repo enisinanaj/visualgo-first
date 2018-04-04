@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 
 import Drawer from 'react-native-drawer'
-//import {Font, AppLoading} from 'expo';
+import {Font, AppLoading} from 'expo';
 import {EvilIcons, Entypo} from '@expo/vector-icons';
 import { withNavigation } from '@expo/ex-navigation';
 import RadialMenu from 'react-native-radial-menu';
@@ -91,12 +91,12 @@ export default class CollabView extends Component {
     }
     
     async loadFonts() {
-        /*await Font.loadAsync({
+        await Font.loadAsync({
             'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
             'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
             'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
             'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
-        });*/
+        });
 
         this.setState({isReady: true});
     }
@@ -249,9 +249,9 @@ export default class CollabView extends Component {
     }
 
     render() {
-        // if (!this.state.isReady) {
-        //     return <AppLoading />;
-        // }
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        }
 
         return (
             <View style={[{flex: 1}, styles.container]}>

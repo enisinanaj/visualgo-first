@@ -9,7 +9,7 @@ import {Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
 import { NavigatorIOS, WebView} from 'react-native';
 import moment from 'moment';
 
-//import {Font, AppLoading} from 'expo';
+import {Font, AppLoading} from 'expo';
 import Colors from '../constants/Colors';
 import DefaultRow from './common/default-row';
 import { isIphoneX } from './helpers';
@@ -43,13 +43,13 @@ export default class AlbumDetail extends React.Component {
     }
 
     async loadFonts() {
-        /*await Font.loadAsync({
+        await Font.loadAsync({
             'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
             'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
             'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
             'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
             'roboto-bold-italic': require('../assets/fonts/Roboto-BoldItalic.ttf')
-        });*/
+        });
 
         this.setState({isReady: true});
     }
@@ -248,9 +248,9 @@ export default class AlbumDetail extends React.Component {
     }
 
     render() {
-        /*if (!this.state.isReady) {
+        if (!this.state.isReady) {
             return <AppLoading />;
-        }*/
+        }
 
         const {environment, theme, profile, taskout} = this.state.data;
         return ( 

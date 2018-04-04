@@ -30,7 +30,7 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#198ab8', '#70d384'];
 
 import {Ionicons, SimpleLineIcons, EvilIcons, Octicons, Entypo} from '@expo/vector-icons';
-// import {Font, AppLoading} from 'expo';
+import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
 import TagList from './tag-list';
 import PostPrivacy from './privacy';
@@ -111,10 +111,10 @@ export default class CreatePost extends Component{
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //     'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
-        //     'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf'
-        // });
+        await Font.loadAsync({
+            'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
+            'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf'
+        });
 
         this.setState({isReady: true});
     }
@@ -633,9 +633,9 @@ export default class CreatePost extends Component{
     }
 
     render() {
-        // if (!this.state.isReady) {
-        //     return <AppLoading />;
-        // }
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        }
 
         return (
             <View style={{height: this.state.visibleHeight, backgroundColor: Colors.white}}>

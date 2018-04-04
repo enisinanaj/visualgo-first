@@ -11,7 +11,7 @@ import {
     Modal
 } from 'react-native';
 
-// import {Font, AppLoading} from 'expo';
+import {Font, AppLoading} from 'expo';
 import PropTypes from 'prop-types';
 import Colors from '../../constants/Colors';
 import DefaultRow from './default-row';
@@ -41,9 +41,9 @@ export default class ContextualActionsMenu extends Component {
   }
 
   async loadFonts() {
-    // await Font.loadAsync({
-    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
-    // });
+    await Font.loadAsync({
+      'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
+    });
 
     this.setState({isReady: true});
   }
@@ -74,9 +74,9 @@ export default class ContextualActionsMenu extends Component {
   }
 
   render() {
-      // if (!this.state.isReady) {
-      //   return <AppLoading />;
-      // }
+      if (!this.state.isReady) {
+        return <AppLoading />;
+      }
 
       return <Modal
         animationType="fade"

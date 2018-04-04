@@ -17,7 +17,7 @@ import {
 import {Ionicons, FontAwesome} from '@expo/vector-icons';
 import {StackNavigator} from 'react-navigation';
 
-//import { AppLoading, Asset, Font } from 'expo';
+import { AppLoading, Asset, Font } from 'expo';
 
 import Router from './navigation/Router';
 import cacheAssetsAsync from './utilities/cacheAssetsAsync';
@@ -63,7 +63,7 @@ class AppContainer extends React.Component {
   }
 
   async loadFontsAsync() {
-    /*Font.loadAsync({
+    Font.loadAsync({
       'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
       'roboto-thin': require('./assets/fonts/Roboto-Thin.ttf'),
       'roboto-black': require('./assets/fonts/Roboto-Black.ttf'),
@@ -72,7 +72,7 @@ class AppContainer extends React.Component {
       'roboto-bold-condensed': require('./assets/fonts/Roboto-BoldCondensed.ttf'),
       'roboto-bold-italic': require('./assets/fonts/Roboto-BoldItalic.ttf'),
       'roboto-bold-italic': require('./assets/fonts/Roboto-BoldItalic.ttf'),
-    });*/
+    });
   }
 
   async _loadAssetsAsync() {
@@ -247,12 +247,11 @@ class AppContainer extends React.Component {
         );
     } else {
       return (
-        // <AppLoading
-        //   startAsync={this._loadAssetsAsync}
-        //   onFinish={() => this.setState({ appIsReady: true })}
-        //   onError={console.warn}
-        // />
-        <View />
+        <AppLoading
+          startAsync={this._loadAssetsAsync}
+          onFinish={() => this.setState({ appIsReady: true })}
+          onError={console.warn}
+        />
       );
     }
   }

@@ -16,7 +16,7 @@ const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 import Colors from '../../constants/Colors';
 import {EvilIcons, Ionicons} from '@expo/vector-icons';
 import Shadow from '../../constants/Shadow';
-// import { Font, AppLoading } from 'expo';
+import { Font, AppLoading } from 'expo';
 import Router from '../../navigation/Router';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import DisabledStyle from '../../constants/DisabledStyle';
@@ -50,12 +50,12 @@ export default class FitlerBar extends Component {
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-        //     'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
-        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
-        // });
+        await Font.loadAsync({
+            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        });
 
         this.setState({ isReady: true });
     }
@@ -245,9 +245,9 @@ export default class FitlerBar extends Component {
     }
 
     render() {
-        // if (!this.state.isReady) {
-        //     return <AppLoading />
-        // }
+        if (!this.state.isReady) {
+            return <AppLoading />
+        }
 
         var {customStyle, innerStyle} = this.props;
 
