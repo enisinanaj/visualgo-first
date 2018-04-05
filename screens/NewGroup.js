@@ -17,9 +17,8 @@ import {
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
 import Colors from '../constants/Colors';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
-import {EvilIcons, SimpleLineIcons, MaterialIcons} from '@expo/vector-icons';
+import {EvilIcons, SimpleLineIcons, MaterialIcons, Ionicons} from 'react-native-vector-icons/FontAwesome';
 import _ from 'lodash';
 
 import moment from 'moment';

@@ -3,9 +3,9 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import {
-  ExponentLinksView,
-} from '@expo/samples';
+// import {
+//   ExponentLinksView,
+// } from '@expo/samples';
 
 export default class LinksScreen extends React.Component {
   static route = {
@@ -22,7 +22,7 @@ export default class LinksScreen extends React.Component {
 
         { /* Go ahead and delete ExponentLinksView and replace it with your
            * content, we just wanted to provide you with some helpful links */ }
-        <ExponentLinksView />
+        {/* <ExponentLinksView /> */}
 
       </ScrollView>
     );

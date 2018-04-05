@@ -4,7 +4,7 @@ import { Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calend
 
 import Colors from '../constants/Colors';
 
-import {AppLoading, Font} from 'expo';
+// import {AppLoading, Font} from 'expo';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import _ from 'lodash';
@@ -38,11 +38,11 @@ export default class CalendarView extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-            'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
+        //     'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
+        // });
 
         this.setState({ isReady: true });
     }
@@ -60,9 +60,9 @@ export default class CalendarView extends Component {
     }
 
     render () {
-        if (!this.state.isReady) {
-            return <AppLoading />;
-        }
+        // if (!this.state.isReady) {
+        //     return <AppLoading />;
+        // }
 
         return (
             <View style={{height: height, flex: 1, flexDirection: 'column'}}>

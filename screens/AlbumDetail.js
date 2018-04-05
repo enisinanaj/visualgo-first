@@ -5,7 +5,8 @@ import { StyleSheet, video,ListView, ScrollView,
         Dimensions, StatusBar,
         View, Button, TouchableHighlight, 
         TextInput, TouchableOpacity, Alert,} from 'react-native';
-import {Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
+
+import {Ionicons, Entypo, EvilIcons} from 'react-native-vector-icons/FontAwesome';
 import { NavigatorIOS, WebView} from 'react-native';
 import moment from 'moment';
 
@@ -26,8 +27,6 @@ export default class AlbumDetail extends React.Component {
         moment.locale("it");
 
         var {data} = this.props.navigation != undefined ? this.props.navigation.state.params : {};
-
-        console.debug("AlbumSummary data: " + JSON.stringify(data));
 
         this.state = {
             isReady: false,

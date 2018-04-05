@@ -10,7 +10,7 @@ import {
     StyleSheet
 } from 'react-native';
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 
 export default class onYourMind extends Component {
 
@@ -27,20 +27,20 @@ export default class onYourMind extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        // });
 
         this.setState({isReady: true});
     }
 
     render() {
-        if (!this.state.isReady) {
-            return <AppLoading />;
-        }
+        // if (!this.state.isReady) {
+        //     return <AppLoading />;
+        // }
 
         return (
             <View style={styles.container}>

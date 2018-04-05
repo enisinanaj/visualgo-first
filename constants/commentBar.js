@@ -19,7 +19,7 @@ export default commentBar = StyleSheet.create({
         margin: 0,
         textAlign: 'center',
         fontSize: 14,
-        fontFamily: 'roboto-regular',
+        fontFamily: 'Roboto-Regular',
         color: '#FFFFFF',
         backgroundColor: 'transparent'
     },
@@ -84,7 +84,7 @@ export default commentBar = StyleSheet.create({
 
     rowTitle: {
         paddingLeft: 5,
-        fontFamily: 'roboto-regular',
+        fontFamily: 'Roboto-Regular',
         fontSize: 12,
         paddingTop: 1,
         backgroundColor: 'transparent'
@@ -101,7 +101,7 @@ export default commentBar = StyleSheet.create({
     },
 
     rowSubTitle: {
-        fontFamily: 'roboto-regular',
+        fontFamily: 'Roboto-Regular',
         color: '#9A9A9A',
         fontSize: 12,
         paddingLeft: 5,

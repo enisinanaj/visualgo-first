@@ -22,7 +22,9 @@ import _ from 'lodash';
 import SingleImage from './single-image';
 import ImageScreen from '../imageScreen';
 import Router from '../../navigation/Router';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
+
+import {EvilIcons} from 'react-native-vector-icons';
+
 import Colors from '../../constants/Colors';
 
 export default class ImagePost extends Component {

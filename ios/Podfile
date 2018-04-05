@@ -1,0 +1,22 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'VisualGo' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for VisualGo
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  # Add new pods below this line
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
+  pod 'native-navigation', :path => '../node_modules/native-navigation'
+
+
+  target 'VisualGoTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

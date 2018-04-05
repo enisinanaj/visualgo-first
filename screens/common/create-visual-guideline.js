@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 
 // import {Font, AppLoading} from 'expo';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import locale from 'moment/locale/it';
 import {RNS3} from 'react-native-aws3';

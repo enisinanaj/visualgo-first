@@ -12,7 +12,7 @@ import {
 
 //import {Font, AppLoading} from 'expo';
 
-import {Ionicons} from '@expo/vector-icons'
+import {Ionicons} from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/Colors';
 import DisabledStyle from '../../constants/DisabledStyle';
 

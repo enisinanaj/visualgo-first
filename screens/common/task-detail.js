@@ -25,9 +25,10 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, Entypo} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, Entypo} from 'react-native-vector-icons/FontAwesome';
+
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';
 import CalendarView from './calendar';
@@ -100,11 +101,11 @@ export default class TaskDetail extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf')
+        // });
 
         this.setState({isReady: true});
     }
@@ -761,9 +762,9 @@ export default class TaskDetail extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
-            return <AppLoading />
-        }
+        // if (!this.state.isReady) {
+        //     return <AppLoading />
+        // }
 
         const {data} = this.props;
         

@@ -11,10 +11,10 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import {AppLoading, Font} from 'expo';
+// import {AppLoading, Font} from 'expo';
 import moment from 'moment';
 import locale from 'moment/locale/it'
-import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
+import {Ionicons, MaterialCommunityIcons} from 'react-native-vector-icons/FontAwesome';
 
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
@@ -56,12 +56,12 @@ export default class VisualGuidelineItem extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        // });
 
         this.setState({ isReady: true });
     }
@@ -131,9 +131,9 @@ export default class VisualGuidelineItem extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
-          return <AppLoading />;
-        }
+        // if (!this.state.isReady) {
+        //   return <AppLoading />;
+        // }
 
         return (
             <View style={{height: 290, padding: 0, margin: 0}} >

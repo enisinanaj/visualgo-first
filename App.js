@@ -10,12 +10,14 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
-import {
-  NavigationProvider,
-  StackNavigation,
-} from '@expo/ex-navigation';
-import {Ionicons, FontAwesome} from '@expo/vector-icons';
-import {StackNavigator} from 'react-navigation';
+// import {
+//   NavigationProvider,
+//   StackNavigation,
+// } from '@expo/ex-navigation';
+
+import { StackNavigator } from 'react-navigation';
+
+import {Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
 
 //import { AppLoading, Asset, Font } from 'expo';
 
@@ -232,9 +234,9 @@ class AppContainer extends React.Component {
                     height: this.state.innerViewHeight,
                     shadowColor: 'transparent',
                     shadowOffset: {height: 0}}}>
-                  <NavigationProvider router={Router}>
+                  {/* <NavigationProvider router={Router}>
                     <StackNavigation id="root" initialRoute={Router.getRoute('rootNavigation')} />
-                  </NavigationProvider>
+                  </NavigationProvider> */}
                 </Animated.View>
                 {Platform.OS === 'ios' && <StatusBar barStyle="light-content" backgroundColor={Colors.main}/>}
                 {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}

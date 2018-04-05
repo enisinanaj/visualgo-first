@@ -4,8 +4,8 @@ import { StyleSheet, FlatList, Platform, fontWeight,
     Button, TouchableHighlight, TextInput, TouchableOpacity, 
     Alert, ScrollView, Dimensions, Modal} from 'react-native';
 
-import {Ionicons, Entypo} from '@expo/vector-icons';
-import {Font, AppLoading} from 'expo';
+import {Ionicons, Entypo, FontAwesome} from 'react-native-vector-icons/FontAwesome';
+// import {Font, AppLoading} from 'expo';
 
 import {MenuIcons} from './helpers/index';
 
@@ -22,7 +22,6 @@ import {TaskAvatar} from '../constants/StyleSheetCommons';
 import AppSettings from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 import CreateTask from './common/create-task';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const {width, height} = Dimensions.get('window');
 const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post, Survey, etc.'},
@@ -62,13 +61,13 @@ export default class MainToDo extends React.Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-            'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-            'roboto-bolditalic': require('../assets/fonts/Roboto-BoldItalic.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
+        //     'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
+        //     'roboto-bolditalic': require('../assets/fonts/Roboto-BoldItalic.ttf')
+        // });
 
         this.setState({isReady: true});
     }
@@ -204,11 +203,9 @@ export default class MainToDo extends React.Component {
     }
 
     render() {
-
-        if (!this.state.isReady) {
-            return <AppLoading />;
-        }
-
+        // if (!this.state.isReady) {
+        //     return <AppLoading />;
+        // }
 
         return (
             <ScrollView style={styles.mainContainer}>

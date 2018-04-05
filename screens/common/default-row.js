@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
+import {EvilIcons} from 'react-native-vector-icons/FontAwesome';
 
 export default class DefaultRow extends Component {
 

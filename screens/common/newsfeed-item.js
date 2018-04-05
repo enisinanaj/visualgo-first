@@ -11,8 +11,8 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import {AppLoading, Font} from 'expo';
-import {Ionicons} from '@expo/vector-icons';
+// import {AppLoading, Font} from 'expo';
+import {Ionicons} from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 
@@ -50,12 +50,12 @@ export default class NewsFeedItem extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        // });
 
         this.setState({ isReady: true });
     }
@@ -145,9 +145,9 @@ export default class NewsFeedItem extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
-          return <AppLoading />;
-        }
+        // if (!this.state.isReady) {
+        //   return <AppLoading />;
+        // }
 
         var {data} = this.props;
 

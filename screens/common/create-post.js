@@ -29,7 +29,7 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
 
-import {Ionicons, SimpleLineIcons, EvilIcons, Octicons, Entypo} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, EvilIcons, Octicons, Entypo} from 'react-native-vector-icons/FontAwesome';
 // import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
 import TagList from './tag-list';

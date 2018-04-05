@@ -3,9 +3,9 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import {
-  ExponentConfigView,
-} from '@expo/samples';
+// import {
+//   ExponentConfigView,
+// } from '@expo/samples';
 
 export default class SettingsScreen extends React.Component {
   static route = {
@@ -22,7 +22,7 @@ export default class SettingsScreen extends React.Component {
 
         { /* Go ahead and delete ExponentConfigView and replace it with your
            * content, we just wanted to give you a quick view of your config */ }
-        <ExponentConfigView />
+        {/* <ExponentConfigView /> */}
 
       </ScrollView>
     );

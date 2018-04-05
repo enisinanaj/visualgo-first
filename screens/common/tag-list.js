@@ -15,11 +15,11 @@ import {
   TouchableOpacity,
   ListView } from 'react-native';
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
-import {EvilIcons, Ionicons} from '@expo/vector-icons';
+import {EvilIcons, Ionicons} from 'react-native-vector-icons/FontAwesome';
 import { isIphoneX } from '../helpers';
 
 import _ from 'lodash';
@@ -62,11 +62,10 @@ export default class TagList extends Component {
   }
 
   async loadFonts() {
-    console.log("loading fonts...");
-    await Font.loadAsync({
-      'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
-      'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf'
-    });
+    // await Font.loadAsync({
+    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
+    //   'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf'
+    // });
 
     this.setState({isReady: true});
   }
@@ -327,9 +326,9 @@ export default class TagList extends Component {
   }
 
   render() {
-    if (!this.state.isReady) {
-      return <AppLoading />;
-    }
+    // if (!this.state.isReady) {
+    //   return <AppLoading />;
+    // }
 
     var {visibleHeight} = this.state;
 

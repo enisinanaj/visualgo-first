@@ -17,7 +17,7 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
                                '#c32ebd', '#e488f1', '#3f075d',
                                '#198ab8', '#70d384'];
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
 import nodeEmoji from 'node-emoji';
 import PropTypes from 'prop-types';
@@ -41,9 +41,9 @@ export default class NoOpModal extends Component {
   }
 
   async loadFonts() {
-    await Font.loadAsync({
-      'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
-    });
+    // await Font.loadAsync({
+    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
+    // });
 
     this.setState({isReady: true});
   }
@@ -53,9 +53,9 @@ export default class NoOpModal extends Component {
   }
 
   render() {
-      if (!this.state.isReady) {
-        return <AppLoading />;
-      }
+      // if (!this.state.isReady) {
+      //   return <AppLoading />;
+      // }
 
       return <Modal
         animationType="fade"

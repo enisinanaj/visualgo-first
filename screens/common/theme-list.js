@@ -22,8 +22,8 @@ import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
 import ImageBrowser from '../ImageBrowser';
 import SingleImage from './single-image';
-import {EvilIcons, Ionicons} from '@expo/vector-icons';
-import {Font, AppLoading} from 'expo';
+import {EvilIcons, Ionicons} from 'react-native-vector-icons/FontAwesome';
+// import {Font, AppLoading} from 'expo';
 import { isIphoneX } from '../helpers';
 
 import _ from 'lodash';
@@ -68,11 +68,11 @@ export default class ThemeList extends Component {
   }
 
   async loadFonts() {
-    await Font.loadAsync({
-      'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
-      'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf',
-      'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf'
-    });
+    // await Font.loadAsync({
+    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
+    //   'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf',
+    //   'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf'
+    // });
 
     this.loadThemes();
     this.setState({isReady: true});
@@ -283,9 +283,9 @@ export default class ThemeList extends Component {
   }
 
   render() {
-    if (!this.state.isReady) {
-      return <AppLoading />
-    }
+    // if (!this.state.isReady) {
+    //   return <AppLoading />
+    // }
 
     return (
       <KeyboardAvoidingView style={{height: this.state.visibleHeight, flex: 1, flexDirection: 'column'}} behavior={"padding"}>

@@ -24,7 +24,7 @@ import FilterBar from './filter-bar';
 import ExtendedStatusWithBackgroundColor from './ExtendedStatusWithBackgroundColor';
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
-import {EvilIcons, Ionicons, FontAwesome} from '@expo/vector-icons';
+import {EvilIcons, Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
 import { isIphoneX } from '../helpers';
 
 import _ from 'lodash';

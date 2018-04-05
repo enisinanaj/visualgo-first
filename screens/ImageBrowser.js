@@ -11,7 +11,7 @@ import {
   Platform
 } from 'react-native';
 import Colors from '../constants/Colors';
-import { FileSystem } from 'expo';
+// import { FileSystem } from 'expo';
 import ImageTile from './common/ImageTile';
 import { isIphoneX, getFileName, getFileExtension } from './helpers';
 const { width } = Dimensions.get('window')
@@ -93,8 +93,9 @@ export default class ImageBrowser extends React.Component {
     let selectedPhotos = photos.filter((item, index) => {
       return(selected[index])
     });
-    let files = selectedPhotos
-      .map(i => FileSystem.getInfoAsync(i, {md5: true}))
+    let files = [];
+    // selectedPhotos
+    //   .map(i => FileSystem.getInfoAsync(i, {md5: true}))
     let callbackResult = Promise
       .all(files)
       .then(imageData=> {

@@ -12,7 +12,7 @@ import {
 
 import Colors from '../../constants/Colors';
 // import { ImagePicker, Camera, Permissions } from 'expo';
-import {MaterialCommunityIcons, EvilIcons, FontAwesome, Ionicons} from '@expo/vector-icons';
+import {MaterialCommunityIcons, EvilIcons, FontAwesome, Ionicons} from 'react-native-vector-icons/FontAwesome';
 import { openCamera, getFileExtension, getFileName } from '../helpers';
 import ApplicationConfig from '../helpers/appconfig'
 
@@ -30,8 +30,8 @@ export default class ImageTile extends React.PureComponent {
   }
   
   async componentWillMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' });
+    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    // this.setState({ hasCameraPermission: status === 'granted' });
   }
 
   renderCameraModal() {
@@ -43,7 +43,7 @@ export default class ImageTile extends React.PureComponent {
         visible={this.state.cameraModal}
         onRequestClose={() => this.setState({cameraModal: false})}>
         <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }} type={this.state.type} ref={c => this.camera = c}>
+          {/* <Camera style={{ flex: 1 }} type={this.state.type} ref={c => this.camera = c}>
             <TouchableOpacity onPress={() => {this.setState({cameraModal: false}); this.props.selectImage({cancelled: true});}} style={{backgroundColor: 'transparent', marginTop: 30, marginLeft: 10}}>
                 <Text style={{ fontSize: 22, marginBottom: 10, color: 'white' }}>Cancel</Text>
             </TouchableOpacity>
@@ -67,7 +67,7 @@ export default class ImageTile extends React.PureComponent {
               <View>
               </View>
             </View>
-          </Camera>
+          </Camera> */}
         </View>
       </Modal>)
   }

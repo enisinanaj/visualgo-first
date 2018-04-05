@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 //import {Camera, Permissions, ImagePicker} from 'expo';
 //import {Font, AppLoading, DocumentPicker} from 'expo';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome, Entypo} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome, Entypo} from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 

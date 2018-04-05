@@ -14,11 +14,10 @@ const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 import Colors from '../../constants/Colors';
-import {EvilIcons, Ionicons} from '@expo/vector-icons';
+import {EvilIcons, Ionicons, MaterialCommunityIcons} from 'react-native-vector-icons/FontAwesome';
 import Shadow from '../../constants/Shadow';
 // import { Font, AppLoading } from 'expo';
 import Router from '../../navigation/Router';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import DisabledStyle from '../../constants/DisabledStyle';
 
 export default class FitlerBar extends Component {

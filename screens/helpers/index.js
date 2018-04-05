@@ -3,7 +3,7 @@ import{
     Platform
 } from 'react-native';
 
-import {ImagePicker} from 'expo';
+// import {ImagePicker} from 'expo';
 
 const profile = [
     {
@@ -131,6 +131,6 @@ export async function openCamera(callback) {
         exif: true
     };
 
-    let image = await ImagePicker.launchCameraAsync(options);
-    callback(image);
+    // let image = await ImagePicker.launchCameraAsync(options);
+    // callback(image);
 };

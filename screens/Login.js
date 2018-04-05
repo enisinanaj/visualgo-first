@@ -19,7 +19,7 @@ import {
     KeyboardAvoidingView
 } from 'react-native';
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 import Drawer from 'react-native-drawer'
 
 import Colors from '../constants/Colors';
@@ -29,7 +29,7 @@ import DisabledStyle from '../constants/DisabledStyle';
 import DefaultRow from './common/default-row';
 import NoOpModal from './common/NoOpModal';
 
-import {EvilIcons} from '@expo/vector-icons';
+import {EvilIcons} from 'react-native-vector-icons/FontAwesome';
 import _ from 'lodash';
 import {NavigationActions} from 'react-navigation';
 
@@ -70,12 +70,12 @@ export default class Login extends Component {
   }
 
   async loadFonts() {
-      await Font.loadAsync({
-        'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-        'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-        'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
-        'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
-      });
+      // await Font.loadAsync({
+      //   'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
+      //   'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
+      //   'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
+      //   'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
+      // });
 
       this.setState({ isReady: true });
   }
@@ -196,9 +196,9 @@ export default class Login extends Component {
   render() {
     var {visibleHeight, passTyped, emailTyped, emailFieldFocused, passwordFieldFocused, secureEntryPassword} = this.state;
     
-    if (!this.state.isReady) {
-      return <AppLoading />;
-    }
+    // if (!this.state.isReady) {
+    //   return <AppLoading />;
+    // }
 
     return (
       <KeyboardAvoidingView style={{flex: 1, height: visibleHeight}} behavior={"padding"}>

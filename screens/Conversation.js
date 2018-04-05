@@ -23,7 +23,7 @@ import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
 
-import {EvilIcons, SimpleLineIcons, MaterialIcons} from '@expo/vector-icons';
+import {EvilIcons, SimpleLineIcons, MaterialIcons} from 'react-native-vector-icons/FontAwesome';
 import _ from 'lodash';
 
 import moment from 'moment';
@@ -33,7 +33,7 @@ import AppSettings from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 import Shadow from '../constants/Shadow';
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 import PubNubReact from 'pubnub-react';
 import ChatEngine from 'chat-engine';
 import { uuid } from './helpers/index';
@@ -104,8 +104,6 @@ export default class Conversation extends Component {
 
         
     componentWillMount() {
-
-
         this.pubnub = new PubNubReact({
             publishKey: 'pub-c-b8fd1056-99b5-4f8b-8986-ce1ab877240b',
             subscribeKey: 'sub-c-f10175d6-fa3c-11e7-8a22-26ec4b06f838',
@@ -115,10 +113,6 @@ export default class Conversation extends Component {
         this.pubnub.init(this);
 
         this.pubnub.subscribe({ channels: ['channel1'], triggerEvents: true, withPresence: true});
-
-
-        
-
     }
       
     componentWillUnmount() {
@@ -134,15 +128,11 @@ export default class Conversation extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-bold': '../assets/fonts/Roboto-Bold.ttf'
-        });
+        // await Font.loadAsync({
+        //     'roboto-bold': '../assets/fonts/Roboto-Bold.ttf'
+        // });
 
         this.setState({isReady: true});
-
-
-
-
     }
 
     componentWillUnmount() {
@@ -231,7 +221,6 @@ export default class Conversation extends Component {
 
         this.pubnub.publish({ message: this.state.newMessage, channel: 'channel1' });
 
-
         //this.setState({convoMessages: ds.cloneWithRows(messages)});
         this.refs['newMessageTextInput'].clear();
         this.setState({newMessage: ""}); 
@@ -239,15 +228,11 @@ export default class Conversation extends Component {
     }
 
     render() {
-
-        if (!this.state.isReady) {
-            return <AppLoading />;
-        }
+        // if (!this.state.isReady) {
+        //     return <AppLoading />;
+        // }
 
         var {height, visibleHeight} = this.state;
-
-        
-
         const messages = this.pubnub.getMessage('channel1');
         
         //console.log("Message(s): " + JSON.stringify(messages));

@@ -22,8 +22,8 @@ import {
 
 import Drawer from 'react-native-drawer'
 //import {Font, AppLoading} from 'expo';
-import {EvilIcons, Entypo} from '@expo/vector-icons';
-import { withNavigation } from '@expo/ex-navigation';
+import {EvilIcons, Entypo, Feather, Ionicons} from 'react-native-vector-icons/FontAwesome';
+//import { withNavigation } from '@expo/ex-navigation';
 import RadialMenu from 'react-native-radial-menu';
 
 import Colors from '../constants/Colors';
@@ -35,8 +35,7 @@ import AppSettings, { getProfile } from './helpers/index';
 import ApplicationConfig from './helpers/appconfig';
 
 import _ from 'lodash';
-import Feather from '@expo/vector-icons/Feather';
-import Ionicons from '@expo/vector-icons/Ionicons';
+
 const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const messages = [{from: {name: 'John', image: require('./img/elmo.jpg')}, message: 'Lorem Ipsum Dolo', read: false, date: new Date()},

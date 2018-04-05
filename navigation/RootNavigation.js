@@ -1,8 +1,9 @@
 import React from 'react';
 import {StyleSheet, View, Image} from 'react-native';
-import {StackNavigation,TabNavigation, TabNavigationItem} from '@expo/ex-navigation';
-import {Ionicons, FontAwesome} from '@expo/vector-icons';
 
+// import {StackNavigation,TabNavigation, TabNavigationItem} from '@expo/ex-navigation';
+
+import {Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
 import Colors from '../constants/Colors';
 import {MenuIcons, isIphoneX} from '../screens/helpers/index';
 import ApplicationConfig from '../screens/helpers/appconfig';

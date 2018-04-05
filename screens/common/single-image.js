@@ -16,11 +16,11 @@ import {
 } from 'react-native';
 
 import {getImage} from '../helpers';
-import Main from '../../App';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
-const {width, height} = Dimensions.get('window');
+import {EvilIcons} from 'react-native-vector-icons';
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
+
+const {width, height} = Dimensions.get('window');
 
 export default class SingleImage extends Component {
     state = {

@@ -19,7 +19,7 @@ import {
 
 
 // import {Font, AppLoading} from 'expo';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from '@expo/vector-icons';
+import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
 import Colors from '../../constants/Colors';
 
 import ThemeList from './theme-list';

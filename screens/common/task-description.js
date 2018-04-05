@@ -11,13 +11,12 @@ import {
   ScrollView,
   Keyboard } from 'react-native';
 
-import {Font, AppLoading} from 'expo';
+// import {Font, AppLoading} from 'expo';
 
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
-import {EvilIcons} from '@expo/vector-icons';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {EvilIcons, Ionicons} from 'react-native-vector-icons/FontAwesome';
 import { isIphoneX } from '../helpers';
 
 const {width, height} = Dimensions.get('window');
@@ -42,9 +41,9 @@ export default class TaskDescription extends Component {
   }
 
   async loadFonts() {
-    await Font.loadAsync({
-      'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
-    });
+    // await Font.loadAsync({
+    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
+    // });
 
     this.setState({isReady: true});
   }
@@ -95,9 +94,9 @@ export default class TaskDescription extends Component {
   }
 
   render() {
-    if (!this.state.isReady) {
-      return <AppLoading />;
-    }
+    // if (!this.state.isReady) {
+    //   return <AppLoading />;
+    // }
 
     var {visibleHeight} = this.state;
     var textInputHeight = visibleHeight - 80; //80 => renderHeader().height more or less (need to check on Android)

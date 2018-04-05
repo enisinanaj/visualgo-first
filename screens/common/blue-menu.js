@@ -12,9 +12,10 @@ import {
     TouchableOpacity,
     Platform
 } from 'react-native';
-import {Feather, Ionicons, EvilIcons} from '@expo/vector-icons';
+
+import {Feather, Ionicons, EvilIcons} from 'react-native-vector-icons/FontAwesome';
 import {NavigationActions} from 'react-navigation';
-import {Font, AppLoading} from "expo";
+// import {Font, AppLoading} from "expo";
 
 import Router from '../../navigation/Router';
 import DisabledStyle from '../../constants/DisabledStyle';
@@ -63,9 +64,9 @@ export default class BlueMenu extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-          'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf')
-        });
+        // await Font.loadAsync({
+        //   'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf')
+        // });
 
         this.setState({ isReady: true });
     }
@@ -162,9 +163,9 @@ export default class BlueMenu extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
-          return <AppLoading />;
-        }
+        // if (!this.state.isReady) {
+        //   return <AppLoading />;
+        // }
 
         return (
             <View style={styles.drawer}>

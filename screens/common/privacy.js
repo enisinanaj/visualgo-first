@@ -14,8 +14,7 @@ import {
 import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import Colors from '../../constants/Colors';
-import {EvilIcons, Entypo} from '@expo/vector-icons';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {EvilIcons, Entypo, Ionicons, FontAwesome} from 'react-native-vector-icons';
 import { isIphoneX } from '../helpers';
 
 var tagsToShow = [

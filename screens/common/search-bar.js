@@ -15,12 +15,11 @@ import {
     Image
 } from 'react-native';
 
-import { ImagePicker, Font, AppLoading } from 'expo';
+// import { ImagePicker, Font, AppLoading } from 'expo';
 import ImageBrowser from '../ImageBrowser';
 
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons} from '@expo/vector-icons';
-import Feather from '@expo/vector-icons/Feather';
+import {Ionicons, SimpleLineIcons, Feather} from 'react-native-vector-icons/FontAwesome';
 import appconfig from '../helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');
@@ -45,12 +44,12 @@ export default class SearchBar extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-            'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
+        // });
 
         this.setState({isReady: true});
         //onLoaded();
@@ -58,7 +57,6 @@ export default class SearchBar extends Component {
 
     imageBrowserCallback = (callback) => {
         callback.then((photos) => {
-          console.log(photos)
           this.setState({
             imageBrowserOpen: false,
             photos
@@ -80,9 +78,9 @@ export default class SearchBar extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
-            return <AppLoading />
-        }
+        // if (!this.state.isReady) {
+        //     return <AppLoading />
+        // }
 
         const {height} = this.state;
 

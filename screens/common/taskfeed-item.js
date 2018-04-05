@@ -10,8 +10,8 @@ import {
     Switch
 } from 'react-native';
 
-import {AppLoading, Font} from 'expo';
-import {Ionicons, Octicons} from '@expo/vector-icons';
+// import {AppLoading, Font} from '  expo';
+import {Ionicons, Octicons} from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import {getProfile, MenuIcons} from '../helpers';
@@ -106,12 +106,12 @@ export default class TaskFeedItem extends Component {
     }
 
     async loadFonts() {
-        await Font.loadAsync({
-            'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-            'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-            'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
-        });
+        // await Font.loadAsync({
+        //     'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
+        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
+        // });
 
         this.loadAlbum();
         this.setState({ isReady: true });
@@ -207,9 +207,9 @@ export default class TaskFeedItem extends Component {
       }
 
     render() {
-        if (!this.state.isReady) {
-          return <AppLoading />;
-        }
+        // if (!this.state.isReady) {
+        //   return <AppLoading />;
+        // }
         const {data} = this.props;
         const {album} = this.state;
 
