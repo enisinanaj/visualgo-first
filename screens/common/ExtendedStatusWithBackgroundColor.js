@@ -26,6 +26,11 @@ import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
 import {EvilIcons, Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entyp from 'react-native-vector-icons/Entypo';
+
 import _ from 'lodash';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

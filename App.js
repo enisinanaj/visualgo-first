@@ -17,7 +17,8 @@ import {
 
 import { StackNavigator } from 'react-navigation';
 
-import {Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //import { AppLoading, Asset, Font } from 'expo';
 

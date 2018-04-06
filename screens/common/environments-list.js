@@ -19,15 +19,13 @@ import {
 
 // import {Font, AppLoading} from 'expo';
 
-import DefaultRow from './default-row';
-import FilterBar from './filter-bar';
-import ExtendedStatusWithBackgroundColor from './ExtendedStatusWithBackgroundColor';
-import Colors from '../../constants/Colors';
-import Shadow from '../../constants/Shadow';
-import {EvilIcons, Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { isIphoneX } from '../helpers';
 
 import _ from 'lodash';
+import Colors from '../../constants/Colors';
 
 const {width, height} = Dimensions.get('window');
 

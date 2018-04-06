@@ -6,7 +6,7 @@
 	<dict>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<data>
-		7aQI71Wj1HrM0153DwDTH0az87s=
+		/qyYLlA1USBskxElBCKdK2sa5PQ=
 		</data>
 		<key>Entypo.ttf</key>
 		<data>
@@ -71,7 +71,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		+4VkIIuH3br+WAnTg3Ohn0rZRt8=
+		SHzxaVYlxsXRvUY45QgUz3A681M=
 		</data>
 		<key>Ionicons.ttf</key>
 		<data>
@@ -113,9 +113,77 @@
 		<data>
 		nKW6klZsjET3bfpcVu3X1jqadf0=
 		</data>
+		<key>Roboto-Black.ttf</key>
+		<data>
+		nrT50arOtFVIPRXOgf1tyx+9sGI=
+		</data>
+		<key>Roboto-BlackItalic.ttf</key>
+		<data>
+		Z5B6/aSg/DAeSfa++kAjF4QNQTs=
+		</data>
+		<key>Roboto-Bold.ttf</key>
+		<data>
+		0xOrLEV1a/TpcmR/WyrWka0lCZA=
+		</data>
+		<key>Roboto-BoldCondensed.ttf</key>
+		<data>
+		VcFzXkCFCJ4uo7A+mAn7kzw7Xbc=
+		</data>
+		<key>Roboto-BoldCondensedItalic.ttf</key>
+		<data>
+		TXE0FoFgeSZ0Z/Cr8F6UkaWLdUQ=
+		</data>
+		<key>Roboto-BoldItalic.ttf</key>
+		<data>
+		nP1mH0WcmPF9PIgZHZ34e5YMKuY=
+		</data>
+		<key>Roboto-Condensed.ttf</key>
+		<data>
+		JeR78mGgeqAUyQvKJzVCkH90Yc0=
+		</data>
+		<key>Roboto-CondensedItalic.ttf</key>
+		<data>
+		A/TkFkO4jvcS7RtFApoCDua86nQ=
+		</data>
+		<key>Roboto-Italic.ttf</key>
+		<data>
+		KlrYhcflgyKDLm5lEVb/wTHify4=
+		</data>
+		<key>Roboto-Light.ttf</key>
+		<data>
+		fQQh3k4TmPuQhzeKnMySl728hLk=
+		</data>
+		<key>Roboto-LightItalic.ttf</key>
+		<data>
+		lqCKzQwHJUwc6AAttat7Z2WenyE=
+		</data>
+		<key>Roboto-Medium.ttf</key>
+		<data>
+		AdTMvfG6Co4USXUhaG4SRvjcV8Q=
+		</data>
+		<key>Roboto-MediumItalic.ttf</key>
+		<data>
+		IPmphyU16j+CwWQSSZRL6e2ZaOc=
+		</data>
+		<key>Roboto-Regular.ttf</key>
+		<data>
+		oY3L+ZyNIyXC+/IqZOjMKKDPTTs=
+		</data>
+		<key>Roboto-Thin.ttf</key>
+		<data>
+		TmOkfS6PJohrtBS561SwJHQtIPI=
+		</data>
+		<key>Roboto-ThinItalic.ttf</key>
+		<data>
+		ogubLt7h3oOKqxD+QGD44NxRFs0=
+		</data>
 		<key>SimpleLineIcons.ttf</key>
 		<data>
 		n/uBpaEREuKS8swyPphIa61ZdZk=
+		</data>
+		<key>SpaceMono-Regular.ttf</key>
+		<data>
+		+uOlpDtQ4ECP1h4UOD2UoCPTMrA=
 		</data>
 		<key>Zocial.ttf</key>
 		<data>
@@ -128,11 +196,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			7aQI71Wj1HrM0153DwDTH0az87s=
+			/qyYLlA1USBskxElBCKdK2sa5PQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			wNKCDXKcEi/QbAQlEw2wr1/E0AN0CEWFkiicO0RMZdA=
+			AHdgW/3jOiYzx6rPR57RYIuxGGjbfv6SdRWOAXUQyAY=
 			</data>
 		</dict>
 		<key>Entypo.ttf</key>
@@ -390,6 +458,182 @@
 			QWpy85Y2j1djjW7oAUWmnI+2k5EHvghlqRslCj7oOOI=
 			</data>
 		</dict>
+		<key>Roboto-Black.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			nrT50arOtFVIPRXOgf1tyx+9sGI=
+			</data>
+			<key>hash2</key>
+			<data>
+			x4zkOOnZHqjBY0Gq8sbPB/nDR+sRML2SJ5atT7eP6IU=
+			</data>
+		</dict>
+		<key>Roboto-BlackItalic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Z5B6/aSg/DAeSfa++kAjF4QNQTs=
+			</data>
+			<key>hash2</key>
+			<data>
+			XnkowUu93qN+ybokU/AL2PTXPELCBSjkKrxbidJzLbE=
+			</data>
+		</dict>
+		<key>Roboto-Bold.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			0xOrLEV1a/TpcmR/WyrWka0lCZA=
+			</data>
+			<key>hash2</key>
+			<data>
+			JFcVAxQHYCQJJNzRI493580EVMDYsHk5kM76L61xRx8=
+			</data>
+		</dict>
+		<key>Roboto-BoldCondensed.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			VcFzXkCFCJ4uo7A+mAn7kzw7Xbc=
+			</data>
+			<key>hash2</key>
+			<data>
+			LJJFwCRqnHRXk8fqqcwfyWShJXAAkDHqAiMRW+xulCY=
+			</data>
+		</dict>
+		<key>Roboto-BoldCondensedItalic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			TXE0FoFgeSZ0Z/Cr8F6UkaWLdUQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			ERfqufSQEjz4plb6k2pMmn5JGLiK5XbWTT15UHCW97k=
+			</data>
+		</dict>
+		<key>Roboto-BoldItalic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			nP1mH0WcmPF9PIgZHZ34e5YMKuY=
+			</data>
+			<key>hash2</key>
+			<data>
+			FlptAv2Jc3A3h/7u9TGbf9jLP2ZaPB5wLvDKSXAVR8k=
+			</data>
+		</dict>
+		<key>Roboto-Condensed.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			JeR78mGgeqAUyQvKJzVCkH90Yc0=
+			</data>
+			<key>hash2</key>
+			<data>
+			Lv5TAbk9HkqpD+2J92aoi+G4C+ZIc/hTwbbgicqxn+o=
+			</data>
+		</dict>
+		<key>Roboto-CondensedItalic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			A/TkFkO4jvcS7RtFApoCDua86nQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			wtXsExwadnE40J93ODtL9oBRwCFk3YPktsWP6yXEc+0=
+			</data>
+		</dict>
+		<key>Roboto-Italic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			KlrYhcflgyKDLm5lEVb/wTHify4=
+			</data>
+			<key>hash2</key>
+			<data>
+			RwEjxvtdbAAFQxwPU5B0JJfFUIc2GnY2t+gus1Y13tc=
+			</data>
+		</dict>
+		<key>Roboto-Light.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			fQQh3k4TmPuQhzeKnMySl728hLk=
+			</data>
+			<key>hash2</key>
+			<data>
+			lN9OSXbbjdrsJ/jowz7vkS50T7IAygkFF5SzjlpQL8A=
+			</data>
+		</dict>
+		<key>Roboto-LightItalic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			lqCKzQwHJUwc6AAttat7Z2WenyE=
+			</data>
+			<key>hash2</key>
+			<data>
+			cJqzyP6qVkCzoUST4cLSdQnfWqXRS4uGvUMatgrFOmk=
+			</data>
+		</dict>
+		<key>Roboto-Medium.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			AdTMvfG6Co4USXUhaG4SRvjcV8Q=
+			</data>
+			<key>hash2</key>
+			<data>
+			AoaNan6A1OeDa2Jj3VDSamPpI6EiPJ4Ceq1twlAcJ8w=
+			</data>
+		</dict>
+		<key>Roboto-MediumItalic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			IPmphyU16j+CwWQSSZRL6e2ZaOc=
+			</data>
+			<key>hash2</key>
+			<data>
+			J/Q0W8AvPN7BUiv+rnCs7WvfIX1Ah4EIz+K6pTXQT6Q=
+			</data>
+		</dict>
+		<key>Roboto-Regular.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			oY3L+ZyNIyXC+/IqZOjMKKDPTTs=
+			</data>
+			<key>hash2</key>
+			<data>
+			FkZu9lBk5vOIWm0oBriUmsGsOLUk3Qz4/JZWXrTMKOg=
+			</data>
+		</dict>
+		<key>Roboto-Thin.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			TmOkfS6PJohrtBS561SwJHQtIPI=
+			</data>
+			<key>hash2</key>
+			<data>
+			KENmna8DBzP2t8VBqY67/1zlwtjLrkI72NJ4o24Wk5k=
+			</data>
+		</dict>
+		<key>Roboto-ThinItalic.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ogubLt7h3oOKqxD+QGD44NxRFs0=
+			</data>
+			<key>hash2</key>
+			<data>
+			VQMe8U9sSZRyVatuDvcRKTjLHsuQP4VVPdx4QkIqWEE=
+			</data>
+		</dict>
 		<key>SimpleLineIcons.ttf</key>
 		<dict>
 			<key>hash</key>
@@ -399,6 +643,17 @@
 			<key>hash2</key>
 			<data>
 			P1Ad2wXHCCm7tRz+nKn/9X854GBFfCV7PM8l33Z/CHA=
+			</data>
+		</dict>
+		<key>SpaceMono-Regular.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			+uOlpDtQ4ECP1h4UOD2UoCPTMrA=
+			</data>
+			<key>hash2</key>
+			<data>
+			TDIlFNJlBiqj9/vYH1t5ORzLdCaOaiBgAGHgzjMjT0E=
 			</data>
 		</dict>
 		<key>Zocial.ttf</key>

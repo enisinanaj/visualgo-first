@@ -29,7 +29,8 @@ import DisabledStyle from '../constants/DisabledStyle';
 import DefaultRow from './common/default-row';
 import NoOpModal from './common/NoOpModal';
 
-import {EvilIcons} from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 import _ from 'lodash';
 import {NavigationActions} from 'react-navigation';
 
@@ -106,7 +107,7 @@ export default class Login extends Component {
     return (
         <View style={styles.headerView}>
             <View style={{flexDirection: 'row', justifyContent: 'flex-start', width: width}}>
-              <EvilIcons name={"chevron-left"} size={30} onPress={() => this._goBack()} color={Colors.main} style={{width: 22}}/>
+              {/* <EvilIcons name={"chevron-left"} size={30} onPress={() => this._goBack()} color={Colors.main} style={{width: 22}}/> */}
               <View style={{flex: 1, justifyContent: 'center', flexDirection: 'row'}}>
                 <Text style={styles.viewTitle}>Login</Text>
               </View>

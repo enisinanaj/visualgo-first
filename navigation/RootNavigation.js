@@ -3,7 +3,9 @@ import {StyleSheet, View, Image} from 'react-native';
 
 // import {StackNavigation,TabNavigation, TabNavigationItem} from '@expo/ex-navigation';
 
-import {Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import Colors from '../constants/Colors';
 import {MenuIcons, isIphoneX} from '../screens/helpers/index';
 import ApplicationConfig from '../screens/helpers/appconfig';

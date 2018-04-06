@@ -24,7 +24,11 @@ import ImageBrowser from '../ImageBrowser';
 import SingleImage from './single-image';
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
-import {EvilIcons, Ionicons, FontAwesome} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entyp from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 import {getFileExtension} from '../helpers';
 
 import _ from 'lodash';

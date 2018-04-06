@@ -16,7 +16,7 @@ export const TaskAvatar = StyleSheet.create({
     name: {
         fontSize: 14,
         color: 'black',
-        fontFamily: 'roboto-bold',
+        fontFamily: 'Roboto-Bold',
         height: 16
     },
 
@@ -24,14 +24,14 @@ export const TaskAvatar = StyleSheet.create({
         fontSize: 14,
         height: 16,
         color: 'black',
-        fontFamily: 'roboto-bold',
+        fontFamily: 'Roboto-Bold',
         marginLeft: 4
     },
 
     time: {
         color: '#999999',
         fontSize: 12,
-        fontFamily: 'roboto-light',
+        fontFamily: 'Roboto-Light',
         marginTop: 3
     },
 

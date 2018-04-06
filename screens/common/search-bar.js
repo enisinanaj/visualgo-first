@@ -19,7 +19,11 @@ import {
 import ImageBrowser from '../ImageBrowser';
 
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons, Feather} from 'react-native-vector-icons/FontAwesome';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Feather from 'react-native-vector-icons/Feather';
+
 import appconfig from '../helpers/appconfig';
 
 const {width, height} = Dimensions.get('window');

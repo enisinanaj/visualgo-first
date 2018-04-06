@@ -9,7 +9,7 @@ import {
     StyleSheet
 } from 'react-native';
 
-import {Ionicons} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/Colors';
 
 export default class ButtonBarChat extends Component {

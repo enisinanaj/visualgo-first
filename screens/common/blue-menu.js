@@ -13,7 +13,10 @@ import {
     Platform
 } from 'react-native';
 
-import {Feather, Ionicons, EvilIcons} from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 import {NavigationActions} from 'react-navigation';
 // import {Font, AppLoading} from "expo";
 

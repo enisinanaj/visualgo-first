@@ -6,7 +6,10 @@ import { StyleSheet, video,ListView, ScrollView,
         View, Button, TouchableHighlight, 
         TextInput, TouchableOpacity, Alert,} from 'react-native';
 
-import {Ionicons, Entypo, EvilIcons} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 import { NavigatorIOS, WebView} from 'react-native';
 import moment from 'moment';
 
@@ -113,7 +116,7 @@ export default class AlbumDetail extends React.Component {
                         Upload Attachements
                     </Text>
                     <View style={{flexDirection: 'row', width: 40, marginRight: 0, justifyContent: 'flex-end', marginRight: 10}}>
-                        <Text style={{fontFamily: 'roboto-regular', fontSize: 16, marginTop: 3}}>(6) </Text>
+                        <Text style={{fontFamily: 'Roboto-Regular', fontSize: 16, marginTop: 3}}>(6) </Text>
                         <Ionicons  style={styles.forwardIcon} name={"ios-attach"} size={25} color={Colors.main}/>
                         <EvilIcons name={"chevron-right"} color={Colors.main} size={32} />
                     </View>
@@ -211,7 +214,7 @@ export default class AlbumDetail extends React.Component {
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingTop: 5, marginRight: 20}}>
-                        <Text style={[styles.name, {fontFamily: 'roboto-bold', color: Colors.main, fontSize: 16 }]}>Add +</Text>
+                        <Text style={[styles.name, {fontFamily: 'Roboto-Bold', color: Colors.main, fontSize: 16 }]}>Add +</Text>
                     </View>
                 </View>
             </View>
@@ -312,7 +315,7 @@ const horizontalImages = StyleSheet.create({
         paddingBottom: 8
     },
     textContent: {
-        fontFamily: 'roboto-light',
+        fontFamily: 'Roboto-Light',
         fontSize: 14
     }
 });
@@ -332,12 +335,12 @@ headerContainer:{
     },
 
     name: {
-        fontFamily: 'roboto-bold',
+        fontFamily: 'Roboto-Bold',
         fontSize: 14
     },
 
     rowTextStyle: {
-        fontFamily: 'roboto-light',
+        fontFamily: 'Roboto-Light',
         color: '#000000',
         fontSize: 16,
         fontWeight: '500',
@@ -373,7 +376,7 @@ bigImageContainer:{
 QuickViewText:{
     color:'#999999',
     fontSize:12,
-    fontFamily: 'roboto-bold-italic',
+    fontFamily: 'Roboto-BoldItalic',
     marginLeft:15,
     marginTop:10,
     

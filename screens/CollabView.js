@@ -22,7 +22,11 @@ import {
 
 import Drawer from 'react-native-drawer'
 //import {Font, AppLoading} from 'expo';
-import {EvilIcons, Entypo, Feather, Ionicons} from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 //import { withNavigation } from '@expo/ex-navigation';
 import RadialMenu from 'react-native-radial-menu';
 

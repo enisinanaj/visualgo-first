@@ -113,13 +113,13 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   welcomeLabel: {
     fontSize: 48,
-    fontFamily: 'roboto',
+    fontFamily: 'Roboto-Thin',
     color: Colors.main,
     marginLeft: 40,
     marginRight: 40
   },
   notice:{
-    fontFamily: 'roboto-light',
+    fontFamily: 'Roboto-Light',
     color: Colors.main,
     marginLeft: 40,
     marginRight: 40,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 18,
     height: 'auto',
-    fontFamily: 'roboto-light',
+    fontFamily: 'Roboto-Light',
     backgroundColor: 'transparent'
   },
 
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     color: Colors.grayText,
     marginLeft: 40,
     marginTop: 20,
-    fontFamily: 'roboto'
+    fontFamily: 'Roboto-Thin'
   },
 
   ShowPasswordText:{

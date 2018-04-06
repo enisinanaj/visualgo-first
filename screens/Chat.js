@@ -23,7 +23,7 @@ import FilterBar from './common/filter-bar';
 import NewGroup from './NewGroup';
 import BlueMenu from './common/blue-menu';
 
-import {EvilIcons} from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import _ from 'lodash';
 
 import moment from 'moment';

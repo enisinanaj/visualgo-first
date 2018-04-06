@@ -12,7 +12,8 @@ import {
 //import {Font, AppLoading} from 'expo';
 
 import Colors from '../../constants/Colors';
-import {Ionicons, EvilIcons} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 export default class Button extends Component {
     constructor(props) {
