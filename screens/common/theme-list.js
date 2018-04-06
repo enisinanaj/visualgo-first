@@ -70,9 +70,9 @@ export default class ThemeList extends Component {
 
   async loadFonts() {
     // await Font.loadAsync({
-    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
-    //   'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf',
-    //   'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf'
+    //   'Roboto-Light': '../../assets/fonts/Roboto-Light.ttf',
+    //   'Roboto-Regular': '../../assets/fonts/Roboto-Regular.ttf',
+    //   'Roboto-Bold': '../../assets/fonts/Roboto-Bold.ttf'
     // });
 
     this.loadThemes();
@@ -152,7 +152,7 @@ export default class ThemeList extends Component {
           borderBottomColor: Colors.borderGray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
-            <Text style={{color: Colors.main, fontFamily: 'roboto-light', fontSize: 16}}>Cancel</Text>
+            <Text style={{color: Colors.main, fontFamily: 'Roboto-Light', fontSize: 16}}>Cancel</Text>
           </TouchableOpacity>
       </View>
     );
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   rowTitle: {
-    fontFamily: 'roboto-bold',
+    fontFamily: 'Roboto-Bold',
     fontSize: 20,
     color: 'black'
   },
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     height: "auto"
   },
   saveButton: {
-    fontFamily: 'roboto-bold',
+    fontFamily: 'Roboto-Bold',
     color: Colors.white,
     fontSize: 16,
     marginRight: 10,

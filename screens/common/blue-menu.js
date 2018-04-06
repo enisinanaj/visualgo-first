@@ -68,7 +68,7 @@ export default class BlueMenu extends Component {
 
     async loadFonts() {
         // await Font.loadAsync({
-        //   'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf')
+        //   'Roboto-Thin': require('../../assets/fonts/Roboto-Thin.ttf')
         // });
 
         this.setState({ isReady: true });
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     },
 
     menuItemLarge: {
-        fontFamily: 'roboto-thin',
+        fontFamily: 'Roboto-Thin',
         color: Colors.white,
         fontSize: 28,
     },
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
         width: 165,
         color: Colors.white,
-        fontFamily: 'roboto-thin'
+        fontFamily: 'Roboto-Thin'
     },
 
     accountName: {
@@ -236,14 +236,14 @@ const styles = StyleSheet.create({
         padding: 0,
         marginTop: 7,
         marginLeft: 0,
-        fontFamily: 'roboto-thin',
+        fontFamily: 'Roboto-Thin',
     },
 
     accountEmail: {
         color: Colors.white,
         fontSize: 16,
         marginLeft: 0,
-        fontFamily: 'roboto-thin',
+        fontFamily: 'Roboto-Thin',
     },
 
     disabledMenu: {

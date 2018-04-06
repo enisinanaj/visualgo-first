@@ -94,13 +94,6 @@ export default class CollabView extends Component {
     }
     
     async loadFonts() {
-        /*await Font.loadAsync({
-            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-            'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
-        });*/
-
         this.setState({isReady: true});
     }
 
@@ -326,7 +319,7 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 14,
         color: 'black',
-        fontFamily: 'roboto-bold',
+        fontFamily: 'Roboto-Bold',
         height: 16
     },
     
@@ -334,7 +327,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         height: 16,
         color: 'black',
-        fontFamily: 'roboto-bold',
+        fontFamily: 'Roboto-Bold',
         marginLeft: 4
     },
 

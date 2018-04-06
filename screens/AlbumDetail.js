@@ -45,14 +45,6 @@ export default class AlbumDetail extends React.Component {
     }
 
     async loadFonts() {
-        /*await Font.loadAsync({
-            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-            'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-            'roboto-bold-italic': require('../assets/fonts/Roboto-BoldItalic.ttf')
-        });*/
-
         this.setState({isReady: true});
     }
 
@@ -457,7 +449,7 @@ bigTextbox:{
 },
 
 bigTextFontStyle: {
-    fontFamily: 'roboto-light',
+    fontFamily: 'Roboto-Light',
     fontSize: 16
 },
 
@@ -506,13 +498,13 @@ UserNameView:{
 
 userNameTextStyle1:{
     fontSize:16,
-    fontFamily: 'roboto-light',
+    fontFamily: 'Roboto-Light',
     color:'black',
 },
 userNameTextStyle2:{
     marginTop: 4,
     fontSize:12,
-    fontFamily: 'roboto-light',
+    fontFamily: 'Roboto-Light',
     color: '#999999'
 },
 

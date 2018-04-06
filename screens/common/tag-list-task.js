@@ -66,9 +66,9 @@ export default class TagListTask extends Component {
 
   async loadFonts() {
     // await Font.loadAsync({
-    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf',
-    //   'roboto-bold': '../../assets/fonts/Roboto-Bold.ttf',
-    //   'roboto-regular': '../../assets/fonts/Roboto-Regular.ttf'
+    //   'Roboto-Light': '../../assets/fonts/Roboto-Light.ttf',
+    //   'Roboto-Bold': '../../assets/fonts/Roboto-Bold.ttf',
+    //   'Roboto-Regular': '../../assets/fonts/Roboto-Regular.ttf'
     // });
 
     this.setState({isReady: true});
@@ -122,7 +122,7 @@ export default class TagListTask extends Component {
           borderBottomColor: Colors.borderGray, flexDirection: 'row',
           justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
           <TouchableOpacity onPress={() => {this.props.closeModal([])}}>
-            <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-light', color: Colors.main}}>Cancel</Text>
+            <Text style={{fontSize: 16, color: 'black', fontFamily: 'Roboto-Light', color: Colors.main}}>Cancel</Text>
           </TouchableOpacity>
       </View>
     );
@@ -295,7 +295,7 @@ export default class TagListTask extends Component {
           {this._renderSelectedTags()}
           <TouchableOpacity  onPress={() => this.props.closeModal(this.state.selectedTags)}>
             {this.state.selectedTags.length > 0 ? 
-              <Text style={{color: Colors.white, fontFamily: 'roboto-bold', fontSize: 18, paddingRight: 10, marginTop: 8}}>Done</Text> 
+              <Text style={{color: Colors.white, fontFamily: 'Roboto-Bold', fontSize: 18, paddingRight: 10, marginTop: 8}}>Done</Text> 
             : null }
           </TouchableOpacity>
         </View>

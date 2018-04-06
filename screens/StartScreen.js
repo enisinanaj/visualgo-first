@@ -51,12 +51,6 @@ export default class Login extends Component {
   }
 
   async loadFonts() {
-      // await Font.loadAsync({
-      //   'roboto': require('../assets/fonts/Roboto-Thin.ttf'),
-      //   'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-      //   'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf')
-      // });
-
       this.setState({ isReady: true });
   }
 

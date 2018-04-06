@@ -63,14 +63,6 @@ export default class MainToDo extends React.Component {
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //     'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-        //     'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
-        //     'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf'),
-        //     'roboto-bolditalic': require('../assets/fonts/Roboto-BoldItalic.ttf')
-        // });
-
         this.setState({isReady: true});
     }
 
@@ -249,7 +241,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginLeft: 20,
         color:'#9a9a9a',
-        fontFamily: 'roboto-bolditalic'
+        fontFamily: 'Roboto-Bolditalic'
     },
 
     taskButton:{ 
@@ -259,7 +251,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginRight: 20,
         color: Colors.main,
-        fontFamily: 'roboto-bold'
+        fontFamily: 'Roboto-Bold'
     },
     
     SingleTaskContainer:{

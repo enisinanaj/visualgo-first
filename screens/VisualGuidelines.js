@@ -79,7 +79,7 @@ export default class VisualGuidelines extends Component {
                 animationType={"slide"}
                 transparent={false}
                 visible={this.state.visualGuidelineModal}
-                onRequestClose={() => this.finishNewVisualGuideline()}>
+                onRequestClose={() => this.finishNewVisualGuideline()} >
                 
                 <CreateVisualGuideline closeModal={() => this.finishNewVisualGuideline()}  />
             </Modal>
@@ -87,13 +87,6 @@ export default class VisualGuidelines extends Component {
     }
 
     async loadFonts(onLoaded) {
-        // await Font.loadAsync({
-        //     'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-        //     'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
-        //     'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
-        // });
-
         this.setState({isReady: true});
         onLoaded();
     }

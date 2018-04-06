@@ -42,7 +42,7 @@ export default class ContextualActionsMenu extends Component {
 
   async loadFonts() {
     // await Font.loadAsync({
-    //   'roboto-light': '../../assets/fonts/Roboto-Light.ttf'
+    //   'Roboto-Light': '../../assets/fonts/Roboto-Light.ttf'
     // });
 
     this.setState({isReady: true});
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     menuElement: {
       backgroundColor: 'transparent',
       color: Colors.black,
-      fontFamily: 'roboto-light',
+      fontFamily: 'Roboto-Light',
       fontSize: 16
     },
     menuIcon: {

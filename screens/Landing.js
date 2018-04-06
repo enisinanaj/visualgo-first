@@ -113,13 +113,6 @@ export default class Landing extends Component {
     }
 
     async loadFonts(onLoaded) {
-        /*await Font.loadAsync({
-            'roboto-thin': require('../assets/fonts/Roboto-Thin.ttf'),
-            'roboto-light': require('../assets/fonts/Roboto-Light.ttf'),
-            'roboto': require('../assets/fonts/Roboto-Regular.ttf'),
-            'roboto-bold': require('../assets/fonts/Roboto-Bold.ttf')
-        });*/
-
         this.setState({isReady: true});
         onLoaded();
     }

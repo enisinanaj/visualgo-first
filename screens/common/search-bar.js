@@ -48,13 +48,6 @@ export default class SearchBar extends Component {
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-        //     'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
-        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
-        // });
-
         this.setState({isReady: true});
         //onLoaded();
     }
@@ -188,6 +181,6 @@ const styles = StyleSheet.create({
         color: "#B2B2B2",
         fontSize: 12,
         marginLeft: 8,
-        fontFamily: 'roboto-light'
+        fontFamily: 'Roboto-Light'
     }
 })

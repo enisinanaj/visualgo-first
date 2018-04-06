@@ -132,7 +132,7 @@ export default class Conversation extends Component {
 
     async loadFonts() {
         // await Font.loadAsync({
-        //     'roboto-bold': '../assets/fonts/Roboto-Bold.ttf'
+        //     'Roboto-Bold': '../assets/fonts/Roboto-Bold.ttf'
         // });
 
         this.setState({isReady: true});
@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
     },
     themeLabel: {
         fontSize: 24,
-        fontFamily: 'roboto-bold',
+        fontFamily: 'Roboto-Bold',
         marginLeft: 15
     },
     fromBubble: {
