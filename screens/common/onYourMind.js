@@ -27,13 +27,6 @@ export default class onYourMind extends Component {
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-        //     'roboto': require('../../assets/fonts/Roboto-Regular.ttf'),
-        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf')
-        // });
-
         this.setState({isReady: true});
     }
 
@@ -68,7 +61,7 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         marginRight: 15,
         color: '#000000',
-        fontFamily: 'roboto-light'
+        fontFamily: 'Roboto-Light'
     },
 
     profile: {

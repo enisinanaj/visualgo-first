@@ -50,13 +50,6 @@ export default class NewsFeedItem extends Component {
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //     'roboto': require('../../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf'),
-        //     'roboto-bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf')
-        // });
-
         this.setState({ isReady: true });
     }
 
@@ -139,7 +132,7 @@ export default class NewsFeedItem extends Component {
 
         return (
             <View style={styles.content}>
-                <Text style={{fontFamily: 'roboto-light'}}>{data.message}</Text>
+                <Text style={{fontFamily: 'Roboto-Light'}}>{data.message}</Text>
             </View>
         )
     }
@@ -206,13 +199,13 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         color: 'black',
-        fontFamily: 'roboto-light'
+        fontFamily: 'Roboto-Light'
     },
 
     time: {
         color: '#999999',
         fontSize: 12,
-        fontFamily: 'roboto-light'
+        fontFamily: 'Roboto-Light'
     },
 
     profile: {

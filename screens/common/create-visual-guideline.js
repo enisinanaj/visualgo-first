@@ -124,9 +124,9 @@ export default class CreateVisualGuideline extends Component {
 
     async loadFonts() {
         // await Font.loadAsync({
-        //     'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf'),
-        //     'roboto-regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-        //     'roboto-light': require('../../assets/fonts/Roboto-Light.ttf')
+        //     'Roboto-Thin': require('../../assets/fonts/Roboto-Thin.ttf'),
+        //     'Roboto-Regular': require('../../assets/fonts/Roboto-Regular.ttf'),
+        //     'Roboto-Light': require('../../assets/fonts/Roboto-Light.ttf')
         // });
 
         this.setState({isReady: true});
@@ -230,11 +230,11 @@ export default class CreateVisualGuideline extends Component {
                     :   <EvilIcons name={"close"} size={22} color={Colors.main}/>}
                 </TouchableOpacity>
                 <View>
-                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'roboto-bold'}}>New Guideline Album</Text>
+                    <Text style={{fontSize: 16, color: 'black', fontFamily: 'Roboto-Bold'}}>New Guideline Album</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.post()} disabled={!isPubblicaEnabled}>
                     <Text style={{color: isPubblicaEnabled ? Colors.main : Colors.gray, 
-                        fontFamily: 'roboto-light', fontSize: 16}}>Pubblica</Text>
+                        fontFamily: 'Roboto-Light', fontSize: 16}}>Pubblica</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -271,14 +271,14 @@ export default class CreateVisualGuideline extends Component {
                 borderBottomColor: Colors.borderGray, flexDirection: 'row',
                 justifyContent: 'space-between', alignItems: 'center', padding: 13}}>
                 <View style={styles.viewAndroid}>
-                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'Roboto-Light'}}>
                         Commenti 
                     </Text>
                     <Switch color={Colors.main} style={styles.switchAndroid}
                         value={this.state.commentsEnabled} onValueChange={(v) => this.setState({commentsEnabled: v})}/>
                 </View>
                 <View style={styles.viewAndroid}>
-                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'roboto-light'}}>
+                    <Text style={{color: Colors.black, fontSize: 14, marginTop: 6, fontFamily: 'Roboto-Light'}}>
                         Notification 
                     </Text>
                     <Switch color={Colors.main} style={styles.switchAndroid}
@@ -286,7 +286,7 @@ export default class CreateVisualGuideline extends Component {
                 </View>
                 <TouchableOpacity onPress={() => this.setState({privacyModal: true})}>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'roboto-light', marginTop: 6}}>
+                        <Text style={{color: Colors.black, fontSize: 14, marginRight: 5, fontFamily: 'Roboto-Light', marginTop: 6}}>
                             All
                         </Text>
                         <Octicons name={"globe"} size={16} color={Colors.main} style={{paddingTop: 6}} />
@@ -371,7 +371,7 @@ export default class CreateVisualGuideline extends Component {
                                            position:'absolute', resizeMode: 'center', top: -19, left: 0}} 
                                 source={img} />
                             <View style={{flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
-                                <Text style={{color: Colors.white, fontSize: 22, fontFamily: 'roboto-bold',
+                                <Text style={{color: Colors.white, fontSize: 22, fontFamily: 'Roboto-Bold',
                                             textShadowColor: 'rgba(0, 0, 0, 0.75)',
                                             textShadowOffset: {width: 1, height: 1},
                                             textShadowRadius: 10, flex: 1, padding: 3, textAlign: 'center'}}>
@@ -426,7 +426,7 @@ export default class CreateVisualGuideline extends Component {
                                             Shadow.filterShadow]}>
                                     <FontAwesome name={"circle"} size={22} color={environment.background} />
                                 </View>
-                                <Text style={[styles.rowTextStyle, {color: environment.background, paddingLeft: 0, fontFamily: 'roboto-bold',
+                                <Text style={[styles.rowTextStyle, {color: environment.background, paddingLeft: 0, fontFamily: 'Roboto-Bold',
                                               marginTop: 5}]}>
                                     {environment.environmentName}
                                 </Text>
@@ -526,7 +526,7 @@ export default class CreateVisualGuideline extends Component {
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5}}>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'Roboto-Regular', paddingLeft: 5}}>
                                         {o.innerName}
                                     </Text>
                                 : null}
@@ -578,7 +578,7 @@ export default class CreateVisualGuideline extends Component {
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5}}>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'Roboto-Regular', paddingLeft: 5}}>
                                         {o.innerName}
                                     </Text>
                                 : null}
@@ -630,7 +630,7 @@ export default class CreateVisualGuideline extends Component {
                             <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4}}>
                                 <Text style={styles.rowTextStyle}>{o.name}</Text>
                                 {o.innerName != undefined && o.innerName != '' ? 
-                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'roboto-regular', paddingLeft: 5}}>{o.innerName}</Text>
+                                    <Text style={{color: Colors.main, fontSize: 16, fontFamily: 'Roboto-Regular', paddingLeft: 5}}>{o.innerName}</Text>
                                 : null}
                             </View>
                         </View>
@@ -780,11 +780,11 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         paddingLeft: 5,
         paddingTop: 5,
-        fontFamily: 'roboto-light'
+        fontFamily: 'Roboto-Light'
     },
 
     rowTextStyle: {
-        fontFamily: 'roboto-light',
+        fontFamily: 'Roboto-Light',
         color: '#000000',
         fontSize: 16,
         paddingLeft: 5,
@@ -793,7 +793,7 @@ const styles = StyleSheet.create({
 
     sectionTitle: {
         fontSize: 14,
-        fontFamily: 'roboto-bold',
+        fontFamily: 'Roboto-Bold',
         color: '#999999'
     }
 });
