@@ -49,16 +49,15 @@ export default class BlueMenu extends Component {
         this.loadFonts();
         this.loadNavigator();
     }
-
     updateMenus() {
         var {tabNavigation} = this;
         const menus = [ 
             {name: 'Report', icon: 'report', onPress: () => {this['report'].toggleState()}, disabled: true, id: 'report'},
-            {name: 'Visual Guideline', icon: 'album', id: 'visual_guideline', onPress: () => tabNavigation.navigate('tabVisualGuidelines')},
-            {name: 'Wall', icon: 'bacheca', onPress: () => {}, id: 'wall'},
-            {name: 'Calendar', icon: 'calendar', onPress: () => {this['calendar'].toggleState()}, disabled: true, id: 'calendar'},
-            {name: 'Messages', icon: 'chat', onPress: () => {this['messages'].toggleState()}, disabled: true, id: 'messages'},
-            {name: 'To Do List', icon: 'notification', onPress: () => {}, id: 'to_do_list'},
+            {name: 'Visual Guideline', icon: 'album', id: 'visual_guideline', onPress: () => this.navigate('VisualGuidelines')},
+            {name: 'Wall', icon: 'bacheca', onPress: () => {}, id: 'wall', onPress: () => this.navigate('Wall')},
+            {name: 'Calendar', icon: 'calendar', onPress: () => this.navigate('MainCalendar'), id: 'calendar'},
+            {name: 'Messages', icon: 'chat', onPress: () => this.navigate('Chat'), id: 'messages'},
+            {name: 'To Do List', icon: 'notification', onPress: () => this.navigate('MainTodo'), id: 'to_do_list'},
             {name: 'Anagrafiche', onPress: () => {this['anagrafiche'].toggleState()}, style: {marginTop: 40}, disabled: true, id: 'anagrafiche'},
             {name: 'Gestisci Negozi, cluster e contatti', isSubtitle: true, disabled: true, id: 'anagrafiche', noOpLabel: 'Anagrafiche'},
             {name: 'Logout', icon: 'log-out', iconPosition: 'right', iconType: 'Feather', onPress: () => {this.logOut()}, style: {marginTop: 15}, id: 'logout'}];
@@ -67,21 +66,23 @@ export default class BlueMenu extends Component {
     }
 
     async loadFonts() {
-        // await Font.loadAsync({
-        //   'roboto-thin': require('../../assets/fonts/Roboto-Thin.ttf')
-        // });
-
         this.setState({ isReady: true });
+    }
+
+    navigate(p) {
+        if (this.tabNavigation != undefined) {
+            this.tabNavigation.navigate(p);
+            ApplicationConfig.getInstance().index._drawer.close();
+        }
     }
 
     async loadNavigator() {
         var interval = {};
-
         var $self = this;
 
         function setNavigator() {
-            if (ApplicationConfig.getInstance().tabNavigaiton != undefined) {
-                $self.tabNavigation = ApplicationConfig.getInstance().tabNavigation;
+            if (ApplicationConfig.getInstance().tabNavigator != undefined) {
+                $self.tabNavigation = ApplicationConfig.getInstance().tabNavigator;
             }
             clearInterval(interval);
             $self.updateMenus();

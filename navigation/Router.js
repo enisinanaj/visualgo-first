@@ -163,22 +163,3 @@ export const MainAppNavigation = StackNavigator({
     }
   }
 });
-
-
-// export default createRouter(() => ({
-//     landing: () => Landing,
-//     images: () => ImageScreen,
-//     links: () => LinksScreen,
-//     settings: () => SettingsScreen,
-//     chat: () => Chat,
-//     mainCalendar: () => MainCalendar,
-//     rootNavigation: () => RootNavigation,
-//     conversation: () => ConversationView,
-//     newGroup: () => NewGroup,
-//     login: () => Login,
-//     imagePost: () => ImagePost,
-//     visualGuidelines: () => VisualGuidelines,
-//     mainTodo: () => MainTodo,
-//     albumDetail: () => AlbumDetail,
-//     collabView: () => CollabView
-// }));

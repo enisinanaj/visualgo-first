@@ -28,9 +28,11 @@ import NoOpModal from './NoOpModal';
 import ContextualActionsMenu from './ContextualActionsMenu';
 import ApplicationConfig, {AWS_OPTIONS} from '../helpers/appconfig';
 
+import {withNavigation} from 'react-navigation';
+
 const {width, height} = Dimensions.get('window');
 
-export default class TaskFeedItem extends Component {
+class TaskFeedItem extends Component {
     constructor(props) {
         super(props);
         moment.locale("it");
@@ -192,7 +194,7 @@ export default class TaskFeedItem extends Component {
         data.theme = this.state.theme;
         data.environment = this.state.environment;
         data.album = this.state.album;
-        this.props.navigation.navigate('MainCalendar');
+        //this.props.navigation.navigate('MainCalendar');
         ApplicationConfig.getInstance().index.props.navigation.navigate("TaskSummary", {data});
     }
 
@@ -383,3 +385,6 @@ const styles = StyleSheet.create({
         
     }
 })
+
+
+export default withNavigation(TaskFeedItem);

@@ -18,8 +18,6 @@ import {
 
 const {width, height} = Dimensions.get('window');
 
-//import {Font, AppLoading} from 'expo';
-
 import Colors from '../constants/Colors';
 import SearchBar from './common/search-bar';
 import ButtonBar from './common/button-bar';
@@ -30,6 +28,8 @@ import CreatePost from './common/create-post';
 import CreateTask from './common/create-task'; 
 import FilterBar from './common/filter-bar';
 import NoOpModal from './common/NoOpModal';
+
+import {withNavigation} from 'react-navigation';
 
 import _ from 'lodash';
 import Shadow from '../constants/Shadow';
@@ -47,7 +47,7 @@ const filters = [{type: 'search', searchPlaceHolder: 'Store, Cluster, Task, Post
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-export default class Landing extends Component {
+class Landing extends Component {
     cancelablePostPromise;
     cancelableTaskPromise;
 
@@ -109,7 +109,7 @@ export default class Landing extends Component {
                 }
             }
         }
-        ApplicationConfig.getInstance().tabNavigator = this.props.navigator;
+        ApplicationConfig.getInstance().tabNavigator = this.props.navigation;
     }
 
     async loadFonts(onLoaded) {
@@ -495,4 +495,7 @@ const styles= StyleSheet.create({
         width: width,
         height: 100
     }
-})
+});
+
+
+export default withNavigation(Landing);
