@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 // import {AppLoading, Font} from 'expo';
-import {Ionicons} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 

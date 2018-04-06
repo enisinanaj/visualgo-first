@@ -14,7 +14,9 @@ import {
 // import {AppLoading, Font} from 'expo';
 import moment from 'moment';
 import locale from 'moment/locale/it'
-import {Ionicons, MaterialCommunityIcons} from 'react-native-vector-icons/FontAwesome';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';

@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 
 import {getImage} from '../helpers';
-import {EvilIcons} from 'react-native-vector-icons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
 

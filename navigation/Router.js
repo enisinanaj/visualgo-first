@@ -52,7 +52,7 @@ function _renderIcon(name, isSelected) {
   }
 
   if (!isSelected) {
-    return <View style={styles.mainIcon}>
+    return <View style={[styles.mainIcon, {marginTop: 0}]}>
         <Image
           style={{flex: 1, width: undefined, height: undefined}}
           source={image}
@@ -123,11 +123,12 @@ export const MainTabNav = TabNavigator({
     tabBarOptions: {
       activeTintColor: Colors.main,
       inactiveTintColor: 'gray',
+      showLabel: false
     },
-    //tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: true,
     swipeEnabled: true,
+    
   });
 
 

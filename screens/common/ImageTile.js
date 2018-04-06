@@ -11,8 +11,12 @@ import {
 } from 'react-native';
 
 import Colors from '../../constants/Colors';
-// import { ImagePicker, Camera, Permissions } from 'expo';
-import {MaterialCommunityIcons, EvilIcons, FontAwesome, Ionicons} from 'react-native-vector-icons/FontAwesome';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { openCamera, getFileExtension, getFileName } from '../helpers';
 import ApplicationConfig from '../helpers/appconfig'
 

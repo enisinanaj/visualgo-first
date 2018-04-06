@@ -23,7 +23,7 @@ import _ from 'lodash';
 import SingleImage from './single-image';
 import ImageScreen from '../imageScreen';
 import Router from '../../navigation/Router';
-import {EvilIcons} from 'react-native-vector-icons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Colors from '../../constants/Colors';
 import Shadow from '../../constants/Shadow';
 import { AWS_OPTIONS } from '../helpers/appconfig';

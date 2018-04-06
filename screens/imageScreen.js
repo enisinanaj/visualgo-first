@@ -16,9 +16,11 @@ import {
 
 import Colors from '../constants/Colors';
 import Router from '../navigation/Router';
-import {EvilIcons, Ionicons} from 'react-native-vector-icons/FontAwesome';
-import Shadow from '../constants/Shadow';
 
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import Shadow from '../constants/Shadow';
 const {width, height} = Dimensions.get('window');
 
 export default class ImageScreen extends Component {

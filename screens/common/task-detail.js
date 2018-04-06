@@ -27,7 +27,13 @@ const backgroundColorsArray = ['#6923b6', '#7c71de',
 
 // import {Font, AppLoading} from 'expo';
 import Colors from '../../constants/Colors';
-import {Ionicons, SimpleLineIcons, Feather, Octicons, EvilIcons, Entypo} from 'react-native-vector-icons/FontAwesome';
+
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Octicons from 'react-native-vector-icons/Octicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 import ThemeList from './theme-list';
 import EnvironmentsList from './environments-list';

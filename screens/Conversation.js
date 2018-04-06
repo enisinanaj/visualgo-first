@@ -23,7 +23,10 @@ import SearchBar from './common/search-bar';
 import DefaultRow from './common/default-row';
 import FilterBar from './common/filter-bar';
 
-import {EvilIcons, SimpleLineIcons, MaterialIcons} from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import _ from 'lodash';
 
 import moment from 'moment';

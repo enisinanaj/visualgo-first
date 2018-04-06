@@ -29,9 +29,9 @@ import NoOpModal from './common/NoOpModal';
 import FilterBar from './common/filter-bar';
 import NewGroup from './NewGroup';
 import BlueMenu from './common/blue-menu';
-// import {Font, AppLoading} from "expo";
 
-import {EvilIcons} from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 import _ from 'lodash';
 import {NavigationActions} from 'react-navigation';
 

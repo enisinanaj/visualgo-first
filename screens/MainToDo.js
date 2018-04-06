@@ -4,7 +4,9 @@ import { StyleSheet, FlatList, Platform, fontWeight,
     Button, TouchableHighlight, TextInput, TouchableOpacity, 
     Alert, ScrollView, Dimensions, Modal} from 'react-native';
 
-import {Ionicons, Entypo, FontAwesome} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import {Font, AppLoading} from 'expo';
 
 import {MenuIcons} from './helpers/index';

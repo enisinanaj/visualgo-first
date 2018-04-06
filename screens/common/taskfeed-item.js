@@ -192,6 +192,7 @@ export default class TaskFeedItem extends Component {
         data.theme = this.state.theme;
         data.environment = this.state.environment;
         data.album = this.state.album;
+        this.props.navigation.navigate('MainCalendar');
         ApplicationConfig.getInstance().index.props.navigation.navigate("TaskSummary", {data});
     }
 

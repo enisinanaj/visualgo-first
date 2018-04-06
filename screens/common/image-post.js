@@ -23,7 +23,7 @@ import SingleImage from './single-image';
 import ImageScreen from '../imageScreen';
 import Router from '../../navigation/Router';
 
-import {EvilIcons} from 'react-native-vector-icons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import Colors from '../../constants/Colors';
 

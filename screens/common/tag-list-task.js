@@ -19,7 +19,8 @@ import DefaultRow from '../common/default-row';
 import FilterBar from '../common/filter-bar';
 import NoOpModal from '../common/NoOpModal';
 import Colors from '../../constants/Colors';
-import {EvilIcons, Ionicons} from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { isIphoneX } from '../helpers';
 
 // import {Font, AppLoading} from 'expo';
