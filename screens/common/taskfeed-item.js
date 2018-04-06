@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 
 // import {AppLoading, Font} from '  expo';
-import {Ionicons, Octicons} from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Octicons from 'react-native-vector-icons/Octicons';
 import moment from 'moment';
 import locale from 'moment/locale/it'
 import {getProfile, MenuIcons} from '../helpers';

@@ -14,7 +14,11 @@ const {width, height} = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 import Colors from '../../constants/Colors';
-import {EvilIcons, Ionicons, MaterialCommunityIcons} from 'react-native-vector-icons/FontAwesome';
+
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import Shadow from '../../constants/Shadow';
 // import { Font, AppLoading } from 'expo';
 import Router from '../../navigation/Router';
